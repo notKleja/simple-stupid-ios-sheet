@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- Use two fresh iPhone 17 Pro simulators on the same iOS 26.4.1 runtime.
+- Use two initialized iPhone 17 Pro simulators whose type and iOS 26.4.1 runtime identity are validated before launch.
 - Native and Flutter consume the same timeline asset and absolute start time.
 - Languages are English/LTR and Arabic/RTL.
 - Keep the surface opaque; no Liquid Glass or glass-route dependency.
@@ -77,4 +77,3 @@
 - [ ] Implement clean simulator creation, synchronized launch/record, FFmpeg composition, and fail-closed cleanup.
 - [ ] Execute one full run and verify both raw streams, composite duration/frame rate, timeline hash, and simulator metadata.
 - [ ] Copy the user-facing MP4 and manifest into the projectless task `outputs/` directory.
-

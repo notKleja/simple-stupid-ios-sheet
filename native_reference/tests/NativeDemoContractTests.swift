@@ -14,6 +14,10 @@ import Foundation
         let due = timeline.actions(fromExclusive: 41200, through: 43600)
         precondition(due.map(\.type) == ["present", "select"])
         precondition(timeline.scenes.last!.endMs == timeline.durationMs)
+        precondition(SynchronizedDemoPresentation.segmentItems(language: "ar") == ["الثاني", "الأول"])
+        precondition(SynchronizedDemoPresentation.selectedSegment(language: "ar", toggleOn: true) == 0)
+        precondition(SynchronizedDemoPresentation.segmentItems(language: "en") == ["First", "Second"])
+        precondition(SynchronizedDemoPresentation.selectedSegment(language: "en", toggleOn: true) == 1)
         print("Native synchronized demo contract PASS: 11 scenes, en/ar, absolute actions, RTL")
     }
 }

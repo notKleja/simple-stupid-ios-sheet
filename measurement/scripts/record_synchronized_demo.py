@@ -49,6 +49,65 @@ def find_runtime(inventory: dict[str, Any], version: str) -> dict[str, Any]:
     raise RuntimeError(f"No exact available runtime for iOS {version}")
 
 
+def bundled_timeline_paths(native_app: Path, flutter_app: Path) -> dict[str, Path]:
+    return {
+        "native": native_app / "synchronized_bilingual_demo.json",
+        "flutter": flutter_app / "Frameworks/App.framework/flutter_assets/assets/synchronized_bilingual_demo.json",
+    }
+
+
+def verify_timeline_assets(selected: Path, bundled: dict[str, Path]) -> str:
+    expected = sha256_file(selected)
+    for implementation, path in bundled.items():
+        if not path.is_file() or sha256_file(path) != expected:
+            raise RuntimeError(f"{implementation} bundled timeline does not match selected timeline")
+    return expected
+
+
+def validate_simulator_identity(
+    inventory: dict[str, Any], udids: list[str], runtime_id: str
+) -> list[dict[str, Any]]:
+    devices = {device.get("udid"): device for device in inventory.get("devices", {}).get(runtime_id, [])}
+    resolved = []
+    for udid in udids:
+        device = devices.get(udid)
+        if not device:
+            raise RuntimeError(f"Simulator {udid} is not in requested runtime {runtime_id}")
+        if device.get("isAvailable") is not True or device.get("deviceTypeIdentifier") != DEVICE_TYPE:
+            raise RuntimeError(f"Simulator {udid} is not an available iPhone 17 Pro")
+        resolved.append(device)
+    return resolved
+
+
+def validate_ack(value: dict[str, Any], status: str, expected: dict[str, Any]) -> None:
+    if value.get("status") != status or any(value.get(key) != wanted for key, wanted in expected.items()):
+        raise RuntimeError(f"Invalid {status} acknowledgement: {value!r}")
+
+
+def app_documents(udid: str, bundle: str) -> Path:
+    container = Path(run(["xcrun", "simctl", "get_app_container", udid, bundle, "data"]).stdout.strip())
+    return container / "Documents"
+
+
+def clear_acknowledgements(directory: Path) -> None:
+    for name in ("synchronized-demo-armed.json", "synchronized-demo-completed.json"):
+        (directory / name).unlink(missing_ok=True)
+
+
+def wait_for_ack(directory: Path, name: str, status: str, expected: dict[str, Any], deadline: float) -> tuple[Path, dict[str, Any]]:
+    path = directory / name
+    while time.time() < deadline:
+        if path.is_file():
+            try:
+                value = json.loads(path.read_text())
+                validate_ack(value, status, expected)
+                return path, value
+            except (json.JSONDecodeError, OSError):
+                pass
+        time.sleep(0.05)
+    raise RuntimeError(f"Missing valid {status} acknowledgement before deadline: {path}")
+
+
 def compose_filter() -> str:
     return (
         "[0:v]setpts=PTS-STARTPTS[native];"
@@ -192,6 +251,7 @@ def main() -> int:
     timeline_value = json.loads(args.timeline.read_text())
     timeline_summary = validate_timeline(timeline_value)
     runtime = find_runtime(run_json(["xcrun", "simctl", "list", "runtimes", "-j"]), args.runtime_version)
+    timeline_asset_hash = verify_timeline_assets(args.timeline, bundled_timeline_paths(args.native_app, args.flutter_app))
     run_id = time.strftime("%Y%m%d-%H%M%S")
     output_dir = args.output_root / run_id
     output_dir.mkdir(parents=True, exist_ok=False)
@@ -207,9 +267,14 @@ def main() -> int:
         native_name, flutter_name = f"Sheet Native 17 Pro {run_id}", f"Sheet Flutter 17 Pro {run_id}"
         native_udid = create_simulator(native_name, runtime["identifier"], args.clone_source)
         flutter_udid = create_simulator(flutter_name, runtime["identifier"], args.clone_source)
+    device_records = validate_simulator_identity(
+        run_json(["xcrun", "simctl", "list", "devices", "-j"]),
+        [native_udid, flutter_udid],
+        runtime["identifier"],
+    )
     simulators = {
-        "native": {"udid": native_udid, "name": native_name, "bundle": NATIVE_BUNDLE},
-        "flutter": {"udid": flutter_udid, "name": flutter_name, "bundle": FLUTTER_BUNDLE},
+        "native": {"udid": native_udid, "name": native_name, "bundle": NATIVE_BUNDLE, "device": device_records[0]},
+        "flutter": {"udid": flutter_udid, "name": flutter_name, "bundle": FLUTTER_BUNDLE, "device": device_records[1]},
     }
 
     with ThreadPoolExecutor(max_workers=2) as executor:
@@ -217,10 +282,18 @@ def main() -> int:
         for future in futures:
             future.result()
 
+    document_dirs = {
+        "native": app_documents(native_udid, NATIVE_BUNDLE),
+        "flutter": app_documents(flutter_udid, FLUTTER_BUNDLE),
+    }
+    for directory in document_dirs.values():
+        clear_acknowledgements(directory)
+
     native_recorder, native_started = start_recording(native_udid, native_video)
     flutter_recorder, flutter_started = start_recording(flutter_udid, flutter_video)
-    start_epoch_ms = int(time.time() * 1000) + 8000
+    start_epoch_ms = int(time.time() * 1000) + 12000
     launch_results: dict[str, Any] = {}
+    acknowledgements: dict[str, Any] = {}
     try:
         with ThreadPoolExecutor(max_workers=2) as executor:
             launches = {
@@ -228,8 +301,25 @@ def main() -> int:
                 "flutter": executor.submit(launch, flutter_udid, FLUTTER_BUNDLE, start_epoch_ms, runtime["buildversion"]),
             }
             launch_results = {name: future.result() for name, future in launches.items()}
+        armed_expected = {
+            "start_epoch_ms": start_epoch_ms,
+            "duration_ms": timeline_summary["duration_ms"],
+            "scene_count": timeline_summary["scene_count"],
+        }
+        armed_deadline = start_epoch_ms / 1000 - 1
+        for implementation, directory in document_dirs.items():
+            path, value = wait_for_ack(directory, "synchronized-demo-armed.json", "armed", armed_expected, armed_deadline)
+            copied = output_dir / f"{implementation}-armed.json"
+            copied.write_bytes(path.read_bytes())
+            acknowledgements[f"{implementation}_armed"] = {"path": str(copied), "sha256": sha256_file(copied), "value": value}
         target_end = start_epoch_ms / 1000 + timeline_summary["duration_ms"] / 1000 + 2
         time.sleep(max(0, target_end - time.time()))
+        completed_expected = {"start_epoch_ms": start_epoch_ms, "last_scene": timeline_summary["scene_ids"][-1]}
+        for implementation, directory in document_dirs.items():
+            path, value = wait_for_ack(directory, "synchronized-demo-completed.json", "completed", completed_expected, target_end + 5)
+            copied = output_dir / f"{implementation}-completed.json"
+            copied.write_bytes(path.read_bytes())
+            acknowledgements[f"{implementation}_completed"] = {"path": str(copied), "sha256": sha256_file(copied), "value": value}
     finally:
         stop_recording(native_recorder)
         stop_recording(flutter_recorder)
@@ -251,6 +341,8 @@ def main() -> int:
     )
     manifest["launches"] = launch_results
     manifest["timeline_summary"] = timeline_summary
+    manifest["verified_bundled_timeline_sha256"] = timeline_asset_hash
+    manifest["acknowledgements"] = acknowledgements
     manifest["git_revision"] = run(["git", "rev-parse", "HEAD"], check=True).stdout.strip()
     manifest_path = output_dir / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")

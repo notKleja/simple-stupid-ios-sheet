@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -217,7 +218,8 @@ class _SynchronizedDemoBootstrapState extends State<SynchronizedDemoBootstrap> {
         final raw = await rootBundle.loadString('assets/synchronized_bilingual_demo.json');
         final timeline = DemoTimeline.fromJson(jsonDecode(raw) as Map<String, Object?>);
         final start = demo['start_epoch_ms']! as int;
-        if (mounted) setState(() => _resolved = SynchronizedDemoApp(timeline: timeline, startEpochMs: start));
+        final documents = metadata?['documents_directory']! as String;
+        if (mounted) setState(() => _resolved = SynchronizedDemoApp(timeline: timeline, startEpochMs: start, ackDirectory: documents));
         return;
       }
     } on MissingPluginException {
@@ -231,9 +233,10 @@ class _SynchronizedDemoBootstrapState extends State<SynchronizedDemoBootstrap> {
 }
 
 class SynchronizedDemoApp extends StatelessWidget {
-  const SynchronizedDemoApp({required this.timeline, required this.startEpochMs, super.key});
+  const SynchronizedDemoApp({required this.timeline, required this.startEpochMs, required this.ackDirectory, super.key});
   final DemoTimeline timeline;
   final int startEpochMs;
+  final String ackDirectory;
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -243,14 +246,15 @@ class SynchronizedDemoApp extends StatelessWidget {
       data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
       child: child!,
     ),
-    home: _LiveDemo(timeline: timeline, startEpochMs: startEpochMs),
+    home: _LiveDemo(timeline: timeline, startEpochMs: startEpochMs, ackDirectory: ackDirectory),
   );
 }
 
 class _LiveDemo extends StatefulWidget {
-  const _LiveDemo({required this.timeline, required this.startEpochMs});
+  const _LiveDemo({required this.timeline, required this.startEpochMs, required this.ackDirectory});
   final DemoTimeline timeline;
   final int startEpochMs;
+  final String ackDirectory;
 
   @override
   State<_LiveDemo> createState() => _LiveDemoState();
@@ -262,15 +266,30 @@ class _LiveDemoState extends State<_LiveDemo> {
   int _previousMs = -1;
   int _backgroundPulse = 0;
   bool _toggle = false;
+  bool _completionWritten = false;
   IosSheetController? _sheet;
   ScrollController? _scroll;
   DemoScene? _presentedScene;
+  final ValueNotifier<bool> _toggleNotifier = ValueNotifier(false);
+  final ValueNotifier<int> _elapsedNotifier = ValueNotifier(0);
 
   @override
   void initState() {
     super.initState();
     _timer = Timer.periodic(const Duration(milliseconds: 16), (_) => _tick());
+    _writeAck('synchronized-demo-armed.json', {
+      'status': 'armed',
+      'start_epoch_ms': widget.startEpochMs,
+      'duration_ms': widget.timeline.durationMs,
+      'scene_count': widget.timeline.scenes.length,
+      'first_scene': widget.timeline.scenes.first.id,
+      'last_scene': widget.timeline.scenes.last.id,
+    });
     _tick();
+  }
+
+  void _writeAck(String name, Map<String, Object?> value) {
+    File('${widget.ackDirectory}/$name').writeAsStringSync('${jsonEncode(value)}\n', flush: true);
   }
 
   void _tick() {
@@ -285,10 +304,22 @@ class _LiveDemoState extends State<_LiveDemo> {
     final actions = widget.timeline.actionsBetween(_previousMs, capped);
     _previousMs = capped;
     setState(() => _elapsedMs = capped);
+    _elapsedNotifier.value = capped;
     for (final action in actions) {
       _perform(action);
     }
-    if (current > widget.timeline.durationMs + 500) _timer?.cancel();
+    if (current > widget.timeline.durationMs + 500) {
+      if (!_completionWritten) {
+        _completionWritten = true;
+        _writeAck('synchronized-demo-completed.json', {
+          'status': 'completed',
+          'start_epoch_ms': widget.startEpochMs,
+          'elapsed_ms': current,
+          'last_scene': widget.timeline.scenes.last.id,
+        });
+      }
+      _timer?.cancel();
+    }
   }
 
   Future<void> _perform(DemoAction action) async {
@@ -303,6 +334,7 @@ class _LiveDemoState extends State<_LiveDemo> {
         if (mounted) setState(() => _backgroundPulse++);
       case 'toggle':
         if (mounted) setState(() => _toggle = !_toggle);
+        _toggleNotifier.value = _toggle;
       case 'dismiss_attempt':
         // Property demonstration only; interactive input proof remains in native traces.
         if (mounted) setState(() => _backgroundPulse++);
@@ -331,7 +363,32 @@ class _LiveDemoState extends State<_LiveDemo> {
       interactiveDismissDisabled: scene.configuration['dismissal_locked'] == true,
       contentInteraction: scene.configuration['scroll_expansion'] == false ? IosSheetContentInteraction.scrolls : IosSheetContentInteraction.resizes,
       backgroundColor: Colors.white,
-      child: Material(color: Colors.white, child: Directionality(textDirection: scene.direction, child: _content(scene))),
+      child: Material(
+        color: Colors.white,
+        child: Directionality(
+          textDirection: scene.direction,
+          child: Stack(
+            children: [
+              Positioned.fill(child: _content(scene)),
+              Positioned(
+                top: 10,
+                left: 14,
+                right: 14,
+                child: ValueListenableBuilder<int>(
+                  valueListenable: _elapsedNotifier,
+                  builder: (_, elapsed, _) => DecoratedBox(
+                    decoration: BoxDecoration(color: Colors.black.withValues(alpha: .74), borderRadius: BorderRadius.circular(10)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      child: Text('FLUTTER • ${scene.id} • ${(elapsed / 1000).toStringAsFixed(3)} s', style: const TextStyle(color: Colors.white, fontSize: 11, fontFamily: 'monospace')),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
     await Navigator.of(context).push(route);
     _sheet = null;
@@ -351,10 +408,16 @@ class _LiveDemoState extends State<_LiveDemo> {
       );
     }
     if (scene.configuration['content'] == 'components') {
-      return DemoComponentGallery(
-        language: scene.language,
-        toggleValue: _toggle,
-        onToggle: (value) => setState(() => _toggle = value),
+      return ValueListenableBuilder<bool>(
+        valueListenable: _toggleNotifier,
+        builder: (_, value, _) => DemoComponentGallery(
+          language: scene.language,
+          toggleValue: value,
+          onToggle: (next) {
+            _toggle = next;
+            _toggleNotifier.value = next;
+          },
+        ),
       );
     }
     return Stack(
@@ -394,6 +457,8 @@ class _LiveDemoState extends State<_LiveDemo> {
   void dispose() {
     _timer?.cancel();
     _scroll?.dispose();
+    _toggleNotifier.dispose();
+    _elapsedNotifier.dispose();
     super.dispose();
   }
 }

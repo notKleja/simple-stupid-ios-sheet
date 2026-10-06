@@ -77,7 +77,7 @@
       "start_ms": 25000,
       "duration_ms": 7000,
       "title": "Properties and modality",
-      "subtitle": "Undimmed medium • modal large • dismissal locked",
+      "subtitle": "Undimmed medium • modal large • dismissal lock configured",
       "configuration": { "detents": "reference", "content": "components", "largest_undimmed": "medium", "dismissal_locked": true },
       "actions": [
         { "at_ms": 400, "type": "present", "detent": "medium" },

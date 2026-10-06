@@ -2,7 +2,7 @@
 
 ## Intent
 
-Produce a reviewable side-by-side video of two fresh iPhone 17 Pro simulators
+Produce a reviewable side-by-side video of two initialized, identity-validated iPhone 17 Pro simulators
 running the same iOS 26.4.1 build: native UIKit on the left and Flutter on the
 right. Both apps execute the same scenario timeline from one absolute host time,
 switch from English/LTR to Arabic/RTL, and expose the scenario ID plus elapsed
@@ -33,18 +33,19 @@ two frames look similar.
 
 ## Synchronization
 
-The coordinator chooses `start_epoch_ms` at least eight seconds in the future,
+The coordinator chooses `start_epoch_ms` at least twelve seconds in the future,
 launches both apps with that value in their process environments, starts two
 `simctl io recordVideo` processes from one host command, and waits for both apps
-to reach their armed screens. Each app derives scene and action state from
+to write matching armed acknowledgements before the start deadline. Each app derives scene and action state from
 `Date.now - start_epoch_ms`; it does not chain relative delays. A visual elapsed
 counter and scene ID appear in both recordings.
 
 ## Recording and composition
 
 Two untouched H.264 simulator recordings are retained. FFmpeg normalizes their
-start timestamps, pads them to equal duration, stacks them horizontally, and
-adds a header and labels outside the simulator pixels. A run manifest records
+start timestamps and stacks them horizontally without trimming either input.
+Persistent implementation, scene, and elapsed-time labels appear inside both
+apps and both presented sheets. A run manifest records
 simulator UDIDs, OS/build, device type, app revisions, timeline hash, launch
 time, recording commands, output hashes, and observed duration/frame rate.
 
@@ -55,4 +56,3 @@ scenarios. It does not replace runtime traces or the numerical parity analyzer.
 Programmatic scrolling is a deterministic visual example; it is not proof of
 finger-driven scroll handoff. Keyboard focus is shown only if both simulators
 present it reliably on the shared timeline.
-

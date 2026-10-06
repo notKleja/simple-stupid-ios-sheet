@@ -13,6 +13,10 @@ import UIKit
     private var sheetController: UISheetPresentationController?
     private var scrollView: UIScrollView?
     private var componentSwitch: UISwitch?
+    private var componentSegmented: UISegmentedControl?
+    private var presentedLanguage = "en"
+    private var sheetHeader: UILabel?
+    private var completionWritten = false
     private let header = UILabel()
     private let backgroundTitle = UILabel()
     private let stateLabel = UILabel()
@@ -61,6 +65,11 @@ import UIKit
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         guard displayLink == nil else { return }
+        writeAck("synchronized-demo-armed.json", [
+            "status": "armed", "start_epoch_ms": startEpochMs,
+            "duration_ms": timeline.durationMs, "scene_count": timeline.scenes.count,
+            "first_scene": timeline.scenes.first?.id ?? "", "last_scene": timeline.scenes.last?.id ?? "",
+        ])
         let link = CADisplayLink(target: self, selector: #selector(tick))
         link.add(to: .main, forMode: .common)
         displayLink = link
@@ -73,10 +82,26 @@ import UIKit
         let scene = timeline.scene(at: elapsedMs)
         if scene.id != currentSceneID { currentSceneID = scene.id; updateScene(scene) }
         updateHeader(scene, rawElapsed: raw)
+        sheetHeader?.text = "NATIVE • \(scene.id) • \(String(format: "%.3f", Double(elapsedMs) / 1000)) s"
         let due = timeline.actions(fromExclusive: previousMs, through: elapsedMs)
         previousMs = elapsedMs
         due.forEach(perform)
-        if raw > timeline.durationMs + 500 { displayLink?.invalidate(); displayLink = nil }
+        if raw > timeline.durationMs + 500 {
+            if !completionWritten {
+                completionWritten = true
+                writeAck("synchronized-demo-completed.json", [
+                    "status": "completed", "start_epoch_ms": startEpochMs,
+                    "elapsed_ms": raw, "last_scene": timeline.scenes.last?.id ?? "",
+                ])
+            }
+            displayLink?.invalidate(); displayLink = nil
+        }
+    }
+
+    private func writeAck(_ name: String, _ value: [String: Any]) {
+        guard let data = try? JSONSerialization.data(withJSONObject: value, options: [.sortedKeys]),
+              let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        try? data.write(to: directory.appendingPathComponent(name), options: .atomic)
     }
 
     private func updateScene(_ scene: SynchronizedDemoScene) {
@@ -114,9 +139,10 @@ import UIKit
             stateLabel.text = "pulse=\(pulse)  toggle=\(toggleValue ? "on" : "off")"
         case "toggle":
             toggleValue.toggle(); componentSwitch?.setOn(toggleValue, animated: true)
+            componentSegmented?.selectedSegmentIndex = SynchronizedDemoPresentation.selectedSegment(language: presentedLanguage, toggleOn: toggleValue)
             stateLabel.text = "pulse=\(pulse)  toggle=\(toggleValue ? "on" : "off")"
         case "dismiss_attempt":
-            stateLabel.text = scheduled.scene.language == "ar" ? "محاولة السحب محظورة" : "interactive dismissal blocked"
+            stateLabel.text = scheduled.scene.language == "ar" ? "قفل السحب مُعدّ • لا توجد إيماءة محقونة" : "dismissal lock configured • no gesture injected"
         case "dismiss": dismissSheet()
         default: break
         }
@@ -136,7 +162,17 @@ import UIKit
     private func presentSheet(scene: SynchronizedDemoScene, initial: String) {
         if let existing = sheet { existing.dismiss(animated: false) }
         let controller = UIViewController()
-        controller.view = contentView(for: scene)
+        presentedLanguage = scene.language
+        let content = contentView(for: scene)
+        let container = UIView(); container.backgroundColor = .white
+        content.frame = container.bounds; content.autoresizingMask = [.flexibleWidth, .flexibleHeight]; container.addSubview(content)
+        let overlay = UILabel(); overlay.frame = CGRect(x: 14, y: 10, width: 374, height: 34)
+        overlay.backgroundColor = UIColor.black.withAlphaComponent(0.74); overlay.textColor = .white
+        overlay.font = .monospacedSystemFont(ofSize: 11, weight: .regular); overlay.layer.cornerRadius = 10; overlay.layer.masksToBounds = true
+        overlay.textAlignment = scene.direction == "rtl" ? .right : .left; overlay.text = "NATIVE • \(scene.id) • \(String(format: "%.3f", Double(elapsedMs) / 1000)) s"
+        container.addSubview(overlay); sheetHeader = overlay
+        controller.view = container
+        controller.view.semanticContentAttribute = scene.direction == "rtl" ? .forceRightToLeft : .forceLeftToRight
         controller.modalPresentationStyle = .pageSheet
         controller.isModalInPresentation = scene.configuration?.dismissalLocked == true
         guard let presentation = controller.sheetPresentationController else { return }
@@ -160,7 +196,7 @@ import UIKit
 
     private func dismissSheet() {
         sheet?.dismiss(animated: true)
-        sheet = nil; sheetController = nil; scrollView = nil; componentSwitch = nil
+        sheet = nil; sheetController = nil; scrollView = nil; componentSwitch = nil; componentSegmented = nil; sheetHeader = nil
     }
 
     private func contentView(for scene: SynchronizedDemoScene) -> UIView {
@@ -172,6 +208,7 @@ import UIKit
     private func scrollingContent(_ scene: SynchronizedDemoScene) -> UIView {
         let scroll = UIScrollView(); scroll.backgroundColor = .white
         let stack = UIStackView(); stack.axis = .vertical; stack.spacing = 8; stack.frame = CGRect(x: 18, y: 42, width: 366, height: 30 * 62)
+        stack.semanticContentAttribute = scene.direction == "rtl" ? .forceRightToLeft : .forceLeftToRight
         for index in 1...30 {
             let label = UILabel(); label.numberOfLines = 2
             label.backgroundColor = UIColor.systemBlue.withAlphaComponent(index % 2 == 0 ? 0.08 : 0.13)
@@ -186,14 +223,15 @@ import UIKit
     private func componentContent(_ scene: SynchronizedDemoScene) -> UIView {
         let scroll = UIScrollView(); scroll.backgroundColor = .white
         let stack = UIStackView(); stack.axis = .vertical; stack.spacing = 12; stack.frame = CGRect(x: 20, y: 42, width: 362, height: 620)
-        let title = UILabel(); title.font = .systemFont(ofSize: 24, weight: .semibold); title.text = scene.language == "ar" ? "معرض المكونات" : "Component gallery"; stack.addArrangedSubview(title)
+        stack.semanticContentAttribute = scene.direction == "rtl" ? .forceRightToLeft : .forceLeftToRight
+        let title = UILabel(); title.font = .systemFont(ofSize: 24, weight: .semibold); title.text = scene.language == "ar" ? "معرض المكونات" : "Component gallery"; title.textAlignment = scene.language == "ar" ? .right : .left; stack.addArrangedSubview(title)
         let button = UIButton(type: .system); button.configuration = .filled(); button.setTitle(scene.language == "ar" ? "زر أساسي" : "Primary button", for: .normal); stack.addArrangedSubview(button)
         let switchRow = UIStackView(); switchRow.axis = .horizontal
-        let switchTitle = UILabel(); switchTitle.text = scene.language == "ar" ? "مفتاح تبديل" : "Toggle switch"
+        let switchTitle = UILabel(); switchTitle.text = scene.language == "ar" ? "مفتاح تبديل" : "Toggle switch"; switchTitle.textAlignment = scene.language == "ar" ? .right : .left
         let toggle = UISwitch(); toggle.isOn = toggleValue; componentSwitch = toggle
         switchRow.addArrangedSubview(switchTitle); switchRow.addArrangedSubview(toggle); stack.addArrangedSubview(switchRow)
-        let segmented = UISegmentedControl(items: scene.language == "ar" ? ["الأول", "الثاني"] : ["First", "Second"]); segmented.selectedSegmentIndex = toggleValue ? 1 : 0; stack.addArrangedSubview(segmented)
-        let field = UITextField(); field.borderStyle = .roundedRect; field.placeholder = scene.language == "ar" ? "حقل نص" : "Text field"; stack.addArrangedSubview(field)
+        let segmented = UISegmentedControl(items: SynchronizedDemoPresentation.segmentItems(language: scene.language)); segmented.selectedSegmentIndex = SynchronizedDemoPresentation.selectedSegment(language: scene.language, toggleOn: toggleValue); componentSegmented = segmented; stack.addArrangedSubview(segmented)
+        let field = UITextField(); field.borderStyle = .roundedRect; field.placeholder = scene.language == "ar" ? "حقل نص" : "Text field"; field.textAlignment = scene.language == "ar" ? .right : .left; stack.addArrangedSubview(field)
         for index in 1...3 {
             let block = UILabel(); block.textAlignment = .center; block.text = scene.language == "ar" ? "كتلة \(index)" : "Fixed block \(index)"
             block.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.05 + CGFloat(index) * 0.05); block.layer.cornerRadius = 12; block.layer.masksToBounds = true

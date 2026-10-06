@@ -92,3 +92,14 @@ struct SynchronizedDemoTimeline: Codable {
         return try JSONDecoder().decode(Self.self, from: Data(contentsOf: url))
     }
 }
+
+enum SynchronizedDemoPresentation {
+    static func segmentItems(language: String) -> [String] {
+        language == "ar" ? ["الثاني", "الأول"] : ["First", "Second"]
+    }
+
+    static func selectedSegment(language: String, toggleOn: Bool) -> Int {
+        if language == "ar" { return toggleOn ? 0 : 1 }
+        return toggleOn ? 1 : 0
+    }
+}

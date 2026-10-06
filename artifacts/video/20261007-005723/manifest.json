@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "run_id": "20261007-005723",
+  "start_epoch_ms": 1791323857018,
+  "recording_start_monotonic_ns": {
+    "native": 68152705564250,
+    "flutter": 68152707394166
+  },
+  "recording_start_delta_ns": 1829916,
+  "device_type": "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro",
+  "runtime": {
+    "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-26-4",
+    "version": "26.4.1",
+    "buildversion": "23E254a"
+  },
+  "simulators": {
+    "native": {
+      "udid": "A82CABFB-0D1C-4764-9ADF-7334445BBFAD",
+      "name": "Existing iPhone 17 Pro — Native",
+      "bundle": "dev.notkleja.NativeSheetHarness",
+      "device": {
+        "dataPath": "/Users/kleja/Library/Developer/CoreSimulator/Devices/A82CABFB-0D1C-4764-9ADF-7334445BBFAD/data",
+        "dataPathSize": 8161116160,
+        "logPath": "/Users/kleja/Library/Logs/CoreSimulator/A82CABFB-0D1C-4764-9ADF-7334445BBFAD",
+        "udid": "A82CABFB-0D1C-4764-9ADF-7334445BBFAD",
+        "lastUsedAt": "2026-10-04T16:44:09Z",
+        "isAvailable": true,
+        "logPathSize": 520192,
+        "deviceTypeIdentifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro",
+        "state": "Booted",
+        "name": "iPhone 17 Pro"
+      }
+    },
+    "flutter": {
+      "udid": "1ABB6111-3905-4504-AE81-88F64F89BA5E",
+      "name": "Existing iPhone 17 Pro — Flutter",
+      "bundle": "dev.sheetreference.iosSheetCandidate",
+      "device": {
+        "dataPath": "/Users/kleja/Library/Developer/CoreSimulator/Devices/1ABB6111-3905-4504-AE81-88F64F89BA5E/data",
+        "dataPathSize": 3180310528,
+        "logPath": "/Users/kleja/Library/Logs/CoreSimulator/1ABB6111-3905-4504-AE81-88F64F89BA5E",
+        "udid": "1ABB6111-3905-4504-AE81-88F64F89BA5E",
+        "lastUsedAt": "2026-10-06T21:15:35Z",
+        "isAvailable": true,
+        "logPathSize": 163840,
+        "deviceTypeIdentifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro",
+        "state": "Booted",
+        "name": "Subbby Onboarding Capture"
+      }
+    }
+  },
+  "timeline": {
+    "path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/synchronized-video/measurement/scenarios/synchronized_bilingual_demo.json",
+    "sha256": "1e9953160490c23dc99f62c2db6d18a3f221823ee14171c48704ccb1cda63617"
+  },
+  "outputs": {
+    "native": {
+      "path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/synchronized-video/artifacts/video/20261007-005723/native-iphone17pro.mp4",
+      "sha256": "a0c4eede9de7ae4ac3090a2f980db44f8a14f1872e312c6c71e24e0440aa0991",
+      "media": {
+        "stream": {
+          "codec_name": "h264",
+          "width": 1206,
+          "height": 2622,
+          "avg_frame_rate": "953400/15637",
+          "nb_frames": "4767"
+        },
+        "format": {
+          "duration": "78.185000",
+          "size": "70192296"
+        }
+      }
+    },
+    "flutter": {
+      "path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/synchronized-video/artifacts/video/20261007-005723/flutter-iphone17pro.mp4",
+      "sha256": "7d28aca00cb7e5cfc3df730b73f50dc7bf8dbb652053b80212ef728840035438",
+      "media": {
+        "stream": {
+          "codec_name": "h264",
+          "width": 1206,
+          "height": 2622,
+          "avg_frame_rate": "1398000/23461",
+          "nb_frames": "4660"
+        },
+        "format": {
+          "duration": "78.203333",
+          "size": "39467542"
+        }
+      }
+    },
+    "composite": {
+      "path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/synchronized-video/artifacts/video/20261007-005723/native-vs-flutter-iphone17pro-bilingual.mp4",
+      "sha256": "a2b496772ead963d7ccca715917d171c232ae794547c9e22d397d74306504424",
+      "media": {
+        "stream": {
+          "codec_name": "h264",
+          "width": 2412,
+          "height": 2622,
+          "avg_frame_rate": "4659600/46901",
+          "nb_frames": "7766"
+        },
+        "format": {
+          "duration": "78.168333",
+          "size": "27998014"
+        }
+      }
+    }
+  },
+  "evidence_boundary": [
+    "Video demonstrates synchronized visible scenarios; numerical parity remains trace-analyzer work.",
+    "Programmatic scrolling is not finger-driven scroll-handoff proof.",
+    "Property labels do not by themselves prove native hit testing."
+  ],
+  "launches": {
+    "native": {
+      "started_monotonic_ns": 68152709431041,
+      "output": "dev.notkleja.NativeSheetHarness: 11116"
+    },
+    "flutter": {
+      "started_monotonic_ns": 68152711096041,
+      "output": "dev.sheetreference.iosSheetCandidate: 11117"
+    }
+  },
+  "timeline_summary": {
+    "scene_count": 11,
+    "languages": [
+      "ar",
+      "en"
+    ],
+    "duration_ms": 66000,
+    "scene_ids": [
+      "en.intro",
+      "en.page",
+      "en.custom",
+      "en.scroll_resize",
+      "en.properties",
+      "en.components",
+      "ar.intro",
+      "ar.page",
+      "ar.custom",
+      "ar.scroll",
+      "ar.outro"
+    ]
+  },
+  "verified_bundled_timeline_sha256": "1e9953160490c23dc99f62c2db6d18a3f221823ee14171c48704ccb1cda63617",
+  "acknowledgements": {
+    "native_armed": {
+      "path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/synchronized-video/artifacts/video/20261007-005723/native-armed.json",
+      "sha256": "fe25a46fa7debd0dbb07bbcb3c6e2e413fadf62f9eb1c6a35def865c600c0752",
+      "value": {
+        "duration_ms": 66000,
+        "first_scene": "en.intro",
+        "last_scene": "ar.outro",
+        "scene_count": 11,
+        "start_epoch_ms": 1791323857018,
+        "status": "armed"
+      }
+    },
+    "flutter_armed": {
+      "path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/synchronized-video/artifacts/video/20261007-005723/flutter-armed.json",
+      "sha256": "e15a196c797bd8b8afc41fb4087688fedf63da1a093a9ed1e20a47d73e701cf7",
+      "value": {
+        "status": "armed",
+        "start_epoch_ms": 1791323857018,
+        "duration_ms": 66000,
+        "scene_count": 11,
+        "first_scene": "en.intro",
+        "last_scene": "ar.outro"
+      }
+    },
+    "native_completed": {
+      "path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/synchronized-video/artifacts/video/20261007-005723/native-completed.json",
+      "sha256": "cf30e21efa772d80f138d4f5bdb4b986777e6e330c41947ed46fbc5a4314c5ad",
+      "value": {
+        "elapsed_ms": 66508,
+        "last_scene": "ar.outro",
+        "start_epoch_ms": 1791323857018,
+        "status": "completed"
+      }
+    },
+    "flutter_completed": {
+      "path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/synchronized-video/artifacts/video/20261007-005723/flutter-completed.json",
+      "sha256": "863550d9de8010f16efdd6a7b1a73623b92f9a2367d5e9b47cdbea62c77d0727",
+      "value": {
+        "status": "completed",
+        "start_epoch_ms": 1791323857018,
+        "elapsed_ms": 66502,
+        "last_scene": "ar.outro"
+      }
+    }
+  },
+  "git_revision": "189c428393270c309cbd3a49dd99cead474f33e2"
+}
