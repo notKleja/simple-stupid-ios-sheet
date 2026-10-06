@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Measured native iOS sheet profile",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "platform",
+    "major_version",
+    "status",
+    "runtime_builds",
+    "profiles",
+    "unresolved"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "platform": { "const": "iOS" },
+    "major_version": { "type": "integer", "minimum": 26 },
+    "status": {
+      "enum": ["unmeasured", "partially_measured", "measured"]
+    },
+    "runtime_builds": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "profiles": { "type": "object" },
+    "observed_animation_objects": { "type": "array" },
+    "unresolved": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
+

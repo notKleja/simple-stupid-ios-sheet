@@ -3,8 +3,130 @@
   "schema_version": 1,
   "platform": "iOS",
   "major_version": 26,
-  "status": "unmeasured",
-  "measurements": {},
-  "unresolved": ["Runtime inventory and native trace collection pending"]
+  "status": "partially_measured",
+  "runtime_builds": ["23E254a", "23G90"],
+  "scope": "Resting geometry only for the exact opaque configurations and devices below",
+  "profiles": {
+    "page_phone_402x874": {
+      "os_version": "26.4.1",
+      "device": "iPhone18,1 simulator",
+      "safe_area": { "top": 62, "bottom": 34, "left": 0, "right": 0 },
+      "scale": 3,
+      "scenario": "native.medium_large.programmatic",
+      "detents": {
+        "maximum": 778,
+        "large": 778,
+        "medium": 435.68000000000006,
+        "medium_ratio_to_maximum": 0.56
+      },
+      "medium_rest": {
+        "x": 8,
+        "y": 415.0265339966832,
+        "width": 386,
+        "visible_height": 450.9734660033168,
+        "bottom_inset": 8
+      },
+      "large_rest": {
+        "x": 0,
+        "y": 62,
+        "width": 402,
+        "visible_height": 812,
+        "bottom_inset": 0
+      },
+      "floating_scale": "(screen_width - 16) / screen_width",
+      "visible_medium_height": "round((resolved_medium + bottom_safe_area) * display_scale) / display_scale * floating_scale",
+      "evidence_ids": ["ios26-page-phone-402x874-rest"]
+    },
+    "page_vphone_430x932": {
+      "os_version": "26.6.2",
+      "device": "iPhone99,11 virtual device",
+      "safe_area": { "top": 59, "bottom": 34, "left": 0, "right": 0 },
+      "scale": 3,
+      "scenario": "native.medium_large.programmatic",
+      "detents": {
+        "maximum": 839,
+        "large": 839,
+        "medium": 469.84000000000003,
+        "medium_ratio_to_maximum": 0.56
+      },
+      "medium_rest": {
+        "x": 8,
+        "y": 438.753488372093,
+        "width": 414,
+        "visible_height": 485.246511627907,
+        "bottom_inset": 8
+      },
+      "large_rest": {
+        "x": 0,
+        "y": 59,
+        "width": 430,
+        "visible_height": 873,
+        "bottom_inset": 0
+      },
+      "evidence_ids": ["ios26-page-vphone-430x932-rest"]
+    },
+    "page_ipad_834x1210": {
+      "os_version": "26.4.1",
+      "device": "iPad17,2 simulator",
+      "safe_area": { "top": 32, "bottom": 25, "left": 0, "right": 0 },
+      "scale": 2,
+      "scenario": "native.medium_large.programmatic",
+      "detents": {
+        "maximum": 1143,
+        "large": 1143,
+        "medium": 640.08,
+        "medium_ratio_to_maximum": 0.56
+      },
+      "medium_rest": {
+        "x": 8,
+        "y": 549.757793764988,
+        "width": 818,
+        "visible_height": 652.242206235012,
+        "bottom_inset": 8
+      },
+      "large_rest": {
+        "x": 0,
+        "y": 42,
+        "width": 834,
+        "visible_height": 1168,
+        "bottom_inset": 0
+      },
+      "evidence_ids": ["ios26-page-ipad-834x1210-rest"]
+    },
+    "form_ipad_preferred_320x320": {
+      "os_version": "26.4.1",
+      "device": "iPad17,2 simulator",
+      "scenario": "native.form",
+      "preferred_content_size": { "width": 320, "height": 320 },
+      "detents": {
+        "maximum": 330,
+        "large": 330,
+        "medium": 184.8,
+        "medium_ratio_to_maximum": 0.56
+      },
+      "medium_rest": { "x": 257, "y": 580, "width": 320, "visible_height": 185 },
+      "large_rest": { "x": 257, "y": 435, "width": 320, "visible_height": 330 },
+      "evidence_ids": ["ios26-form-ipad-320x320-rest"]
+    }
+  },
+  "observed_animation_objects": [
+    {
+      "scope": "One observed programmatic detent animation family; not universal release physics",
+      "mass": 1,
+      "stiffness": 333.3333332805039,
+      "damping": 36.51483716411749,
+      "initial_velocity": 0,
+      "duration_seconds": 0.5058237871186482,
+      "status": "observed_not_promoted"
+    }
+  ],
+  "unresolved": [
+    "Full presentation, detent-transition, dismissal, and interruption trajectories",
+    "Gesture transfer, overdrag resistance, velocity mapping, and snap target selection",
+    "Scalar radius and full clipping contour",
+    "Effective barrier alpha and actual background hit testing",
+    "Scroll handoff, keyboard synchronization, stacking, accessibility, and performance",
+    "Landscape and compact-height profiles",
+    "Device-independent formulas outside the measured cohorts"
+  ]
 }
-
