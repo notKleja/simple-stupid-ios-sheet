@@ -1,0 +1,22 @@
+{
+  "profile_id": "initial-parity-goals-v1",
+  "provenance": "User mission acceptance goals; these are not measured Apple constants",
+  "alignment": {"event": "present.requested", "occurrence": 0},
+  "max_gap_frames": 2,
+  "event_tolerance_frames": 1,
+  "metrics": {
+    "sheet.x": {"final": 0.5}, "sheet.y": {"rms": 1, "max": 2, "final": 0.25},
+    "sheet.width": {"final": 0.5}, "sheet.height": {"final": 0.5}, "sheet.visible_height": {"final": 0.5},
+    "sheet.left_inset": {"rms": 0.5, "max": 0.5, "final": 0.5},
+    "sheet.right_inset": {"rms": 0.5, "max": 0.5, "final": 0.5},
+    "sheet.bottom_inset": {"rms": 0.5, "max": 0.5, "final": 0.5},
+    "sheet.detent_height": {"max": 0.5, "final": 0.5}, "sheet.radius": {"max": 0.5, "final": 0.5},
+    "barrier.alpha": {"rms": 0.01, "max": 0.01, "final": 0.01},
+    "presenter.scale_x": {"max": 0.001}, "presenter.scale_y": {"max": 0.001},
+    "presenter.translation_x": {"rms": 1, "max": 2, "final": 0.25},
+    "presenter.translation_y": {"rms": 1, "max": 2, "final": 0.25}
+  },
+  "states": ["selected_detent", "target_detent", "gesture", "scroll_owner", "underlying_hit_test"],
+  "exact_event_data": {"detent.requested": ["target"], "detent.changed": ["selected"], "scroll.handoff": ["owner"], "input.touch": ["phase", "x", "y"]},
+  "notes": ["Profile must be applied per phase and observed state; null metrics fail closed", "Scalar radius only applies when native shape admits one; use separately reviewed contour comparison otherwise", "Observed resting checkpoints required before and after transitions; terminal dismissal frame is not a resting presented sheet", "No velocity target invented: velocity diagnostics are reported until native-repeat-derived limits are approved"]
+}

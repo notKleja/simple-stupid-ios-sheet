@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/notKleja/simple-stupid-ios-sheet/measurement/trace-v1",
+  "title": "Sheet trace JSONL record v1",
+  "type": "object",
+  "required": ["schema_version", "type", "run_id", "seq", "t_ns"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "type": {"enum": ["session", "event", "frame"]},
+    "run_id": {"type": "string", "minLength": 1},
+    "seq": {"type": "integer", "minimum": 0},
+    "t_ns": {"type": "integer", "minimum": 0},
+    "unavailable": {"type": "object", "additionalProperties": {"type": "string"}}
+  },
+  "allOf": [
+    {"if": {"properties": {"type": {"const": "session"}}}, "then": {
+      "required": ["scenario_id", "implementation", "evidence_kind", "os", "device", "environment", "configuration"],
+      "properties": {
+        "scenario_id": {"type": "string", "minLength": 1},
+        "implementation": {"enum": ["native", "flutter"]},
+        "evidence_kind": {"enum": ["runtime", "synthetic"]},
+        "os": {"type": "object", "required": ["version", "build"], "properties": {"version": {"type": "string"}, "build": {"type": ["string", "null"]}}},
+        "device": {"type": "object", "required": ["model", "logical_size", "physical_size", "scale", "refresh_hz", "runtime_kind"], "properties": {
+          "model": {"type": "string", "minLength": 1}, "runtime_kind": {"enum": ["simulator", "virtual_device", "physical_device", "synthetic"]},
+          "logical_size": {"$ref": "#/$defs/size"}, "physical_size": {"$ref": "#/$defs/size"},
+          "scale": {"type": "number", "exclusiveMinimum": 0}, "refresh_hz": {"type": ["number", "null"], "exclusiveMinimum": 0}
+        }},
+        "environment": {"type": "object", "required": ["orientation", "safe_area", "size_classes", "status_bar", "keyboard"], "properties": {
+          "orientation": {"enum": ["portrait", "landscape", "portrait_upside_down", "unknown"]},
+          "safe_area": {"type": "object", "required": ["top", "left", "bottom", "right"], "additionalProperties": {"type": "number", "minimum": 0}},
+          "size_classes": {"type": "object", "required": ["horizontal", "vertical"], "additionalProperties": {"enum": ["compact", "regular", "unspecified"]}},
+          "status_bar": {"type": ["object", "null"], "properties": {"hidden": {"type": "boolean"}, "visible": {"type": "boolean"}}},
+          "keyboard": {"type": "object", "required": ["visible", "frame"], "properties": {"visible": {"type": "boolean"}, "frame": {"$ref": "#/$defs/nullableRect"}}}
+        }},
+        "configuration": {"type": "object"}
+      }
+    }},
+    {"if": {"properties": {"type": {"const": "event"}}}, "then": {"required": ["name", "data"], "properties": {"name": {"type": "string", "minLength": 1}, "data": {"type": "object"}}}},
+    {"if": {"properties": {"type": {"const": "frame"}}}, "then": {"required": ["metrics", "state"], "properties": {"metrics": {"type": "object", "additionalProperties": {"type": ["number", "null"]}}, "state": {"type": "object"}}}},
+    {"if": {"properties": {"type": {"const": "session"}, "evidence_kind": {"const": "runtime"}}}, "then": {"properties": {"device": {"properties": {"runtime_kind": {"enum": ["simulator", "virtual_device", "physical_device"]}}}}}}
+  ],
+  "$defs": {
+    "size": {"type": "object", "required": ["width", "height"], "properties": {"width": {"type": "number", "exclusiveMinimum": 0}, "height": {"type": "number", "exclusiveMinimum": 0}}},
+    "nullableRect": {"type": ["object", "null"], "required": ["x", "y", "width", "height"], "properties": {"x": {"type": "number"}, "y": {"type": "number"}, "width": {"type": "number", "minimum": 0}, "height": {"type": "number", "minimum": 0}}}
+  }
+}
