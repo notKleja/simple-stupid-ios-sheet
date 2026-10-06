@@ -201,6 +201,57 @@ class ComparisonTests(unittest.TestCase):
         candidate[1]["data"]["target"] = "medium"
         self.assertEqual(self.run_compare(native, candidate, settings)["verdict"], "FAIL")
 
+    def test_auxiliary_probe_events_are_explicitly_reported_when_ignored(self):
+        native = trace()
+        native.append({"schema_version": 1, "type": "event", "run_id": native[0]["run_id"],
+                       "seq": 5, "t_ns": 200_000_000, "name": "detent.resolved", "data": {"large": 700}})
+        report = self.run_compare(native=native, settings=config(auxiliary_events=["detent.resolved"]))
+        self.assertEqual(report["verdict"], "PASS")
+        self.assertEqual(report["auxiliary_event_counts"]["native"], {"detent.resolved": 1})
+
+    def test_alignment_event_cannot_be_ignored_as_auxiliary(self):
+        report = self.run_compare(settings=config(auxiliary_events=["gesture.ended"]))
+        self.assertEqual(report["verdict"], "FAIL")
+
+    def test_diagnostic_runtime_markers_do_not_grant_full_parity_eligibility(self):
+        # Synthetic provenance-marker simulation tests the gate, never native behavior.
+        native, candidate = trace(), trace("flutter")
+        for records in (native, candidate):
+            records[0]["evidence_kind"] = "runtime"
+        report = self.run_compare(native, candidate)
+        self.assertEqual(report["verdict"], "PASS")
+        self.assertFalse(report["native_parity_eligible"])
+        self.assertEqual(report["acceptance_scope"], "diagnostic_subset")
+        self.assertIn("sheet.radius", report["full_acceptance_missing"])
+
+    def test_candidate_preboundary_sample_can_bracket_native_first_sample(self):
+        native = trace(values=(1, 11, 21), times=(10, 110, 210))
+        candidate = trace("flutter", values=(-1, 1.5, 11.5, 21.5), times=(-10, 15, 115, 215), offset=100_000_000)
+        candidate[0]["t_ns"] = 0
+        candidate.sort(key=lambda record: record["t_ns"])
+        for i, record in enumerate(candidate):
+            record["seq"] = i
+        # Header remains first; an observed predecessor is valid interpolation,
+        # not extrapolation or a generated sample.
+        self.assertEqual(self.run_compare(native, candidate)["verdict"], "PASS")
+
+    def test_phase_window_reports_frames_outside_evaluation(self):
+        native = trace(values=(0, 10, 20, 30, 40), times=(0, 100, 200, 300, 400))
+        candidate = trace("flutter", values=(None, 10, 20, 30, 40), times=(0, 100, 200, 300, 400))
+        for records in (native, candidate):
+            for name, ms in (("phase.begin", 100), ("phase.end", 400)):
+                records.append({"schema_version": 1, "type": "event", "run_id": records[0]["run_id"], "seq": 0,
+                                "t_ns": ms * 1_000_000, "name": name, "data": {}})
+            records.sort(key=lambda record: record["t_ns"])
+            for i, record in enumerate(records):
+                record["seq"] = i
+        settings = config(window={"start_event": "phase.begin", "start_occurrence": 0,
+                                  "end_event": "phase.end", "end_occurrence": 0})
+        report = self.run_compare(native, candidate, settings)
+        self.assertEqual(report["verdict"], "PASS")
+        self.assertEqual(report["metrics"]["sheet.y"]["samples"], 3)
+        self.assertEqual(report["window"]["native_frames_outside"], 2)
+
 
 if __name__ == "__main__":
     unittest.main()

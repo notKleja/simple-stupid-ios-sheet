@@ -158,13 +158,34 @@ def compare(request):
         ch, cf, ce = validate(request.get("candidate"), "flutter")
         cfg = request.get("config", {})
         require(isinstance(cfg, dict) and cfg.get("metrics"), "explicit nonempty metric acceptance configuration required")
+        baseline = json.loads((Path(__file__).resolve().parents[1] / "measurement/profiles/full.json").read_text())
+        missing = []
+        for name, required_limits in baseline["metrics"].items():
+            given = cfg["metrics"].get(name, {})
+            if not all(key in given and finite(given[key]) and given[key] <= limit for key, limit in required_limits.items()):
+                missing.append(name)
+        missing += ["state." + name for name in baseline["states"] if name not in cfg.get("states", [])]
+        if cfg.get("event_tolerance_frames", 1) > baseline["event_tolerance_frames"]:
+            missing.append("event_timing_target")
+        if cfg.get("max_gap_frames", 2) > baseline["max_gap_frames"]:
+            missing.append("sampling_gap_target")
+        report["full_acceptance_missing"] = missing
+        report["acceptance_scope"] = "diagnostic_subset" if missing else "full_metric_profile"
         for key in ("scenario_id", "os", "device", "environment", "configuration"):
             if nh[key] != ch[key]:
                 report["issues"].append(f"incompatible {key}; cross-device/build/configuration comparison forbidden")
         report["proof_scope"] = "synthetic_math_only" if "synthetic" in (nh["evidence_kind"], ch["evidence_kind"]) else "runtime_trace_pair_only"
-        report["native_parity_eligible"] = report["proof_scope"] == "runtime_trace_pair_only" and not report["issues"]
+        report["native_parity_eligible"] = report["proof_scope"] == "runtime_trace_pair_only" and not report["issues"] and not missing
         report["runs"] = {"native": nh["run_id"], "candidate": ch["run_id"], "scenario_id": nh["scenario_id"]}
         alignment = cfg.get("alignment", {})
+        auxiliary = cfg.get("auxiliary_events", [])
+        require(isinstance(auxiliary, list) and all(isinstance(name, str) for name in auxiliary), "invalid auxiliary event policy")
+        require(alignment.get("event") not in auxiliary, "alignment event cannot be auxiliary")
+        report["auxiliary_event_counts"] = {}
+        for role, events in (("native", ne), ("candidate", ce)):
+            report["auxiliary_event_counts"][role] = {name: sum(e["name"] == name for e in events) for name in auxiliary}
+        ne = [e for e in ne if e["name"] not in auxiliary]
+        ce = [e for e in ce if e["name"] not in auxiliary]
         boundary = f"{alignment.get('event')}#{alignment.get('occurrence', 0)}"
         nev, cev = indexed_events(ne), indexed_events(ce)
         require(boundary in nev and boundary in cev, f"missing real alignment boundary {boundary}")
@@ -198,10 +219,36 @@ def compare(request):
         # Comparing exact event order also catches swapped same-time handoffs.
         if [e["name"] for e in ne] != [e["name"] for e in ce]:
             report["issues"].append("event order mismatch")
-        nf = [f for f in nf if f["t_ns"] >= nt]
-        cf = [f for f in cf if f["t_ns"] >= ct]
-        require(len(nf) >= 2 and len(cf) >= 2, "insufficient frames after alignment boundary")
-        ntime, ctime = [f["t_ns"] - nt for f in nf], [f["t_ns"] - ct for f in cf]
+        native_total, candidate_total = len(nf), len(cf)
+        start, end = nt, math.inf
+        window = cfg.get("window")
+        if window is not None:
+            require(isinstance(window, dict), "window must specify observed start/end events")
+            start_key = f"{window.get('start_event')}#{window.get('start_occurrence', 0)}"
+            end_key = f"{window.get('end_event')}#{window.get('end_occurrence', 0)}"
+            require(start_key in nev and start_key in cev and end_key in nev and end_key in cev, "missing observed phase window boundary")
+            start, end = nev[start_key]["t_ns"], nev[end_key]["t_ns"]
+            require(start < end and cev[start_key]["t_ns"] < cev[end_key]["t_ns"], "invalid phase boundary order")
+            report["window"] = {"start_boundary": start_key, "end_boundary": end_key, "end_inclusive": False,
+                                "native_start_ns": start, "native_end_ns": end,
+                                "candidate_start_ns": cev[start_key]["t_ns"], "candidate_end_ns": cev[end_key]["t_ns"]}
+        else:
+            report["window"] = {"start_boundary": boundary, "end_boundary": "trace_end", "end_inclusive": True}
+        nf = [f for f in nf if start <= f["t_ns"] < end]
+        require(len(nf) >= 2, "insufficient native frames in selected phase")
+        ntime = [f["t_ns"] - nt for f in nf]
+        all_ctime = [f["t_ns"] - ct for f in cf]
+        require(all_ctime[0] <= ntime[0] and all_ctime[-1] >= ntime[-1], "candidate coverage incomplete; reference tail cannot be trimmed")
+        first = bisect_left(all_ctime, ntime[0])
+        if all_ctime[first] != ntime[0]:
+            first -= 1
+        last = bisect_left(all_ctime, ntime[-1])
+        cf = cf[first:last + 1]
+        ctime = all_ctime[first:last + 1]
+        require(len(cf) >= 2, "insufficient candidate interpolation brackets")
+        report["window"]["native_frames_outside"] = native_total - len(nf)
+        report["window"]["candidate_frames_outside"] = candidate_total - len(cf)
+        report["window"]["candidate_interpolation_brackets_observed"] = True
         require(ctime[0] <= ntime[0] and ctime[-1] >= ntime[-1], "candidate coverage incomplete; reference tail cannot be trimmed")
         gap_limit = frame_ms * cfg.get("max_gap_frames", 2) * 1_000_000
         require(finite(gap_limit) and gap_limit > 0, "positive max_gap_frames required")
@@ -238,8 +285,9 @@ def compare(request):
             aligned = [cvalues[max(0, bisect_left(ctime, t) - (t not in ctime))] for t in ntime]
             def transitions(values):
                 return [value for i, value in enumerate(values) if i == 0 or value != values[i - 1]]
-            matched = observed and nvalues == aligned and transitions(nvalues) == transitions(cvalues)
-            report["states"][name] = {"match": matched, "native_final": nvalues[-1], "candidate_final": cvalues[-1], "observed": observed}
+            candidate_in_window = [aligned[0]] + [value for t, value in zip(ctime, cvalues) if ntime[0] < t <= ntime[-1]]
+            matched = observed and nvalues == aligned and transitions(nvalues) == transitions(candidate_in_window)
+            report["states"][name] = {"match": matched, "native_final": nvalues[-1], "candidate_final": aligned[-1], "observed": observed}
             if not matched:
                 report["issues"].append(f"exact state/interaction mismatch or missing: {name}")
         report["verdict"] = "FAIL" if report["issues"] else "PASS"
