@@ -139,6 +139,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
     var interaction: InteractionProbe?
     var trialOffset = 0
     var strictTimers: [UUID: DispatchSourceTimer] = [:]
+    var priorScrollMotion: (Double, Double)?
     override func loadView() { view = CalibrationView(title: "Native Sheet Reference\nOpaque calibration surface") }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -262,6 +263,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
             after(1.5) { field.becomeFirstResponder() }
         }
         sheet = vc; phase = "present"; previousY = nil; firstVisibleRecorded = false
+        priorScrollMotion = nil
         let screen = probe.screen
         var effectiveConfiguration = definition.configuration(trial: trial, detents: config.detents.map { canonicalDetentID($0.identifier.rawValue)! })
         effectiveConfiguration["presentation_style"] = vc.modalPresentationStyle == .formSheet ? "form_sheet" : "page_sheet"
@@ -398,6 +400,19 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
             "presenter.radius": NSNull(), "sheet.velocity_y": velocity as Any? ?? NSNull(),
             "finger.y": probe.finger?.y as Any? ?? NSNull(), "finger.velocity_y": probe.fingerVelocity as Any? ?? NSNull(),
             "scroll.offset": scroll?.contentOffset.y as Any? ?? NSNull()]
+        var movementConsumer: String?
+        if let scroll {
+            let offset = Double(scroll.contentOffset.y)
+            metrics["scroll.pan_translation_y"] = scroll.panGestureRecognizer.translation(in:probe).y
+            metrics["scroll.pan_velocity_y"] = scroll.panGestureRecognizer.velocity(in:probe).y
+            if let prior = priorScrollMotion {
+                let scrollMoved = offset != prior.0, sheetMoved = Double(r.minY) != prior.1
+                movementConsumer = scrollMoved && sheetMoved ? "both" : (scrollMoved ? "scroll" : (sheetMoved ? "sheet" : "none"))
+                metrics["scroll.offset_delta"] = offset-prior.0
+                metrics["sheet.position_delta"] = Double(r.minY)-prior.1
+            }
+            priorScrollMotion = (offset,Double(r.minY))
+        }
         for (key, value) in metrics { if let n = value as? Double, !n.isFinite { metrics[key] = NSNull() } }
         var layers: [[String: Any]] = []
         func walk(_ node: UIView, _ depth: Int) {
@@ -407,7 +422,8 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         probe.subviews.forEach { walk($0, 0) }
         trace.record("frame", ["metrics": metrics,
             "state": ["phase": phase, "selected_detent": canonicalDetentID(sheet.sheetPresentationController?.selectedDetentIdentifier?.rawValue) as Any? ?? NSNull(),
-                "target_detent": target as Any? ?? NSNull(), "gesture": probe.finger == nil ? "none" : "touch", "scroll_owner": NSNull(), "underlying_hit_test": interaction?.lastOutcome as Any? ?? NSNull()],
+                "target_detent": target as Any? ?? NSNull(), "gesture": probe.finger == nil ? "none" : "touch", "scroll_owner": NSNull(), "underlying_hit_test": interaction?.lastOutcome as Any? ?? NSNull(),
+                "scroll_pan_state": scroll?.panGestureRecognizer.state.rawValue as Any? ?? NSNull(), "observed_movement_consumer": movementConsumer as Any? ?? NSNull()],
             "unavailable": ["sheet.radius": "Container scalar may not represent visible clipping shape; inspect raw layers",
                 "presenter.radius": "Root scalar does not identify wrapper clipping shape", "barrier.alpha": "Unclassified system layer", "underlying_hit_test": "Requires actual background touch",
                 "target_detent": "Dismissal has no configured detent target", "scroll_owner": "Native scroll arbitration instrumentation unavailable",
@@ -416,7 +432,8 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
             "raw_uikit_identifier": ["selected_detent": sheet.sheetPresentationController?.selectedDetentIdentifier?.rawValue as Any? ?? NSNull()],
             "display": ["timestamp": display.timestamp, "target_timestamp": display.targetTimestamp, "duration": display.duration],
             "geometry_source": "coherent window presentation tree with stable model ancestry", "coherent_layer_count": samples.count,
-            "legacy_mixed_tree_sheet_frame": rect(legacy), "raw_layers": layers, "keyboard_frame": rect(keyboardFrame)], time: t)
+            "legacy_mixed_tree_sheet_frame": rect(legacy), "raw_layers": layers, "keyboard_frame": rect(keyboardFrame),
+            "provenance": ["movement_consumer": "derived from consecutive observed offset/position deltas; not private gesture ownership"]], time: t)
     }
 }
 
