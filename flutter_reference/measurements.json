@@ -1,0 +1,523 @@
+{
+  "schema_version": 1,
+  "scope": "native.medium_large.programmatic,402x874@3x,safe62/34,portrait,no keyboard",
+  "method": "median of last0.4s before next actual request boundary",
+  "cohorts": [
+    {
+      "path": "artifacts/flutter/ios26_4_1_candidate",
+      "trace_count": 10,
+      "status": "runtime_candidate_dynamic_parity_unresolved",
+      "os": {
+        "version": "26.4.1",
+        "build": "23E254a"
+      },
+      "device": {
+        "refresh_hz": 60,
+        "physical_size": {
+          "width": 1206,
+          "height": 2622
+        },
+        "model": "iPhone18,1",
+        "runtime_kind": "simulator",
+        "logical_size": {
+          "width": 402,
+          "height": 874
+        },
+        "scale": 3
+      },
+      "frames_range": [
+        319,
+        325
+      ],
+      "rest": {
+        "medium_initial": {
+          "sheet.x": {
+            "median": 8,
+            "min": 8,
+            "max": 8
+          },
+          "sheet.y": {
+            "median": 415.02653399668327,
+            "min": 415.02653399668327,
+            "max": 415.02653399668327
+          },
+          "sheet.width": {
+            "median": 386,
+            "min": 386,
+            "max": 386
+          },
+          "sheet.height": {
+            "median": 450.97346600331673,
+            "min": 450.97346600331673,
+            "max": 450.97346600331673
+          },
+          "sheet.bottom_inset": {
+            "median": 8,
+            "min": 8,
+            "max": 8
+          }
+        },
+        "large": {
+          "sheet.x": {
+            "median": 0,
+            "min": 0,
+            "max": 0
+          },
+          "sheet.y": {
+            "median": 62,
+            "min": 62,
+            "max": 62
+          },
+          "sheet.width": {
+            "median": 402,
+            "min": 402,
+            "max": 402
+          },
+          "sheet.height": {
+            "median": 812,
+            "min": 812,
+            "max": 812
+          },
+          "sheet.bottom_inset": {
+            "median": 0,
+            "min": 0,
+            "max": 0
+          }
+        },
+        "medium_return": {
+          "sheet.x": {
+            "median": 8,
+            "min": 8,
+            "max": 8
+          },
+          "sheet.y": {
+            "median": 415.02653399668327,
+            "min": 415.02653399668327,
+            "max": 415.02653399668327
+          },
+          "sheet.width": {
+            "median": 386,
+            "min": 386,
+            "max": 386
+          },
+          "sheet.height": {
+            "median": 450.97346600331673,
+            "min": 450.97346600331673,
+            "max": 450.97346600331673
+          },
+          "sheet.bottom_inset": {
+            "median": 8,
+            "min": 8,
+            "max": 8
+          }
+        }
+      },
+      "artifacts": [
+        {
+          "path": "artifacts/flutter/ios26_4_1_candidate/native.medium_large.programmatic-1791309609510585-1.jsonl.gz",
+          "sha256": "7df126f9abac18a025db08e241dcfd4a204308952b028672f3f1343cc6370263",
+          "frames": 319,
+          "trial": 1
+        },
+        {
+          "path": "artifacts/flutter/ios26_4_1_candidate/native.medium_large.programmatic-1791309615395996-2.jsonl.gz",
+          "sha256": "a6021b8a8b5f94860460dd978b8a80bda6d9850e9209a11c6451380c3250916d",
+          "frames": 325,
+          "trial": 2
+        },
+        {
+          "path": "artifacts/flutter/ios26_4_1_candidate/native.medium_large.programmatic-1791309621247192-3.jsonl.gz",
+          "sha256": "9233988587af508170a97d8f42c68b22c58e44e825a0913610354f27b130ece3",
+          "frames": 324,
+          "trial": 3
+        },
+        {
+          "path": "artifacts/flutter/ios26_4_1_candidate/native.medium_large.programmatic-1791309627099365-4.jsonl.gz",
+          "sha256": "c71b84cd3f5fb8fbf9b3f49a9537a9d0bf1b6d2c79a190dc34789460f9111fe0",
+          "frames": 324,
+          "trial": 4
+        },
+        {
+          "path": "artifacts/flutter/ios26_4_1_candidate/native.medium_large.programmatic-1791309632943473-5.jsonl.gz",
+          "sha256": "e26cc4dc3cac95e262bedaa2fd0526f877111994d49b464b6a6acfc20d636116",
+          "frames": 324,
+          "trial": 5
+        },
+        {
+          "path": "artifacts/flutter/ios26_4_1_candidate/native.medium_large.programmatic-1791309638798284-6.jsonl.gz",
+          "sha256": "da74a98ee9e02dcd151742efbf908e56258397f013fd3c2b98082b8abcaf35c2",
+          "frames": 324,
+          "trial": 6
+        },
+        {
+          "path": "artifacts/flutter/ios26_4_1_candidate/native.medium_large.programmatic-1791309644648288-7.jsonl.gz",
+          "sha256": "941db6705a6f03727cfbb2941eb1d9eb18ca9da99a7d6f50bf8480bef5ca18c5",
+          "frames": 324,
+          "trial": 7
+        },
+        {
+          "path": "artifacts/flutter/ios26_4_1_candidate/native.medium_large.programmatic-1791309650495309-8.jsonl.gz",
+          "sha256": "31cd93f31990ff5d9dc9c208b401eb33c4420db62fdfa84c8cdbd866b3f462e2",
+          "frames": 324,
+          "trial": 8
+        },
+        {
+          "path": "artifacts/flutter/ios26_4_1_candidate/native.medium_large.programmatic-1791309656352670-9.jsonl.gz",
+          "sha256": "6ddc1e1133e287fc6963155bb017ee00e48d176ca4e43b630a4241e1bf2bb1e7",
+          "frames": 324,
+          "trial": 9
+        },
+        {
+          "path": "artifacts/flutter/ios26_4_1_candidate/native.medium_large.programmatic-1791309662194106-10.jsonl.gz",
+          "sha256": "9c829097ef3c0d7d70e22425a8a63bcedcc1af64f0ecc7688d445c0baa8c84ae",
+          "frames": 325,
+          "trial": 10
+        }
+      ]
+    },
+    {
+      "path": "artifacts/flutter/ios27_0_candidate",
+      "trace_count": 10,
+      "status": "runtime_candidate_dynamic_parity_unresolved",
+      "os": {
+        "build": "24A434",
+        "version": "27.0"
+      },
+      "device": {
+        "logical_size": {
+          "width": 402,
+          "height": 874
+        },
+        "runtime_kind": "simulator",
+        "physical_size": {
+          "height": 2622,
+          "width": 1206
+        },
+        "scale": 3,
+        "refresh_hz": 60,
+        "model": "iPhone19,2"
+      },
+      "frames_range": [
+        307,
+        326
+      ],
+      "rest": {
+        "medium_initial": {
+          "sheet.x": {
+            "median": 8,
+            "min": 8,
+            "max": 8
+          },
+          "sheet.y": {
+            "median": 415.02653399668327,
+            "min": 415.02653399668327,
+            "max": 415.02653399668327
+          },
+          "sheet.width": {
+            "median": 386,
+            "min": 386,
+            "max": 386
+          },
+          "sheet.height": {
+            "median": 450.97346600331673,
+            "min": 450.97346600331673,
+            "max": 450.97346600331673
+          },
+          "sheet.bottom_inset": {
+            "median": 8,
+            "min": 8,
+            "max": 8
+          }
+        },
+        "large": {
+          "sheet.x": {
+            "median": 0,
+            "min": 0,
+            "max": 0
+          },
+          "sheet.y": {
+            "median": 62,
+            "min": 62,
+            "max": 62
+          },
+          "sheet.width": {
+            "median": 402,
+            "min": 402,
+            "max": 402
+          },
+          "sheet.height": {
+            "median": 812,
+            "min": 812,
+            "max": 812
+          },
+          "sheet.bottom_inset": {
+            "median": 0,
+            "min": 0,
+            "max": 0
+          }
+        },
+        "medium_return": {
+          "sheet.x": {
+            "median": 8,
+            "min": 8,
+            "max": 8
+          },
+          "sheet.y": {
+            "median": 415.02653399668327,
+            "min": 415.02653399668327,
+            "max": 415.02653399668327
+          },
+          "sheet.width": {
+            "median": 386,
+            "min": 386,
+            "max": 386
+          },
+          "sheet.height": {
+            "median": 450.97346600331673,
+            "min": 450.97346600331673,
+            "max": 450.97346600331673
+          },
+          "sheet.bottom_inset": {
+            "median": 8,
+            "min": 8,
+            "max": 8
+          }
+        }
+      },
+      "artifacts": [
+        {
+          "path": "artifacts/flutter/ios27_0_candidate/native.medium_large.programmatic-1791309353666717-1.jsonl.gz",
+          "sha256": "a5d04ebc43984c75acea2bdf8411ad4e0494f8e45157dfa8564b97aa3b1547f4",
+          "frames": 307,
+          "trial": 1
+        },
+        {
+          "path": "artifacts/flutter/ios27_0_candidate/native.medium_large.programmatic-1791309359539830-2.jsonl.gz",
+          "sha256": "24605010d6c8f5154c0f2ab8846c2488dfa926833f48919579b374dd61f2f43a",
+          "frames": 322,
+          "trial": 2
+        },
+        {
+          "path": "artifacts/flutter/ios27_0_candidate/native.medium_large.programmatic-1791309365394921-3.jsonl.gz",
+          "sha256": "2a4e78f1f75da4e35f6ff154e716f0f7007a004d61e00b64664787a67428e30c",
+          "frames": 323,
+          "trial": 3
+        },
+        {
+          "path": "artifacts/flutter/ios27_0_candidate/native.medium_large.programmatic-1791309371246792-4.jsonl.gz",
+          "sha256": "9984b639544b90a4a8390961bd95f6859402d9869729b2d3a619662c00692291",
+          "frames": 324,
+          "trial": 4
+        },
+        {
+          "path": "artifacts/flutter/ios27_0_candidate/native.medium_large.programmatic-1791309377098324-5.jsonl.gz",
+          "sha256": "5b0b681131e441f4e7dfbfa71a6eabd13b5020e4c8adef49cad56d0f183b5c46",
+          "frames": 324,
+          "trial": 5
+        },
+        {
+          "path": "artifacts/flutter/ios27_0_candidate/native.medium_large.programmatic-1791309382951622-6.jsonl.gz",
+          "sha256": "5355d616c37c9489bb3ff6b72ac5d6cdd71cf7b4a18215ef8166fc77afcfbcf8",
+          "frames": 324,
+          "trial": 6
+        },
+        {
+          "path": "artifacts/flutter/ios27_0_candidate/native.medium_large.programmatic-1791309388801904-7.jsonl.gz",
+          "sha256": "1de17485f1bbc67500da5351b2fe3e536d61c4ab6096fb737d76142d74e01519",
+          "frames": 324,
+          "trial": 7
+        },
+        {
+          "path": "artifacts/flutter/ios27_0_candidate/native.medium_large.programmatic-1791309394652144-8.jsonl.gz",
+          "sha256": "9bc25423d5a5b96b392f0c0edc6db9264bc20a70b6dc2b528d3ee369639b3be7",
+          "frames": 325,
+          "trial": 8
+        },
+        {
+          "path": "artifacts/flutter/ios27_0_candidate/native.medium_large.programmatic-1791309400501923-9.jsonl.gz",
+          "sha256": "1159b9429f72328bdd0cbee8494c877beb74bdc66e01578f97abb1de0b3e6aeb",
+          "frames": 324,
+          "trial": 9
+        },
+        {
+          "path": "artifacts/flutter/ios27_0_candidate/native.medium_large.programmatic-1791309406345580-10.jsonl.gz",
+          "sha256": "405685c5104f2d125a25ae63bb1d6413f1fa97a10ad442ea277612cabb6d3012",
+          "frames": 326,
+          "trial": 10
+        }
+      ]
+    },
+    {
+      "path": "artifacts/flutter/ios27_0_candidate_metadata_invalid",
+      "trace_count": 10,
+      "status": "excluded_host_build_metadata",
+      "os": {
+        "version": "27.0.0",
+        "build": "26A5425a"
+      },
+      "device": {
+        "scale": 3,
+        "physical_size": {
+          "width": 1206,
+          "height": 2622
+        },
+        "logical_size": {
+          "width": 402,
+          "height": 874
+        },
+        "refresh_hz": 60,
+        "runtime_kind": "simulator",
+        "model": "iPhone19,2"
+      },
+      "frames_range": [
+        310,
+        326
+      ],
+      "rest": {
+        "medium_initial": {
+          "sheet.x": {
+            "median": 8,
+            "min": 8,
+            "max": 8
+          },
+          "sheet.y": {
+            "median": 415.02653399668327,
+            "min": 415.02653399668327,
+            "max": 415.02653399668327
+          },
+          "sheet.width": {
+            "median": 386,
+            "min": 386,
+            "max": 386
+          },
+          "sheet.height": {
+            "median": 450.97346600331673,
+            "min": 450.97346600331673,
+            "max": 450.97346600331673
+          },
+          "sheet.bottom_inset": {
+            "median": 8,
+            "min": 8,
+            "max": 8
+          }
+        },
+        "large": {
+          "sheet.x": {
+            "median": 0,
+            "min": 0,
+            "max": 0
+          },
+          "sheet.y": {
+            "median": 62,
+            "min": 62,
+            "max": 62
+          },
+          "sheet.width": {
+            "median": 402,
+            "min": 402,
+            "max": 402
+          },
+          "sheet.height": {
+            "median": 812,
+            "min": 812,
+            "max": 812
+          },
+          "sheet.bottom_inset": {
+            "median": 0,
+            "min": 0,
+            "max": 0
+          }
+        },
+        "medium_return": {
+          "sheet.x": {
+            "median": 8,
+            "min": 8,
+            "max": 8
+          },
+          "sheet.y": {
+            "median": 415.02653399668327,
+            "min": 415.02653399668327,
+            "max": 415.02653399668327
+          },
+          "sheet.width": {
+            "median": 386,
+            "min": 386,
+            "max": 386
+          },
+          "sheet.height": {
+            "median": 450.97346600331673,
+            "min": 450.97346600331673,
+            "max": 450.97346600331673
+          },
+          "sheet.bottom_inset": {
+            "median": 8,
+            "min": 8,
+            "max": 8
+          }
+        }
+      },
+      "artifacts": [
+        {
+          "path": "artifacts/flutter/ios27_0_candidate_metadata_invalid/native.medium_large.programmatic-1791309010396529-1.jsonl.gz",
+          "sha256": "66f34231bc62ab24b1e44cfa68696bb2bd733e1edd05de7ba96daf8958216b8d",
+          "frames": 310,
+          "trial": 1
+        },
+        {
+          "path": "artifacts/flutter/ios27_0_candidate_metadata_invalid/native.medium_large.programmatic-1791309016279763-2.jsonl.gz",
+          "sha256": "6f7b6031ebd3e7df5de0565f48ad76e48024240c61dfb64493235dd78426b84e",
+          "frames": 324,
+          "trial": 2
+        },
+        {
+          "path": "artifacts/flutter/ios27_0_candidate_metadata_invalid/native.medium_large.programmatic-1791309022129235-3.jsonl.gz",
+          "sha256": "a932e9c434e288f3ec04917b6642fed9ca7dac8d73aca07f27bcbc5f14b2e6e9",
+          "frames": 326,
+          "trial": 3
+        },
+        {
+          "path": "artifacts/flutter/ios27_0_candidate_metadata_invalid/native.medium_large.programmatic-1791309027983502-4.jsonl.gz",
+          "sha256": "32e0bc7c86aa3820872e26fc2c79d4e28b95e1b28a20ff03a0015e16ce025a30",
+          "frames": 323,
+          "trial": 4
+        },
+        {
+          "path": "artifacts/flutter/ios27_0_candidate_metadata_invalid/native.medium_large.programmatic-1791309033837648-5.jsonl.gz",
+          "sha256": "3fc91beaf5e17216e5579cbc664787e690d798e27910223145ae3d86b9672e59",
+          "frames": 325,
+          "trial": 5
+        },
+        {
+          "path": "artifacts/flutter/ios27_0_candidate_metadata_invalid/native.medium_large.programmatic-1791309039695187-6.jsonl.gz",
+          "sha256": "9e23706913bcb14b2b285f6eb0b6c6d06752fd64823347f20d56a2bf58ae324b",
+          "frames": 325,
+          "trial": 6
+        },
+        {
+          "path": "artifacts/flutter/ios27_0_candidate_metadata_invalid/native.medium_large.programmatic-1791309045554033-7.jsonl.gz",
+          "sha256": "a21794a52899c911d92d0034858838d74af7e6a0ff97486437454cd9adf25c08",
+          "frames": 324,
+          "trial": 7
+        },
+        {
+          "path": "artifacts/flutter/ios27_0_candidate_metadata_invalid/native.medium_large.programmatic-1791309051401911-8.jsonl.gz",
+          "sha256": "6f67b62c0836b2894ae1cfc5ace6ccf41cabf69910712e66f48933953f4b1a1c",
+          "frames": 324,
+          "trial": 8
+        },
+        {
+          "path": "artifacts/flutter/ios27_0_candidate_metadata_invalid/native.medium_large.programmatic-1791309057240439-9.jsonl.gz",
+          "sha256": "2da69eb6be04b060ce555a46b2475bd90b7318a3c8f43dcaa0e6fff986290119",
+          "frames": 325,
+          "trial": 9
+        },
+        {
+          "path": "artifacts/flutter/ios27_0_candidate_metadata_invalid/native.medium_large.programmatic-1791309063131586-10.jsonl.gz",
+          "sha256": "35b6a10ba4ba4d6694ae3773b37b0809e870ca664c0ef0acc53f64b9f0642119",
+          "frames": 324,
+          "trial": 10
+        }
+      ]
+    }
+  ]
+}

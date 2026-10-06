@@ -1,0 +1,230 @@
+## 1.0.0-dev.4
+
+ - **FIX**: notify `PopScope` when a drag attempts to dismiss a sheet whose
+   pop is blocked.
+
+## 1.0.0-dev.3
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FEAT**: replace `onlyDragWhenScrollWasAtTop` with
+   `dragHandoff` on every sheet route. Choose whether a sheet can take over
+   only when a gesture starts at the scroll boundary or continuously when the
+   gesture reaches it.
+ - **FIX**: migrate scroll-to-drag routing to the physical-direction
+   `scroll_drag_detector` API.
+ - **FEAT**: add the deprecated `LegacySnapPhysics` migration helper for apps
+   that need the pre-`1.0.0-dev.1` snapping response.
+
+## 1.0.0-dev.2
+
+ - **DOCS**: update logo.
+
+## 1.0.0-dev.1
+
+> Note: This release has breaking changes.
+
+ - **FIX**: snapping sheets can now be dragged past fully open correctly.
+ - **FEAT**: add `DismissalMode` to all sheets which unlocks more complex layouts.
+
+    You can set `DismissalMode` to `.shrink` on a sheet to make it shrink
+    instead of slide out while being dismissed or dragged down.
+    
+    Use this to implement things like a persistant footer that remains
+    anchored to the bottom of the screen while the sheet is being dismissed.
+
+ - **DOCS**: document new features in example.
+ - **DOCS**: add logo.
+ - **DOCS**: redesign entire example.
+ - **DOCS**: add example for a glass style shrinking modal.
+ - **DOCS**: improve examples and README significantly.
+ - **BREAKING** **FIX**: `SheetSnappingConfig.minExtent` now correctly returns the minimum extent that is not zero.
+ - **BREAKING** **FEAT**: add `SheetBackground.withTopMargin` constructor and elevate cupertino user interface level in `SheetBackground` by default.
+ - **BREAKING** **FEAT**: `SheetBackground` elevates cupertino user interface level.
+
+    by default
+
+ - **BREAKING** **FEAT**: support `SnapPhysics` as part of `SheetShappingConfig`.
+
+    BREAKING CHANGES:
+    - the signature of`findTargetSnapPoint` changed. It now requires both a relative and an absolute velocity.
+    - the default snap physics have changed to match behavior on mobile platforms better. Snapping points cannot be skipped anymore. Set your `SnappingConfig` to use `FrictionSnapPhysics` to revert to the old behavior
+
+ - **BREAKING** **FEAT**: sheet routes that contain `PopScope.canPop == false` cannot be dragged to close anymore.
+
+## 0.9.1+1
+
+ - **FIX**: dragging up a sheet whose highest snapping point was lower than 1.0 would incorrectly snap it to 1.0.
+
+## 0.9.1
+
+ - **FIX**: incorrect snapping points used for cupertino secondary transitions in some cases.
+ - **FEAT**: add option to blur route behind `StupidSimpleGlassSheet` and customize `barrierColor`.
+
+## 0.9.0
+
+> Note: This release has breaking changes.
+
+ - **FEAT**: add `RouteSnapshotMode` that can be used to improve performance.
+ - **FEAT**: Add `StupidSimpleGlassSheetRoute` which uses the iOS 26 style.
+ - **BREAKING** **REFACTOR**: remove deprecated `topRadius` parameter.
+ - **BREAKING** **FEAT**: simplify `SheetSnappingConfig` to only support relative values.
+
+    Remove absolute pixel-based snapping which didn't work correctly.
+
+
+## 0.8.0+1
+
+ - **FIX**: immediately start clearing overscroll when letting go.
+
+## 0.8.0
+
+> Note: This release has breaking changes.
+
+ - **FIX**: dragging up from a snap point doesn't perform one frame of scroll before transitioning to dragging anymore.
+ - **DOCS**: updated docs with more cookbooks and all settings.
+ - **BREAKING** **FEAT**: removed clip, background color and shape from `StupidSimpleSheetRoute`.
+
+    Added a `SheetBackground` widget as a replacement.
+    Wrap your content in `SheetBackground` to get the same effect as before.
+    
+    This was done to allow more flexibility in customizing the sheet's appearance.
+
+
+## 0.7.0
+
+> Note: This release has breaking changes.
+
+ - **FIX**: clip behavior wasn't respected in sheets.
+ - **BREAKING** **FEAT**: add `backgroundColor` to `StupidSimpleSheetRoute`.
+
+## 0.6.3
+
+ - **FIX**: improve clipping of overlayed sheets.
+ - **FEAT**: add `shape` parameter to `StupidSimpleCupertinoSheetRoute`.
+
+    Deprecated `topRadius` parameter in favor of it.
+
+
+## 0.6.2+3
+
+ - **FIX**: don't interfere with `pop()` animation while sheet is being dragged.
+
+## 0.6.2+2
+
+ - **FIX**: stop bounce when scrolling down while sheet is at top.
+
+## 0.6.2+1
+
+ - **DOCS**: fixed an incorrect changelog entry.
+
+## 0.6.2
+
+ - **FEAT**: add `topRadius` to cupertino sheet.
+
+    This allows matching the iOS 26.0 appearance more closely
+
+ - **FEAT**: add `originateAboveBottomViewInset` to `StupidSimpleSheet` and its mixin.
+
+## 0.6.1
+
+ - **FEAT**: add `draggable` parameter to sheets that can be used to disable user drags (#206).
+
+## 0.6.0+1
+
+ - **FIX**: `overrideSnappingConfig` and `animateToRelative` could interrupt sheet dismissal and break Navigator (#205).
+
+## 0.6.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FEAT**: allow overriding the current sheet's snapping config from its controller (#203).
+
+    For this, `effectiveSnappingConfig` was introduced on `StupidSimpleSheetTransitionMixin`, which should be used for all snapping configuration calculations instead of `snappingConfig`.
+    If you only set `snappingConfig` and didn't do your own calculations with its values, you don't need to change anything.
+
+## 0.5.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FIX**: don't call `Navigator.did[Start|Stop]UserGesture` by default to match Flutter sheets.
+
+    You can restore the old behavior by passing `callNavigatorUserGestureMethods = true` to your sheet route
+
+
+## 0.4.2
+
+ - **FEAT**: add `StupidSimpleSheetController` that can be used from a sheets subtree for imperative control.
+
+## 0.4.1
+
+ - **FIX**: velocity scaling when overdragging with resistance.
+ - **FIX**: secondary animation in cupertino sheet.
+ - **FEAT**: cupertino sheet can now be dragged over its limits with resistance.
+ - **FEAT**: sheets support snapping points now.
+ - **FEAT**: cupertino sheet top padding is based on safe area now.
+
+## 0.4.0+2
+
+ - Update a dependency to the latest release.
+
+## 0.4.0+1
+
+ - Update a dependency to the latest release.
+
+## 0.4.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FEAT**: add `onlyDragWhenScrollWasAtTop` and default to true.
+
+    This allows sheets to prevent closing accidentally when the user just wanted to scroll to the top, especially in short lists. It matches iOS default behavior.
+
+
+## 0.3.1
+
+ - **FEAT**: add `clearBarrierImmediately` setting that allows the route to make underlying routes interactible straight away (#183).
+
+## 0.3.0+1
+
+ - **FIX**: routes below `StupidSimpleCupertinoSheetRoute` took too long to become interactable (#180).
+
+## 0.3.0
+
+ - Graduate package to a stable release. See pre-releases prior to this version for changelog entries.
+
+## 0.3.0-dev.3
+
+ - **FIX**: import internal from package:meta again.
+
+## 0.3.0-dev.2
+
+ - **FEAT**: add clip behavior option to sheet (#173).
+
+## 0.3.0-dev.1
+
+ - **FIX**: don't render overscroll indicators while we drag.
+ - **FIX**: only pay attention to drags on the axis we care about.
+ - **FIX**: only pay attention to relevant axes.
+
+## 0.3.0-dev.0
+
+ - **BUILD**: fixed package versioning
+
+## 0.0.2-dev.2
+
+ - **FIX**: default to `snapToEnd` in sheet motions for compatibility with the latest motor update.
+
+## 0.0.2-dev.1
+
+ - Update a dependency to the latest release.
+
+## 0.0.2-dev.0+1
+
+ - **FIX**: sheets don't incorrectly use an old drag end velocity anymore.
+
+## 0.0.2
+
+ - **FIX**: remove hard-coded padding from sheet (#155).
+ - **FEAT**: stupid simple sheet and drag detector (#154).
+
