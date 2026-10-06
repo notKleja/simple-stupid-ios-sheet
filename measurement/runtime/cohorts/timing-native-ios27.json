@@ -1,0 +1,154 @@
+{
+  "artifacts": [
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/38fec0a2495d3fa9fa23886f7b24a43cddab45d05a8bcf040217d51945bc3b65.jsonl.gz",
+      "raw_sha256": "7d174c74beb8ba80ceb0652cbe69e7b8ff39a0e9c7434bc1f7614b69c8fd3ed0",
+      "run_id": "051E3E77-237A-4124-AE71-FF35CA303C05",
+      "sha256": "38fec0a2495d3fa9fa23886f7b24a43cddab45d05a8bcf040217d51945bc3b65",
+      "source_attempt_id": "4CC99B66-9822-4FF5-A2EA-6478A768E31C",
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-051E3E77-237A-4124-AE71-FF35CA303C05.jsonl.gz",
+      "status": "complete",
+      "trial": 2
+    },
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/d5e66af7548caf49abab4d5ae4cf188ea44f56cabd6824de6599e92a8558d155.jsonl.gz",
+      "raw_sha256": "9fc3537ae0af1a18f6cb8e0c80ebf8b811b8ef96e1f91765cdb671bcce7cc578",
+      "run_id": "05FD2258-A903-47F6-8BFC-D8CC554EDDC8",
+      "sha256": "d5e66af7548caf49abab4d5ae4cf188ea44f56cabd6824de6599e92a8558d155",
+      "source_attempt_id": "8F477540-A0C8-4745-8ED3-53E89D3E5AE5",
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-05FD2258-A903-47F6-8BFC-D8CC554EDDC8.jsonl.gz",
+      "status": "complete",
+      "trial": 3
+    },
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/b9bee7d3a37a1d02293ed5061cad53b168d76ee5a5b529ab9489352eb77ed6db.jsonl.gz",
+      "raw_sha256": "007b85f67528efe40c75720c2a0d556392423e3bed3b817fb6ad7579dae8f243",
+      "run_id": "1BFF7838-6E7B-4DD8-9268-5C32916DD82B",
+      "sha256": "b9bee7d3a37a1d02293ed5061cad53b168d76ee5a5b529ab9489352eb77ed6db",
+      "source_attempt_id": "939F42D3-A7F6-41CF-BE99-767B4F3A5649",
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-1BFF7838-6E7B-4DD8-9268-5C32916DD82B.jsonl.gz",
+      "status": "complete",
+      "trial": 10
+    },
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/6cf634adf8ab369accae1020a5d65435f668d647d1e0f74a79db96dfeee50ef4.jsonl.gz",
+      "raw_sha256": "4b2427a07a7a9666812d43ee05a9ff77e38e4575132ab7c47f858148a9675ceb",
+      "run_id": "93225134-E24C-403F-8FA8-0AF915248E36",
+      "sha256": "6cf634adf8ab369accae1020a5d65435f668d647d1e0f74a79db96dfeee50ef4",
+      "source_attempt_id": "9509D3CA-E668-4EDA-9CEA-80A11738EF19",
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-93225134-E24C-403F-8FA8-0AF915248E36.jsonl.gz",
+      "status": "complete",
+      "trial": 9
+    },
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/a258365433785480bdd3e5f4e009d23d25a36c37ddef4955c842728a59f1aa32.jsonl.gz",
+      "raw_sha256": "51598adf8be9c1808f14d7d321b38b888308d18a13fd3f81ce6051d38d360a36",
+      "run_id": "A7C24858-B1E3-482D-8AAB-AABA7E3F4C88",
+      "sha256": "a258365433785480bdd3e5f4e009d23d25a36c37ddef4955c842728a59f1aa32",
+      "source_attempt_id": "EF1DAB97-22FF-4341-8B89-5EB4EB01C166",
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-A7C24858-B1E3-482D-8AAB-AABA7E3F4C88.jsonl.gz",
+      "status": "complete",
+      "trial": 8
+    },
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/8a940f165db89b99484b9ce67a8300680294721db4e432d8ecc1ca1b1817d185.jsonl.gz",
+      "raw_sha256": "da39afb1e40d67372709405a9e191c12cae7542e762f1e2e1f151feb8ca50dab",
+      "run_id": "D9EEE96B-6AE1-4A16-ADC1-E3D3F1689D6B",
+      "sha256": "8a940f165db89b99484b9ce67a8300680294721db4e432d8ecc1ca1b1817d185",
+      "source_attempt_id": "01CD2CD8-E01F-45A5-A8D4-E5C2E05C764C",
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-D9EEE96B-6AE1-4A16-ADC1-E3D3F1689D6B.jsonl.gz",
+      "status": "complete",
+      "trial": 7
+    },
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/e07b70b4e93c1501ff2b38423888f5ba71cd5135d0b8605145417bcf9b46afe2.jsonl.gz",
+      "raw_sha256": "b7cf52d1b1df8642248df917e46809f86fe5009ba6bee5218cebf943140fb05f",
+      "run_id": "DB36BB8C-1CC3-4A69-9066-8A92E715FB87",
+      "sha256": "e07b70b4e93c1501ff2b38423888f5ba71cd5135d0b8605145417bcf9b46afe2",
+      "source_attempt_id": "EB0922AA-1412-4934-82F3-513D123DA5D0",
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-DB36BB8C-1CC3-4A69-9066-8A92E715FB87.jsonl.gz",
+      "status": "complete",
+      "trial": 6
+    },
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/a1d2298cb0c161efc142efd96b7bd9f0a33df125d00a62573d2a3a66b363dbd0.jsonl.gz",
+      "raw_sha256": "a344f9f8343d13575d74c9492b5127eefa7fad56b09fff1d2d673382377d9a0e",
+      "run_id": "E37BD61D-0CA1-4D2B-ADB8-EA88C677CE01",
+      "sha256": "a1d2298cb0c161efc142efd96b7bd9f0a33df125d00a62573d2a3a66b363dbd0",
+      "source_attempt_id": "275989AA-7C9C-472E-B68A-BAB0933B5BD4",
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-E37BD61D-0CA1-4D2B-ADB8-EA88C677CE01.jsonl.gz",
+      "status": "complete",
+      "trial": 1
+    },
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/f476265560a77cc101f33ba314a45e1fe252a58c5fa38a9193d105a380a63f7b.jsonl.gz",
+      "raw_sha256": "31e6984716f6e6cd913e0814085ad5f429cf12a02ff3310f8b91c9cf20794735",
+      "run_id": "EFD875CE-D5D2-4D40-8493-A19CB1FBCF14",
+      "sha256": "f476265560a77cc101f33ba314a45e1fe252a58c5fa38a9193d105a380a63f7b",
+      "source_attempt_id": "A35EA673-B4AB-450C-98A7-F0E1FC09663A",
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-EFD875CE-D5D2-4D40-8493-A19CB1FBCF14.jsonl.gz",
+      "status": "complete",
+      "trial": 4
+    },
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/45e5ccdd8f14b48d52e5a64efa06eb316ca1c3908ad92130dadc969c9c1d2759.jsonl.gz",
+      "raw_sha256": "c2dbf66e8195b504e72706cea48049397c7042404b1d181851b3cb37514338d7",
+      "run_id": "FE5C9FD9-51CB-45AE-943B-26811F8AE974",
+      "sha256": "45e5ccdd8f14b48d52e5a64efa06eb316ca1c3908ad92130dadc969c9c1d2759",
+      "source_attempt_id": "61AE5A26-97DC-4582-AD1F-8CC895101570",
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-FE5C9FD9-51CB-45AE-943B-26811F8AE974.jsonl.gz",
+      "status": "complete",
+      "trial": 5
+    }
+  ],
+  "cohort_id": "strict-timing-native-27",
+  "implementation": "native",
+  "producer_adapter": "native-timing-v1",
+  "producer_manifest": {
+    "path": "../../../artifacts/runtime/imports/2b453051521ab6334ad452fb3f4aa3388e646d05b5640c8c1f79403eefd261af.producer.json",
+    "sha256": "2b453051521ab6334ad452fb3f4aa3388e646d05b5640c8c1f79403eefd261af",
+    "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/timing/ios27_strict_anchored/manifest.json"
+  },
+  "producer_provenance": {
+    "limitations": [
+      "Actual raw command timestamps retained",
+      "Prior coalesced-timer cohorts invalid for nominal replay timing acceptance",
+      "Motion/shape/gesture calibration is separate",
+      "Raw header source marker unresolved in this recollection; build/collection revision pinned here without relabeling bytes"
+    ],
+    "request_ms": [
+      {
+        "max": 1500.336625,
+        "median": 1500.1577499999999,
+        "min": 1500.103209
+      },
+      {
+        "max": 3003.190875,
+        "median": 3000.2564795,
+        "min": 3000.122875
+      },
+      {
+        "max": 4502.792958,
+        "median": 4500.213728999999,
+        "min": 4500.104042
+      }
+    ],
+    "scenario_id": "native.medium_large.programmatic",
+    "scheduler": "strict DispatchSourceTimer, zero requested leeway, shared present boundary",
+    "schema_version": 1,
+    "source_revision": "741175b9dabaf68a5083cfc6ab426a531cd27397",
+    "status": "complete_resting_and_replay_timing_only"
+  },
+  "schema_version": 1,
+  "split": "training"
+}

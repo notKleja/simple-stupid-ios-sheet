@@ -1,22 +1,22 @@
-# Graph Report - flutter-engine  (2026-10-06)
+# Graph Report - parity-harness  (2026-10-06)
 
 ## Corpus Check
-- 150 files · ~177,427 words
+- 180 files · ~277,906 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 228 file(s) not represented in the graph (top: .gz 202, (none) 8, .plist 5)
+- Unclassified: 278 file(s) not represented in the graph (top: .gz 252, (none) 8, .plist 5)
 
 ## Summary
-- 1544 nodes · 2282 edges · 102 communities (76 shown, 26 thin omitted)
-- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 21 edges (avg confidence: 0.84)
+- 1761 nodes · 2708 edges · 130 communities (99 shown, 31 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 24 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a987cc94`
+- Built from commit: `eaa7373f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- compare.py
+- runtime_batch.py
 - ComparisonTests
 - properties
 - json
@@ -35,7 +35,7 @@
 - Harness
 - evidence.json
 - canonicalDetentID
-- evidence_contract.py
+- properties
 - Native iOS Sheet Parity Design
 - .record
 - Third-party notices
@@ -85,7 +85,7 @@
 - trace.dart
 - Cookbook
 - sheet_background.dart
-- regression.py
+- RuntimeBatchTests
 - package:flutter_test/flutter_test.dart
 - stupid_simple_sheet_test.dart
 - non_draggable.dart
@@ -99,11 +99,11 @@
 - share_sheet_example.dart
 - route_test.dart
 - Widget
-- package:flutter/material.dart
-- observed_profiles.dart
+- example_logo_test.dart
+- package:flutter/widgets.dart
 - simple_stupid_ios_sheet.dart
 - Brother 2 — Flutter engine milestone
-- route_snapshot_mode_test.dart
+- package:flutter/material.dart
 - Flutter engine and opaque API
 - example
 - contract_v2_pair/README.md
@@ -118,22 +118,48 @@
 - double?
 - int?
 - String?
+- RegressionTests
+- form_ipad_preferred_320x320
+- full_trace
+- sheet_dismissal_transition.dart
+- form_ipad_preferred_320x320
+- large_rest
+- medium_rest
+- large_rest
+- medium_rest
+- detents
+- page_phone_402x874
+- detents
+- page_phone_402x874
+- CustomPainter
+- Native iOS sheet parity report
+- safe_area
+- snapping_recipe.dart
+- collect_simulator.py
+- page_ipad_834x1210
+- page_vphone_430x932
+- page_ipad_834x1210
+- safe_area
+- slide_vs_shrink_recipe.dart
+- fixture
+- Runtime parity batch — phase 2
+- InspectTests
+- RUNTIME_CONTRACT.md
+- users_kleja_simple_stupid_ios_sheet_worktrees_flutter_engine_flutter_reference_candidate_ios_runner_generatedpluginregistrant_h
 
 ## God Nodes (most connected - your core abstractions)
 1. `_` - 40 edges
 2. `ComparisonTests` - 37 edges
 3. `trace()` - 33 edges
 4. `_` - 33 edges
-5. `Harness` - 26 edges
-6. `require()` - 22 edges
-7. `EvidenceTests` - 21 edges
-8. `RegressionTests` - 16 edges
-9. `finite()` - 14 edges
-10. `StupidSimpleSheetRoute` - 14 edges
+5. `require()` - 31 edges
+6. `Harness` - 26 edges
+7. `RuntimeBatchTests` - 23 edges
+8. `EvidenceTests` - 21 edges
+9. `RegressionTests` - 16 edges
+10. `TraceError` - 15 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `run()` --uses--> `TraceError`  [INFERRED]
-  analysis/regression.py → analysis/compare.py
 - `main` --navigates--> `StupidSimpleIosSheetRoute`  [EXTRACTED]
   flutter_reference/packages/ios_sheet/test/route_test.dart → flutter_reference/packages/ios_sheet/lib/src/route.dart
 - `_openSheet` --navigates--> `StupidSimpleSheetRoute`  [EXTRACTED]
@@ -142,27 +168,29 @@
   flutter_reference/packages/stupid_simple_sheet/example/lib/presets/cupertino_sheet_preset.dart → flutter_reference/packages/stupid_simple_sheet/lib/src/stupid_simple_cupertino_sheet.dart
 - `_push` --navigates--> `StupidSimpleGlassSheetRoute`  [EXTRACTED]
   flutter_reference/packages/stupid_simple_sheet/example/lib/presets/glass_sheet_preset.dart → flutter_reference/packages/stupid_simple_sheet/lib/src/stupid_simple_glass_sheet.dart
+- `showBasicSheet` --navigates--> `StupidSimpleSheetRoute`  [EXTRACTED]
+  flutter_reference/packages/stupid_simple_sheet/example/lib/recipes/basic_sheet.dart → flutter_reference/packages/stupid_simple_sheet/lib/stupid_simple_sheet.dart
 
 ## Import Cycles
 - None detected.
 
-## Communities (102 total, 26 thin omitted)
+## Communities (130 total, 31 thin omitted)
 
-### Community 0 - "compare.py"
-Cohesion: 0.15
-Nodes (32): finite(), metric_report(), First sample of final continuously in-band suffix; no unseen dwell inferred., Compare observed JSONL trace pairs. Standard library only; never invent samples., Validate the declarative subset used by our fixed v1 schema, not arbitrary…, read_jsonl(), repeat_noise(), require() (+24 more)
+### Community 0 - "runtime_batch.py"
+Cohesion: 0.07
+Nodes (82): compare(), transitions(), finite(), indexed_events(), interpolate(), main(), metric_report(), First sample of final continuously in-band suffix; no unseen dwell inferred. (+74 more)
 
 ### Community 1 - "ComparisonTests"
-Cohesion: 0.08
-Nodes (12): ComparisonTests, config(), full_config(), full_trace(), Synthetic provenance-marker simulation for eligibility-gate tests only., trace(), InspectTests, complete_matrix() (+4 more)
+Cohesion: 0.18
+Nodes (3): ComparisonTests, config(), trace()
 
 ### Community 2 - "properties"
 Cohesion: 0.04
 Nodes (45): enum, minimum, type, type, const, items, type, type (+37 more)
 
 ### Community 3 - "json"
-Cohesion: 0.18
-Nodes (16): Synthetic mathematics fixtures only; no fixture is a native measurement., Synthetic model fits; these do not establish an Apple spring., Test ingestion QC against labeled synthetic samples., Coverage tests contain only synthetic trace pairs; no runtime acceptance claims., fixture(), Synthetic scaled-container geometry, never Apple measurements., SpacingTests, copy (+8 more)
+Cohesion: 0.20
+Nodes (16): Synthetic mathematics fixtures only; no fixture is a native measurement., Synthetic model fits; these do not establish an Apple spring., Test ingestion QC against labeled synthetic samples., Coverage tests contain only synthetic trace pairs; no runtime acceptance claims., Synthetic gate simulations only; runtime marker fixtures are not native…, Synthetic scaled-container geometry, never Apple measurements., copy, json (+8 more)
 
 ### Community 4 - "trace.schema.json"
 Cohesion: 0.05
@@ -185,12 +213,12 @@ Cohesion: 0.25
 Nodes (7): properties, schema_version, required, $schema, const, title, type
 
 ### Community 9 - "ios26.json"
-Cohesion: 0.25
-Nodes (7): major_version, measurements, platform, $schema, schema_version, status, unresolved
+Cohesion: 0.20
+Nodes (9): major_version, observed_animation_objects, platform, runtime_builds, $schema, schema_version, scope, status (+1 more)
 
 ### Community 10 - "ios27.json"
-Cohesion: 0.25
-Nodes (7): major_version, measurements, platform, $schema, schema_version, status, unresolved
+Cohesion: 0.20
+Nodes (9): major_version, observed_animation_objects, platform, runtime_builds, $schema, schema_version, scope, status (+1 more)
 
 ### Community 11 - "Master state"
 Cohesion: 0.25
@@ -216,9 +244,9 @@ Nodes (3): entries, $schema, schema_version
 Cohesion: 0.13
 Nodes (14): Error, Foundation, Legacy interpretation, Native recorder contract v2, Profile acceptance, canonicalDetentID(), NativeScenario, ScenarioError (+6 more)
 
-### Community 19 - "evidence_contract.py"
-Cohesion: 0.23
-Nodes (16): gzip, hashlib, adapt_legacy(), canonical_id(), finite(), identity(), Native acceptance controls; legacy adaptation never rewrites hashed sources., read() (+8 more)
+### Community 19 - "properties"
+Cohesion: 0.08
+Nodes (26): type, minimum, type, type, const, type, properties, major_version (+18 more)
 
 ### Community 20 - "Native iOS Sheet Parity Design"
 Cohesion: 0.12
@@ -229,8 +257,8 @@ Cohesion: 0.26
 Nodes (9): FileHandle, Int64, Any, Bool, Double, String, URL, Trace (+1 more)
 
 ### Community 23 - "Trace analysis"
-Cohesion: 0.25
-Nodes (7): Comparison formulas, Current native relationship evidence, Fitting diagnostics, Matrix and holdouts, Record validation, Tolerances and repeat noise, Trace analysis
+Cohesion: 0.22
+Nodes (8): Actual runtime batches, Comparison formulas, Current native relationship evidence, Fitting diagnostics, Matrix and holdouts, Record validation, Tolerances and repeat noise, Trace analysis
 
 ### Community 29 - "ProbeWindow"
 Cohesion: 0.12
@@ -253,8 +281,8 @@ Cohesion: 0.25
 Nodes (4): CGRect, CalibrationView, NSCoder, UIView
 
 ### Community 36 - "shrink_transition.dart"
-Cohesion: 0.05
-Nodes (43): Animation, AnimationWithParentMixin, @internal, class RenderShrinkTransition extends, dart:math, double get, clamped, ClampedAnimation (+35 more)
+Cohesion: 0.07
+Nodes (34): Animation, AnimationWithParentMixin, @internal, class RenderShrinkTransition extends, double get, clamped, ClampedAnimation, ClampedAnimationX (+26 more)
 
 ### Community 37 - "items"
 Cohesion: 0.29
@@ -269,8 +297,8 @@ Cohesion: 0.29
 Nodes (6): Changed files, branch and decisions, Conclusions and measured constants, Confidence and uncertainty, Failed hypotheses worth knowing, Native reference milestone, Review fix round1
 
 ### Community 40 - "package:flutter/cupertino.dart"
-Cohesion: 0.07
-Nodes (33): build, CupertinoSheetPreset, CupertinoSheetPreview, _push, build, GlassSheetPreset, GlassSheetPreview, _push (+25 more)
+Cohesion: 0.09
+Nodes (24): build, CupertinoSheetPreset, CupertinoSheetPreview, _push, build, GlassSheetPreset, GlassSheetPreview, _push (+16 more)
 
 ### Community 41 - "id"
 Cohesion: 0.67
@@ -289,8 +317,8 @@ Cohesion: 0.67
 Nodes (3): trials, minimum, type
 
 ### Community 49 - "candidate/lib/main.dart"
-Cohesion: 0.05
-Nodes (37): ChangeNotifier, dart:async, _active, _backgroundTouches, _beginTrace, build, _content, controller (+29 more)
+Cohesion: 0.06
+Nodes (32): dart:async, _active, _backgroundTouches, _beginTrace, build, _content, controller, createState (+24 more)
 
 ### Community 50 - "profile.dart"
 Cohesion: 0.05
@@ -298,7 +326,7 @@ Nodes (36): bottomInset, boundaryPoints, copyWith, cornerRadius, detentToVisible
 
 ### Community 51 - "example_card.dart"
 Cohesion: 0.06
-Nodes (36): borderColor, borderRadius, build, _buildFooter, _buildPreview, _cardRandom, CardSection, categoryId (+28 more)
+Nodes (33): borderColor, borderRadius, build, _buildFooter, _buildPreview, _cardRandom, CardSection, categoryId (+25 more)
 
 ### Community 52 - "CHANGELOG.md"
 Cohesion: 0.06
@@ -329,8 +357,8 @@ Cohesion: 0.08
 Nodes (27): @Deprecated, _LargestSnapPhysics, AbsoluteSnapPhysics, constantDeceleration, dragCoefficient, findClosestPoint, findClosestSnapPoint, findTargetSnapPoint (+19 more)
 
 ### Community 59 - "sheet_previews.dart"
-Cohesion: 0.08
-Nodes (27): CustomPainter, _RulerPainter, _InnerShadowPainter, _SheetLogoPainter, build, child, color, DashedLinePainter (+19 more)
+Cohesion: 0.09
+Nodes (22): build, child, color, dashWidth, dotColor, dotRadius, fractions, gapWidth (+14 more)
 
 ### Community 60 - "_"
 Cohesion: 0.07
@@ -341,12 +369,12 @@ Cohesion: 0.08
 Nodes (24): accentColor, _barrierDismissible, build, createState, _dismissalMode, _draggable, _initialSnap, interactive (+16 more)
 
 ### Community 62 - "vphone_run.py"
-Cohesion: 0.12
-Nodes (16): argparse, base64, Locate the known red footer in compositor pixels, independent of CALayer…, main(), Run one deterministic scenario; archive only completed runtime trace batches., sim(), main(), Download only complete native research traces through the guest file API. (+8 more)
+Cohesion: 0.21
+Nodes (9): base64, main(), Download only complete native research traces through the guest file API., Capture compositor video alongside a fresh deterministic native trace batch., main(), Install the research app over the documented guest RPC, then launch by URL., rpc(), signal (+1 more)
 
 ### Community 63 - "StatelessWidget"
-Cohesion: 0.09
-Nodes (21): CalibrationContent, IosSheetCandidateApp, _CardGrid, _HomePage, _SubsectionLabel, _OpenButton, _OptionRow, PlaygroundPreview (+13 more)
+Cohesion: 0.10
+Nodes (19): CalibrationContent, IosSheetCandidateApp, _CardGrid, _HomePage, _SubsectionLabel, _OpenButton, _OptionRow, PlaygroundPreview (+11 more)
 
 ### Community 64 - ".application"
 Cohesion: 0.10
@@ -368,17 +396,13 @@ Nodes (17): Background snapshotting, Cookbook, Cupertino sheet, Custom routes (m
 Cohesion: 0.12
 Nodes (15): backgroundColor, build, child, clipBehavior, elevateCupertinoUserInterfaceLevel, extensionAtBottom, _getDefaultBackgroundColor, _includeSafeArea (+7 more)
 
-### Community 69 - "regression.py"
-Cohesion: 0.26
-Nodes (14): compare(), transitions(), indexed_events(), interpolate(), main(), schema_equal(), cells(), entry_request() (+6 more)
-
 ### Community 70 - "package:flutter_test/flutter_test.dart"
-Cohesion: 0.17
-Nodes (11): dart:convert, main, environment, main, base, main, main, package:flutter_test/flutter_test.dart (+3 more)
+Cohesion: 0.22
+Nodes (8): dart:convert, main, base, main, main, package:flutter_test/flutter_test.dart, package:ios_sheet_candidate/main.dart, package:simple_stupid_ios_sheet/simple_stupid_ios_sheet.dart
 
 ### Community 71 - "stupid_simple_sheet_test.dart"
-Cohesion: 0.15
-Nodes (12): AssertionError, basedir, compare, findTargetSnapPoint, _maxPixelMismatchCount, PixelDiffGoldenComparator, target, _testBaseDirectory (+4 more)
+Cohesion: 0.17
+Nodes (11): AssertionError, basedir, compare, findTargetSnapPoint, _maxPixelMismatchCount, PixelDiffGoldenComparator, target, _testBaseDirectory (+3 more)
 
 ### Community 72 - "non_draggable.dart"
 Cohesion: 0.17
@@ -405,8 +429,8 @@ Cohesion: 0.60
 Nodes (10): StupidSimpleIosSheetRoute, CustomSheetRoute, StupidSimpleCupertinoSheetRoute, StupidSimpleGlassSheetRoute, StupidSimpleSheetController, StupidSimpleSheetRoute, StupidSimpleSheetTransitionMixin, main (+2 more)
 
 ### Community 78 - "State"
-Cohesion: 0.27
-Nodes (10): CustomRouteExample, _CustomRouteExampleState, DynamicContentExample, _DynamicContentExampleState, PlaygroundPage, _PlaygroundPageState, _RelativeGestureDetector, _RelativeGestureDetectorState (+2 more)
+Cohesion: 0.17
+Nodes (16): SheetPlayground, _SheetPlaygroundState, CustomRouteExample, _CustomRouteExampleState, DynamicContentExample, _DynamicContentExampleState, PlaygroundPage, _PlaygroundPageState (+8 more)
 
 ### Community 79 - "dynamic_content_example.dart"
 Cohesion: 0.20
@@ -417,20 +441,20 @@ Cohesion: 0.20
 Nodes (9): build, color, _Contact, _contacts, initials, name, ShareSheetExample, ShareSheetPreview (+1 more)
 
 ### Community 81 - "route_test.dart"
-Cohesion: 0.22
-Nodes (8): backgroundTaps, controller, findTargetSnapPoint, main, navigator, present, GlobalKey, NavigatorState
+Cohesion: 0.18
+Nodes (10): ChangeNotifier, IosSheetController, backgroundTaps, controller, findTargetSnapPoint, main, navigator, present (+2 more)
 
 ### Community 82 - "Widget"
-Cohesion: 0.25
-Nodes (7): Clip, build, child, clipBehavior, shape, ShapeBorder, Widget
+Cohesion: 0.22
+Nodes (8): Clip, build, child, clipBehavior, shape, package:flutter/foundation.dart, ShapeBorder, Widget
 
-### Community 83 - "package:flutter/material.dart"
-Cohesion: 0.25
-Nodes (6): dart:io, main, main, package:flutter/material.dart, package:snaptest/snaptest.dart, package:stupid_simple_sheet_example/widgets/sheet_logo.dart
+### Community 83 - "example_logo_test.dart"
+Cohesion: 0.40
+Nodes (4): dart:io, main, package:snaptest/snaptest.dart, package:stupid_simple_sheet_example/widgets/sheet_logo.dart
 
-### Community 84 - "observed_profiles.dart"
-Cohesion: 0.29
-Nodes (6): detents.dart, copyWith, fallback, observedPage402x874Profile, requireScope, profile.dart
+### Community 84 - "package:flutter/widgets.dart"
+Cohesion: 0.18
+Nodes (9): detents.dart, copyWith, fallback, observedPage402x874Profile, requireScope, environment, main, package:flutter/widgets.dart (+1 more)
 
 ### Community 85 - "simple_stupid_ios_sheet.dart"
 Cohesion: 0.29
@@ -440,9 +464,9 @@ Nodes (6): src/comparison_contract.dart, src/detents.dart, src/observed_profiles
 Cohesion: 0.29
 Nodes (6): Brother 2 — Flutter engine milestone, Changed areas, Conclusions, Review round 1, Runtime proof and tests, Uncertainty / blockers / next decision
 
-### Community 87 - "route_snapshot_mode_test.dart"
-Cohesion: 0.33
-Nodes (5): buildApp, isSnapshotting, main, motion, SnapshotWidget
+### Community 87 - "package:flutter/material.dart"
+Cohesion: 0.22
+Nodes (7): buildApp, isSnapshotting, main, motion, main, package:flutter/material.dart, SnapshotWidget
 
 ### Community 88 - "Flutter engine and opaque API"
 Cohesion: 0.40
@@ -452,25 +476,121 @@ Nodes (4): Architecture map, Flutter engine and opaque API, Profile discipline, 
 Cohesion: 0.40
 Nodes (4): Assets, example, Getting Started, Localization
 
+### Community 102 - "RegressionTests"
+Cohesion: 0.24
+Nodes (3): complete_matrix(), matrix(), RegressionTests
+
+### Community 103 - "form_ipad_preferred_320x320"
+Cohesion: 0.13
+Nodes (17): device, evidence_ids, device, evidence_ids, os_version, placement, preferred_content_size, scenario (+9 more)
+
+### Community 104 - "full_trace"
+Cohesion: 0.27
+Nodes (5): full_config(), full_trace(), Synthetic provenance-marker simulation for eligibility-gate tests only., gate_records(), Explicitly synthetic records with simulated runtime markers to exercise gate…
+
+### Community 105 - "sheet_dismissal_transition.dart"
+Cohesion: 0.20
+Nodes (9): dart:math, animation, build, child, dismissalMode, referenceHeightOf, SheetDismissalTransition, package:stupid_simple_sheet/src/dismissal_mode.dart (+1 more)
+
+### Community 106 - "form_ipad_preferred_320x320"
+Cohesion: 0.22
+Nodes (9): device, evidence_ids, os_version, preferred_content_size, scenario, height, width, profiles (+1 more)
+
+### Community 107 - "large_rest"
+Cohesion: 0.53
+Nodes (9): large_rest, bottom_inset, visible_height, width, x, y, large_rest, large_rest (+1 more)
+
+### Community 108 - "medium_rest"
+Cohesion: 0.53
+Nodes (9): medium_rest, bottom_inset, visible_height, width, x, y, medium_rest, medium_rest (+1 more)
+
+### Community 109 - "large_rest"
+Cohesion: 0.50
+Nodes (9): large_rest, large_rest, bottom_inset, visible_height, width, x, y, large_rest (+1 more)
+
+### Community 110 - "medium_rest"
+Cohesion: 0.50
+Nodes (9): medium_rest, medium_rest, bottom_inset, visible_height, width, x, y, medium_rest (+1 more)
+
+### Community 111 - "detents"
+Cohesion: 0.57
+Nodes (8): large, maximum, medium, medium_ratio_to_maximum, detents, detents, detents, detents
+
+### Community 112 - "page_phone_402x874"
+Cohesion: 0.25
+Nodes (8): device, evidence_ids, floating_scale, os_version, scale, scenario, visible_medium_height, page_phone_402x874
+
+### Community 113 - "detents"
+Cohesion: 0.57
+Nodes (8): large, maximum, medium, medium_ratio_to_maximum, detents, detents, detents, detents
+
+### Community 114 - "page_phone_402x874"
+Cohesion: 0.25
+Nodes (8): device, evidence_ids, floating_scale, os_version, scale, scenario, visible_medium_height, page_phone_402x874
+
+### Community 115 - "CustomPainter"
+Cohesion: 0.29
+Nodes (7): CustomPainter, _RulerPainter, _InnerShadowPainter, _SheetLogoPainter, DashedLinePainter, DotGridPainter, LineGridPainter
+
+### Community 116 - "Native iOS sheet parity report"
+Cohesion: 0.29
+Nodes (6): Acceptance classification, Delivered and verified, Exact matches established, Known failures and unresolved coverage, Measured platform differences, Native iOS sheet parity report
+
+### Community 117 - "safe_area"
+Cohesion: 0.57
+Nodes (7): safe_area, safe_area, safe_area, bottom, left, right, top
+
+### Community 118 - "snapping_recipe.dart"
+Cohesion: 0.33
+Nodes (5): build, _colorForStop, showSnappingSheet, SnappingPreview, snaps
+
+### Community 119 - "collect_simulator.py"
+Cohesion: 0.40
+Nodes (5): main(), Run one deterministic scenario; archive only completed runtime trace batches., sim(), os, time
+
+### Community 120 - "page_ipad_834x1210"
+Cohesion: 0.33
+Nodes (6): device, evidence_ids, os_version, scale, scenario, page_ipad_834x1210
+
+### Community 121 - "page_vphone_430x932"
+Cohesion: 0.33
+Nodes (6): device, evidence_ids, os_version, scale, scenario, page_vphone_430x932
+
+### Community 122 - "page_ipad_834x1210"
+Cohesion: 0.33
+Nodes (6): device, evidence_ids, os_version, scale, scenario, page_ipad_834x1210
+
+### Community 123 - "safe_area"
+Cohesion: 0.53
+Nodes (6): safe_area, safe_area, bottom, left, right, top
+
+### Community 124 - "slide_vs_shrink_recipe.dart"
+Cohesion: 0.40
+Nodes (4): build, _show, SlideVsShrinkPreview, SlideVsShrinkRecipe
+
+### Community 126 - "Runtime parity batch — phase 2"
+Cohesion: 0.50
+Nodes (3): Actual runtime results, Runtime parity batch — phase 2, Verification / next decision
+
 ## Knowledge Gaps
-- **794 isolated node(s):** `XCTest`, `_metadata`, `_major`, `_undimmed`, `_content` (+789 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 982 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **26 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **866 isolated node(s):** `XCTest`, `_metadata`, `_major`, `_undimmed`, `_content` (+861 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1064 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **31 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `_` connect `_` to `package:flutter/cupertino.dart`, `section_header.dart`, `_`, `playground_page.dart`?**
-  _High betweenness centrality (0.018) - this node is a cross-community bridge._
-- **Why does `_` connect `_` to `@immutable`, `observed_profiles.dart`, `package:flutter_test/flutter_test.dart`?**
-  _High betweenness centrality (0.015) - this node is a cross-community bridge._
-- **Why does `SheetSnappingConfig` connect `@immutable` to `custom_route_example.dart`, `stupid_simple_sheet.dart`, `stupid_simple_glass_sheet.dart`, `stupid_simple_cupertino_sheet.dart`, `snapping_point.dart`?**
-  _High betweenness centrality (0.005) - this node is a cross-community bridge._
+  _High betweenness centrality (0.019) - this node is a cross-community bridge._
+- **Why does `_` connect `_` to `@immutable`, `package:flutter/widgets.dart`?**
+  _High betweenness centrality (0.011) - this node is a cross-community bridge._
 - **What connects `XCTest`, `_metadata`, `_major` to the rest of the system?**
-  _794 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `compare.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.14603174603174604 - nodes in this community are weakly interconnected._
-- **Should `ComparisonTests` be split into smaller, more focused modules?**
-  _Cohesion score 0.0818452380952381 - nodes in this community are weakly interconnected._
+  _866 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `runtime_batch.py` be split into smaller, more focused modules?**
+  _Cohesion score 0.06788766788766788 - nodes in this community are weakly interconnected._
 - **Should `properties` be split into smaller, more focused modules?**
   _Cohesion score 0.044444444444444446 - nodes in this community are weakly interconnected._
+- **Should `trace.schema.json` be split into smaller, more focused modules?**
+  _Cohesion score 0.04541062801932367 - nodes in this community are weakly interconnected._
+- **Should `route.dart` be split into smaller, more focused modules?**
+  _Cohesion score 0.024691358024691357 - nodes in this community are weakly interconnected._

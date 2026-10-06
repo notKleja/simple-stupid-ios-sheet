@@ -50,6 +50,22 @@ python3 analysis/runtime_batch.py freeze plan.json --output-directory measuremen
 python3 analysis/runtime_batch.py run frozen-index.json --output artifacts/runtime/report.json
 ```
 
+`import-cohort` requires an explicit producer adapter (`flutter-timing-v1`,
+`native-timing-v1`, `native-reference-v1`, or `native-interaction-pilot-v1`),
+source root, role/split/cohort ID and content-addressed artifact directory.
+It copies source bytes and the producer manifest without rewriting them,
+checks compressed/raw hashes, preserves opaque attempt IDs and producer
+quality outcomes, and never promotes a diagnostic pilot. New frozen plans pin
+`holdout_definitions` as well as matrix/profile/recipe hashes. Example:
+
+```
+python3 analysis/runtime_batch.py import-cohort producer.json --adapter flutter-timing-v1 --source-root /source/repository --implementation flutter --split training --cohort-id candidate-v2 --output measurement/runtime/cohorts/candidate.json --artifact-directory artifacts/runtime/imports
+```
+
+The initial baseline-v1 index predates the holdout-definition pin and remains
+an explicitly labeled historical diagnostic index. It assigns no holdout capture
+and provides no acceptance credit. New batches require the full freeze contract.
+
 Tests use explicitly synthetic fixtures, including simulated runtime provenance
 markers needed to exercise gates. They do not establish native parity. The
 current real v2 pair is an immutable diagnostic baseline with no acceptance claim.

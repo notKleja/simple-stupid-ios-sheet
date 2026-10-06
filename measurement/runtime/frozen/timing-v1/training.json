@@ -1,0 +1,67 @@
+{
+  "assignments": [
+    {
+      "candidate": {
+        "path": "../../cohorts/timing-flutter-ios26.json",
+        "sha256": "a56f76ad1c00c7f46419764321ea1bedd10f86a3ada1241aeb3b427fd7612305"
+      },
+      "cell_id": "26/iphone_a/portrait/programmatic",
+      "expected_trials": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "native": {
+        "path": "../../cohorts/timing-native-ios26.json",
+        "sha256": "ef99108084b0b5ec3d01cfc062485a8f524f28c54732f1f5e593b44617d60bf3"
+      },
+      "recipe": {
+        "path": "../../../recipes/programmatic.json",
+        "sha256": "003d7a8c900c435036516ed2ef04d5cab1eae0d7e987439cd933b7741c363cf8"
+      },
+      "runtime_input_verified": true,
+      "split": "training",
+      "verification_scope": "Actual complete programmatic request sequence/target payloads in both raw traces; no physical gesture claim."
+    },
+    {
+      "candidate": {
+        "path": "../../cohorts/timing-flutter-ios27.json",
+        "sha256": "0f409403bdca5c951bc526d33cefe62313cd8747d2cf5eb59704dc53399ef200"
+      },
+      "cell_id": "27/iphone_a/portrait/programmatic",
+      "expected_trials": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "native": {
+        "path": "../../cohorts/timing-native-ios27.json",
+        "sha256": "4974ea9082a46e355d2428a9dbe982258cd79dacaae9f53ea32252e80d5a501f"
+      },
+      "recipe": {
+        "path": "../../../recipes/programmatic.json",
+        "sha256": "003d7a8c900c435036516ed2ef04d5cab1eae0d7e987439cd933b7741c363cf8"
+      },
+      "runtime_input_verified": true,
+      "split": "training",
+      "verification_scope": "Actual complete programmatic request sequence/target payloads in both raw traces; no physical gesture claim."
+    }
+  ],
+  "batch_id": "canonical-v2-timing-002",
+  "schema_version": 1,
+  "split": "training"
+}

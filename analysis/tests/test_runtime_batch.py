@@ -87,7 +87,7 @@ class RuntimeBatchTests(unittest.TestCase):
         if extra:
             assignments+=extra
         plan=self.save("plan.json",{"schema_version":1,"batch_id":"SYNTHETIC","matrix":self.save("matrix.json",self.matrix),
-            "profile":self.save("profile.json",self.profile),"assignments":assignments})
+            "profile":self.save("profile.json",self.profile),"holdout_definitions":self.save("held-definitions.json",{"schema_version":1,"definitions":[]}),"assignments":assignments})
         code,freeze=self.invoke("freeze",plan["path"],"--output-directory",str(self.base/"frozen"))
         self.assertEqual(code,0,freeze)
         return self.invoke("run",freeze["index_path"])[1]
@@ -162,6 +162,65 @@ class RuntimeBatchTests(unittest.TestCase):
         report=self.execute(self.cohort("native",[(1,1,{})]),self.cohort("flutter",[(1,1,{"spike":True})]))
         self.assertEqual(report["coverage_counts"],{"PASS":0,"FAIL":1,"UNRESOLVED":1})
         self.assertEqual(report["phase_counts"],{"PASS":0,"FAIL":1,"UNRESOLVED":0})
+
+    def test_producer_import_preserves_compressed_and_raw_hashes(self):
+        source=self.cohort("flutter",[(1,1,{})])
+        artifact=json.loads(Path(source["path"]).read_text())["artifacts"][0]
+        original=Path(artifact["path"]).read_bytes()
+        artifact.update(raw_sha256=hashlib.sha256(gzip.decompress(original)).hexdigest(),terminal="dismiss.completed",rows=len(rows("flutter")))
+        producer=self.save("producer.json",{"schema_version":1,"split":"training","complete":True,"attempt":1,"artifacts":[artifact]})
+        code,result=self.invoke("import-cohort",producer["path"],"--adapter","flutter-timing-v1","--source-root",str(self.base),
+            "--implementation","flutter","--split","training","--cohort-id","SYNTHETIC-import", "--output",str(self.base/"imported.json"),
+            "--artifact-directory",str(self.base/"imported-artifacts"))
+        self.assertEqual(code,0,result)
+        manifest=json.loads((self.base/"imported.json").read_text())
+        copied=(self.base/manifest["artifacts"][0]["path"]).read_bytes()
+        self.assertEqual(copied,original)
+        self.assertEqual(manifest["producer_manifest"]["sha256"],producer["sha256"])
+
+    def test_wrong_raw_hash_is_rejected_before_producer_import(self):
+        source=self.cohort("flutter",[(1,1,{})])
+        artifact=json.loads(Path(source["path"]).read_text())["artifacts"][0]
+        artifact.update(raw_sha256="0"*64,terminal="dismiss.completed")
+        producer=self.save("producer.json",{"schema_version":1,"split":"training","complete":True,"attempt":1,"artifacts":[artifact]})
+        code,result=self.invoke("import-cohort",producer["path"],"--adapter","flutter-timing-v1","--source-root",str(self.base),
+            "--implementation","flutter","--split","training","--cohort-id","SYNTHETIC-import","--output",str(self.base/"imported.json"),
+            "--artifact-directory",str(self.base/"imported-artifacts"))
+        self.assertEqual(code,1)
+        self.assertIn("raw",json.dumps(result))
+
+    def test_truncated_gzip_is_audited_as_partial_not_a_crash(self):
+        n=self.cohort("native",[(1,1,{})]);c=self.cohort("flutter",[(1,1,{"terminal":False})])
+        manifest=json.loads(Path(c["path"]).read_text());artifact=manifest["artifacts"][0];path=Path(artifact["path"])
+        path.write_bytes(path.read_bytes()[:-8]);artifact["sha256"]=hashlib.sha256(path.read_bytes()).hexdigest()
+        c=self.save("flutter--manifest.json",manifest)
+        report=self.execute(n,c)
+        self.assertEqual(report["pair_counts"]["paired"],0)
+        self.assertTrue(any(a["status"]=="partial" for a in report["artifact_audit"]))
+
+    def test_holdout_definitions_are_checked_even_on_training_only_run(self):
+        self.execute(self.cohort("native",[(1,1,{})]),self.cohort("flutter",[(1,1,{})]))
+        (self.base/"held-definitions.json").write_text("{}")
+        _,report=self.invoke("run",str(self.base/"frozen/index.json"),"--split","training")
+        self.assertEqual(report["verdict"],"FAIL")
+        self.assertIn("hash",json.dumps(report["issues"]))
+
+    def test_required_matrix_action_cannot_be_ignored_by_pair_wrapper(self):
+        self.matrix["cases"][0]["required_checks"][0]["expected_events"]={"detent.requested#0":{"target":"medium"}}
+        report=self.execute(self.cohort("native",[(1,1,{})]),self.cohort("flutter",[(1,1,{})]))
+        self.assertEqual(report["coverage_counts"]["PASS"],0)
+        self.assertIn("required action",json.dumps(report["phases"]))
+
+    def test_same_geometry_cannot_fill_two_device_geometry_roles(self):
+        self.matrix["environment_axes"]["device_geometry"]=["iphone_a","iphone_b"]
+        n=self.cohort("native",[(1,1,{})]);c=self.cohort("flutter",[(1,1,{})])
+        n2=self.cohort("native",[(1,2,{})],label="geometry-b");c2=self.cohort("flutter",[(1,2,{})],label="geometry-b")
+        extra=[{"split":"training","cell_id":"26/iphone_b/portrait/basic","expected_trials":[1],"native":n2,"candidate":c2,
+            "recipe":self.save("geometry-b-recipe.json",self.recipe),"runtime_input_verified":True}]
+        report=self.execute(n,c,extra=extra)
+        self.assertEqual(report["coverage_counts"]["PASS"],1)
+        self.assertEqual(report["coverage_counts"]["UNRESOLVED"],1)
+        self.assertIn("geometry",json.dumps(report["issues"]))
 
 
 if __name__=="__main__":

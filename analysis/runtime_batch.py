@@ -3,13 +3,15 @@
 import argparse
 from collections import Counter
 import hashlib
+import gzip
 import json
 import os
 from pathlib import Path
 import re
 import sys
+import importlib.util
 
-from compare import TraceError, compare, read_jsonl, require, schema_equal, validate
+from compare import TraceError, compare, read_jsonl, require, schema_equal, validate, indexed_events
 from regression import cells, normalize_window
 
 SPLITS = ("diagnostic", "training", "holdout")
@@ -86,6 +88,10 @@ def freeze(plan_path, output):
     index = {"schema_version": 1, "batch_id": plan["batch_id"], "plan_sha256": sha(plan_path),
              "matrix": relocate(plan["matrix"], plan_path.parent, output),
              "profile": relocate(plan["profile"], plan_path.parent, output), "splits": []}
+    if any(cell["role"] == "holdout" for cell in expected.values()) or "holdout_definitions" in plan:
+        require("holdout_definitions" in plan, "holdout definitions must be frozen before new batch assignment")
+        read_ref(plan["holdout_definitions"], plan_path.parent)
+        index["holdout_definitions"] = relocate(plan["holdout_definitions"], plan_path.parent, output)
     for split in SPLITS:
         payload = {"schema_version": 1, "batch_id": plan["batch_id"], "split": split,
                    "assignments": sorted(assignments[split], key=lambda x: x["cell_id"])}
@@ -98,6 +104,78 @@ def freeze(plan_path, output):
 def identity(header):
     return {key: header[key] for key in ("scenario_id", "os", "device", "environment")} | {
         "configuration": {key: value for key, value in header["configuration"].items() if key != "trial"}}
+
+
+def import_cohort(source_manifest, source_root, adapter, role, split, cohort_id, output, artifact_directory, attempt=1):
+    """Explicit producer adapters preserve bytes and producer outcomes; no trace adaptation."""
+    source_manifest, source_root = Path(source_manifest).resolve(), Path(source_root).resolve()
+    output, artifact_directory = Path(output).resolve(), Path(artifact_directory).resolve()
+    producer = json.loads(source_manifest.read_text())
+    require(producer.get("schema_version") == 1, "unsupported producer manifest")
+    require(adapter != "flutter-timing-v1" or role == "flutter", "producer adapter/role mismatch")
+    require(adapter == "flutter-timing-v1" or role == "native", "producer adapter/role mismatch")
+    pilot = adapter == "native-interaction-pilot-v1"
+    if pilot:
+        require(split == "diagnostic" and producer.get("status") == "diagnostic", "interaction pilot cannot be promoted beyond diagnostic scope")
+    roster = producer.get("entries") if adapter in ("native-timing-v1", "native-interaction-pilot-v1") else producer.get("artifacts")
+    require(isinstance(roster, list) and roster, "producer manifest artifact roster required")
+    artifact_directory.mkdir(parents=True, exist_ok=True)
+    producer_copy = artifact_directory / (sha(source_manifest) + ".producer.json")
+    if producer_copy.exists():
+        require(producer_copy.read_bytes() == source_manifest.read_bytes(), "producer manifest content collision")
+    else:
+        with producer_copy.open("xb") as stream:
+            stream.write(source_manifest.read_bytes())
+    result = {"schema_version": 1, "cohort_id": cohort_id, "implementation": role, "split": split,
+              "producer_adapter": adapter, "producer_manifest": {"path": os.path.relpath(producer_copy, output.parent), "sha256": sha(source_manifest), "source_path": str(source_manifest)},
+              "producer_provenance": {key: value for key, value in producer.items() if key not in ("entries", "artifacts", "runtime")}, "artifacts": []}
+    for entry in roster:
+        producer_split = entry.get("split", entry.get("role", producer.get("split")))
+        require(producer_split == split or pilot and producer_split == "training", "producer split cannot be reassigned")
+        path = reference(entry, source_root)
+        require(path.is_relative_to(source_root), "producer path escapes explicit source root")
+        require(path.is_file() and sha(path) == entry["sha256"], "producer source hash mismatch")
+        content = path.read_bytes()
+        raw = gzip.decompress(content) if str(path).endswith(".gz") else content
+        if entry.get("raw_sha256") is not None:
+            require(hashlib.sha256(raw).hexdigest() == entry["raw_sha256"], "producer raw hash mismatch")
+        observations = [json.loads(line) for line in raw.decode().splitlines() if line.strip()]
+        ordinal = entry.get("attempt", producer.get("attempt", attempt))
+        require(type(ordinal) is int and ordinal > 0, "explicit positive producer attempt ordinal required")
+        item = {"run_id": entry["run_id"], "trial": entry["trial"], "attempt": ordinal,
+                "sha256": entry["sha256"], "raw_sha256": hashlib.sha256(raw).hexdigest(),
+                "source_path": str(path), "source_attempt_id": entry.get("attempt_id"), "status": "partial"}
+        validate_v2(observations, role, item)
+        if adapter == "flutter-timing-v1":
+            require(producer.get("complete") is True and entry.get("terminal") == "dismiss.completed", "producer did not declare complete candidate capture")
+        elif adapter == "native-timing-v1":
+            require(producer.get("status") == "complete_resting_and_replay_timing_only" and entry.get("terminal") is True, "producer did not declare complete timing capture")
+        item["status"] = "complete"
+        if pilot:
+            item["status"] = "unsupported"
+            item["quality_error"] = "pilot/uncommitted source is diagnostic only; no paired candidate or accepted timing claim"
+            item["producer_outcomes"] = entry.get("outcomes", [])
+        if role == "native" and not pilot:
+            spec = importlib.util.spec_from_file_location("native_evidence_contract", ROOT / "native_reference/scripts/evidence_contract.py")
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            try:
+                module.validate_run(observations)
+            except ValueError as error:
+                item["status"] = "partial"
+                item["quality_error"] = str(error)
+        artifact_directory.mkdir(parents=True, exist_ok=True)
+        destination = artifact_directory / (entry["sha256"] + (".jsonl.gz" if str(path).endswith(".gz") else ".jsonl"))
+        if destination.exists():
+            require(destination.read_bytes() == content, "content-addressed artifact collision")
+        else:
+            with destination.open("xb") as stream:
+                stream.write(content)
+        item["path"] = os.path.relpath(destination, output.parent)
+        result["artifacts"].append(item)
+    write_immutable(output, result)
+    return {"status": "imported", "manifest": str(output), "sha256": sha(output), "artifacts": len(result["artifacts"]),
+            "outcomes": dict(Counter(item["status"] for item in result["artifacts"])), "producer_sha256": sha(source_manifest)}
 
 
 def validate_v2(rows, role, artifact):
@@ -156,7 +234,7 @@ def load_cohort(ref, base, role, split, audit):
                 candidates.append(record)
                 all_records.append(record)
                 item["status"] = "complete"
-            except (TraceError, OSError, ValueError, KeyError, TypeError) as error:
+            except (TraceError, OSError, EOFError, ValueError, KeyError, TypeError) as error:
                 item["reason"] = str(error)
                 if "run.error" in str(error):
                     item["status"] = "failed"
@@ -206,9 +284,15 @@ def run(index_path, split_filter=None):
         result["coverage"] = {cell_id: {"status": "UNRESOLVED", "complete_trials": [], "required_trials": matrix.get("minimum_trials", 10)} for cell_id in expected}
         result["coverage_counts"]["UNRESOLVED"] = len(expected)
         profile, _ = read_ref(index["profile"], index_path.parent)
+        if "holdout_definitions" in index:
+            read_ref(index["holdout_definitions"], index_path.parent)
+            result["holdout_definitions_sha256"] = index["holdout_definitions"]["sha256"]
+        else:
+            result["holdout_definition_status"] = "legacy diagnostic index; no holdout capture assigned or accepted"
         result["batch_id"] = index["batch_id"]
         result["frozen_index_sha256"] = sha(index_path)
         result["analyzer_sha256"] = sha(ROOT / "analysis/compare.py")
+        result["runtime_orchestrator_sha256"] = sha(Path(__file__))
         result["matrix_sha256"] = index["matrix"]["sha256"]
         rosters = []
         registry = {}
@@ -229,6 +313,7 @@ def run(index_path, split_filter=None):
                 rosters.append((split, assignment, native, candidate))
         coverage = {cell_id: {check_id: set() for check_id in cell["check_contracts"]} for cell_id, cell in expected.items()}
         failures = set()
+        geometry_bindings = {}
         for split, assignment, native, candidate in rosters:
             if split_filter and split != split_filter:
                 continue
@@ -247,6 +332,15 @@ def run(index_path, split_filter=None):
                     continue
                 require(n["header"]["scenario_id"] == cell["scenario_id"], "source scenario does not match frozen case")
                 require(int(n["header"]["os"]["version"].split(".")[0]) == cell["ios_major"] and n["header"]["environment"]["orientation"] == cell["orientation"], "source environment does not match frozen cell")
+                size = n["header"]["device"]["logical_size"]
+                size_key = tuple(sorted((size["width"], size["height"])))
+                geometry = cell["device_geometry"]
+                if (geometry in geometry_bindings and geometry_bindings[geometry] != size_key or
+                    any(name != geometry and value == size_key for name, value in geometry_bindings.items())):
+                    result["pair_counts"]["unresolved"] += 1
+                    result["issues"].append(f"{cell_id}/trial{trial}: geometry role changed or duplicates another role")
+                    continue
+                geometry_bindings[geometry] = size_key
                 pair = {"cell_id": cell_id, "split": split, "trial": trial,
                         "native": {key: n["artifact"][key] for key in ("run_id", "trial", "attempt", "path", "sha256")},
                         "candidate": {key: c["artifact"][key] for key in ("run_id", "trial", "attempt", "path", "sha256")}}
@@ -259,6 +353,13 @@ def run(index_path, split_filter=None):
                     report = compare({"native": n["rows"], "candidate": c["rows"], "config": cfg})
                     status = outcome(report)
                     reasons = []
+                    action_failed = False
+                    for record in (n, c):
+                        observed_events = indexed_events([row for row in record["rows"] if row["type"] == "event"])
+                        for name, fields in contract.get("expected_events", {}).items():
+                            if name not in observed_events or not all(key in observed_events[name]["data"] and schema_equal(observed_events[name]["data"][key], value) for key, value in fields.items()):
+                                reasons.append("required action/outcome not observed for matrix check")
+                                action_failed = True
                     if assignment.get("runtime_input_verified") is not True:
                         reasons.append("actual input delivery verification absent")
                     if recipe.get("scenario_id") != cell["scenario_id"] or recipe.get("role") != cell["role"]:
@@ -272,6 +373,8 @@ def run(index_path, split_filter=None):
                         reasons.append("frozen recipe does not pin subcondition")
                     if status == "PASS" and reasons:
                         status = "UNRESOLVED"
+                    if action_failed:
+                        status = "FAIL"
                     phase = {"cell_id": cell_id, "trial": trial, "split": split, "check_id": check_id,
                              "status": status, "reasons": reasons, "analyzer": report}
                     result["phases"].append(phase)
@@ -290,6 +393,7 @@ def run(index_path, split_filter=None):
                 "checks": {key: {"passing_trials": sorted(value)} for key, value in checks.items()}}
             result["coverage_counts"][status] += 1
         result["required_cells"] = len(expected)
+        result["geometry_bindings"] = {key: list(value) for key, value in geometry_bindings.items()}
         result["required_checks"] = sum(len(cell["check_contracts"]) for cell in expected.values())
         result["verdict"] = "PASS" if not result["issues"] and result["coverage_counts"]["FAIL"] == result["coverage_counts"]["UNRESOLVED"] == 0 else "FAIL"
         result["limitations"] = ["diagnostic pairs never count toward acceptance", "analyzer FAIL is preserved; unavailable evidence remains unresolved", "canonical v2 parameterized checks need an approved applicability/parameter contract", "actual displayed frames and native shape calibration remain independent"]
@@ -308,17 +412,37 @@ def main():
     r.add_argument("index")
     r.add_argument("--split", choices=SPLITS)
     r.add_argument("--output")
+    i = sub.add_parser("import-cohort")
+    i.add_argument("manifest")
+    i.add_argument("--adapter", choices=("flutter-timing-v1", "native-timing-v1", "native-reference-v1", "native-interaction-pilot-v1"), required=True)
+    i.add_argument("--source-root", required=True)
+    i.add_argument("--implementation", choices=("native", "flutter"), required=True)
+    i.add_argument("--split", choices=SPLITS, required=True)
+    i.add_argument("--cohort-id", required=True)
+    i.add_argument("--attempt", type=int, default=1)
+    i.add_argument("--output", required=True)
+    i.add_argument("--artifact-directory", required=True)
     args = parser.parse_args()
     try:
-        result = freeze(args.plan, args.output_directory) if args.command == "freeze" else run(args.index, args.split)
-    except (TraceError, OSError, ValueError, KeyError, TypeError) as error:
+        if args.command == "freeze":
+            result = freeze(args.plan, args.output_directory)
+        elif args.command == "import-cohort":
+            result = import_cohort(args.manifest, args.source_root, args.adapter, args.implementation, args.split,
+                                   args.cohort_id, args.output, args.artifact_directory, args.attempt)
+        else:
+            result = run(args.index, args.split)
+    except (TraceError, OSError, EOFError, ValueError, KeyError, TypeError) as error:
         result = {"verdict": "FAIL", "issues": [str(error)], "parity_proven": False}
     if args.command == "run" and args.output:
         path = Path(args.output)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(serialize(result))
-    print(json.dumps(result, indent=2, allow_nan=False))
-    return 0 if result.get("status") == "frozen" or result.get("verdict") == "PASS" else 1
+    display = result
+    if args.command == "run" and args.output:
+        display = {key: result.get(key) for key in ("verdict", "batch_id", "required_cells", "required_checks", "pair_counts", "phase_counts", "coverage_counts", "issues")}
+        display["output"] = args.output
+    print(json.dumps(display, indent=2, allow_nan=False))
+    return 0 if result.get("status") in ("frozen", "imported") or result.get("verdict") == "PASS" else 1
 
 
 if __name__ == "__main__":

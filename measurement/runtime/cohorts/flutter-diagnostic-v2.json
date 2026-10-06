@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "cohort_id": "baseline-v2-flutter-26",
+  "implementation": "flutter",
+  "split": "diagnostic",
+  "provenance": "Unmodified actual v2 capture retained in merged main; diagnostic only",
+  "artifacts": [
+    {
+      "path": "../../../artifacts/flutter/contract_v2_pair/native.medium_large.programmatic-1791313880627903-1.jsonl.gz",
+      "sha256": "ee969f09c3cf84e8676730da3e73cef26e219e85559b109d744059376c590071",
+      "run_id": "1791313880627903-1",
+      "trial": 1,
+      "attempt": 1,
+      "status": "complete"
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "artifacts": [
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/a8524a2244e285b07e0e7c3abf9a73ca520d20380aa70fe949bd11aa438a2609.jsonl.gz",
+      "raw_sha256": "a214ce52f831097d6acb3214c537c3ee5969fca0e7e9703875ad53bee661b9ca",
+      "run_id": "1791318560873366-1",
+      "sha256": "a8524a2244e285b07e0e7c3abf9a73ca520d20380aa70fe949bd11aa438a2609",
+      "source_attempt_id": null,
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/flutter-engine/artifacts/flutter/timing_v2_ios27_attempt1/native.medium_large.programmatic-1791318560873366-1.jsonl.gz",
+      "status": "complete",
+      "trial": 1
+    },
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/6ea6c7908c2ccdd071d80d9806bf0645d35733b7f806e172a0aa752da9e5f277.jsonl.gz",
+      "raw_sha256": "399f081159164a203b6f0de058be1d6194e5a742053baa86f407d420ecd08da6",
+      "run_id": "1791318566747634-2",
+      "sha256": "6ea6c7908c2ccdd071d80d9806bf0645d35733b7f806e172a0aa752da9e5f277",
+      "source_attempt_id": null,
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/flutter-engine/artifacts/flutter/timing_v2_ios27_attempt1/native.medium_large.programmatic-1791318566747634-2.jsonl.gz",
+      "status": "complete",
+      "trial": 2
+    },
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/eb3a608e824c49c1760d054df0c8cb09554c8095f0491953d7f2aec050da4fe0.jsonl.gz",
+      "raw_sha256": "6135c5611603666efc4b53ad3dac7d1e5e34009d8ae5957bc9c0db2bf3b27bb1",
+      "run_id": "1791318572593855-3",
+      "sha256": "eb3a608e824c49c1760d054df0c8cb09554c8095f0491953d7f2aec050da4fe0",
+      "source_attempt_id": null,
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/flutter-engine/artifacts/flutter/timing_v2_ios27_attempt1/native.medium_large.programmatic-1791318572593855-3.jsonl.gz",
+      "status": "complete",
+      "trial": 3
+    },
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/e677acb8f9868d8f9a72c3173c8fcc950b903980c64102380aa9daed1071f723.jsonl.gz",
+      "raw_sha256": "6803a594bb64c19065a77e721a32e67f4511ff62010b756d5ab17b75b87e23fd",
+      "run_id": "1791318578447913-4",
+      "sha256": "e677acb8f9868d8f9a72c3173c8fcc950b903980c64102380aa9daed1071f723",
+      "source_attempt_id": null,
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/flutter-engine/artifacts/flutter/timing_v2_ios27_attempt1/native.medium_large.programmatic-1791318578447913-4.jsonl.gz",
+      "status": "complete",
+      "trial": 4
+    },
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/efc8bdebd5b6e8e70b575a877c72ad3a0558c990acb7c0cee75913589ec6b9e2.jsonl.gz",
+      "raw_sha256": "9a66159ca7282f8274308a337fe31543e3315f53f846393aa956c01189d97194",
+      "run_id": "1791318584295707-5",
+      "sha256": "efc8bdebd5b6e8e70b575a877c72ad3a0558c990acb7c0cee75913589ec6b9e2",
+      "source_attempt_id": null,
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/flutter-engine/artifacts/flutter/timing_v2_ios27_attempt1/native.medium_large.programmatic-1791318584295707-5.jsonl.gz",
+      "status": "complete",
+      "trial": 5
+    },
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/4b152a4130529034d7d540e7de27bf3116f8dda2f0aa95bebca3661f83605dcd.jsonl.gz",
+      "raw_sha256": "531916a94a16a2b6c31dbdfeec46a27f81a7f06b84bee635209f4a77dff77ec6",
+      "run_id": "1791318590147447-6",
+      "sha256": "4b152a4130529034d7d540e7de27bf3116f8dda2f0aa95bebca3661f83605dcd",
+      "source_attempt_id": null,
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/flutter-engine/artifacts/flutter/timing_v2_ios27_attempt1/native.medium_large.programmatic-1791318590147447-6.jsonl.gz",
+      "status": "complete",
+      "trial": 6
+    },
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/bb777c0baac2262e676224fababdbdb52c6d4d8cbc814e006cc984d4f17fc5e3.jsonl.gz",
+      "raw_sha256": "3ed9a7a25e3acccf33224c60a3b53f2e9f14a73278b2e8068c573dc6ca343b3a",
+      "run_id": "1791318596002703-7",
+      "sha256": "bb777c0baac2262e676224fababdbdb52c6d4d8cbc814e006cc984d4f17fc5e3",
+      "source_attempt_id": null,
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/flutter-engine/artifacts/flutter/timing_v2_ios27_attempt1/native.medium_large.programmatic-1791318596002703-7.jsonl.gz",
+      "status": "complete",
+      "trial": 7
+    },
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/97f3e93933a7cbdc8b39717a3db8d38bbb95570ac2e266c7a65f5cdc25c2b606.jsonl.gz",
+      "raw_sha256": "e35e87335ba15bd39fa89883bea3a8dcd3fe77a941576d6b45a7d7ee23bd3516",
+      "run_id": "1791318601876724-8",
+      "sha256": "97f3e93933a7cbdc8b39717a3db8d38bbb95570ac2e266c7a65f5cdc25c2b606",
+      "source_attempt_id": null,
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/flutter-engine/artifacts/flutter/timing_v2_ios27_attempt1/native.medium_large.programmatic-1791318601876724-8.jsonl.gz",
+      "status": "complete",
+      "trial": 8
+    },
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/12d69e80741fa40b1aaa6f4fa581bb4adad2e9f8ab19091d10f971b2620bcfe7.jsonl.gz",
+      "raw_sha256": "9c79c1c5368b1066b3fb366937fce12f6a3c2b9bc907ff425effef621ab50dcd",
+      "run_id": "1791318607726244-9",
+      "sha256": "12d69e80741fa40b1aaa6f4fa581bb4adad2e9f8ab19091d10f971b2620bcfe7",
+      "source_attempt_id": null,
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/flutter-engine/artifacts/flutter/timing_v2_ios27_attempt1/native.medium_large.programmatic-1791318607726244-9.jsonl.gz",
+      "status": "complete",
+      "trial": 9
+    },
+    {
+      "attempt": 1,
+      "path": "../../../artifacts/runtime/imports/d31cfed0561b906b05f765d6a59c3edead7fc5126f3d7bb2b5ffdc36413ad02f.jsonl.gz",
+      "raw_sha256": "1e7ff778e21f2434c10b78835e024650c1797d5ef33614102b344e12fa345318",
+      "run_id": "1791318613588923-10",
+      "sha256": "d31cfed0561b906b05f765d6a59c3edead7fc5126f3d7bb2b5ffdc36413ad02f",
+      "source_attempt_id": null,
+      "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/flutter-engine/artifacts/flutter/timing_v2_ios27_attempt1/native.medium_large.programmatic-1791318613588923-10.jsonl.gz",
+      "status": "complete",
+      "trial": 10
+    }
+  ],
+  "cohort_id": "strict-timing-flutter-27",
+  "implementation": "flutter",
+  "producer_adapter": "flutter-timing-v1",
+  "producer_manifest": {
+    "path": "../../../artifacts/runtime/imports/b9815f06c989b108e859eaca47f82a60ab89d2c4ad40195f2afa6296aa029379.producer.json",
+    "sha256": "b9815f06c989b108e859eaca47f82a60ab89d2c4ad40195f2afa6296aa029379",
+    "source_path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/flutter-engine/artifacts/flutter/timing_v2_ios27_attempt1/manifest.json"
+  },
+  "producer_provenance": {
+    "attempt": 1,
+    "build_mode": "debug_simulator",
+    "candidate_source_sha256": {
+      "flutter_reference/candidate/lib/main.dart": "7e78fda22333fd165253ffb5e7c715d3a7a991baf52c80ec5f402e0af129e6f6",
+      "flutter_reference/candidate/lib/replay_timing.dart": "577b90735c05923e5db04d7666701f86cd24e09df0430d356b9e9e2f6c3490c4"
+    },
+    "complete": true,
+    "executable_sha256": "7b27494b69fd80d8ed18377b926b2462d6262816a3a1bae86dc5292a7e945949",
+    "expected_trials": 10,
+    "proof_scope": "runtime_candidate_attempt_not_parity",
+    "schema_version": 1,
+    "source_revision": "e16fbddd6ac574d85a725e77705c65a4823c2d24",
+    "source_worktree_diff_sha256": "9325085dcdce11c70a488ca2b49aa5b007900c82576f146aa9c0565456157344",
+    "split": "training",
+    "udid": "8C8F0596-DEB9-42A5-8DEB-3BF309DF840E"
+  },
+  "schema_version": 1,
+  "split": "training"
+}
