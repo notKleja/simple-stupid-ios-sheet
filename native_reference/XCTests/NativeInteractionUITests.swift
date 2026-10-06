@@ -67,4 +67,19 @@ final class NativeInteractionUITests: XCTestCase {
 
     func testScrollExpandsFirst() { scroll("native.scroll.medium_large") }
     func testScrollContentFirst() { scroll("native.scroll.content_first") }
+
+    func testDownwardScrollHandoff() {
+        for trial in 1...10 {
+            let app = launch("native.scroll.handoff.down", trial:trial)
+            wait(1)
+            app.buttons["scroll.set400"].tap()
+            app.buttons["probe.begin"].tap()
+            let view=app.scrollViews["sheet.scroll"]
+            view.coordinate(withNormalizedOffset:CGVector(dx:0.5,dy:0.35)).press(forDuration:0.1,
+                thenDragTo:view.coordinate(withNormalizedOffset:CGVector(dx:0.5,dy:0.95)))
+            wait(1)
+            app.buttons["probe.end"].tap()
+            finish(app)
+        }
+    }
 }

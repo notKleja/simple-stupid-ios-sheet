@@ -35,7 +35,8 @@ import UIKit
             ("sheet.select.medium", "Medium", #selector(medium)),
             ("probe.begin", "Begin probe", #selector(begin)),
             ("probe.end", "End probe", #selector(end)),
-            ("experiment.finish", "Finish experiment", #selector(finish))]
+            ("experiment.finish", "Finish experiment", #selector(finish)),
+            ("scroll.set400", "Scroll offset 400", #selector(setOffset))]
         for (index, item) in controls.enumerated() {
             let button = UIButton(type: .system)
             button.accessibilityIdentifier = item.0
@@ -90,4 +91,8 @@ import UIKit
         status.text = "Completed probes: \(probeIndex); background activations: \(activations)"
     }
     @objc func finish() { harness?.finishInteraction() }
+    @objc func setOffset() {
+        harness?.trace?.event("scroll.offset.requested", ["offset": 400])
+        harness?.scroll?.setContentOffset(CGPoint(x:0,y:400),animated:false)
+    }
 }

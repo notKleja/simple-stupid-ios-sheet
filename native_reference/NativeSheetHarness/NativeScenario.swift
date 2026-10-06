@@ -35,6 +35,7 @@ struct NativeScenario {
         add(NativeScenario(id: "native.dismiss.disabled", manual: true, dismissalLocked: true))
         add(NativeScenario(id: "native.scroll.medium_large", manual: true, scrolling: true))
         add(NativeScenario(id: "native.scroll.content_first", manual: true, scrolling: true, expandsOnScroll: false))
+        add(NativeScenario(id: "native.scroll.handoff.down", initial: "large", manual: true, scrolling: true))
         add(NativeScenario(id: "native.keyboard.medium", manual: true, keyboard: true))
         add(NativeScenario(id: "native.edge.width", compactEdge: true, preferredWidth: true))
         add(NativeScenario(id: "native.form", style: "form_sheet"))
