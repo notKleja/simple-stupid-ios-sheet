@@ -1,0 +1,497 @@
+{
+  "schema_version": 1,
+  "parity_proven": false,
+  "proof_scope": "native_container_relationship_only",
+  "calibration_status": "invalid_for_full_trajectory_acceptance; native recorder mixed model/presentation ancestry; relationships are provisional recorded-output hypotheses",
+  "runs": [
+    {
+      "run_id": "163EBD4E-056A-4AB3-825D-2E27313B7371",
+      "os": {
+        "build": "23E254a",
+        "version": "26.4.1"
+      },
+      "device": {
+        "logical_size": {
+          "height": 874,
+          "width": 402
+        },
+        "model": "iPhone18,1",
+        "physical_size": {
+          "height": 2622,
+          "width": 1206
+        },
+        "refresh_hz": 60,
+        "scale": 3
+      },
+      "parameters": {
+        "W": 402,
+        "M": 469.66666666666674,
+        "L": 812.0,
+        "I": 8.0
+      },
+      "extent_domain": [
+        0.5784072249589491,
+        1
+      ],
+      "boundary_ns": {
+        "large": 51774260479375,
+        "medium": 51775836600208,
+        "end": 51777410423208
+      },
+      "sampling": "native timestamps retained; endpoint medians use final two observed pre-command frames",
+      "present_first_visible_observed": false,
+      "samples": 189
+    },
+    {
+      "run_id": "2279A0D1-9E77-4880-8449-403C8D71F458",
+      "os": {
+        "build": "23E254a",
+        "version": "26.4.1"
+      },
+      "device": {
+        "logical_size": {
+          "height": 874,
+          "width": 402
+        },
+        "model": "iPhone18,1",
+        "physical_size": {
+          "height": 2622,
+          "width": 1206
+        },
+        "refresh_hz": 60,
+        "scale": 3
+      },
+      "parameters": {
+        "W": 402,
+        "M": 469.66666666666674,
+        "L": 812.0,
+        "I": 8.0
+      },
+      "extent_domain": [
+        0.5784072249589491,
+        1
+      ],
+      "boundary_ns": {
+        "large": 51728577397000,
+        "medium": 51730152453791,
+        "end": 51731727395166
+      },
+      "sampling": "native timestamps retained; endpoint medians use final two observed pre-command frames",
+      "present_first_visible_observed": false,
+      "samples": 189
+    },
+    {
+      "run_id": "639869C1-326B-478C-ABBB-C6E71708B6BD",
+      "os": {
+        "build": "23E254a",
+        "version": "26.4.1"
+      },
+      "device": {
+        "logical_size": {
+          "height": 874,
+          "width": 402
+        },
+        "model": "iPhone18,1",
+        "physical_size": {
+          "height": 2622,
+          "width": 1206
+        },
+        "refresh_hz": 60,
+        "scale": 3
+      },
+      "parameters": {
+        "W": 402,
+        "M": 469.66666666666674,
+        "L": 812.0,
+        "I": 8.0
+      },
+      "extent_domain": [
+        0.5784072249589491,
+        1
+      ],
+      "boundary_ns": {
+        "large": 51745620916125,
+        "medium": 51747194004708,
+        "end": 51748771020041
+      },
+      "sampling": "native timestamps retained; endpoint medians use final two observed pre-command frames",
+      "present_first_visible_observed": false,
+      "samples": 189
+    },
+    {
+      "run_id": "653B2880-C4FA-4929-93F0-5A686A1A4CC3",
+      "os": {
+        "build": "23E254a",
+        "version": "26.4.1"
+      },
+      "device": {
+        "logical_size": {
+          "height": 874,
+          "width": 402
+        },
+        "model": "iPhone18,1",
+        "physical_size": {
+          "height": 2622,
+          "width": 1206
+        },
+        "refresh_hz": 60,
+        "scale": 3
+      },
+      "parameters": {
+        "W": 402,
+        "M": 469.66666666666674,
+        "L": 812.0,
+        "I": 8.0
+      },
+      "extent_domain": [
+        0.5784072249589491,
+        1
+      ],
+      "boundary_ns": {
+        "large": 51762910613041,
+        "medium": 51764487776375,
+        "end": 51766060537708
+      },
+      "sampling": "native timestamps retained; endpoint medians use final two observed pre-command frames",
+      "present_first_visible_observed": false,
+      "samples": 189
+    },
+    {
+      "run_id": "66AA7D4D-6E06-421C-9238-BC2929410835",
+      "os": {
+        "build": "23E254a",
+        "version": "26.4.1"
+      },
+      "device": {
+        "logical_size": {
+          "height": 874,
+          "width": 402
+        },
+        "model": "iPhone18,1",
+        "physical_size": {
+          "height": 2622,
+          "width": 1206
+        },
+        "refresh_hz": 60,
+        "scale": 3
+      },
+      "parameters": {
+        "W": 402,
+        "M": 469.66666666666674,
+        "L": 812.0,
+        "I": 8.0
+      },
+      "extent_domain": [
+        0.5784072249589491,
+        1
+      ],
+      "boundary_ns": {
+        "large": 51768581342541,
+        "medium": 51770157947416,
+        "end": 51771731396000
+      },
+      "sampling": "native timestamps retained; endpoint medians use final two observed pre-command frames",
+      "present_first_visible_observed": false,
+      "samples": 189
+    },
+    {
+      "run_id": "80FDD52B-52F9-4C9C-883D-C04EF00DD767",
+      "os": {
+        "build": "23E254a",
+        "version": "26.4.1"
+      },
+      "device": {
+        "logical_size": {
+          "height": 874,
+          "width": 402
+        },
+        "model": "iPhone18,1",
+        "physical_size": {
+          "height": 2622,
+          "width": 1206
+        },
+        "refresh_hz": 60,
+        "scale": 3
+      },
+      "parameters": {
+        "W": 402,
+        "M": 469.66666666666674,
+        "L": 812.0,
+        "I": 8.0
+      },
+      "extent_domain": [
+        0.5784072249589491,
+        1
+      ],
+      "boundary_ns": {
+        "large": 51739939787583,
+        "medium": 51741516085625,
+        "end": 51743090289875
+      },
+      "sampling": "native timestamps retained; endpoint medians use final two observed pre-command frames",
+      "present_first_visible_observed": false,
+      "samples": 189
+    },
+    {
+      "run_id": "8E6A87EB-C6B1-4AC9-B902-FC09BAB97E5F",
+      "os": {
+        "build": "23E254a",
+        "version": "26.4.1"
+      },
+      "device": {
+        "logical_size": {
+          "height": 874,
+          "width": 402
+        },
+        "model": "iPhone18,1",
+        "physical_size": {
+          "height": 2622,
+          "width": 1206
+        },
+        "refresh_hz": 60,
+        "scale": 3
+      },
+      "parameters": {
+        "W": 402,
+        "M": 469.66666666666674,
+        "L": 812.0,
+        "I": 8.0
+      },
+      "extent_domain": [
+        0.5784072249589491,
+        1
+      ],
+      "boundary_ns": {
+        "large": 51734256963125,
+        "medium": 51735831490250,
+        "end": 51737406964041
+      },
+      "sampling": "native timestamps retained; endpoint medians use final two observed pre-command frames",
+      "present_first_visible_observed": false,
+      "samples": 189
+    },
+    {
+      "run_id": "A8985D2A-43A2-4CD1-9043-14967FFB93BA",
+      "os": {
+        "build": "23E254a",
+        "version": "26.4.1"
+      },
+      "device": {
+        "logical_size": {
+          "height": 874,
+          "width": 402
+        },
+        "model": "iPhone18,1",
+        "physical_size": {
+          "height": 2622,
+          "width": 1206
+        },
+        "refresh_hz": 60,
+        "scale": 3
+      },
+      "parameters": {
+        "W": 402,
+        "M": 469.66666666666674,
+        "L": 812.0,
+        "I": 8.0
+      },
+      "extent_domain": [
+        0.5784072249589491,
+        1
+      ],
+      "boundary_ns": {
+        "large": 51722973886208,
+        "medium": 51724551247791,
+        "end": 51726039919791
+      },
+      "sampling": "native timestamps retained; endpoint medians use final two observed pre-command frames",
+      "present_first_visible_observed": false,
+      "samples": 184
+    },
+    {
+      "run_id": "B6290EC2-FA3B-49EE-A856-DF2A37DC94BC",
+      "os": {
+        "build": "23E254a",
+        "version": "26.4.1"
+      },
+      "device": {
+        "logical_size": {
+          "height": 874,
+          "width": 402
+        },
+        "model": "iPhone18,1",
+        "physical_size": {
+          "height": 2622,
+          "width": 1206
+        },
+        "refresh_hz": 60,
+        "scale": 3
+      },
+      "parameters": {
+        "W": 402,
+        "M": 469.66666666666674,
+        "L": 812.0,
+        "I": 8.0
+      },
+      "extent_domain": [
+        0.5784072249589491,
+        1
+      ],
+      "boundary_ns": {
+        "large": 51751543928833,
+        "medium": 51753118821041,
+        "end": 51754693883708
+      },
+      "sampling": "native timestamps retained; endpoint medians use final two observed pre-command frames",
+      "present_first_visible_observed": false,
+      "samples": 189
+    },
+    {
+      "run_id": "B9AF9672-8D2E-4AEE-BDEE-192C4E7973C2",
+      "os": {
+        "build": "23E254a",
+        "version": "26.4.1"
+      },
+      "device": {
+        "logical_size": {
+          "height": 874,
+          "width": 402
+        },
+        "model": "iPhone18,1",
+        "physical_size": {
+          "height": 2622,
+          "width": 1206
+        },
+        "refresh_hz": 60,
+        "scale": 3
+      },
+      "parameters": {
+        "W": 402,
+        "M": 469.66666666666674,
+        "L": 812.0,
+        "I": 8.0
+      },
+      "extent_domain": [
+        0.5784072249589491,
+        1
+      ],
+      "boundary_ns": {
+        "large": 51757220075416,
+        "medium": 51758794072916,
+        "end": 51760369398666
+      },
+      "sampling": "native timestamps retained; endpoint medians use final two observed pre-command frames",
+      "present_first_visible_observed": false,
+      "samples": 189
+    }
+  ],
+  "formulas": {
+    "side": "x=I*(L-H)/(L-M); H=visible_height/(visible_width/W)",
+    "bottom_equal_side": "b=x",
+    "bottom_quadratic": "b=x+((L-M)/W)*x*(1-x/I)"
+  },
+  "limitations": [
+    "container fields share one sampling pipeline; tiny arithmetic residual is not optical calibration",
+    "programmatic medium/large only; no extrapolation to interactive drag or other geometry",
+    "all original samples remain in residuals; anomalies are flagged, never trimmed",
+    "callback completion is not physical settling"
+  ],
+  "anomalies": [],
+  "side": {
+    "samples": 1885,
+    "rms": 1.3253451049728423e-14,
+    "max": 6.039613253960852e-14,
+    "signed_min": -4.468647674116255e-15,
+    "signed_max": 6.039613253960852e-14,
+    "excluded_samples": 0
+  },
+  "left_right_symmetry": {
+    "samples": 1885,
+    "rms": 2.1750991293105463e-14,
+    "max": 8.526512829121202e-14,
+    "signed_min": -2.842170943040401e-14,
+    "signed_max": 8.526512829121202e-14,
+    "excluded_samples": 0
+  },
+  "bottom": {
+    "large": {
+      "equal_side": {
+        "samples": 946,
+        "rms": 0.4553269133838398,
+        "max": 1.7029032100510904,
+        "signed_min": 0,
+        "signed_max": 1.7029032100510904,
+        "excluded_samples": 0
+      },
+      "quadratic": {
+        "samples": 946,
+        "rms": 3.9008719574298476e-14,
+        "max": 2.2648549702353193e-13,
+        "signed_min": -1.580957587066223e-13,
+        "signed_max": 2.2648549702353193e-13,
+        "excluded_samples": 0
+      }
+    },
+    "medium": {
+      "equal_side": {
+        "samples": 939,
+        "rms": 0.4571105119094429,
+        "max": 1.7025652352905922,
+        "signed_min": -2.842170943040401e-14,
+        "signed_max": 1.7025652352905922,
+        "excluded_samples": 0
+      },
+      "quadratic": {
+        "samples": 939,
+        "rms": 4.429069970657269e-14,
+        "max": 1.9273471707492718e-13,
+        "signed_min": -1.5987211554602254e-13,
+        "signed_max": 1.9273471707492718e-13,
+        "excluded_samples": 0
+      }
+    }
+  },
+  "trial_count": 10,
+  "artifacts": [
+    {
+      "path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-163EBD4E-056A-4AB3-825D-2E27313B7371.jsonl.gz",
+      "sha256": "0103796a22febcb1ba9ddf66eb1b5c663dccb4e80167b79a2ec96780046727ea"
+    },
+    {
+      "path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-2279A0D1-9E77-4880-8449-403C8D71F458.jsonl.gz",
+      "sha256": "5a9650c4803991f4f8b4340fbd1351b530308b2e5a3dac5d2a235e29d9c02e4e"
+    },
+    {
+      "path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-639869C1-326B-478C-ABBB-C6E71708B6BD.jsonl.gz",
+      "sha256": "728115546964e19ba65075c90e81891bacdec949400d01826e8eabe2ba4a97b9"
+    },
+    {
+      "path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-653B2880-C4FA-4929-93F0-5A686A1A4CC3.jsonl.gz",
+      "sha256": "6c20726c5b867af4aedef869c09f3c41cf250537bb6c3e9dab4da6f7a3723f90"
+    },
+    {
+      "path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-66AA7D4D-6E06-421C-9238-BC2929410835.jsonl.gz",
+      "sha256": "78230b48f354157ea157f46d4a397233975c77034b0770a67dbab5d899e1386c"
+    },
+    {
+      "path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-80FDD52B-52F9-4C9C-883D-C04EF00DD767.jsonl.gz",
+      "sha256": "0cc2c38dc61782fda8284b5adb82cc73515af8dbc1a4d7d8c0f2b238a11ab96b"
+    },
+    {
+      "path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-8E6A87EB-C6B1-4AC9-B902-FC09BAB97E5F.jsonl.gz",
+      "sha256": "d9576e2588c695d71cbe6a2d358bb7d61773f683710fdaba69c39f535f9b19ed"
+    },
+    {
+      "path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-A8985D2A-43A2-4CD1-9043-14967FFB93BA.jsonl.gz",
+      "sha256": "b5981ce69ba22e3345d90ae491526dff5f4645ed70e33fd7ee6e8e3c57a17973"
+    },
+    {
+      "path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-B6290EC2-FA3B-49EE-A856-DF2A37DC94BC.jsonl.gz",
+      "sha256": "d3ee6caf02ea7b9145c58f0d455899d8b2b841f4136b0c0cea494a1f97abec54"
+    },
+    {
+      "path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/native-reference/artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-B9AF9672-8D2E-4AEE-BDEE-192C4E7973C2.jsonl.gz",
+      "sha256": "6076f8b5da354cc496ad19e48239240443ad53a414d0e21b635184932558c3e8"
+    }
+  ]
+}

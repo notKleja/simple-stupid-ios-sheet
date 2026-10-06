@@ -1,0 +1,11 @@
+{
+  "profile_id": "programmatic-geometry-diagnostic-v1",
+  "provenance": "Subset of mission goals; never sufficient for full parity acceptance",
+  "alignment": {"event": "present.requested", "occurrence": 0},
+  "max_gap_frames": 2,
+  "event_tolerance_frames": 1,
+  "auxiliary_events": ["detent.resolved", "batch.completed"],
+  "metrics": {"sheet.y": {"rms": 1, "max": 2, "final": 0.25}, "sheet.left_inset": {"max": 0.5}, "sheet.right_inset": {"max": 0.5}, "sheet.bottom_inset": {"max": 0.5}, "presenter.scale_x": {"max": 0.001}, "presenter.scale_y": {"max": 0.001}},
+  "states": ["selected_detent"],
+  "exact_event_data": {"detent.requested": ["target"]}
+}

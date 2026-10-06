@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "freeze_policy": "Definitions frozen before tuning. Bind screen points from observed geometry, save generated gesture JSON and its SHA-256 before execution. Do not tune to holdout results; replace compromised holdouts.",
+  "provenance": "Adversarial experimental controls, not Apple constants or collected evidence",
+  "definitions": [
+    {"id": "holdout.reverse_settle", "preconditions": ["medium", "keyboard_hidden"], "commands": ["present", "select_large"], "gesture": {"start_phase": "mid_settle", "vertical_offsets_pt": [0, -73, 41, -19], "time_offsets_ms": [0, 83, 117, 151]}, "falsifies": ["velocity reset on interruption", "detent skip policy", "position discontinuity"]},
+    {"id": "holdout.close_detents", "detent_height_offsets_pt": [0, 7, 91], "release_position_relative_to_midpoint_pt": [-0.6, 0.6], "release_velocities_pt_s": [-137, 0, 137, 731], "falsifies": ["nearest-position-only snap", "hysteresis omission", "custom spacing dependence"]},
+    {"id": "holdout.scroll_one_point", "scroll_offsets_pt": [0, 1, 1.5], "vertical_offsets_pt": [0, 13, 52], "time_offsets_ms": [0, 47, 119], "falsifies": ["handoff epsilon", "one-frame discontinuity", "bounce cancellation"]},
+    {"id": "holdout.keyboard_retarget", "commands": ["present_medium", "focus", "select_large", "select_medium_during_keyboard_animation"], "falsifies": ["phase relation", "keyboard-first policy", "safe-area double counting"]},
+    {"id": "holdout.nonmodal_threshold", "commands": ["present_undimmed", "activate_background_control", "cross_threshold", "activate_background_control", "return_undimmed", "activate_background_control"], "falsifies": ["alpha mistaken for hit testing", "barrier release delay", "underlying focus"]},
+    {"id": "holdout.stack_cancel", "commands": ["present_custom", "present_large_over_custom", "cancel_top_dismiss", "dismiss_top"], "falsifies": ["layer transform coupling", "stale snapshots", "grabber clipping"]},
+    {"id": "holdout.pager_diagonal", "horizontal_offsets_pt": [0, 71, 154], "vertical_offsets_pt": [0, 63, 139], "time_offsets_ms": [0, 89, 163], "falsifies": ["direction arbitration", "pager steals vertical gesture"]},
+    {"id": "holdout.disabled_high_velocity", "preconditions": ["interactive_dismiss_disabled", "scroll_mid_content"], "vertical_offsets_pt": [0, 57, 173], "time_offsets_ms": [0, 37, 81], "falsifies": ["dismiss despite lock", "release velocity cap", "underdrag resistance"]}
+  ]
+}

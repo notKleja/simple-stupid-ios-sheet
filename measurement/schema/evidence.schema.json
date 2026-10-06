@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Measured sheet evidence database v1",
+  "type": "object",
+  "required": ["schema_version", "entries"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "entries": {"type": "array", "items": {
+      "type": "object",
+      "required": ["id", "ios", "parameter", "source", "status", "confidence", "artifacts"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "ios": {"type": "string"}, "os_build": {"type": ["string", "null"]},
+        "parameter": {"type": "string"}, "value": {}, "formula": {"type": "string"}, "unit": {"type": "string"},
+        "source": {"enum": ["native_runtime", "apple_documentation", "derived_formula", "explicit_fallback", "synthetic_math"]},
+        "status": {"enum": ["measured", "documented", "derived", "fallback", "unresolved"]},
+        "scenario": {"type": "string"}, "run_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "samples": {"type": "integer", "minimum": 0}, "trials": {"type": "integer", "minimum": 0},
+        "stddev": {"type": ["number", "null"], "minimum": 0},
+        "confidence": {"enum": ["high", "medium", "low", "unresolved"]},
+        "artifacts": {"type": "array", "items": {"type": "object", "required": ["path", "sha256"], "properties": {"path": {"type": "string"}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}}},
+        "limitations": {"type": "array", "items": {"type": "string"}}, "hypotheses": {"type": "array", "items": {"type": "string"}}
+      }
+    }}
+  }
+}

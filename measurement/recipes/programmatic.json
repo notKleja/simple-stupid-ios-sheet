@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "programmatic.sequence.v1",
+  "scenario_id": "native.medium_large.programmatic",
+  "coordinate_space": "screen_logical_points",
+  "role": "training",
+  "provenance": "Experiment controls matching native harness delays, not measured motion durations",
+  "preconditions": {"selected_detent": "medium", "detents": ["fixed320", "medium", "large"], "orientation": "portrait", "keyboard_visible": false},
+  "steps": [
+    {"at_ms": 0, "action": "command", "command": "present", "marker": "present.requested"},
+    {"at_ms": 1500, "action": "command", "command": "select_large", "marker": "detent.requested"},
+    {"at_ms": 3000, "action": "command", "command": "select_medium", "marker": "detent.requested"},
+    {"at_ms": 4500, "action": "command", "command": "dismiss", "marker": "dismiss.requested"}
+  ],
+  "expected_observations": ["Command receipt timing", "Per-frame sheet geometry", "Selected detent", "Completion callbacks", "Actual settling measured independently of callbacks"]
+}
