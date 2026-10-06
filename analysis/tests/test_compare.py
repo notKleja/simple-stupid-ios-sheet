@@ -353,6 +353,21 @@ class ComparisonTests(unittest.TestCase):
                         records[0]["device"]["runtime_kind"] = kind
                 self.assertEqual(self.run_compare(native, candidate, full_config())["verdict"], "FAIL")
 
+    def test_boolean_touch_phase_cannot_match_numeric_phase_zero(self):
+        native, candidate = full_trace(), full_trace("flutter")
+        for records, phase in ((native, 0), (candidate, False)):
+            records.append({"schema_version": 1, "type": "event", "run_id": records[0]["run_id"], "seq": 5,
+                            "t_ns": 32_000_000, "name": "input.touch", "data": {"phase": phase, "x": 10, "y": 20}})
+        self.assertEqual(self.run_compare(native, candidate, full_config())["verdict"], "FAIL")
+
+    def test_boolean_hit_test_state_cannot_match_numeric_state_one(self):
+        native, candidate = full_trace(), full_trace("flutter")
+        for records, state in ((native, True), (candidate, 1)):
+            for row in records:
+                if row["type"] == "frame":
+                    row["state"]["underlying_hit_test"] = state
+        self.assertEqual(self.run_compare(native, candidate, full_config())["verdict"], "FAIL")
+
 
 if __name__ == "__main__":
     unittest.main()

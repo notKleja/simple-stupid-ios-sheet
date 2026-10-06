@@ -39,6 +39,10 @@ def trace_schema():
 
 def schema_equal(value, expected):
     # JSON booleans are distinct from numbers even though Python True == 1.
+    if isinstance(value, dict) or isinstance(expected, dict):
+        return isinstance(value, dict) and isinstance(expected, dict) and value.keys() == expected.keys() and all(schema_equal(value[key], expected[key]) for key in value)
+    if isinstance(value, list) or isinstance(expected, list):
+        return isinstance(value, list) and isinstance(expected, list) and len(value) == len(expected) and all(schema_equal(a, b) for a, b in zip(value, expected))
     return value == expected and (not isinstance(value, bool) and not isinstance(expected, bool)
                                  or type(value) is type(expected))
 
@@ -253,7 +257,7 @@ def compare(request):
         report["full_acceptance_missing"] = missing
         report["acceptance_scope"] = "diagnostic_subset" if missing else "full_metric_profile"
         for key in ("scenario_id", "os", "device", "environment", "configuration"):
-            if nh[key] != ch[key]:
+            if not schema_equal(nh[key], ch[key]):
                 report["issues"].append(f"incompatible {key}; cross-device/build/configuration comparison forbidden")
         report["proof_scope"] = "synthetic_math_only" if "synthetic" in (nh["evidence_kind"], ch["evidence_kind"]) else "runtime_trace_pair_only"
         report["native_parity_eligible"] = report["proof_scope"] == "runtime_trace_pair_only" and not report["issues"] and not missing
@@ -291,11 +295,11 @@ def compare(request):
                 report["issues"].append(f"event timing exceeds one configured native-frame limit: {key}")
             mandatory_fields = baseline["exact_event_data"].get(n["name"], [])
             if policy is None:
-                data_match = n["data"] == c["data"] and all(field in n["data"] and n["data"][field] is not None for field in mandatory_fields)
+                data_match = schema_equal(n["data"], c["data"]) and all(field in n["data"] and n["data"][field] is not None for field in mandatory_fields)
             else:
                 fields = set(mandatory_fields) | set(policy.get(n["name"], []))
                 data_match = all(field in n["data"] and field in c["data"] and n["data"][field] is not None
-                                 and n["data"][field] == c["data"][field] for field in fields)
+                                 and schema_equal(n["data"][field], c["data"][field]) for field in fields)
             if not data_match:
                 report["issues"].append(f"event data/outcome mismatch: {key}")
         # Comparing exact event order also catches swapped same-time handoffs.
@@ -343,6 +347,8 @@ def compare(request):
         union_time = sorted(set(ntime) | {t for t in ctime if ntime[0] <= t <= ntime[-1]})
         report["comparison_grid"] = "union_of_observed_timestamps"
         report["comparison_samples"] = len(union_time)
+        union_intervals_ms = [(union_time[i] - union_time[i - 1]) / 1_000_000 for i in range(1, len(union_time))]
+        report["comparison_intervals_ms"] = {"min": min(union_intervals_ms), "median": statistics.median(union_intervals_ms), "max": max(union_intervals_ms)}
         for name, limits in cfg["metrics"].items():
             require(isinstance(limits, dict) and limits, f"{name}: nonempty limits required")
             require(all(key in ("rms", "max", "final", "velocity_rms", "velocity_max", "absolute_mean", "settling_ms") and finite(value) and value >= 0 for key, value in limits.items()), f"{name}: invalid acceptance limits")
@@ -370,9 +376,9 @@ def compare(request):
             # State transitions are held, never numerically interpolated.
             aligned = [cvalues[max(0, bisect_left(ctime, t) - (t not in ctime))] for t in ntime]
             def transitions(values):
-                return [value for i, value in enumerate(values) if i == 0 or value != values[i - 1]]
+                return [value for i, value in enumerate(values) if i == 0 or not schema_equal(value, values[i - 1])]
             candidate_in_window = [aligned[0]] + [value for t, value in zip(ctime, cvalues) if ntime[0] < t <= ntime[-1]]
-            matched = observed and nvalues == aligned and transitions(nvalues) == transitions(candidate_in_window)
+            matched = observed and schema_equal(nvalues, aligned) and schema_equal(transitions(nvalues), transitions(candidate_in_window))
             report["states"][name] = {"match": matched, "native_final": nvalues[-1], "candidate_final": aligned[-1], "observed": observed}
             if not matched:
                 report["issues"].append(f"exact state/interaction mismatch or missing: {name}")

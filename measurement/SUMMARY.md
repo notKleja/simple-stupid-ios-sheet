@@ -61,3 +61,27 @@ trials with fresh visible boundaries; replay frozen holdouts. Master decision:
 which phase-specific full profiles and independent shape/hit-test evidence close
 acceptance. Changed areas: `measurement/`, `analysis/`, `spec/test_matrix.json`,
 `artifacts/analysis/`, generated `graphify-out/` (caches/backups ignored).
+
+## PR #19 fix round 1
+
+All four review findings reproduced with failing regressions and corrected.
+Comparison commit: `a52b2db`. Union-grid metrics now count candidate-only spikes
+(100pt at8ms yields max100pt, velocity max12500pt/s). Environment changes are
+rejected before filtering; exclusions are limited to approved probe markers;
+baseline semantic fields remain mandatory. Schema-driven nested validation
+rejects malformed sizes/scale/environment and missing/invalid runtime provenance.
+
+Matrix trials now require every pinned phase/check and Cartesian subcondition:
+248 cells, 1480 required checks, ≥10 complete independent trials each. Opening
+alone is PARTIAL; caller idle windows cannot replace dismissal windows. Required
+parameters must match both run headers and frozen recipe preconditions.
+
+Fresh full suite: **54 tests, zero failures/errors** (20 new test methods plus
+table-driven malformed metadata cases). Empty manifest remains FAIL/0 accepted,
+248 unresolved. Fixtures, including simulated runtime markers, are explicitly
+synthetic and prove gates only. No native/Flutter branches were edited.
+Concerns: older traces without runtime_kind now fail; most parameterized checks
+need observed check markers/parameters before coverage; union RMS is cadence-
+weighted; optical calibration and full native parity remain separate evidence.
+Exact JSON semantics also preserve boolean/number distinctions in event payloads,
+configuration and states (False must not match0; True must not match1).

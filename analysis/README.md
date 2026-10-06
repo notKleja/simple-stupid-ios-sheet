@@ -22,7 +22,10 @@ Let the selected event occurrence be at native `Tn` and candidate `Tc`.
 Original timestamps remain intact. Relative sample times are `t = timestamp-T`.
 The report's `clock_offset_ns=Tc-Tn` is clock alignment, **not** gesture latency.
 Boundary absence fails. Candidate values are linearly interpolated onto the
-native sample grid within measured coverage; extrapolation is forbidden.
+union of both observed timestamp grids within the native evaluation window;
+each trace is interpolated only inside its observed coverage. Candidate-only
+spikes contribute to position and velocity errors. Extrapolation is forbidden.
+RMS is sample-weighted over this union, and its cadence is reported.
 Durations are never normalized and no cross-correlation minimizes timing error.
 An optional `window` selects observed `start_event`/`start_occurrence` and
 `end_event`/`end_occurrence` boundaries (end exclusive). Reports retain original
@@ -37,7 +40,7 @@ For native value `n_i`, interpolated candidate `c_i`, and `d_i=c_i-n_i`:
 - RMS = `sqrt(sum(d_i^2)/N)`; maximum = `max(abs(d_i))`.
 - Final difference = `abs(d_last)`; verify resting checkpoints separately.
 - Velocity = `(x_i-x_(i-1))/(t_i-t_(i-1))` in metric units/second.
-  Velocity RMS/max compare those interval slopes on the same native grid.
+  Velocity RMS/max compare those interval slopes on the same union grid.
 - Event timing error = `abs((event_c-Tc)-(event_n-Tn))`.
   Initial goal is one native declared frame (`1000/refresh_hz` milliseconds).
 - Effective settling diagnostic = first point of the final continuously
@@ -51,8 +54,12 @@ collapsed observed transition sequences must match, so a transient wrong target
 cannot hide between native samples. Exact semantics use event payload fields
 selected by `exact_event_data`; numerical event payloads belong in separately
 observed metrics. If the policy is absent, whole event payloads compare exactly.
-`auxiliary_events` explicitly excludes probe-only markers, reports their counts,
-and cannot exclude the alignment boundary. Event order and occurrences remain
+`auxiliary_events` may exclude only `detent.resolved` and `batch.completed`,
+reports their counts, and cannot exclude the alignment boundary. Environment
+changes are rejected before filtering. Baseline semantic fields are checked
+whenever those events appear, even with an empty caller policy. Full eligibility
+also requires the baseline semantic policy or whole-payload exact comparison.
+Event order and occurrences remain
 exact for all retained markers. Recorder-specific started/completed names must
 be synchronized or explicitly adapted with provenance; never rename a callback
 to settled merely to satisfy a test.
@@ -62,7 +69,8 @@ environment changes, invalid sequence/time fields, nonfinite values, incomplete
 coverage and excessive sampling gaps fail closed. A profile names the metric
 subset actually evaluated. A diagnostic subset PASS cannot satisfy full
 acceptance: full-profile eligibility requires every baseline metric/state at
-the original or stricter targets. Omitted fields or looser targets are listed
+the original or stricter targets and the mandatory semantic fields. Omitted
+fields or looser targets are listed
 as `full_acceptance_missing`. Overall project parity remains separate.
 
 ## Tolerances and repeat noise
@@ -109,18 +117,28 @@ model is asserted just because one underdamped fit has a small residual.
 ## Matrix and holdouts
 
 `spec/test_matrix.json` expands 31 cases over OS 26/27, two distinct observed
-iPhone geometry roles, and portrait/landscape: 248 required cells, ten repeated
-trial pairs per cell. Subconditions, iPad/resizable references and performance
-are additionally listed; a macro-case ID does not prove each subcondition was
-executed. Inventory must bind two genuinely distinct display sizes.
+iPhone geometry roles, and portrait/landscape: 248 required cells and 1,480
+phase/subcondition checks, ten independent complete trials per cell. Each case
+declares pinned windows, all logical checks, and all Cartesian parameter
+combinations. Accepted trial IDs are intersected across every required check.
+A passing opening/idle phase remains PARTIAL when another phase is absent or
+fails. Inventory must bind two distinct sizes; additional iPad/resizable,
+contour calibration and performance references still matter.
 
 Manifest paths resolve relative to its directory. Each entry includes
-`cell_id` (`26/iphone_a/portrait/programmatic`), integer `trial`, `native_path`,
+`cell_id` (`26/iphone_a/portrait/programmatic`), integer `trial`, explicit
+`check_id`, `native_path`,
 `candidate_path`, `config_path`, `recipe_path`, and `runtime_input_verified`.
 The latter may only be set after independent actual-delivery verification; a
 scheduled recipe alone is insufficient. Paths are hashed in the report. A
 holdout also supplies its pre-frozen `recipe_sha256`. The runner rejects
 synthetic pairs, reused run IDs/trials, incompatible cells and unfrozen recipes.
+One raw run may serve different checks within the same cell/trial, but cannot
+pad independent trials. Caller windows must equal the required window. If no
+window was supplied, the runner selects the matrix's observed boundaries.
+Required `measurement_parameters` must match both session configurations and
+recipe preconditions. Expected target/action events are verified. The report
+includes the chosen window and the matrix artifact hash.
 Its PASS covers the configured trace-pair matrix only; final acceptance still
 requires calibration, full subcondition coverage, clean builds and live tests.
 
@@ -148,6 +166,16 @@ and ten remaining anomalies, and exits unresolved. The second-geometry
 `native_spacing_vphone_ios26_6_2.json` records ten actual virtual-device trials
 at 430×932. It has no flagged spacing anomaly but still requires independent
 sampling calibration. No actual Flutter pair has been accepted yet.
+
+## Record validation
+
+The analyzer validates the fixed v1 schema subset and stream ordering. Nested
+metadata must use the declared types/ranges; numeric values must be finite,
+and booleans cannot satisfy numbers. Display dimensions/scale must be positive.
+Safe area, size classes, status bar and keyboard are checked.
+`device.runtime_kind` is mandatory: simulator, virtual_device, physical_device,
+or synthetic. Runtime evidence cannot claim synthetic provenance. Older files
+that omit provenance fail; it is never inferred from filenames.
 
 Trace alignment, geometry comparison, motion fitting, parity tolerances, plots,
 and machine-readable PASS/FAIL reports live here.

@@ -13,7 +13,8 @@ key and reason in `unavailable`; omission means not instrumented.
 The run ID identifies one trial. Capture identical configuration, device,
 orientation, content, keyboard, safe area and OS build for a valid A/B pair.
 Record actual OS/build; a simulator, virtual device and physical device must
-have distinct device metadata (`runtime_kind` extra field). OS 26 and 27 never
+have explicit `device.runtime_kind` (simulator, virtual_device, physical_device,
+or synthetic). Runtime evidence cannot use synthetic provenance. OS 26 and 27 never
 share a measured profile. Metadata changes are named events carrying the new
 environment; split analyses at these events.
 
@@ -43,10 +44,12 @@ Repeated event names are addressed by zero-based occurrence. Emit the requested
 boundary at actual command/pointer receipt, started on first observable motion,
 settled from an explicit documented detector, not a guessed delay.
 
-The analyzer aligns the selected real boundary occurrence independently in
+The analyzer validates nested metadata against the declared schema and aligns
+the selected real boundary occurrence independently in
 each trace. It never optimizes cross-correlation or normalizes duration.
-Subsequent event timings are compared relative to that boundary. Interpolation
-is linear within observed samples only; gaps, missing required metrics or
+Subsequent event timings are compared relative to that boundary. Numerical
+errors use the union of both observed grids inside the evaluation window.
+Interpolation is linear within observed samples only; gaps, missing required metrics or
 incompatible metadata fail closed. No filtered/excluded noise samples disappear
 without an explicit report.
 
@@ -61,3 +64,13 @@ without replacing the holdout set.
 Every real artifact in evidence has a SHA-256 digest. Synthetic analyzer tests
 prove arithmetic and rejection behavior only. They cannot establish native
 sheet constants, gesture physics, platform support, or parity acceptance.
+
+Full matrix coverage requires every declared phase/check/Cartesian subcondition
+within the same independent trial. An entry names `check_id`; its analysis
+window is pinned by the matrix. Required scalar `measurement_parameters` must
+appear identically in both session configurations and recipe preconditions.
+Parameterized/manual checks use actual `check.<name>.started/completed` markers;
+the harness must observe those boundaries before that check can pass. A single
+passing phase remains partial. Only detent.resolved/batch.completed may be
+auxiliary; environment changes and mandatory semantic event fields cannot be
+hidden by caller policy.
