@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import socket
 import subprocess
+import time
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -36,6 +37,10 @@ def main():
     machine = next(m for m in inventory if m["name"] == a.machine)
     control = machine["controlSocket"]
     if a.install:
+        try:
+            rpc(control, "apps.terminate", {"bundle_id": "dev.notkleja.NativeSheetHarness"})
+        except RuntimeError:
+            pass  # A first install has no running process.
         data = (ROOT / "build/native/NativeSheetHarness.ipa").read_bytes()
         if len(data) > 500_000:
             raise RuntimeError("Small-file RPC budget exceeded; use streaming API")
@@ -43,8 +48,18 @@ def main():
                         "content": base64.b64encode(data).decode(), "encoding": "base64"})
         print(json.dumps({"upload": uploaded}), flush=True)
         print(json.dumps({"install": rpc(control, "apps.install", {"path": "/private/var/tmp/NativeSheetHarness.ipa"})}), flush=True)
-    url = f"nativesheet://run?scenario={a.scenario}&trials={a.trials}"
-    print(json.dumps({"launch": rpc(control, "apps.launch", {"bundle_id": "dev.notkleja.NativeSheetHarness", "url": url})}), flush=True)
+    if a.scenario != "native.medium_large.programmatic" or a.trials != 10:
+        raise RuntimeError("Guest notification recipe currently supports default 10-trial batch only; use simulator for other scenarios")
+    print(json.dumps({"launch": rpc(control, "apps.launch", {"bundle_id": "dev.notkleja.NativeSheetHarness"})}), flush=True)
+    deadline = time.monotonic() + 20
+    while time.monotonic() < deadline:
+        foreground = rpc(control, "apps.foreground", {})
+        if foreground.get("bundle_id") == "dev.notkleja.NativeSheetHarness" and foreground.get("verified"):
+            break
+        time.sleep(1)
+    else:
+        raise RuntimeError("Native app did not gain verified foreground")
+    print(json.dumps({"start": rpc(control, "notify.post", {"name": "dev.notkleja.native-sheet.start"})}), flush=True)
     print(json.dumps({"foreground": rpc(control, "apps.foreground", {})}), flush=True)
     print(json.dumps({"data": rpc(control, "apps.data_dir", {"bundle_id": "dev.notkleja.NativeSheetHarness"})}), flush=True)
 

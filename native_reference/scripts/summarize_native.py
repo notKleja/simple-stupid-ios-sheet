@@ -31,13 +31,18 @@ def main():
             for run in runs:
                 end = [r for r in run if r.get("name") == next_name][occurrence]["t_ns"]
                 frames = [r for r in run if r["type"] == "frame" and end - 400_000_000 <= r["t_ns"] < end]
-                for key in frames[0]["metrics"]:
-                    values = [r["metrics"][key] for r in frames if r["metrics"][key] is not None]
+                for key in set().union(*(r["metrics"] for r in frames)):
+                    values = [r["metrics"][key] for r in frames if r["metrics"].get(key) is not None]
                     if values:
                         samples.setdefault(key, []).append(statistics.median(values))
             profile["rest"][phase] = {key: {"median": statistics.median(v), "min": min(v), "max": max(v), "stddev": statistics.pstdev(v), "trials": len(v)} for key, v in samples.items()}
         resolved = [r["data"] for run in runs for r in run if r.get("name") == "detent.resolved"]
         profile["resolved_detents"] = {key: sorted(set(r[key] for r in resolved if r.get(key) is not None)) for key in ["maximum", "medium", "large", "fixed"]}
+        frames = [r for run in runs for r in run if r["type"] == "frame"]
+        profile["quality"] = {"frame_count": len(frames), "geometry_unavailable_frames": sum(r["metrics"].get("sheet.y") is None for r in frames),
+            "geometry_sources": sorted(set(r.get("geometry_source", "legacy_mixed_tree_conversion") for r in frames))}
+        animations = {json.dumps(a, sort_keys=True) for r in frames for l in r.get("raw_layers", []) for a in l.get("animations", [])}
+        profile["observed_animation_objects"] = [json.loads(a) for a in sorted(animations)]
         profile["unresolved"] = ["scalar visible radius", "effective barrier alpha", "gesture transfer", "snap policy", "scroll handoff", "actual background touch", "settling detector", "stacking", "keyboard", "OS-wide/device-independent formulas"]
         report["profiles"].append(profile)
     Path(a.output).write_text(json.dumps(report, indent=2) + "\n")

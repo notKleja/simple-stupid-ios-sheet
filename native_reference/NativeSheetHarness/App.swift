@@ -1,6 +1,7 @@
 import UIKit
 import QuartzCore
 import Darwin
+import SwiftUI
 
 func rect(_ r: CGRect) -> [String: Double] {
     ["x": Double(r.minX), "y": Double(r.minY), "width": Double(r.width), "height": Double(r.height)]
@@ -29,6 +30,42 @@ func deviceModel() -> String {
     var bytes = [CChar](repeating: 0, count: size)
     sysctlbyname("hw.machine", &bytes, &size, nil, 0)
     return String(cString: bytes)
+}
+
+/// Walk the stable model hierarchy, sampling each node's presentation properties.
+/// CALayer.convert between a detached presentation layer and a model window can
+/// lose the ancestor offset for one frame during animation removal.
+func sampledWindowRect(_ model: CALayer, window: CALayer, samples: [ObjectIdentifier: CALayer]) -> CGRect? {
+    guard let first = samples[ObjectIdentifier(model)] else { return nil }
+    let initial = first.bounds
+    var corners = [CGPoint(x: initial.minX, y: initial.minY), CGPoint(x: initial.maxX, y: initial.minY),
+                   CGPoint(x: initial.minX, y: initial.maxY), CGPoint(x: initial.maxX, y: initial.maxY)]
+    var current: CALayer? = model
+    while let node = current, node !== window {
+        guard let s = samples[ObjectIdentifier(node)] else { return nil }
+        guard CATransform3DIsAffine(s.transform) else { return nil }
+        let anchor = CGPoint(x: s.bounds.minX + s.anchorPoint.x * s.bounds.width, y: s.bounds.minY + s.anchorPoint.y * s.bounds.height)
+        corners = corners.map { p in
+            let transformed = CGPoint(x: p.x - anchor.x, y: p.y - anchor.y).applying(s.affineTransform())
+            return CGPoint(x: transformed.x + s.position.x, y: transformed.y + s.position.y)
+        }
+        current = node.superlayer
+        if let parent = current, let sample = samples[ObjectIdentifier(parent)], !CATransform3DIsIdentity(sample.sublayerTransform) { return nil }
+    }
+    guard current === window else { return nil }
+    let xs = corners.map(\.x), ys = corners.map(\.y)
+    return CGRect(x: xs.min()!, y: ys.min()!, width: xs.max()! - xs.min()!, height: ys.max()! - ys.min()!)
+}
+
+func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
+    guard let root = window.presentation() else { return [:] }
+    var samples: [ObjectIdentifier: CALayer] = [:]
+    func walk(_ layer: CALayer) {
+        samples[ObjectIdentifier(layer.model())] = layer
+        layer.sublayers?.forEach(walk)
+    }
+    walk(root)
+    return samples
 }
 
 @MainActor final class Trace {
@@ -120,6 +157,7 @@ func deviceModel() -> String {
     var keyboardFrame = CGRect.zero
     var running = false
     var firstVisibleRecorded = false
+    var resolvedDetents: [UISheetPresentationController.Detent.Identifier: CGFloat] = [:]
     override func loadView() { view = CalibrationView(title: "Native Sheet Reference\nOpaque calibration surface") }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -128,6 +166,11 @@ func deviceModel() -> String {
         button.setTitle("Run native scenarios", for: .normal)
         button.addTarget(self, action: #selector(startDefault), for: .touchUpInside)
         view.addSubview(button)
+        CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), Unmanaged.passUnretained(self).toOpaque(), { _, observer, _, _, _ in
+            guard let observer else { return }
+            let harness = Unmanaged<Harness>.fromOpaque(observer).takeUnretainedValue()
+            DispatchQueue.main.async { harness.start() }
+        }, "dev.notkleja.native-sheet.start" as CFString, nil, .deliverImmediately)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboard(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -163,13 +206,19 @@ func deviceModel() -> String {
         vc.preferredContentSize = CGSize(width: 320, height: 320)
         guard let config = vc.sheetPresentationController else { fatalError("Missing native sheet") }
         let fixed = UISheetPresentationController.Detent.custom(identifier: .init("fixed320")) { context in
+            self.resolvedDetents[.medium] = UISheetPresentationController.Detent.medium().resolvedValue(in: context)
+            self.resolvedDetents[.large] = UISheetPresentationController.Detent.large().resolvedValue(in: context)
+            self.resolvedDetents[.init("fixed320")] = 320
             t.event("detent.resolved", ["maximum": context.maximumDetentValue,
                 "medium": UISheetPresentationController.Detent.medium().resolvedValue(in: context) as Any? ?? NSNull(),
                 "large": UISheetPresentationController.Detent.large().resolvedValue(in: context) as Any? ?? NSNull(), "fixed": 320])
             return 320
         }
         // A custom resolver probes native medium/large resolvedValue without changing those detents.
-        config.detents = [fixed, .medium(), .large()]
+        // The measured iOS26 regular-width 320pt form resolves medium below320.
+        // Native requires ascending detents; do not reuse the page-sheet order.
+        let narrow26Form = scenario.contains("form") && UIDevice.current.systemVersion.hasPrefix("26.") && traitCollection.horizontalSizeClass == .regular
+        config.detents = narrow26Form ? [.medium(), fixed, .large()] : [fixed, .medium(), .large()]
         config.selectedDetentIdentifier = scenario.contains("custom") ? .init("fixed320") : (scenario.contains("large.basic") ? .large : .medium)
         config.prefersGrabberVisible = true
         config.prefersPageSizing = !scenario.contains("form")
@@ -198,12 +247,13 @@ func deviceModel() -> String {
             "device": ["model": deviceModel(),
                 "logical_size": ["width": screen.bounds.width, "height": screen.bounds.height],
                 "physical_size": ["width": screen.nativeBounds.width, "height": screen.nativeBounds.height],
-                "scale": screen.scale, "refresh_hz": screen.maximumFramesPerSecond,
+                "scale": screen.scale, "refresh_hz": screen.maximumFramesPerSecond, "refresh_hz_source": "UIScreen.maximumFramesPerSecond; measured cadence is per-frame",
                 "runtime_kind": ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"] != nil ? "simulator" : (deviceModel().hasPrefix("iPhone99") ? "virtual_device" : "physical_device")],
             "environment": ["orientation": view.window?.windowScene?.interfaceOrientation.isLandscape == true ? "landscape" : "portrait",
                 "safe_area": insets(view.safeAreaInsets), "size_classes": ["horizontal": traitCollection.horizontalSizeClass.rawValue == 1 ? "compact" : "regular", "vertical": traitCollection.verticalSizeClass.rawValue == 1 ? "compact" : "regular"],
-                "status_bar": ["hidden": prefersStatusBarHidden], "keyboard": ["visible": false, "frame": rect(keyboardFrame)]],
-            "configuration": ["trial": trial, "detents": ["fixed320", "medium", "large"], "surface": "opaque.white", "grabber": true, "page_sizing": config.prefersPageSizing,
+                "status_bar": ["hidden": probe.windowScene?.statusBarManager?.isStatusBarHidden as Any? ?? NSNull()], "keyboard": ["visible": false, "frame": rect(keyboardFrame)],
+                "system_settings": ["reduce_motion": UIAccessibility.isReduceMotionEnabled, "voice_over": UIAccessibility.isVoiceOverRunning, "content_size_category": traitCollection.preferredContentSizeCategory.rawValue]],
+            "configuration": ["trial": trial, "detents": narrow26Form ? ["medium", "fixed320", "large"] : ["fixed320", "medium", "large"], "surface": "opaque.white", "grabber": true, "page_sizing": config.prefersPageSizing,
                 "modal_in_presentation": vc.isModalInPresentation, "largest_undimmed": config.largestUndimmedDetentIdentifier?.rawValue as Any? ?? NSNull()]])
         link?.invalidate(); link = CADisplayLink(target: self, selector: #selector(sample(_:))); link!.add(to: .main, forMode: .common)
         t.event("present.requested")
@@ -237,8 +287,8 @@ func deviceModel() -> String {
     func presentationControllerDidDismiss(_ controller: UIPresentationController) {
         trace?.event("dismiss.interactive_completed"); link?.invalidate(); sheet = nil; running = false
     }
-    func layerInfo(_ view: UIView, in window: UIWindow) -> [String: Any] {
-        let layer = view.layer.presentation() ?? view.layer
+    func layerInfo(_ view: UIView, in window: UIWindow, samples: [ObjectIdentifier: CALayer]) -> [String: Any] {
+        let layer = samples[ObjectIdentifier(view.layer)] ?? view.layer
         let target = window.layer.presentation() ?? window.layer
         let animations: [[String: Any]] = (view.layer.animationKeys() ?? []).compactMap { key in
             guard let a = view.layer.animation(forKey: key) else { return nil }
@@ -247,7 +297,10 @@ func deviceModel() -> String {
             if let basic = a as? CABasicAnimation { value["key_path"] = basic.keyPath as Any? ?? NSNull() }
             return value
         }
-        return ["class": NSStringFromClass(type(of: view)), "frame_window": rect(layer.convert(layer.bounds, to: target)),
+        return ["class": NSStringFromClass(type(of: view)), "frame_window": sampledWindowRect(view.layer, window: window.layer, samples: samples).map(rect) as Any? ?? NSNull(),
+            "legacy_mixed_tree_frame": rect(layer.convert(layer.bounds, to: target)),
+            "sampled_position": ["x": layer.position.x, "y": layer.position.y], "model_position": ["x": view.layer.position.x, "y": view.layer.position.y],
+            "presentation_has_parent": layer.superlayer != nil, "sample_source": samples[ObjectIdentifier(view.layer)] == nil ? "model_not_in_snapshot" : "coherent_presentation_tree",
             "bounds": rect(layer.bounds), "corner_radius": layer.cornerRadius, "corner_curve": layer.cornerCurve.rawValue,
             "opacity": layer.opacity, "hidden": layer.isHidden, "clips": layer.masksToBounds,
             "background_alpha": layer.backgroundColor?.alpha as Any? ?? NSNull(), "masked_corners": layer.maskedCorners.rawValue,
@@ -260,8 +313,14 @@ func deviceModel() -> String {
         let container = sheet.presentationController?.presentedView ?? sheet.view!
         let l = container.layer.presentation() ?? container.layer
         let windowLayer = probe.layer.presentation() ?? probe.layer
-        let r = l.convert(l.bounds, to: windowLayer)
-        let pl = view.layer.presentation() ?? view.layer
+        let samples = coherentLayerSamples(probe.layer)
+        guard let r = sampledWindowRect(container.layer, window: probe.layer, samples: samples) else {
+            trace.record("frame", ["metrics": ["sheet.x": NSNull(), "sheet.y": NSNull(), "sheet.width": NSNull(), "sheet.height": NSNull()],
+                "state": ["phase": phase], "unavailable": ["sheet.y": "No coherent presentation ancestry or unsupported nonaffine transform"], "coherent_layer_count": samples.count])
+            return
+        }
+        let legacy = l.convert(l.bounds, to: windowLayer)
+        let pl = samples[ObjectIdentifier(view.layer)] ?? view.layer
         let t = CACurrentMediaTime()
         if !firstVisibleRecorded && r.intersection(probe.bounds).height > 0 {
             firstVisibleRecorded = true
@@ -272,16 +331,16 @@ func deviceModel() -> String {
         var metrics: [String: Any] = ["sheet.x": r.minX, "sheet.y": r.minY, "sheet.width": r.width, "sheet.height": r.height,
             "sheet.visible_height": r.intersection(probe.bounds).height, "sheet.top": r.minY, "sheet.bottom": r.maxY,
             "sheet.left_inset": r.minX, "sheet.right_inset": probe.bounds.maxX - r.maxX, "sheet.bottom_inset": probe.bounds.maxY - r.maxY,
-            "sheet.detent_height": NSNull(), "sheet.radius": NSNull(), "barrier.alpha": NSNull(),
+            "sheet.detent_height": sheet.sheetPresentationController?.selectedDetentIdentifier.flatMap { resolvedDetents[$0] } as Any? ?? NSNull(), "sheet.radius": NSNull(), "barrier.alpha": NSNull(),
             "presenter.scale_x": pl.transform.m11, "presenter.scale_y": pl.transform.m22,
             "presenter.translation_x": pl.transform.m41, "presenter.translation_y": pl.transform.m42,
-            "presenter.radius": pl.cornerRadius, "sheet.velocity_y": velocity as Any? ?? NSNull(),
+            "presenter.radius": NSNull(), "sheet.velocity_y": velocity as Any? ?? NSNull(),
             "finger.y": probe.finger?.y as Any? ?? NSNull(), "finger.velocity_y": probe.fingerVelocity as Any? ?? NSNull(),
             "scroll.offset": scroll?.contentOffset.y as Any? ?? NSNull()]
         for (key, value) in metrics { if let n = value as? Double, !n.isFinite { metrics[key] = NSNull() } }
         var layers: [[String: Any]] = []
         func walk(_ node: UIView, _ depth: Int) {
-            if depth > 6 { return }; var info = layerInfo(node, in: probe); info["depth"] = depth; layers.append(info)
+            if depth > 6 { return }; var info = layerInfo(node, in: probe, samples: samples); info["depth"] = depth; layers.append(info)
             node.subviews.forEach { walk($0, depth + 1) }
         }
         probe.subviews.forEach { walk($0, 0) }
@@ -289,9 +348,11 @@ func deviceModel() -> String {
             "state": ["phase": phase, "selected_detent": sheet.sheetPresentationController?.selectedDetentIdentifier?.rawValue as Any? ?? NSNull(),
                 "target_detent": target as Any? ?? NSNull(), "gesture": probe.finger == nil ? "none" : "touch", "scroll_owner": NSNull(), "underlying_hit_test": NSNull()],
             "unavailable": ["sheet.radius": "Container scalar may not represent visible clipping shape; inspect raw layers",
-                "sheet.detent_height": "Only resolver context provides native resolved height", "barrier.alpha": "Unclassified system layer", "underlying_hit_test": "Requires actual background touch"],
+                "presenter.radius": "Root scalar does not identify wrapper clipping shape", "barrier.alpha": "Unclassified system layer", "underlying_hit_test": "Requires actual background touch",
+                "finger.y": "No active delivered touch when null", "finger.velocity_y": "No consecutive delivered touch samples when null", "scroll.offset": "No scroll view in this scenario when null"],
             "display": ["timestamp": display.timestamp, "target_timestamp": display.targetTimestamp, "duration": display.duration],
-            "raw_layers": layers, "keyboard_frame": rect(keyboardFrame)], time: t)
+            "geometry_source": "coherent window presentation tree with stable model ancestry", "coherent_layer_count": samples.count,
+            "legacy_mixed_tree_sheet_frame": rect(legacy), "raw_layers": layers, "keyboard_frame": rect(keyboardFrame)], time: t)
     }
 }
 
@@ -308,7 +369,9 @@ func deviceModel() -> String {
     let harness = Harness()
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options: UIScene.ConnectionOptions) {
         guard let ws = scene as? UIWindowScene else { return }
-        let w = ProbeWindow(windowScene: ws); w.rootViewController = harness; w.makeKeyAndVisible(); window = w
+        let w = ProbeWindow(windowScene: ws)
+        w.rootViewController = ProcessInfo.processInfo.environment["NATIVE_SWIFTUI"] == "1" ? UIHostingController(rootView: SwiftUIReference()) : harness
+        w.makeKeyAndVisible(); window = w
         if let url = options.urlContexts.first?.url { DispatchQueue.main.async { self.harness.open(url) } }
     }
     func scene(_ scene: UIScene, openURLContexts urls: Set<UIOpenURLContext>) { if let url = urls.first?.url { harness.open(url) } }
