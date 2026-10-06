@@ -118,5 +118,6 @@
       "ar.outro"
     ]
   },
-  "git_revision": "e16fbddd6ac574d85a725e77705c65a4823c2d24"
+  "capture_base_revision": "e16fbddd6ac574d85a725e77705c65a4823c2d24",
+  "feature_source_commit": "d34a269d1f4ab8cfb971edc6c578e778d9daddeb"
 }

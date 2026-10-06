@@ -9,6 +9,7 @@ Left: native UIKit reference. Right: Flutter `StupidSimpleIosSheetRoute`.
 - Recording start delta: 8.1705 ms
 - Application launch-command delta: 0.298625 ms
 - Composite: 2412×2622 H.264, 74.01 seconds
+- Feature source commit: `d34a269d1f4ab8cfb971edc6c578e778d9daddeb`
 
 Visible scenarios include medium/large page fluidity, custom-height resizing,
 programmatic long-list scrolling under both content-interaction policies,
