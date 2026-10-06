@@ -376,7 +376,14 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options: UIScene.ConnectionOptions) {
         guard let ws = scene as? UIWindowScene else { return }
         let w = ProbeWindow(windowScene: ws)
-        w.rootViewController = ProcessInfo.processInfo.environment["NATIVE_SWIFTUI"] == "1" ? UIHostingController(rootView: SwiftUIReference()) : harness
+        if ProcessInfo.processInfo.environment["SHEET_DEMO"] == "1",
+           let rawStart = ProcessInfo.processInfo.environment["SHEET_DEMO_START_MS"],
+           let start = Int(rawStart),
+           let timeline = try? SynchronizedDemoTimeline.loadFromBundle() {
+            w.rootViewController = SynchronizedNativeDemoController(timeline: timeline, startEpochMs: start)
+        } else {
+            w.rootViewController = ProcessInfo.processInfo.environment["NATIVE_SWIFTUI"] == "1" ? UIHostingController(rootView: SwiftUIReference()) : harness
+        }
         w.makeKeyAndVisible(); window = w
         if let url = options.urlContexts.first?.url { DispatchQueue.main.async { self.harness.open(url) } }
     }

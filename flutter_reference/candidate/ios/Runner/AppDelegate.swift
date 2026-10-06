@@ -67,7 +67,11 @@ import Darwin
           "keyboard": ["visible": false, "frame": ["x": 0, "y": 0, "width": 0, "height": 0]],
           "system_settings": ["reduce_motion": UIAccessibility.isReduceMotionEnabled,
             "voice_over": UIAccessibility.isVoiceOverRunning,
-            "content_size_category": traits.preferredContentSizeCategory.rawValue]]
+            "content_size_category": traits.preferredContentSizeCategory.rawValue]],
+        "demo": [
+          "enabled": ProcessInfo.processInfo.environment["SHEET_DEMO"] == "1",
+          "start_epoch_ms": Int64(ProcessInfo.processInfo.environment["SHEET_DEMO_START_MS"] ?? "0") ?? 0
+        ]
       ])
     }
   }

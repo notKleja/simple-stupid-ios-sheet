@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "title": "Native iOS vs Flutter sheet scenarios",
+  "device": "iPhone 17 Pro",
+  "runtime": "iOS 26.4.1",
+  "duration_ms": 66000,
+  "scenes": [
+    {
+      "id": "en.intro",
+      "language": "en",
+      "direction": "ltr",
+      "kind": "intro",
+      "start_ms": 0,
+      "duration_ms": 4000,
+      "title": "Synchronized sheet comparison",
+      "subtitle": "Native UIKit and Flutter • one absolute clock",
+      "actions": []
+    },
+    {
+      "id": "en.page",
+      "language": "en",
+      "direction": "ltr",
+      "kind": "page",
+      "start_ms": 4000,
+      "duration_ms": 7000,
+      "title": "Page sheet fluidity",
+      "subtitle": "Medium → Large → Medium",
+      "configuration": { "detents": "reference", "content": "calibration" },
+      "actions": [
+        { "at_ms": 400, "type": "present", "detent": "medium" },
+        { "at_ms": 2400, "type": "select", "detent": "large" },
+        { "at_ms": 4400, "type": "select", "detent": "medium" },
+        { "at_ms": 6300, "type": "dismiss" }
+      ]
+    },
+    {
+      "id": "en.custom",
+      "language": "en",
+      "direction": "ltr",
+      "kind": "custom",
+      "start_ms": 11000,
+      "duration_ms": 7000,
+      "title": "Custom resizing",
+      "subtitle": "Small 240 • Middle 420 • Large",
+      "configuration": { "detents": "custom", "content": "components" },
+      "actions": [
+        { "at_ms": 400, "type": "present", "detent": "small" },
+        { "at_ms": 2100, "type": "select", "detent": "middle" },
+        { "at_ms": 3800, "type": "select", "detent": "large" },
+        { "at_ms": 5200, "type": "select", "detent": "middle" },
+        { "at_ms": 6400, "type": "dismiss" }
+      ]
+    },
+    {
+      "id": "en.scroll_resize",
+      "language": "en",
+      "direction": "ltr",
+      "kind": "scroll",
+      "start_ms": 18000,
+      "duration_ms": 7000,
+      "title": "Scroll expands sheet first",
+      "subtitle": "Long list • medium to large • deterministic scroll",
+      "configuration": { "detents": "reference", "content": "long_scroll", "scroll_expansion": true },
+      "actions": [
+        { "at_ms": 400, "type": "present", "detent": "medium" },
+        { "at_ms": 2000, "type": "select", "detent": "large" },
+        { "at_ms": 3400, "type": "scroll", "offset": 620 },
+        { "at_ms": 5200, "type": "select", "detent": "medium" },
+        { "at_ms": 6400, "type": "dismiss" }
+      ]
+    },
+    {
+      "id": "en.properties",
+      "language": "en",
+      "direction": "ltr",
+      "kind": "properties",
+      "start_ms": 25000,
+      "duration_ms": 7000,
+      "title": "Properties and modality",
+      "subtitle": "Undimmed medium • modal large • dismissal locked",
+      "configuration": { "detents": "reference", "content": "components", "largest_undimmed": "medium", "dismissal_locked": true },
+      "actions": [
+        { "at_ms": 400, "type": "present", "detent": "medium" },
+        { "at_ms": 1700, "type": "background_pulse" },
+        { "at_ms": 2900, "type": "select", "detent": "large" },
+        { "at_ms": 4400, "type": "dismiss_attempt" },
+        { "at_ms": 6300, "type": "dismiss" }
+      ]
+    },
+    {
+      "id": "en.components",
+      "language": "en",
+      "direction": "ltr",
+      "kind": "components",
+      "start_ms": 32000,
+      "duration_ms": 6000,
+      "title": "Component gallery",
+      "subtitle": "Button • Switch • Segments • Text field • List rows",
+      "configuration": { "detents": "reference", "content": "components" },
+      "actions": [
+        { "at_ms": 400, "type": "present", "detent": "medium" },
+        { "at_ms": 2000, "type": "select", "detent": "large" },
+        { "at_ms": 3300, "type": "toggle" },
+        { "at_ms": 5400, "type": "dismiss" }
+      ]
+    },
+    {
+      "id": "ar.intro",
+      "language": "ar",
+      "direction": "rtl",
+      "kind": "intro",
+      "start_ms": 38000,
+      "duration_ms": 3000,
+      "title": "مقارنة متزامنة للورقة",
+      "subtitle": "واجهة iOS الأصلية وFlutter • ساعة واحدة",
+      "actions": []
+    },
+    {
+      "id": "ar.page",
+      "language": "ar",
+      "direction": "rtl",
+      "kind": "page",
+      "start_ms": 41000,
+      "duration_ms": 7000,
+      "title": "سلاسة ورقة الصفحة",
+      "subtitle": "متوسطة ← كبيرة ← متوسطة",
+      "configuration": { "detents": "reference", "content": "calibration" },
+      "actions": [
+        { "at_ms": 400, "type": "present", "detent": "medium" },
+        { "at_ms": 2400, "type": "select", "detent": "large" },
+        { "at_ms": 4400, "type": "select", "detent": "medium" },
+        { "at_ms": 6300, "type": "dismiss" }
+      ]
+    },
+    {
+      "id": "ar.custom",
+      "language": "ar",
+      "direction": "rtl",
+      "kind": "custom",
+      "start_ms": 48000,
+      "duration_ms": 7000,
+      "title": "تغيير الحجم المخصص",
+      "subtitle": "صغيرة 240 • وسطى 420 • كبيرة",
+      "configuration": { "detents": "custom", "content": "components" },
+      "actions": [
+        { "at_ms": 400, "type": "present", "detent": "small" },
+        { "at_ms": 2100, "type": "select", "detent": "middle" },
+        { "at_ms": 3800, "type": "select", "detent": "large" },
+        { "at_ms": 5200, "type": "select", "detent": "middle" },
+        { "at_ms": 6400, "type": "dismiss" }
+      ]
+    },
+    {
+      "id": "ar.scroll",
+      "language": "ar",
+      "direction": "rtl",
+      "kind": "scroll",
+      "start_ms": 55000,
+      "duration_ms": 7000,
+      "title": "التمرير وتغيير الحجم",
+      "subtitle": "قائمة طويلة • توسيع الورقة • تمرير حتمي",
+      "configuration": { "detents": "reference", "content": "long_scroll", "scroll_expansion": false },
+      "actions": [
+        { "at_ms": 400, "type": "present", "detent": "medium" },
+        { "at_ms": 2000, "type": "select", "detent": "large" },
+        { "at_ms": 3400, "type": "scroll", "offset": 620 },
+        { "at_ms": 5200, "type": "select", "detent": "medium" },
+        { "at_ms": 6400, "type": "dismiss" }
+      ]
+    },
+    {
+      "id": "ar.outro",
+      "language": "ar",
+      "direction": "rtl",
+      "kind": "outro",
+      "start_ms": 62000,
+      "duration_ms": 4000,
+      "title": "اكتمل العرض المتزامن",
+      "subtitle": "الفيديو للعرض؛ القياسات الرقمية محفوظة بشكل مستقل",
+      "actions": []
+    }
+  ]
+}

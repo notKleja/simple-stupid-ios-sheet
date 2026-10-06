@@ -1,11 +1,18 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:simple_stupid_ios_sheet/simple_stupid_ios_sheet.dart';
+import 'synchronized_demo.dart';
 
-void main() => runApp(const IosSheetCandidateApp());
+void main() {
+  debugPaintBaselinesEnabled = false;
+  debugPaintSizeEnabled = false;
+  debugPaintPointersEnabled = false;
+  runApp(const SynchronizedDemoBootstrap(fallback: IosSheetCandidateApp()));
+}
 
 class IosSheetCandidateApp extends StatelessWidget {
   const IosSheetCandidateApp({super.key});
