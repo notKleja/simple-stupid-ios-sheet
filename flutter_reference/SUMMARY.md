@@ -1,5 +1,36 @@
 # Brother 2 — Flutter engine milestone
 
+## Review round 1
+
+All four PR21 review findings are addressed. Fixed-surface opening now rejects
+programmatic retarget/dismissal before state mutation and ignores opening
+content input; this explicitly unsupported interruption family prevents the
+former medium→large completion jump. Generic engine routes retain their path.
+Logical selected/requested IDs change immediately on accepted commands; engine
+gesture snap targets synchronize before recording. Current software resting
+observations are separate and never labeled native settling.
+
+Height APIs distinguish unscaledTrajectoryHeight/unscaledSurfaceHeight from
+renderedSurfaceHeight/renderedVisibleHeight. visibleHeight now reports the
+scaled, viewport-clipped observation. Recorders use observed render bounds.
+
+The v2 emitter uses the native13-key comparison configuration, canonical IDs,
+and seven-event programmatic vocabulary. Profile/clock/resting details moved
+to provenance; raw identifiers are preserved. Native metadata includes matching
+system settings and refresh-rate source. CONTRACT_V2.md defines the boundary.
+
+Fresh real26.4.1 native/candidate trial1 pair: all comparison metadata objects
+match, canonical event names/payloads match, and selected/target/gesture
+transition sequences match. The strict analyzer reports zero structural
+incompatibilities. Its verdict remains FAIL for timing and reference-tail
+coverage, with native_parity_eligible=false. Raw pair, hashes and the report
+are in artifacts/flutter/contract_v2_pair; no runtime bytes were relabeled.
+
+Final round1 verification:148 Flutter tests pass (115 upstream+32 API+1 candidate),
+API/candidate analyzer clean, arm64 v2 simulator build and run succeed. No
+native branch was edited. All previously declared unfinished native families,
+provisional transfer fits and opaque/no-glass boundary remain explicit.
+
 Branch: `feat/ios-sheet-engine`. Working candidate, not full native parity.
 
 ## Conclusions

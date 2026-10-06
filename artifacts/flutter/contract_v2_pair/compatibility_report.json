@@ -1,0 +1,146 @@
+{
+    "schema_version": 1,
+    "verdict": "FAIL",
+    "issues": [
+        "event timing exceeds one configured native-frame limit: detent.requested#0",
+        "event timing exceeds one configured native-frame limit: detent.requested#1",
+        "event timing exceeds one configured native-frame limit: dismiss.completed#0",
+        "event timing exceeds one configured native-frame limit: dismiss.requested#0",
+        "event timing exceeds one configured native-frame limit: present.completed#0",
+        "event timing exceeds one configured native-frame limit: present.first_visible#0",
+        "candidate coverage incomplete; reference tail cannot be trimmed"
+    ],
+    "metrics": {},
+    "states": {},
+    "event_timing": {
+        "detent.requested#0": {
+            "error_ms": 61.89375,
+            "limit_ms": 16.666666666666668,
+            "pass": false
+        },
+        "detent.requested#1": {
+            "error_ms": 140.124792,
+            "limit_ms": 16.666666666666668,
+            "pass": false
+        },
+        "dismiss.completed#0": {
+            "error_ms": 203.700416,
+            "limit_ms": 16.666666666666668,
+            "pass": false
+        },
+        "dismiss.requested#0": {
+            "error_ms": 206.594417,
+            "limit_ms": 16.666666666666668,
+            "pass": false
+        },
+        "present.completed#0": {
+            "error_ms": 302.348458,
+            "limit_ms": 16.666666666666668,
+            "pass": false
+        },
+        "present.first_visible#0": {
+            "error_ms": 127.002833,
+            "limit_ms": 16.666666666666668,
+            "pass": false
+        },
+        "present.requested#0": {
+            "error_ms": 0,
+            "limit_ms": 16.666666666666668,
+            "pass": true
+        }
+    },
+    "noise": {},
+    "native_parity_eligible": false,
+    "proof_scope": "runtime_trace_pair_only",
+    "full_acceptance_missing": [
+        "sheet.x",
+        "sheet.width",
+        "sheet.height",
+        "sheet.visible_height",
+        "sheet.left_inset",
+        "sheet.right_inset",
+        "sheet.bottom_inset",
+        "sheet.detent_height",
+        "sheet.radius",
+        "barrier.alpha",
+        "presenter.translation_x",
+        "presenter.translation_y",
+        "state.target_detent",
+        "state.gesture",
+        "state.scroll_owner",
+        "state.underlying_hit_test",
+        "event_data.detent.changed.selected",
+        "event_data.scroll.handoff.owner",
+        "event_data.input.touch.phase",
+        "event_data.input.touch.x",
+        "event_data.input.touch.y"
+    ],
+    "acceptance_scope": "diagnostic_subset",
+    "runs": {
+        "native": "4FE99C2A-84FA-41DE-824D-EDA0A62E5B4C",
+        "candidate": "1791313880627903-1",
+        "scenario_id": "native.medium_large.programmatic"
+    },
+    "auxiliary_event_counts": {
+        "native": {
+            "detent.resolved": 14,
+            "batch.completed": 0
+        },
+        "candidate": {
+            "detent.resolved": 0,
+            "batch.completed": 0
+        }
+    },
+    "alignment": {
+        "boundary": "present.requested#0",
+        "native_t_ns": 57462550361041,
+        "candidate_t_ns": 6296000,
+        "clock_offset_ns": -57462544065041,
+        "method": "observed_event_boundary"
+    },
+    "native_frame_ms": 16.666666666666668,
+    "window": {
+        "start_boundary": "present.requested#0",
+        "end_boundary": "trace_end",
+        "end_inclusive": true
+    },
+    "artifacts": {
+        "native": {
+            "path": "artifacts/flutter/contract_v2_pair/native_trial1.jsonl.gz",
+            "sha256": "6e235b30c44aedc45c78b70a01c55281e0234d188bd3336f47ea58ef87c0bd5e"
+        },
+        "candidate": {
+            "path": "artifacts/flutter/contract_v2_pair/native.medium_large.programmatic-1791313880627903-1.jsonl.gz",
+            "sha256": "ee969f09c3cf84e8676730da3e73cef26e219e85559b109d744059376c590071"
+        },
+        "config": {
+            "path": "/Users/kleja/Simple Stupid iOS Sheet/.worktrees/parity-harness/measurement/profiles/programmatic-geometry.json",
+            "sha256": "87811f5b464392507b32ace5a5cfb2674502bc2e02189e2e9189c109a3798200"
+        }
+    },
+    "contract_compatibility": {
+        "native_contract_version": 2,
+        "metadata_match": true,
+        "canonical_event_payloads_match": true,
+        "structural_issues": [],
+        "native_source_revision": "4e3f90c",
+        "analyzer_revision": "d307f7c",
+        "scope": "one actual iOS26 runtime pair; contract proof only",
+        "selected_transition_sequence": [
+            "medium",
+            "large",
+            "medium"
+        ],
+        "target_transition_sequence": [
+            "medium",
+            "large",
+            "medium",
+            null
+        ],
+        "gesture_transition_sequence": [
+            "none"
+        ],
+        "categorical_transition_sequences_match": true,
+        "analyzer_sha256": "ce9221380a5850b64a31ed82c22fc07cdf2743e6b38004aca2dd22618ff6ad96"
+    }
+}

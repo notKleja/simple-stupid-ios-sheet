@@ -19,8 +19,23 @@ class IosSheetController extends ChangeNotifier {
 
   bool get isAttached => _route != null;
   String? get selectedDetentIdentifier => _route?._selectedIdentifier;
-  String? get targetDetentIdentifier => _route?._targetIdentifier;
-  double get visibleHeight => _route?.visibleHeight ?? 0;
+
+  /// Most recently accepted selection, not an inference from current geometry.
+  String? get requestedDetentIdentifier => selectedDetentIdentifier;
+  String? get targetDetentIdentifier => _route?._engineTargetIdentifier;
+
+  /// Null while moving/dragging; based on engine status and extent tolerance.
+  String? get restingDetentIdentifier => _route?._restingIdentifier;
+  bool get isPresented => _route?._presented ?? false;
+  double get unscaledTrajectoryHeight => _route?.unscaledTrajectoryHeight ?? 0;
+  double get unscaledSurfaceHeight => _route?.unscaledSurfaceHeight ?? 0;
+
+  /// Last laid-out surface height in window coordinates, including scale.
+  double get renderedSurfaceHeight => _route?.renderedSurfaceHeight ?? 0;
+
+  /// Last laid-out surface intersected with the viewport.
+  double get renderedVisibleHeight => _route?.renderedVisibleHeight ?? 0;
+  double get visibleHeight => renderedVisibleHeight;
   bool get isModal => _route?.isModal ?? false;
 
   /// Capture after layout/paint, typically from a post-frame callback.
@@ -41,6 +56,7 @@ class IosSheetController extends ChangeNotifier {
     final route = _route;
     if (route == null) throw StateError('Sheet controller is detached');
     if (!route.isCurrent) throw StateError('Sheet is covered by another route');
+    route._requireOpeningCompleted();
     route.navigator?.pop(result);
   }
 
@@ -119,6 +135,8 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   String? _targetIdentifier;
   bool _presented = false;
   double? _dismissStartExtent;
+  bool _dismissing = false;
+  final _activePointers = <int>{};
   final _surfaceProbe = GlobalKey();
 
   IosSheetGeometry get currentGeometry => profile.geometry(
@@ -136,14 +154,80 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
         (!_presented ? snappingConfig.initialSnap : controller!.value);
   }
 
-  IosSheetFrame captureFrame() {
+  bool get _openingLocked =>
+      profile.fixedSurfaceDuringTransition && !_presented;
+
+  void _requireOpeningCompleted() {
+    if (_openingLocked) {
+      throw StateError(
+        'This profile does not support retargeting or dismissal '
+        'during fixed-surface presentation',
+      );
+    }
+  }
+
+  String? _identifierAt(double? extent) {
+    if (extent == null) return null;
+    final matches = resolvedDetents.where(
+      (e) => (_engineExtent(e) - extent).abs() < 0.000001,
+    );
+    return matches
+            .where((e) => e.identifier == _targetIdentifier)
+            .firstOrNull
+            ?.identifier ??
+        matches.firstOrNull?.identifier;
+  }
+
+  String? get _engineTargetIdentifier => _dismissing || isUserDragging
+      ? null
+      : _identifierAt(targetRelativePosition);
+
+  String? get _restingIdentifier =>
+      controller == null ||
+          controller!.isAnimating ||
+          isUserDragging ||
+          !_presented ||
+          _dismissing
+      ? null
+      : _identifierAt(controller!.value);
+
+  void _synchronizeEngineSelection() {
+    _targetIdentifier = _engineTargetIdentifier;
+    if (_targetIdentifier != null && _selectedIdentifier != _targetIdentifier) {
+      _selectedIdentifier = _targetIdentifier;
+      onSelectedDetentChanged?.call(_selectedIdentifier!);
+    }
+  }
+
+  Rect? get _renderedRect {
     final box = _surfaceProbe.currentContext?.findRenderObject();
-    if (box is! RenderBox || !box.hasSize) {
+    if (box is! RenderBox || !box.hasSize) return null;
+    return Rect.fromPoints(
+      box.localToGlobal(Offset.zero),
+      box.localToGlobal(box.size.bottomRight(Offset.zero)),
+    );
+  }
+
+  double get renderedSurfaceHeight => _renderedRect?.height ?? 0;
+  double get renderedVisibleHeight {
+    final bounds = _renderedRect;
+    if (bounds == null) return 0;
+    return math.max(
+      0,
+      math.min(bounds.bottom, environment.availableSize.height) -
+          math.max(0, bounds.top),
+    );
+  }
+
+  IosSheetFrame captureFrame() {
+    _synchronizeEngineSelection();
+    final bounds = _renderedRect;
+    if (bounds == null) {
       throw StateError('Sheet has not completed layout');
     }
-    final topLeft = box.localToGlobal(Offset.zero);
-    final bottomRight = box.localToGlobal(box.size.bottomRight(Offset.zero));
-    final size = bottomRight - topLeft;
+    final topLeft = bounds.topLeft;
+    final bottomRight = bounds.bottomRight;
+    final size = bounds.size;
     final env = environment;
     final geometry = currentGeometry;
     final selected = resolvedDetents
@@ -153,13 +237,9 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
       metrics: {
         'sheet.x': topLeft.dx,
         'sheet.y': topLeft.dy,
-        'sheet.width': size.dx,
-        'sheet.height': size.dy,
-        'sheet.visible_height': math.max(
-          0,
-          math.min(bottomRight.dy, env.availableSize.height) -
-              math.max(0, topLeft.dy),
-        ),
+        'sheet.width': size.width,
+        'sheet.height': size.height,
+        'sheet.visible_height': renderedVisibleHeight,
         'sheet.top': topLeft.dy,
         'sheet.bottom': bottomRight.dy,
         'sheet.left_inset': topLeft.dx,
@@ -170,6 +250,8 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
             ? geometry.cornerRadius * geometry.scale
             : null,
         'sheet.relative_progress': controller!.value,
+        'sheet.trajectory_height_unscaled': unscaledTrajectoryHeight,
+        'sheet.surface_height_unscaled': unscaledSurfaceHeight,
         'barrier.alpha': isModal ? modalBarrierColor.a : 0,
         'sheet.velocity_y': null,
         'finger.velocity_y': null,
@@ -178,7 +260,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
       state: {
         'selected_detent': _selectedIdentifier,
         'target_detent': _targetIdentifier,
-        'gesture': isUserDragging ? 'dragging' : 'idle',
+        'gesture': _activePointers.isEmpty ? 'none' : 'touch',
         'scroll_owner': null,
         'underlying_hit_test': null,
         'dismissed': !isActive,
@@ -191,8 +273,18 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
         'scroll.offset': 'scroll recorder not attached',
         'scroll_owner': 'gesture ownership instrumentation pending',
         'underlying_hit_test': 'no real background touch probe in this frame',
+        if (_targetIdentifier == null)
+          'target_detent': _dismissing
+              ? 'Dismissal has no configured detent target'
+              : 'No committed configured snap target while dragging or retargeting',
         if (geometry.shape != null)
           'sheet.radius': 'custom shape cannot be represented by one scalar',
+      },
+      implementationProvenance: {
+        'resting_detent': _restingIdentifier,
+        'resting_detector': 'engine not animating, no drag, extent epsilon1e-6',
+        'sheet_gesture': isUserDragging ? 'dragging' : 'idle',
+        'pointer_observation_scope': 'delivered pointers inside sheet content',
       },
     );
   }
@@ -237,7 +329,10 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   List<ResolvedIosDetent> get resolvedDetents =>
       resolveIosDetents(detents, environment: environment, profile: profile);
 
-  double get visibleHeight => (controller?.value ?? 0) * _referenceHeight;
+  double get unscaledTrajectoryHeight =>
+      (controller?.value ?? 0) * _referenceHeight;
+  double get unscaledSurfaceHeight => _layoutExtent * _referenceHeight;
+  double get visibleHeight => renderedVisibleHeight;
 
   bool get isModal {
     final identifier = largestUndimmedDetentIdentifier;
@@ -249,7 +344,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
       threshold.height,
       environment,
     );
-    return visibleHeight > thresholdHeight + 0.000001;
+    return unscaledTrajectoryHeight > thresholdHeight + 0.000001;
   }
 
   @override
@@ -318,7 +413,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   bool get maintainState => true;
   @override
   RoutePopDisposition get popDisposition =>
-      dismissible && !interactiveDismissDisabled
+      dismissible && !interactiveDismissDisabled && !_openingLocked
       ? super.popDisposition
       : RoutePopDisposition.doNotPop;
 
@@ -349,7 +444,11 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   void _statusChanged(AnimationStatus _) => _animationChanged();
 
   void _animationChanged() {
-    if (!controller!.isAnimating && isActive) {
+    _synchronizeEngineSelection();
+    if (!controller!.isAnimating &&
+        !isUserDragging &&
+        isActive &&
+        !_dismissing) {
       final extent = controller!.value;
       final matches = resolvedDetents.where(
         (e) => (_engineExtent(e) - extent).abs() < 0.000001,
@@ -361,10 +460,6 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
                 .where((e) => e.identifier == _targetIdentifier)
                 .firstOrNull ??
             matches.first;
-        if (_selectedIdentifier != selected.identifier) {
-          _selectedIdentifier = selected.identifier;
-          onSelectedDetentChanged?.call(selected.identifier);
-        }
         _targetIdentifier = selected.identifier;
         if (!_presented) {
           _presented = true;
@@ -378,15 +473,46 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   void selectDetent(String identifier) {
     final resolved = resolvedDetents.where((e) => e.identifier == identifier);
     if (resolved.isEmpty) throw ArgumentError('Unknown detent: $identifier');
+    _requireOpeningCompleted();
+    if (!isCurrent || _dismissing) throw StateError('Sheet is not current');
+    final previousSelection = _selectedIdentifier;
+    final previousTarget = _targetIdentifier;
     _targetIdentifier = identifier;
-    animateToRelative(_engineExtent(resolved.single));
+    _selectedIdentifier = identifier;
+    try {
+      animateToRelative(_engineExtent(resolved.single));
+    } catch (_) {
+      _selectedIdentifier = previousSelection;
+      _targetIdentifier = previousTarget;
+      rethrow;
+    }
+    if (previousSelection != identifier)
+      onSelectedDetentChanged?.call(identifier);
+    _sheetController?._changed();
   }
 
   @override
   Widget buildContent(BuildContext context) => MediaQuery.removePadding(
     context: context,
     removeTop: true,
-    child: SizedBox.expand(child: child),
+    child: Listener(
+      onPointerDown: (event) => _activePointers.add(event.pointer),
+      onPointerUp: (event) => _activePointers.remove(event.pointer),
+      onPointerCancel: (event) => _activePointers.remove(event.pointer),
+      child: SizedBox.expand(child: child),
+    ),
+  );
+
+  @override
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) => AnimatedBuilder(
+    animation: controller!,
+    child: super.buildPage(context, animation, secondaryAnimation),
+    builder: (_, child) =>
+        IgnorePointer(ignoring: _openingLocked, child: child),
   );
 
   @override
@@ -482,6 +608,9 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
 
   @override
   bool didPop(T? result) {
+    if (_openingLocked) return false;
+    _dismissing = true;
+    _targetIdentifier = null;
     if (profile.fixedSurfaceDuringTransition) {
       _dismissStartExtent = controller!.value;
     }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'comparison_contract.dart';
 
 @immutable
 class IosSheetFrame {
@@ -7,10 +8,12 @@ class IosSheetFrame {
     required this.metrics,
     required this.state,
     this.unavailable = const {},
+    this.implementationProvenance = const {},
   });
   final Map<String, num?> metrics;
   final Map<String, Object?> state;
   final Map<String, String> unavailable;
+  final Map<String, Object?> implementationProvenance;
 }
 
 /// Trace v1 adapter. The caller supplies actual device/OS metadata and chooses
@@ -29,17 +32,22 @@ class IosSheetTraceRecorder {
     required Map<String, Object?> environment,
     required Map<String, Object?> configuration,
     String evidenceKind = 'runtime',
+    Map<String, Object?> implementationProvenance = const {},
   }) {
     _clock.start();
     _write('session', {
       'scenario_id': scenarioId,
+      'native_contract_version': 2,
       'implementation': 'flutter',
       'evidence_kind': evidenceKind,
       'os': os,
       'device': device,
       'environment': environment,
-      'configuration': configuration,
-      'clock': {'source': 'Dart Stopwatch', 'precision_ns': 1000},
+      'configuration': canonicalIosSheetConfiguration(configuration),
+      'provenance': {
+        'clock': {'source': 'Dart Stopwatch', 'precision_ns': 1000},
+        'implementation': implementationProvenance,
+      },
     });
   }
 
@@ -49,13 +57,47 @@ class IosSheetTraceRecorder {
   int _sequence = 0;
 
   void event(String name, [Map<String, Object?> data = const {}]) =>
-      _write('event', {'name': name, 'data': data});
+      eventWithProvenance(name, data: data);
 
-  void frame(IosSheetFrame frame) => _write('frame', {
-    'metrics': frame.metrics,
-    'state': frame.state,
-    if (frame.unavailable.isNotEmpty) 'unavailable': frame.unavailable,
-  });
+  void eventWithProvenance(
+    String name, {
+    Map<String, Object?> data = const {},
+    Map<String, Object?> implementationProvenance = const {},
+  }) {
+    final canonical = Map<String, Object?>.of(data);
+    for (final key in ['target', 'selected']) {
+      if (canonical[key] is String) {
+        canonical[key] = canonicalIosDetentIdentifier(canonical[key] as String);
+      }
+    }
+    _write('event', {
+      'name': name,
+      'data': canonical,
+      'terminal': name == 'dismiss.completed' || name == 'run.error',
+      if (!mapEquals(canonical, data)) 'raw_event_data': data,
+      if (implementationProvenance.isNotEmpty)
+        'provenance': implementationProvenance,
+    });
+  }
+
+  void frame(IosSheetFrame frame) {
+    final state = Map<String, Object?>.of(frame.state);
+    final raw = <String, Object?>{};
+    for (final key in ['selected_detent', 'target_detent']) {
+      if (state[key] is String) {
+        raw[key] = state[key];
+        state[key] = canonicalIosDetentIdentifier(state[key] as String);
+      }
+    }
+    _write('frame', {
+      'metrics': frame.metrics,
+      'state': state,
+      if (raw.isNotEmpty) 'raw_detent_identifiers': raw,
+      if (frame.implementationProvenance.isNotEmpty)
+        'provenance': frame.implementationProvenance,
+      if (frame.unavailable.isNotEmpty) 'unavailable': frame.unavailable,
+    });
+  }
 
   void _write(String type, Map<String, Object?> payload) {
     sink(

@@ -108,14 +108,14 @@ class _SheetPlaygroundState extends State<SheetPlayground>
       os: Map<String, Object?>.from(metadata['os'] as Map),
       device: Map<String, Object?>.from(metadata['device'] as Map),
       environment: Map<String, Object?>.from(metadata['environment'] as Map),
-      configuration: {
-        'trial': trial,
-        'detents': ['fixed320', 'medium', 'large'],
-        'surface': 'opaque.white',
-        'grabber': _grabber,
-        'page_sizing': true,
-        'largest_undimmed': _undimmed ? 'medium' : null,
-        'modal_in_presentation': _dismissLocked,
+      configuration: iosPageReferenceConfiguration(
+        trial: trial,
+        grabber: _grabber,
+        largestUndimmed: _undimmed ? 'medium' : null,
+        modalInPresentation: _dismissLocked,
+        scrollExpansion: !_scrollFirst,
+      ),
+      implementationProvenance: {
         'profile_major': _major,
         'profile_evidence': _profile().evidence,
         'content': 'calibration',
@@ -131,7 +131,9 @@ class _SheetPlaygroundState extends State<SheetPlayground>
           if (!_firstVisible &&
               (frame.metrics['sheet.visible_height'] ?? 0) > 0) {
             _firstVisible = true;
-            _recorder?.event('present.first_visible');
+            _recorder?.event('present.first_visible', {
+              'detector': 'first sampled positive visible height',
+            });
           }
           _recorder?.frame(frame);
         } on StateError {
@@ -170,13 +172,12 @@ class _SheetPlaygroundState extends State<SheetPlayground>
         contentInteraction: _scrollFirst
             ? IosSheetContentInteraction.scrolls
             : IosSheetContentInteraction.resizes,
-        onPresented: () => _recorder?.event('present.completed', {
-          'detector': 'engine status; not native physical settling',
-        }),
-        onSelectedDetentChanged: (id) => _recorder?.event('detent.settled', {
-          'selected': id,
-          'detector': 'engine status + extent tolerance',
-        }),
+        onPresented: () => _recorder?.eventWithProvenance(
+          'present.completed',
+          implementationProvenance: {
+            'detector': 'engine status; not native physical settling',
+          },
+        ),
         onDismissed: () => _recorder?.event('dismiss.completed'),
         backgroundColor: Colors.white,
         child: Stack(
@@ -252,6 +253,8 @@ class _SheetPlaygroundState extends State<SheetPlayground>
       _busy = true;
       _detents = 'reference';
       _content = 'calibration';
+      _draggable =
+          true; // The paired native recipe has no nondraggable variant.
     });
     const trials = int.fromEnvironment('SHEET_TRIALS', defaultValue: 10);
     try {

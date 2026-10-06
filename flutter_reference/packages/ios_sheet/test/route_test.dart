@@ -17,8 +17,11 @@ void main() {
     Widget? child,
     ValueChanged<String>? onSelected,
     bool settle = true,
+    MediaQueryData? media,
+    List<IosSheetDetent>? detents,
+    String initial = 'short',
   }) async {
-    await tester.binding.setSurfaceSize(const Size(400, 800));
+    await tester.binding.setSurfaceSize(media?.size ?? const Size(400, 800));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     navigator = GlobalKey<NavigatorState>();
     controller = IosSheetController();
@@ -26,6 +29,8 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         navigatorKey: navigator,
+        builder: (context, child) =>
+            media == null ? child! : MediaQuery(data: media, child: child!),
         home: Scaffold(
           body: Align(
             alignment: Alignment.topCenter,
@@ -40,8 +45,10 @@ void main() {
     navigator.currentState!.push(
       StupidSimpleIosSheetRoute<void>(
         profile: profile ?? IosSheetProfile.ios26,
-        detents: [IosSheetDetent.height('short', 300), IosSheetDetent.large],
-        initialDetentIdentifier: 'short',
+        detents:
+            detents ??
+            [IosSheetDetent.height('short', 300), IosSheetDetent.large],
+        initialDetentIdentifier: initial,
         largestUndimmedDetentIdentifier: undimmed,
         controller: controller,
         interactiveDismissDisabled: interactiveDismissDisabled,
@@ -237,6 +244,124 @@ void main() {
     await tester.drag(find.text('Sheet content'), const Offset(0, -60));
     await tester.pumpAndSettle();
     expect(controller.selectedDetentIdentifier, 'large');
+  });
+
+  testWidgets('opening fixed-surface retarget rejects before changing state', (
+    tester,
+  ) async {
+    await present(
+      tester,
+      settle: false,
+      profile: IosSheetProfile.ios26.copyWith(
+        fixedSurfaceDuringTransition: true,
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 100));
+    final before = controller.captureFrame();
+    expect(() => controller.selectDetent('large'), throwsStateError);
+    expect(controller.selectedDetentIdentifier, 'short');
+    expect(controller.targetDetentIdentifier, 'short');
+    expect(
+      controller.captureFrame().metrics['sheet.height'],
+      before.metrics['sheet.height'],
+    );
+    await tester.pumpAndSettle();
+    expect(controller.captureFrame().metrics['sheet.height'], 300);
+    expect(controller.captureFrame().metrics['sheet.y'], 500);
+  });
+
+  testWidgets(
+    'programmatic selection changes immediately while rest is absent',
+    (tester) async {
+      final changes = <String>[];
+      await present(tester, onSelected: changes.add);
+      expect(controller.restingDetentIdentifier, 'short');
+      controller.selectDetent('large');
+      expect(controller.selectedDetentIdentifier, 'large');
+      expect(controller.requestedDetentIdentifier, 'large');
+      expect(controller.targetDetentIdentifier, 'large');
+      expect(controller.restingDetentIdentifier, isNull);
+      expect(changes, ['large']);
+      expect(controller.captureFrame().state['selected_detent'], 'large');
+      await tester.pumpAndSettle();
+      expect(controller.restingDetentIdentifier, 'large');
+      expect(changes, ['large']);
+    },
+  );
+
+  testWidgets('released gesture target synchronizes before recorder emission', (
+    tester,
+  ) async {
+    await present(
+      tester,
+      profile: IosSheetProfile.ios26.copyWith(
+        snapPhysics: const _LargestSnapPhysics(),
+      ),
+    );
+    final gesture = await tester.startGesture(
+      tester.getCenter(find.text('Sheet content')),
+    );
+    await gesture.moveBy(const Offset(0, -60));
+    await tester.pump();
+    expect(controller.captureFrame().state['gesture'], 'touch');
+    await gesture.up();
+    await tester.pump();
+    final frame = controller.captureFrame();
+    expect(frame.state['target_detent'], 'large');
+    expect(controller.targetDetentIdentifier, 'large');
+    expect(controller.restingDetentIdentifier, isNull);
+    expect(frame.state['gesture'], 'none');
+    await tester.pumpAndSettle();
+    expect(controller.restingDetentIdentifier, 'large');
+  });
+
+  testWidgets('height API separates trajectory from rendered native surface', (
+    tester,
+  ) async {
+    await present(
+      tester,
+      media: const MediaQueryData(
+        size: Size(402, 874),
+        devicePixelRatio: 3,
+        padding: EdgeInsets.only(top: 62, bottom: 34),
+        viewPadding: EdgeInsets.only(top: 62, bottom: 34),
+      ),
+      detents: [
+        IosSheetDetent.height('fixed320', 320),
+        IosSheetDetent.medium,
+        IosSheetDetent.large,
+      ],
+      initial: 'medium',
+      profile: observedPage402x874Profile(26),
+    );
+    expect(
+      controller.unscaledTrajectoryHeight,
+      closeTo(469.6666666666667, .000001),
+    );
+    expect(
+      controller.renderedSurfaceHeight,
+      closeTo(450.9734660033168, .000001),
+    );
+    expect(
+      controller.renderedVisibleHeight,
+      closeTo(450.9734660033168, .000001),
+    );
+    expect(controller.visibleHeight, closeTo(450.9734660033168, .000001));
+  });
+
+  testWidgets('rendered visible height clips to the observed viewport', (
+    tester,
+  ) async {
+    await present(
+      tester,
+      profile: IosSheetProfile.ios26.copyWith(
+        geometry: (_) => const IosSheetGeometry(bottomInset: 600),
+      ),
+    );
+    expect(controller.unscaledTrajectoryHeight, 300);
+    expect(controller.renderedSurfaceHeight, 300);
+    expect(controller.renderedVisibleHeight, 200);
+    expect(controller.captureFrame().metrics['sheet.visible_height'], 200);
   });
 
   testWidgets('fitted overdrag transfer function controls real movement', (

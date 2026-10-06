@@ -56,14 +56,18 @@ import Darwin
           "logical_size": ["width": size.width, "height": size.height],
           "physical_size": ["width": size.width * screen.scale,
             "height": size.height * screen.scale], "scale": screen.scale,
-          "refresh_hz": screen.maximumFramesPerSecond],
+          "refresh_hz": screen.maximumFramesPerSecond,
+          "refresh_hz_source": "UIScreen.maximumFramesPerSecond; measured cadence is per-frame"],
         "environment": ["orientation": size.height >= size.width ? "portrait" : "landscape",
           "safe_area": ["top": safe.top, "left": safe.left,
             "bottom": safe.bottom, "right": safe.right],
           "size_classes": ["horizontal": sizeClass(traits.horizontalSizeClass),
             "vertical": sizeClass(traits.verticalSizeClass)],
           "status_bar": ["hidden": window.windowScene?.statusBarManager?.isStatusBarHidden ?? false],
-          "keyboard": ["visible": false, "frame": ["x": 0, "y": 0, "width": 0, "height": 0]]]
+          "keyboard": ["visible": false, "frame": ["x": 0, "y": 0, "width": 0, "height": 0]],
+          "system_settings": ["reduce_motion": UIAccessibility.isReduceMotionEnabled,
+            "voice_over": UIAccessibility.isVoiceOverRunning,
+            "content_size_category": traits.preferredContentSizeCategory.rawValue]]
       ])
     }
   }
