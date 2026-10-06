@@ -189,5 +189,6 @@
       }
     }
   },
-  "git_revision": "189c428393270c309cbd3a49dd99cead474f33e2"
+  "capture_base_revision": "189c428393270c309cbd3a49dd99cead474f33e2",
+  "feature_source_commit": "263fac4fd72f1bdc31bf91dfcd7293ac5a440623"
 }
