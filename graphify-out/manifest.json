@@ -1,230 +1,482 @@
 {
   "analysis/compare.py": {
-    "mtime": 1791311850.7430215,
-    "seen": 1791311859.410902,
+    "mtime": 1791315303.3778272,
+    "seen": 1791315349.728895,
     "ast_hash": "69c2e6297979f2a70e7bb2a0f7d6ff81",
     "semantic_hash": ""
   },
   "analysis/fit.py": {
-    "mtime": 1791307354.035353,
-    "seen": 1791308109.349664,
+    "mtime": 1791315303.3780165,
+    "seen": 1791315349.728899,
     "ast_hash": "0563eb4f559467e9c716f29f411c7b3d",
     "semantic_hash": ""
   },
   "analysis/inspect_trace.py": {
-    "mtime": 1791307718.6257682,
-    "seen": 1791308109.349666,
+    "mtime": 1791315303.3781025,
+    "seen": 1791315349.7289011,
     "ast_hash": "627d81c196761a2d1f88505e656bab59",
     "semantic_hash": ""
   },
   "analysis/regression.py": {
-    "mtime": 1791311333.5411713,
-    "seen": 1791311732.4740648,
+    "mtime": 1791315303.378278,
+    "seen": 1791315349.7289019,
     "ast_hash": "a646dcd2e251085e528a2b209fff574e",
     "semantic_hash": ""
   },
   "analysis/spacing.py": {
-    "mtime": 1791308404.2954068,
-    "seen": 1791308855.410657,
+    "mtime": 1791315303.3784697,
+    "seen": 1791315349.7289019,
     "ast_hash": "5174d46d3362caa3690d7b5c54386b0b",
     "semantic_hash": ""
   },
   "analysis/tests/test_compare.py": {
-    "mtime": 1791311804.077001,
-    "seen": 1791311859.41091,
+    "mtime": 1791315303.3786633,
+    "seen": 1791315349.7289028,
     "ast_hash": "588eceed5572bc36157c6624354a18e5",
     "semantic_hash": ""
   },
   "analysis/tests/test_fit.py": {
-    "mtime": 1791307305.4077709,
-    "seen": 1791308109.349668,
+    "mtime": 1791315303.3787932,
+    "seen": 1791315349.728904,
     "ast_hash": "1442f29350317be4028a71239dedca73",
     "semantic_hash": ""
   },
   "analysis/tests/test_inspect.py": {
-    "mtime": 1791307623.1179132,
-    "seen": 1791308109.3496692,
+    "mtime": 1791315303.3788745,
+    "seen": 1791315349.728905,
     "ast_hash": "433fb48c7c20eddce09281ec452e98a3",
     "semantic_hash": ""
   },
   "analysis/tests/test_regression.py": {
-    "mtime": 1791311284.6428232,
-    "seen": 1791311732.47407,
+    "mtime": 1791315303.3790562,
+    "seen": 1791315349.728905,
     "ast_hash": "3b7d180b2bd00d6f700beaf3bce30eda",
     "semantic_hash": ""
   },
   "analysis/tests/test_spacing.py": {
-    "mtime": 1791308381.3041341,
-    "seen": 1791308855.4106612,
+    "mtime": 1791315303.379151,
+    "seen": 1791315349.728906,
     "ast_hash": "ebc2adb00a5ad5c0926772cc6d9d924a",
     "semantic_hash": ""
   },
   "artifacts/analysis/native_spacing_ios26.json": {
-    "mtime": 1791308295.6368337,
-    "seen": 1791308855.410662,
+    "mtime": 1791315303.3793485,
+    "seen": 1791315349.728907,
     "ast_hash": "4907f5940dabc86e9c06dff348ecb5ab",
     "semantic_hash": ""
   },
   "artifacts/analysis/native_spacing_ios27.json": {
-    "mtime": 1791308295.7917373,
-    "seen": 1791308855.410663,
+    "mtime": 1791315303.3794272,
+    "seen": 1791315349.728908,
     "ast_hash": "06f21bf1184540d43f755d7d68fb4d5c",
     "semantic_hash": ""
   },
   "measurement/holdouts.json": {
-    "mtime": 1791307587.217748,
-    "seen": 1791308109.349673,
+    "mtime": 1791315303.384925,
+    "seen": 1791315349.7289228,
     "ast_hash": "e626763a652f424de752a1beb8875280",
     "semantic_hash": ""
   },
   "measurement/profiles/full.json": {
-    "mtime": 1791307587.0520756,
-    "seen": 1791308109.349673,
+    "mtime": 1791315303.3851664,
+    "seen": 1791315349.7289238,
     "ast_hash": "b6bc88192f961bbdc49f5b1f2f8d79ad",
     "semantic_hash": ""
   },
   "measurement/profiles/programmatic-geometry.json": {
-    "mtime": 1791307587.0841868,
-    "seen": 1791308109.349674,
+    "mtime": 1791315303.3852446,
+    "seen": 1791315349.728925,
     "ast_hash": "b7a35b825e42e4ef182d223dfd9ae465",
     "semantic_hash": ""
   },
   "measurement/recipes/programmatic.json": {
-    "mtime": 1791307587.184652,
-    "seen": 1791308109.349674,
+    "mtime": 1791315303.385363,
+    "seen": 1791315349.728925,
     "ast_hash": "bfc1d0827e95720f52921c7f6cb15bbf",
     "semantic_hash": ""
   },
   "measurement/regression_manifest.json": {
-    "mtime": 1791311608.052704,
-    "seen": 1791311732.474078,
+    "mtime": 1791315303.3854356,
+    "seen": 1791315349.728926,
     "ast_hash": "c119f959b6789067253a7a427a5e9f37",
     "semantic_hash": ""
   },
   "measurement/schema/evidence.schema.json": {
-    "mtime": 1791306948.450383,
-    "seen": 1791308109.349675,
+    "mtime": 1791315303.3855639,
+    "seen": 1791315349.728927,
     "ast_hash": "e0aae57405e10075ac50bcc91e028172",
     "semantic_hash": ""
   },
   "measurement/schema/gesture.schema.json": {
-    "mtime": 1791306948.4809344,
-    "seen": 1791308109.3496761,
+    "mtime": 1791315303.3856392,
+    "seen": 1791315349.728927,
     "ast_hash": "cee9ac269c92ba54d01c55a80d9e748b",
     "semantic_hash": ""
   },
   "measurement/schema/trace.schema.json": {
-    "mtime": 1791310715.2634394,
-    "seen": 1791311732.47408,
+    "mtime": 1791315303.3857152,
+    "seen": 1791315349.728928,
     "ast_hash": "d004f39edba8017a8373005be398c11e",
     "semantic_hash": ""
   },
   "spec/evidence.json": {
-    "mtime": 1791306756.8706212,
-    "seen": 1791308109.349694,
+    "mtime": 1791306756.795014,
+    "seen": 1791315349.728939,
     "ast_hash": "9069083237b24b8277f9af86eb25334b",
     "semantic_hash": ""
   },
   "spec/ios26.json": {
-    "mtime": 1791306756.8707194,
-    "seen": 1791308109.349697,
+    "mtime": 1791306756.7951148,
+    "seen": 1791315349.72894,
     "ast_hash": "0d8c11aa44b1b96ccf8d3cc25c144c53",
     "semantic_hash": ""
   },
   "spec/ios27.json": {
-    "mtime": 1791306756.87082,
-    "seen": 1791308109.349699,
+    "mtime": 1791306756.7952132,
+    "seen": 1791315349.728941,
     "ast_hash": "6146ab85dc8ab932fcce024cd0ead305",
     "semantic_hash": ""
   },
   "spec/test_matrix.json": {
-    "mtime": 1791311228.201433,
-    "seen": 1791311732.4740841,
+    "mtime": 1791315303.3858552,
+    "seen": 1791315349.7289422,
     "ast_hash": "ccdbc237083f03d2825651ff58b2ed49",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1791306756.869145,
-    "seen": 1791308109.3497012,
+    "mtime": 1791306756.79307,
+    "seen": 1791315349.7289422,
     "ast_hash": "f69c124d36357043058d656960574ce0",
     "semantic_hash": ""
   },
   "THIRD_PARTY_NOTICES.md": {
-    "mtime": 1791306756.8692741,
-    "seen": 1791308109.349702,
+    "mtime": 1791306756.793178,
+    "seen": 1791315349.728943,
     "ast_hash": "4ff0be7cac2fa0de286c526bc8cc6647",
     "semantic_hash": ""
   },
   "analysis/README.md": {
-    "mtime": 1791311607.985741,
-    "seen": 1791311732.4740858,
+    "mtime": 1791315303.3776898,
+    "seen": 1791315349.728944,
     "ast_hash": "d089754037565b47b5dd5ce84190d2fa",
     "semantic_hash": ""
   },
   "artifacts/README.md": {
-    "mtime": 1791306756.8695679,
-    "seen": 1791308109.349704,
+    "mtime": 1791306756.793466,
+    "seen": 1791315349.728944,
     "ast_hash": "eea2ad70d3716e9e1344b52eacc20cfb",
     "semantic_hash": ""
   },
   "docs/README.md": {
-    "mtime": 1791306756.8697028,
-    "seen": 1791308109.349705,
+    "mtime": 1791306756.7937548,
+    "seen": 1791315349.7289448,
     "ast_hash": "7e4dc3e8ef450443b39e6f37da70bf60",
     "semantic_hash": ""
   },
   "flutter_reference/README.md": {
-    "mtime": 1791306756.869856,
-    "seen": 1791308109.349706,
+    "mtime": 1791306756.7940066,
+    "seen": 1791315349.728947,
     "ast_hash": "38c5c62ce3d6cb0affe981cee762afc1",
     "semantic_hash": ""
   },
   "measurement/CONTRACT.md": {
-    "mtime": 1791311608.019769,
-    "seen": 1791311732.474089,
+    "mtime": 1791315303.3842728,
+    "seen": 1791315349.728947,
     "ast_hash": "08a916635259f6c8ececa98f57be0b39",
     "semantic_hash": ""
   },
   "measurement/README.md": {
-    "mtime": 1791308223.568865,
-    "seen": 1791308855.410681,
+    "mtime": 1791315303.3845153,
+    "seen": 1791315349.7289479,
     "ast_hash": "21e3e3a14fa7d12c8a606e2b2ae73787",
     "semantic_hash": ""
   },
   "native_reference/README.md": {
-    "mtime": 1791306756.8701358,
-    "seen": 1791308109.349708,
-    "ast_hash": "11beb080118a36acee6980b16e4166e2",
+    "mtime": 1791313457.7092586,
+    "seen": 1791315349.72895,
+    "ast_hash": "84a003fd66b39ea96a1ec967f26b262c",
     "semantic_hash": ""
   },
   "spec/DIFF_26_27.md": {
-    "mtime": 1791306756.870389,
-    "seen": 1791308109.349709,
+    "mtime": 1791306756.7945504,
+    "seen": 1791315349.7289522,
     "ast_hash": "c4ca2d5e7f74802190cbab7edfeddd5a",
     "semantic_hash": ""
   },
   "spec/MASTER_STATE.md": {
-    "mtime": 1791306756.8705218,
-    "seen": 1791308109.34971,
+    "mtime": 1791306756.7947893,
+    "seen": 1791315349.7289522,
     "ast_hash": "ea1d4f13c1da5ced225d8d264fb73b0e",
     "semantic_hash": ""
   },
   "artifacts/analysis/native_spacing_ios27_coherent.json": {
-    "mtime": 1791308430.2705805,
-    "seen": 1791308855.4106638,
+    "mtime": 1791315303.3795357,
+    "seen": 1791315349.728909,
     "ast_hash": "a42b58fe36d8279ccc0a18a53edb07b3",
     "semantic_hash": ""
   },
   "artifacts/analysis/native_spacing_vphone_ios26_6_2.json": {
-    "mtime": 1791308433.1244404,
-    "seen": 1791308855.410665,
+    "mtime": 1791315303.3796484,
+    "seen": 1791315349.728909,
     "ast_hash": "0f5d38dbd5828311c7fc1443b341025b",
     "semantic_hash": ""
   },
   "measurement/SUMMARY.md": {
-    "mtime": 1791311850.7767074,
-    "seen": 1791311859.410933,
+    "mtime": 1791315303.3848362,
+    "seen": 1791315349.728949,
     "ast_hash": "610699df99bf3699efb8f135187c51e6",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios26_4_1_coherent_iphone17pro/runtime_inventory.json": {
+    "mtime": 1791308474.2863598,
+    "seen": 1791315349.7289112,
+    "ast_hash": "a91d3f1c6400780c567c54af3e1a71fc",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios26_4_1_ipad11/runtime_inventory.json": {
+    "mtime": 1791308706.4787443,
+    "seen": 1791315349.7289119,
+    "ast_hash": "a91d3f1c6400780c567c54af3e1a71fc",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios26_4_1_ipad11_form/runtime_inventory.json": {
+    "mtime": 1791308866.0526352,
+    "seen": 1791315349.7289119,
+    "ast_hash": "ecc31adc25edf46e57a3089d62a9981c",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios26_4_1_ipad11_form_sorted/runtime_inventory.json": {
+    "mtime": 1791309215.0281217,
+    "seen": 1791315349.7289128,
+    "ast_hash": "f8ceefad8342346de1771982b5e8dd6c",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios26_4_1_iphone17pro/runtime_inventory.json": {
+    "mtime": 1791307263.4882042,
+    "seen": 1791315349.728914,
+    "ast_hash": "03297649bce68cd57a884d82787006bb",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios26_4_1_scene_iphone17pro/runtime_inventory.json": {
+    "mtime": 1791307471.197397,
+    "seen": 1791315349.728914,
+    "ast_hash": "38ce65003b7f4848844f1d53eceb65b4",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios26_4_1_v2_iphone17pro/runtime_inventory.json": {
+    "mtime": 1791313211.6995826,
+    "seen": 1791315349.728915,
+    "ast_hash": "af90b92d82b34213fd3c731f311ceac1",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios26_6_2_vphone/vphone_inventory.json": {
+    "mtime": 1791308051.5015717,
+    "seen": 1791315349.728916,
+    "ast_hash": "0a42bc370d00886bf71b2b256e270051",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios27_0_calibrated_iphone18pro/runtime_inventory.json": {
+    "mtime": 1791308076.0014014,
+    "seen": 1791315349.728916,
+    "ast_hash": "721622e1ba0af057655092d387c50684",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios27_0_coherent_iphone18pro/runtime_inventory.json": {
+    "mtime": 1791308253.1752725,
+    "seen": 1791315349.728917,
+    "ast_hash": "9dbfddfcb5879f8d83762639c1363ccc",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios27_0_final_iphone18pro/runtime_inventory.json": {
+    "mtime": 1791307926.3978486,
+    "seen": 1791315349.728918,
+    "ast_hash": "8a76b6bd8d107e3eb92b57a13a491eb1",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios27_0_ipad11/runtime_inventory.json": {
+    "mtime": 1791308502.664741,
+    "seen": 1791315349.728918,
+    "ast_hash": "3ebbfd3a8512dbe3f589084d2cda64a2",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios27_0_ipad11_form/runtime_inventory.json": {
+    "mtime": 1791309214.2697794,
+    "seen": 1791315349.728919,
+    "ast_hash": "21d44a5134812dd967dda0f0cdfd3102",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios27_0_ipad11_form_leading/runtime_inventory.json": {
+    "mtime": 1791308860.2456408,
+    "seen": 1791315349.72892,
+    "ast_hash": "ee6cdc50d60a9e38c241c2de0a0a51a5",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios27_0_iphone18pro/runtime_inventory.json": {
+    "mtime": 1791307468.8204956,
+    "seen": 1791315349.72892,
+    "ast_hash": "32e275b2a441e8d5ba9665f296c4273f",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios27_0_v2_ipad11_form/runtime_inventory.json": {
+    "mtime": 1791313205.8751538,
+    "seen": 1791315349.7289212,
+    "ast_hash": "4816447c1de301420ecde4dc37c9aaf5",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios27_0_video_calibration/footer_pixels.json": {
+    "mtime": 1791309494.4478376,
+    "seen": 1791315349.7289212,
+    "ast_hash": "c041e30b2d794252efe67c860823f288",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios27_0_video_calibration/runtime_inventory.json": {
+    "mtime": 1791308617.1875072,
+    "seen": 1791315349.7289221,
+    "ast_hash": "efb96d9efb777781fe86782e20d385c5",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios27_0_video_calibration/video_metadata.json": {
+    "mtime": 1791308618.3329768,
+    "seen": 1791315349.7289228,
+    "ast_hash": "424d54ad99d1d63373ac8cd9319143e0",
+    "semantic_hash": ""
+  },
+  "native_reference/NativeSheetHarness/App.swift": {
+    "mtime": 1791313325.5853598,
+    "seen": 1791315349.728929,
+    "ast_hash": "141308e3e72491f95e98db57ffa2fc19",
+    "semantic_hash": ""
+  },
+  "native_reference/NativeSheetHarness/NativeScenario.swift": {
+    "mtime": 1791312720.4872053,
+    "seen": 1791315349.728929,
+    "ast_hash": "2301e7c86e35a9d02ec548be5dafcb97",
+    "semantic_hash": ""
+  },
+  "native_reference/NativeSheetHarness/SwiftUIReference.swift": {
+    "mtime": 1791308273.5250046,
+    "seen": 1791315349.72893,
+    "ast_hash": "bf524c1cfe43efd6f8c388d0b4d983e9",
+    "semantic_hash": ""
+  },
+  "native_reference/NativeSheetHarness/Trace.swift": {
+    "mtime": 1791312995.0389843,
+    "seen": 1791315349.7289312,
+    "ast_hash": "508c1e40d31c184e2ffa5ed9abe73ddc",
+    "semantic_hash": ""
+  },
+  "native_reference/measurements.json": {
+    "mtime": 1791313347.2416196,
+    "seen": 1791315349.7289312,
+    "ast_hash": "db5fa6afdb3bbe38562acfafc9cdde60",
+    "semantic_hash": ""
+  },
+  "native_reference/scripts/analyze_footer_video.py": {
+    "mtime": 1791309475.275503,
+    "seen": 1791315349.7289321,
+    "ast_hash": "74ea433167901e02d3dd1387f2b197e4",
+    "semantic_hash": ""
+  },
+  "native_reference/scripts/build.sh": {
+    "mtime": 1791308273.5944176,
+    "seen": 1791315349.728933,
+    "ast_hash": "5eccd10d3fab6b1bca0d1e1150b45f06",
+    "semantic_hash": ""
+  },
+  "native_reference/scripts/collect_simulator.py": {
+    "mtime": 1791307173.244516,
+    "seen": 1791315349.728933,
+    "ast_hash": "fa91c6f47b49106485a9bb30f8f91cb1",
+    "semantic_hash": ""
+  },
+  "native_reference/scripts/collect_vphone.py": {
+    "mtime": 1791308046.1409266,
+    "seen": 1791315349.7289338,
+    "ast_hash": "aca1a8f10f992259821f4104da284d94",
+    "semantic_hash": ""
+  },
+  "native_reference/scripts/evidence_contract.py": {
+    "mtime": 1791312995.0058677,
+    "seen": 1791315349.7289338,
+    "ast_hash": "a36e13877842f6f8218e48d46a701635",
+    "semantic_hash": ""
+  },
+  "native_reference/scripts/package_device.sh": {
+    "mtime": 1791307173.27517,
+    "seen": 1791315349.728935,
+    "ast_hash": "9270d0384d59c4603d0067ffd436bf0d",
+    "semantic_hash": ""
+  },
+  "native_reference/scripts/record_simulator.py": {
+    "mtime": 1791308554.3069355,
+    "seen": 1791315349.728935,
+    "ast_hash": "8620393657a2548832e79d17f36775d1",
+    "semantic_hash": ""
+  },
+  "native_reference/scripts/summarize_native.py": {
+    "mtime": 1791312555.7236934,
+    "seen": 1791315349.728936,
+    "ast_hash": "109564f479fec43ecd184d3766bf6a2f",
+    "semantic_hash": ""
+  },
+  "native_reference/scripts/validate_native.py": {
+    "mtime": 1791312555.6908033,
+    "seen": 1791315349.728937,
+    "ast_hash": "6262528fd29ed42ce7d7cd0da236507d",
+    "semantic_hash": ""
+  },
+  "native_reference/scripts/vphone_run.py": {
+    "mtime": 1791307847.5748081,
+    "seen": 1791315349.728937,
+    "ast_hash": "452bc67a860f58e27195ba9030f4bf69",
+    "semantic_hash": ""
+  },
+  "native_reference/tests/NativeContractTests.swift": {
+    "mtime": 1791312588.2767138,
+    "seen": 1791315349.728938,
+    "ast_hash": "b0e172545aabc6ffdc14cb3db2ffec78",
+    "semantic_hash": ""
+  },
+  "native_reference/tests/test_evidence.py": {
+    "mtime": 1791313124.7609396,
+    "seen": 1791315349.728939,
+    "ast_hash": "eeb42a842c00553e6fdb4e027d6483db",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-10-06-sheet-parity-integration.md": {
+    "mtime": 1791315303.3799522,
+    "seen": 1791315349.728946,
+    "ast_hash": "dc9972e792811cb249aac4dfd0a1d6da",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-10-06-native-ios-sheet-parity-design.md": {
+    "mtime": 1791315303.3802116,
+    "seen": 1791315349.728946,
+    "ast_hash": "5a0044d51ec1a9239382302d24ec5312",
+    "semantic_hash": ""
+  },
+  "native_reference/CONTRACT_V2.md": {
+    "mtime": 1791313325.6182837,
+    "seen": 1791315349.728949,
+    "ast_hash": "58875627ed0a0b6ca6fea44d63572272",
+    "semantic_hash": ""
+  },
+  "native_reference/SUMMARY.md": {
+    "mtime": 1791313457.6782832,
+    "seen": 1791315349.728951,
+    "ast_hash": "81b7fd8031a927a3e8d21dfa2420ed57",
+    "semantic_hash": ""
+  },
+  "artifacts/native/vphone-start.png": {
+    "mtime": 1791307724.9187286,
+    "seen": 1791315349.7289531,
+    "ast_hash": "88aadb8c4e7b085f2f7ff0c6f3c4511b",
+    "semantic_hash": ""
+  },
+  "artifacts/native/ios27_0_video_calibration/native-rendering.mp4": {
+    "mtime": 1791308618.017768,
+    "seen": 1791315349.728954,
+    "ast_hash": "80c5200f9e265dfa82ec3c7cb8629f45",
     "semantic_hash": ""
   }
 }
