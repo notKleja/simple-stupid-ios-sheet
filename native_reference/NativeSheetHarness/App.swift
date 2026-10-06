@@ -192,7 +192,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         }
         trace = nil; running = true; trial = trialOffset; next()
     }
-    func after(_ seconds: Double, _ work: @escaping () -> Void) {
+    func after(_ seconds: Double, from origin: DispatchTime? = nil, _ work: @escaping () -> Void) {
         let caStart = CACurrentMediaTime()
         let dispatchStart = DispatchTime.now().uptimeNanoseconds
         let callback = {
@@ -203,11 +203,11 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
             }
             work()
         }
-        if ProcessInfo.processInfo.environment["NATIVE_STRICT_TIMERS"] == "1" {
+        if ProcessInfo.processInfo.environment["NATIVE_TIMER_MODE"] != "coalesced" {
             let key = UUID()
             let timer = DispatchSource.makeTimerSource(flags: .strict, queue: .main)
             strictTimers[key] = timer
-            timer.schedule(deadline: .now()+seconds, leeway: .nanoseconds(0))
+            timer.schedule(deadline: (origin ?? .now())+seconds, leeway: .nanoseconds(0))
             timer.setEventHandler { timer.cancel(); self.strictTimers[key] = nil; callback() }
             timer.resume()
         } else { DispatchQueue.main.asyncAfter(deadline: .now()+seconds, execute: callback) }
@@ -292,6 +292,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
                 "role": ProcessInfo.processInfo.environment["NATIVE_ROLE"] ?? "training",
                 "native_source_revision": ProcessInfo.processInfo.environment["NATIVE_SOURCE_REVISION"] ?? "working_tree_uncommitted"]])
         link?.invalidate(); link = CADisplayLink(target: self, selector: #selector(sample(_:))); link!.add(to: .main, forMode: .common)
+        let replayOrigin = DispatchTime.now()
         t.event("present.requested")
         present(vc, animated: true) {
             t.event("present.completed") // Completion callback does not establish physical settling.
@@ -299,17 +300,17 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         }
         // Manual gesture scenarios intentionally stay open for external input replay.
         guard !definition.manual else { return }
-        after(1.5) {
+        after(1.5, from: replayOrigin) {
             self.target = "large"; self.phase = "detent"
             t.event("detent.requested", ["target": "large"])
             config.animateChanges { config.selectedDetentIdentifier = .large }
         }
-        after(3) {
+        after(3, from: replayOrigin) {
             self.target = "medium"; self.phase = "detent"
             t.event("detent.requested", ["target": "medium"])
             config.animateChanges { config.selectedDetentIdentifier = .medium }
         }
-        after(4.5) {
+        after(4.5, from: replayOrigin) {
             self.phase = "dismiss"; self.target = nil; t.event("dismiss.requested")
             vc.dismiss(animated: true) {
                 t.event("dismiss.completed", terminal: true); self.link?.invalidate(); self.sheet = nil

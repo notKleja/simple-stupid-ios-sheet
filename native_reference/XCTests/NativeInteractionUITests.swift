@@ -6,7 +6,8 @@ final class NativeInteractionUITests: XCTestCase {
         continueAfterFailure = false
         let app = XCUIApplication(bundleIdentifier: "dev.notkleja.NativeSheetHarness")
         app.launchEnvironment = ["NATIVE_AUTORUN":"1", "NATIVE_SCENARIO":scenario, "NATIVE_TRIALS":"1",
-            "NATIVE_TRIAL_OFFSET":String(trial-1), "NATIVE_ATTEMPT_ID":UUID().uuidString, "NATIVE_ROLE":"training"]
+            "NATIVE_TRIAL_OFFSET":String(trial-1), "NATIVE_ATTEMPT_ID":UUID().uuidString, "NATIVE_ROLE":"training",
+            "NATIVE_SOURCE_REVISION":Bundle(for:NativeInteractionUITests.self).object(forInfoDictionaryKey:"NativeSourceRevision") as? String ?? "unresolved"]
         if let root = ProcessInfo.processInfo.environment["SIMULATOR_ROOT"],
            let plist = NSDictionary(contentsOfFile: root + "/System/Library/CoreServices/SystemVersion.plist"),
            let build = plist["ProductBuildVersion"] as? String { app.launchEnvironment["NATIVE_OS_BUILD"] = build }

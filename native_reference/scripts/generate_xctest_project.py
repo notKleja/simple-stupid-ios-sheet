@@ -3,6 +3,7 @@
 import hashlib
 from pathlib import Path
 import plistlib
+import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "build/NativeInteractions.xcodeproj"
@@ -38,7 +39,8 @@ def configurations(name, extra):
     return add(name+"configs","XCConfigurationList",buildConfigurations=configs,defaultConfigurationIsVisible=0,defaultConfigurationName="Debug")
 
 app_config = configurations("app", {"PRODUCT_BUNDLE_IDENTIFIER":"dev.notkleja.NativeSheetHarness", "INFOPLIST_FILE":str(ROOT/"native_reference/NativeSheetHarness/Info.plist"), "LD_RUNPATH_SEARCH_PATHS":"$(inherited) @executable_path/Frameworks", "OTHER_LDFLAGS":"$(inherited) -framework UIKit -framework QuartzCore -framework SwiftUI"})
-test_config = configurations("tests", {"PRODUCT_BUNDLE_IDENTIFIER":"dev.notkleja.NativeSheetHarnessUITests", "GENERATE_INFOPLIST_FILE":"YES", "TEST_TARGET_NAME":app_name, "LD_RUNPATH_SEARCH_PATHS":"$(inherited) @executable_path/Frameworks @loader_path/Frameworks"})
+revision = subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+test_config = configurations("tests", {"PRODUCT_BUNDLE_IDENTIFIER":"dev.notkleja.NativeSheetHarnessUITests", "GENERATE_INFOPLIST_FILE":"YES", "INFOPLIST_KEY_NativeSourceRevision":revision, "TEST_TARGET_NAME":app_name, "LD_RUNPATH_SEARCH_PATHS":"$(inherited) @executable_path/Frameworks @loader_path/Frameworks"})
 app_sources = add("app-sources","PBXSourcesBuildPhase",buildActionMask=2147483647,files=app_files,runOnlyForDeploymentPostprocessing=0)
 test_sources = add("test-sources","PBXSourcesBuildPhase",buildActionMask=2147483647,files=[test_file],runOnlyForDeploymentPostprocessing=0)
 app_frameworks = add("app-frameworks","PBXFrameworksBuildPhase",buildActionMask=2147483647,files=[],runOnlyForDeploymentPostprocessing=0)
