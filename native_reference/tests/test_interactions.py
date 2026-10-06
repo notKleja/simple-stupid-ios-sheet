@@ -2,11 +2,77 @@
 import unittest
 from pathlib import Path
 import sys
+import copy
+from test_evidence import fixture
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
 
 class InteractionAcceptanceTests(unittest.TestCase):
+    def cohort(self):
+        runs=[]
+        for trial in range(1,11):
+            rows=fixture(trial)
+            rows[0]['scenario_id']='native.nonmodal.medium'
+            rows[0]['configuration']['largest_undimmed']='medium'
+            rows[0]['environment'].update(size_classes={'horizontal':'compact','vertical':'regular'},status_bar={'hidden':False},keyboard={'visible':False,'frame':{'x':0,'y':0,'width':0,'height':0}})
+            rows[0]['provenance']={'attempt_id':f'attempt-{trial}','role':'training','native_source_revision':'a'*40}
+            rows=[r for r in rows if r['type']!='event']
+            for name,ms in [('present.requested',1),('present.completed',50)]:
+                rows.append({'schema_version':1,'type':'event','run_id':rows[0]['run_id'],'t_ns':ms*1000000,'name':name,'data':{}})
+            for i,phase in enumerate(('medium_initial','large','medium_return')):
+                before=i
+                for j,(name,data) in enumerate([
+                    ('background.probe.requested',{'phase':phase,'activation_before':before}),
+                    ('input.touch',{'phase':0}),
+                    ('background.control.activated',{'count':before+1}),
+                    ('background.probe.completed',{'phase':phase,'activation_after':before+1,'delivered_target_touch_events':2})]):
+                    rows.append({'schema_version':1,'type':'event','run_id':rows[0]['run_id'],'t_ns':(i*1000+100+j)*1000000,'name':name,'data':data})
+            rows.append({'schema_version':1,'type':'event','run_id':rows[0]['run_id'],'t_ns':6000000000,'name':'dismiss.completed','terminal':True,'data':{}})
+            rows.sort(key=lambda r:r['t_ns'])
+            for seq,row in enumerate(rows): row['seq']=seq
+            runs.append(rows)
+        return runs
+
+    def test_complete_interaction_cohort_is_validated_not_declared(self):
+        from interaction_validation import validate_interaction_cohort
+        self.assertEqual(len(validate_interaction_cohort(self.cohort())),10)
+
+    def test_cohort_rejects_missing_duplicate_mixed_or_unpinned_trials(self):
+        from interaction_validation import validate_interaction_cohort
+        cases=[self.cohort()[:1]]
+        for section,key,value in [('configuration','trial',1),('os','build','different'),('provenance','attempt_id','attempt-1'),('provenance','native_source_revision','unresolved')]:
+            runs=copy.deepcopy(self.cohort());runs[1][0][section][key]=value;cases.append(runs)
+        for runs in cases:
+            with self.subTest(): self.assertRaises(ValueError,validate_interaction_cohort,runs)
+
+    def test_error_missing_terminal_or_unexplained_null_invalidates_cohort(self):
+        from interaction_validation import validate_interaction_cohort
+        runs=self.cohort();runs[1][-1]['name']='run.error'
+        self.assertRaises(ValueError,validate_interaction_cohort,runs)
+        runs=self.cohort();runs[1].pop()
+        self.assertRaises(ValueError,validate_interaction_cohort,runs)
+        runs=self.cohort();next(r for r in runs[1] if r['type']=='frame')['state']['scroll_owner']=None
+        self.assertRaises(ValueError,validate_interaction_cohort,runs)
+
+    def test_incomplete_probe_phase_sequence_is_rejected(self):
+        from interaction_validation import validate_interaction_cohort
+        runs=self.cohort()
+        for row in runs[1]:
+            if row.get('data',{}).get('phase')=='medium_return': row['data']['phase']='large'
+        self.assertRaises(ValueError,validate_interaction_cohort,runs)
+
+    def test_counter_without_actual_control_activation_is_rejected(self):
+        from interaction_validation import nonmodal_outcomes
+        rows=[r for r in self.cohort()[0] if r.get('name')!='background.control.activated']
+        self.assertRaises(ValueError,nonmodal_outcomes,rows)
+
+    def test_incomplete_nested_runtime_metadata_is_rejected(self):
+        from interaction_validation import validate_interaction_cohort
+        for section,key in [('device','physical_size'),('environment','keyboard'),('environment','size_classes')]:
+            runs=self.cohort();del runs[1][0][section][key]
+            with self.subTest(key=key): self.assertRaises(ValueError,validate_interaction_cohort,runs)
+
     def test_alpha_without_delivered_touch_and_activation_cannot_prove_nonmodal(self):
         from interaction_validation import nonmodal_outcomes
         self.assertRaises(ValueError, nonmodal_outcomes, [{"type":"frame", "metrics":{"barrier.alpha":0}, "state":{"underlying_hit_test":True}}])

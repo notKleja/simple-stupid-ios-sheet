@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "scenario_id": "native.nonmodal.medium",
+  "status": "failed",
+  "requested_status": "accepted",
+  "issues": [
+    "exactly ten interaction artifacts required"
+  ],
+  "collection_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+  "entries": [],
+  "limitations": [
+    "Acceptance is scoped to actual control/scroll outcomes; no full dynamics or private ownership accepted",
+    "Pilot/source-uncommitted attempts cannot become accepted native timing evidence",
+    "All collected failures and unavailable states retained"
+  ]
+}
