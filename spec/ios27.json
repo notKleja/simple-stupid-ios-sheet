@@ -1,0 +1,10 @@
+{
+  "$schema": "sheet-profile.schema.json",
+  "schema_version": 1,
+  "platform": "iOS",
+  "major_version": 27,
+  "status": "unmeasured",
+  "measurements": {},
+  "unresolved": ["Runtime inventory and native trace collection pending"]
+}
+

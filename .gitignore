@@ -1,0 +1,14 @@
+.DS_Store
+.dart_tool/
+.idea/
+.metadata
+.packages
+.worktrees/
+build/
+coverage/
+DerivedData/
+Pods/
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+

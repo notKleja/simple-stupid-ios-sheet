@@ -1,0 +1,6 @@
+{
+  "$schema": "../measurement/schema/evidence.schema.json",
+  "schema_version": 1,
+  "entries": []
+}
+
