@@ -73,6 +73,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
     var trace: Trace?
     var finger: CGPoint?
     var fingerVelocity: Double?
+    var touchObserver: ((UITouch, CGPoint) -> Void)?
     private var prior: (CGPoint, TimeInterval)?
     override func sendEvent(_ event: UIEvent) {
         if let touch = event.allTouches?.first {
@@ -80,8 +81,10 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
             let dt = prior.map { touch.timestamp - $0.1 } ?? 0
             fingerVelocity = dt > 0 ? Double(point.y - prior!.0.y) / dt : nil
             finger = point
+            touchObserver?(touch, point)
             trace?.record("event", ["name": "input.touch", "data": [
                 "phase": touch.phase.rawValue, "x": point.x, "y": point.y,
+                "hit_view": touch.view?.accessibilityIdentifier ?? NSStringFromClass(type(of: touch.view ?? UIView())),
                 "velocity_y": fingerVelocity as Any? ?? NSNull(), "input_t_ns": Int64(touch.timestamp * 1e9)
             ]])
             prior = (point, touch.timestamp)
@@ -133,6 +136,9 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
     var firstVisibleRecorded = false
     var resolvedDetents: [UISheetPresentationController.Detent.Identifier: CGFloat] = [:]
     var definition = NativeScenario.definitions["native.medium_large.programmatic"]!
+    var interaction: InteractionProbe?
+    var trialOffset = 0
+    var strictTimers: [UUID: DispatchSourceTimer] = [:]
     override func loadView() { view = CalibrationView(title: "Native Sheet Reference\nOpaque calibration surface") }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -153,6 +159,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         if ProcessInfo.processInfo.environment["NATIVE_AUTORUN"] == "1" && !running {
             scenario = ProcessInfo.processInfo.environment["NATIVE_SCENARIO"] ?? scenario
             trials = Int(ProcessInfo.processInfo.environment["NATIVE_TRIALS"] ?? "10") ?? 10
+            trialOffset = Int(ProcessInfo.processInfo.environment["NATIVE_TRIAL_OFFSET"] ?? "0") ?? 0
             start()
         }
     }
@@ -179,11 +186,34 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
             rejected.fail("invalid_scenario", ["error": String(describing: error)])
             return
         }
-        trace = nil; running = true; trial = 0; next()
+        if definition.manual && interaction == nil {
+            interaction = InteractionProbe(self); interaction?.installPresenter()
+            probe.touchObserver = { [weak self] touch, point in self?.interaction?.observe(touch, point: point) }
+        }
+        trace = nil; running = true; trial = trialOffset; next()
     }
-    func after(_ seconds: Double, _ work: @escaping () -> Void) { DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: work) }
+    func after(_ seconds: Double, _ work: @escaping () -> Void) {
+        let caStart = CACurrentMediaTime()
+        let dispatchStart = DispatchTime.now().uptimeNanoseconds
+        let callback = {
+            if ProcessInfo.processInfo.environment["NATIVE_IO_AUDIT"] == "1" {
+                self.trace?.record("event", ["name": "scheduler.audit", "data": ["requested_ms": seconds*1000,
+                    "ca_elapsed_ms": (CACurrentMediaTime()-caStart)*1000,
+                    "dispatch_elapsed_ms": Double(DispatchTime.now().uptimeNanoseconds-dispatchStart)/1e6]])
+            }
+            work()
+        }
+        if ProcessInfo.processInfo.environment["NATIVE_STRICT_TIMERS"] == "1" {
+            let key = UUID()
+            let timer = DispatchSource.makeTimerSource(flags: .strict, queue: .main)
+            strictTimers[key] = timer
+            timer.schedule(deadline: .now()+seconds, leeway: .nanoseconds(0))
+            timer.setEventHandler { timer.cancel(); self.strictTimers[key] = nil; callback() }
+            timer.resume()
+        } else { DispatchQueue.main.asyncAfter(deadline: .now()+seconds, execute: callback) }
+    }
     func next() {
-        guard trial < trials else {
+        guard trial < trials + trialOffset else {
             running = false; trace?.event("batch.completed", ["trials": trials]); return
         }
         trial += 1
@@ -221,9 +251,11 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         config.delegate = self
         if definition.scrolling {
             let s = UIScrollView(frame: vc.view.bounds); s.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            s.accessibilityIdentifier = "sheet.scroll"
             let content = CalibrationView(title: "Long scroll\nKnown extent 2400 pt"); content.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 2400)
             s.addSubview(content); s.contentSize = content.bounds.size; vc.view.addSubview(s); scroll = s
         } else { scroll = nil }
+        if definition.manual { interaction?.installSheet(vc.view) }
         if definition.keyboard {
             let field = UITextField(frame: CGRect(x: 20, y: 150, width: 280, height: 50))
             field.borderStyle = .roundedRect; field.placeholder = "Keyboard reference"; vc.view.addSubview(field)
@@ -255,7 +287,10 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
                 "safe_area": insets(view.safeAreaInsets), "size_classes": ["horizontal": traitCollection.horizontalSizeClass.rawValue == 1 ? "compact" : "regular", "vertical": traitCollection.verticalSizeClass.rawValue == 1 ? "compact" : "regular"],
                 "status_bar": ["hidden": probe.windowScene?.statusBarManager?.isStatusBarHidden as Any? ?? NSNull()], "keyboard": ["visible": false, "frame": rect(keyboardFrame)],
                 "system_settings": ["reduce_motion": UIAccessibility.isReduceMotionEnabled, "voice_over": UIAccessibility.isVoiceOverRunning, "content_size_category": traitCollection.preferredContentSizeCategory.rawValue]],
-            "configuration": effectiveConfiguration])
+            "configuration": effectiveConfiguration,
+            "provenance": ["attempt_id": ProcessInfo.processInfo.environment["NATIVE_ATTEMPT_ID"] ?? UUID().uuidString,
+                "role": ProcessInfo.processInfo.environment["NATIVE_ROLE"] ?? "training",
+                "native_source_revision": ProcessInfo.processInfo.environment["NATIVE_SOURCE_REVISION"] ?? "working_tree_uncommitted"]])
         link?.invalidate(); link = CADisplayLink(target: self, selector: #selector(sample(_:))); link!.add(to: .main, forMode: .common)
         t.event("present.requested")
         present(vc, animated: true) {
@@ -280,6 +315,21 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
                 t.event("dismiss.completed", terminal: true); self.link?.invalidate(); self.sheet = nil
                 self.after(0.4) { self.next() }
             }
+        }
+    }
+    func requestInteractionDetent(_ id: UISheetPresentationController.Detent.Identifier) {
+        guard let config = sheet?.sheetPresentationController else { return }
+        target = canonicalDetentID(id.rawValue)
+        trace?.event("detent.requested", ["target": target!])
+        config.animateChanges { config.selectedDetentIdentifier = id }
+    }
+    func finishInteraction() {
+        guard let sheet, let trace else { return }
+        phase = "dismiss"; target = nil; trace.event("dismiss.requested")
+        sheet.dismiss(animated: true) {
+            trace.event("dismiss.completed", terminal: true)
+            self.link?.invalidate(); self.sheet = nil; self.running = false
+            self.interaction?.status.text = "Experiment complete"
         }
     }
     func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ controller: UISheetPresentationController) {
@@ -309,6 +359,13 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
             "background_alpha": layer.backgroundColor?.alpha as Any? ?? NSNull(), "masked_corners": layer.maskedCorners.rawValue,
             "mask_class": layer.mask.map { NSStringFromClass(type(of: $0)) } as Any? ?? NSNull(), "animations": animations,
             "background": layer.backgroundColor.map { UIColor(cgColor: $0).description } as Any? ?? NSNull(),
+            "gesture_recognizers": (view.gestureRecognizers ?? []).map { recognizer -> [String: Any] in
+                var value: [String: Any] = ["class": NSStringFromClass(type(of:recognizer)), "state": recognizer.state.rawValue, "enabled": recognizer.isEnabled, "touches": recognizer.numberOfTouches]
+                if let pan = recognizer as? UIPanGestureRecognizer {
+                    value["translation_y"] = pan.translation(in:window).y; value["velocity_y"] = pan.velocity(in:window).y
+                }
+                return value
+            },
             "transform": [layer.transform.m11, layer.transform.m12, layer.transform.m21, layer.transform.m22, layer.transform.m41, layer.transform.m42]]
     }
     @objc func sample(_ display: CADisplayLink) {
@@ -349,7 +406,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         probe.subviews.forEach { walk($0, 0) }
         trace.record("frame", ["metrics": metrics,
             "state": ["phase": phase, "selected_detent": canonicalDetentID(sheet.sheetPresentationController?.selectedDetentIdentifier?.rawValue) as Any? ?? NSNull(),
-                "target_detent": target as Any? ?? NSNull(), "gesture": probe.finger == nil ? "none" : "touch", "scroll_owner": NSNull(), "underlying_hit_test": NSNull()],
+                "target_detent": target as Any? ?? NSNull(), "gesture": probe.finger == nil ? "none" : "touch", "scroll_owner": NSNull(), "underlying_hit_test": interaction?.lastOutcome as Any? ?? NSNull()],
             "unavailable": ["sheet.radius": "Container scalar may not represent visible clipping shape; inspect raw layers",
                 "presenter.radius": "Root scalar does not identify wrapper clipping shape", "barrier.alpha": "Unclassified system layer", "underlying_hit_test": "Requires actual background touch",
                 "target_detent": "Dismissal has no configured detent target", "scroll_owner": "Native scroll arbitration instrumentation unavailable",
