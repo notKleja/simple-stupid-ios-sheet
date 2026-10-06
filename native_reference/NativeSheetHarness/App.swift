@@ -140,6 +140,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
     var trialOffset = 0
     var strictTimers: [UUID: DispatchSourceTimer] = [:]
     var priorScrollMotion: (Double, Double)?
+    var replayRequest: [String: Any] = [:]
     override func loadView() { view = CalibrationView(title: "Native Sheet Reference\nOpaque calibration surface") }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -151,7 +152,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), Unmanaged.passUnretained(self).toOpaque(), { _, observer, _, _, _ in
             guard let observer else { return }
             let harness = Unmanaged<Harness>.fromOpaque(observer).takeUnretainedValue()
-            DispatchQueue.main.async { harness.start() }
+            DispatchQueue.main.async { harness.startFromNotification() }
         }, "dev.notkleja.native-sheet.start" as CFString, nil, .deliverImmediately)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboard(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
@@ -165,6 +166,16 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         }
     }
     @objc func startDefault() { start() }
+    func startFromNotification() {
+        let request = FileManager.default.urls(for:.documentDirectory,in:.userDomainMask)[0].appendingPathComponent("interaction_request.json")
+        if let data = try? Data(contentsOf:request), let fields = try? JSONSerialization.jsonObject(with:data) as? [String:Any] {
+            replayRequest = fields
+            scenario = fields["scenario_id"] as? String ?? "invalid_missing_scenario"
+            trials = fields["trials"] as? Int ?? 1
+            trialOffset = (fields["trial"] as? Int ?? 1)-1
+        }
+        start()
+    }
     @objc func keyboard(_ note: Notification) {
         keyboardFrame = note.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect ?? .zero
         trace?.event("keyboard.frame", ["frame": rect(keyboardFrame)])
@@ -290,9 +301,9 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
                 "status_bar": ["hidden": probe.windowScene?.statusBarManager?.isStatusBarHidden as Any? ?? NSNull()], "keyboard": ["visible": false, "frame": rect(keyboardFrame)],
                 "system_settings": ["reduce_motion": UIAccessibility.isReduceMotionEnabled, "voice_over": UIAccessibility.isVoiceOverRunning, "content_size_category": traitCollection.preferredContentSizeCategory.rawValue]],
             "configuration": effectiveConfiguration,
-            "provenance": ["attempt_id": ProcessInfo.processInfo.environment["NATIVE_ATTEMPT_ID"] ?? UUID().uuidString,
-                "role": ProcessInfo.processInfo.environment["NATIVE_ROLE"] ?? "training",
-                "native_source_revision": ProcessInfo.processInfo.environment["NATIVE_SOURCE_REVISION"] ?? "working_tree_uncommitted"]])
+            "provenance": ["attempt_id": replayRequest["attempt_id"] as? String ?? ProcessInfo.processInfo.environment["NATIVE_ATTEMPT_ID"] ?? UUID().uuidString,
+                "role": replayRequest["role"] as? String ?? ProcessInfo.processInfo.environment["NATIVE_ROLE"] ?? "training",
+                "native_source_revision": replayRequest["source_revision"] as? String ?? ProcessInfo.processInfo.environment["NATIVE_SOURCE_REVISION"] ?? "working_tree_uncommitted"]])
         link?.invalidate(); link = CADisplayLink(target: self, selector: #selector(sample(_:))); link!.add(to: .main, forMode: .common)
         let replayOrigin = DispatchTime.now()
         t.event("present.requested")
