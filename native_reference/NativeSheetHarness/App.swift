@@ -459,6 +459,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
 @MainActor final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     let harness = Harness()
+    private var launchMode: NativeLaunchMode?
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options: UIScene.ConnectionOptions) {
         guard let ws = scene as? UIWindowScene else { return }
         let w = ProbeWindow(windowScene: ws)
@@ -466,12 +467,22 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
            let rawStart = ProcessInfo.processInfo.environment["SHEET_DEMO_START_MS"],
            let start = Int(rawStart),
            let timeline = try? SynchronizedDemoTimeline.loadFromBundle() {
+            launchMode = .synchronizedDemo
             w.rootViewController = SynchronizedNativeDemoController(timeline: timeline, startEpochMs: start)
+        } else if ProcessInfo.processInfo.environment["NATIVE_SWIFTUI"] == "1" {
+            launchMode = .swiftUI
+            w.rootViewController = UIHostingController(rootView: SwiftUIReference())
         } else {
-            w.rootViewController = ProcessInfo.processInfo.environment["NATIVE_SWIFTUI"] == "1" ? UIHostingController(rootView: SwiftUIReference()) : harness
+            launchMode = .referenceHarness
+            w.rootViewController = harness
         }
         w.makeKeyAndVisible(); window = w
-        if let url = options.urlContexts.first?.url { DispatchQueue.main.async { self.harness.open(url) } }
+        if let url = options.urlContexts.first?.url { DispatchQueue.main.async { self.dispatchReferenceURL(url) } }
     }
-    func scene(_ scene: UIScene, openURLContexts urls: Set<UIOpenURLContext>) { if let url = urls.first?.url { harness.open(url) } }
+    func scene(_ scene: UIScene, openURLContexts urls: Set<UIOpenURLContext>) {
+        if let url = urls.first?.url { dispatchReferenceURL(url) }
+    }
+    private func dispatchReferenceURL(_ url: URL) {
+        launchMode?.dispatchReferenceURL(url) { harness.open($0) }
+    }
 }

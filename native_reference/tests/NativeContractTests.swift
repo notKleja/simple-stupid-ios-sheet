@@ -30,6 +30,25 @@ import Foundation
         precondition(Set(required) == Set(config.keys), "Serialize complete effective scenario configuration")
         do { _ = try NativeScenario.resolve("native.typo.scroll", major: 27); fatalError("Unknown scenario silently accepted") } catch {}
         do { _ = try NativeScenario.resolve("native.form.placement.leading", major: 26); fatalError("Unavailable placement silently accepted") } catch {}
+        let referenceURL = URL(string: "nativesheet://run?scenario=native.medium_large.programmatic&trials=1")!
+        for (mode, expectedFiles) in [(NativeLaunchMode.synchronizedDemo, 0), (.swiftUI, 0), (.referenceHarness, 1)] {
+            let modeDirectory = directory.appendingPathComponent(mode.rawValue)
+            try FileManager.default.createDirectory(at: modeDirectory, withIntermediateDirectories: true)
+            mode.dispatchReferenceURL(referenceURL) { received in
+                let recording = Trace(scenario: "test.url", directory: modeDirectory, clock: { 1 })
+                recording.record("session", ["requested_url": received.absoluteString])
+            }
+            let files = try FileManager.default.contentsOfDirectory(at: modeDirectory, includingPropertiesForKeys: nil)
+            guard files.count == expectedFiles else {
+                print("Launch-mode contract FAIL: \(mode.rawValue) created \(files.count) reference trace(s); expected \(expectedFiles)")
+                exit(1)
+            }
+            if mode == .referenceHarness {
+                let row = try JSONSerialization.jsonObject(with: Data(contentsOf: files[0])) as! [String: Any]
+                precondition(row["requested_url"] as? String == referenceURL.absoluteString, "Reference URL must remain unchanged")
+            }
+        }
+        print("Launch-mode contract PASS: demo/SwiftUI create no reference traces; reference harness receives unchanged URL")
         print("Native contract checks PASS: serialization terminal/sequence, null reasons, canonical IDs, scenario validation/configuration")
     }
 }

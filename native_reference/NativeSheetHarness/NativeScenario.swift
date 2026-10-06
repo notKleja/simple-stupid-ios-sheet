@@ -1,5 +1,15 @@
 import Foundation
 
+/// The selected scene root owns whether reference URL replay may run.
+enum NativeLaunchMode: String {
+    case referenceHarness, swiftUI, synchronizedDemo
+
+    func dispatchReferenceURL(_ url: URL, open: (URL) -> Void) {
+        guard self == .referenceHarness else { return }
+        open(url)
+    }
+}
+
 func canonicalDetentID(_ raw: String?) -> String? {
     switch raw {
     case "com.apple.UIKit.medium": return "medium"
