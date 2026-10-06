@@ -12,7 +12,7 @@ Pods/
 *.xcworkspace/xcuserdata/
 *.xcodeproj/xcuserdata/
 work/
-test/.snaptest/
+.snaptest/
 graphify-out/cache/
 graphify-out/[0-9]*/
 graphify-out/.graphify_root
