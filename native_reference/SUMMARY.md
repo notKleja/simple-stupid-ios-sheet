@@ -10,7 +10,9 @@ For the measured portrait page recipe `[fixed320, medium, large]`, system
 medium resolves to `0.56 * maximumDetentValue`, not half the maximum. Large
 resolves to the maximum. At medium the whole page sheet is uniformly scaled
 to `(screenWidth-16)/screenWidth`, with8pt side and bottom spacing. Resting
-visible medium height equals `(resolvedMedium + bottomSafeArea) * scale`.
+visible medium height equals
+`round((resolvedMedium + bottomSafeArea) * displayScale) / displayScale * scale`.
+For the402pt phone: `round((435.68+34)*3)/3*(386/402)=450.9734660033168`.
 At large it is full width, bottom spacing0 and visible height
 `resolvedLarge + bottomSafeArea`. This is a measured configuration, not an
 OS-wide rule for every sheet type.
@@ -59,6 +61,27 @@ handoff, keyboard/stacking/interruptibility and accessibility behavior remain
 unmeasured. SwiftUI reference code builds but has no accepted runtime cohort.
 System settings are captured in the newest form traces; older cohorts lack
 that metadata. No full native parity or matrix completion is claimed.
+
+## Review fix round1
+
+Recorder v2 emits canonical medium/large/custom IDs with raw UIKit values kept
+separately, validates explicit scenario definitions, and records the complete
+effective UIKit configuration. All null metric/state fields have reasons.
+Serialization failure writes a terminal error without a sequence hole and
+invalidates further recording. CONTRACT_V2.md defines the version boundary.
+
+Both evidence tools enforce exactly ten files, unique run/trial IDs,
+homogeneous identity/configuration/environment, ordered complete boundaries,
+and fully observed/stable400ms resting windows. The prior27 automatic form
+cohort failed a41ms resting-window gap; it remains archived and is excluded
+from accepted profiles. Fresh v2 phone/form cohorts pass these gates.
+Integrity:90 accepted traces, nine profiles,50 explicit non-resting geometry
+gaps. Full trajectory/native parity remains unresolved.
+
+Archived v1 cohorts require native-legacy-v1 explicitly; original bytes/hashes
+are unchanged, null explanations identify legacy instrumentation gaps, and
+missing effective configuration flags are not inferred. Fresh v2 traces are
+required for strict pairing with the complete current configuration.
 
 ## Failed hypotheses worth knowing
 

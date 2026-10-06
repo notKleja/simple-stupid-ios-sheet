@@ -22,9 +22,10 @@ artifacts/native/<cohort>` collects ten complete trials and records the
 simulator runtime build from simctl, rather than the host kernel build.
 The simulator must already be booted. `NATIVE_SWIFTUI=1` selects the standalone
 SwiftUI surface. `NATIVE_SCENARIO` and `NATIVE_TRIALS` select UIKit experiments.
-Scenario substrings currently expose custom initial selection, nonmodal medium,
-dismissal disabled, scroll/content-first, keyboard, form/page sizing, compact
-edge attachment and iOS27 leading/trailing placement. Only the explicitly
+Explicit NativeScenario definitions expose custom initial selection, nonmodal
+medium, dismissal disabled, scroll/content-first, keyboard, form/page sizing,
+compact edge attachment and iOS27 leading/trailing placement. Unknown IDs fail;
+there is no substring/default fallthrough. Only the explicitly
 archived measured recipes carry evidence. Drag/scroll/keyboard scenarios stay
 open for external input rather than executing the timed recipe.
 

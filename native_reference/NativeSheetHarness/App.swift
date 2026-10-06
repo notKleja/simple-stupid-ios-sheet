@@ -68,32 +68,6 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
     return samples
 }
 
-@MainActor final class Trace {
-    let id = UUID().uuidString
-    private var seq = 0
-    private let handle: FileHandle
-    let path: URL
-    init(scenario: String) {
-        let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        path = dir.appendingPathComponent("\(scenario)-\(id).jsonl")
-        FileManager.default.createFile(atPath: path.path, contents: nil)
-        handle = try! FileHandle(forWritingTo: path)
-    }
-    func record(_ type: String, _ fields: [String: Any], time: Double = CACurrentMediaTime()) {
-        var row = fields
-        row.merge(["schema_version": 1, "type": type, "run_id": id,
-                   "seq": seq, "t_ns": Int64(time * 1_000_000_000)]) { _, n in n }
-        seq += 1
-        if let data = try? JSONSerialization.data(withJSONObject: row, options: [.sortedKeys]) {
-            handle.write(data); handle.write(Data([10]))
-        }
-    }
-    func event(_ name: String, _ data: [String: Any] = [:]) {
-        record("event", ["name": name, "data": data])
-        try? handle.synchronize()
-    }
-}
-
 /// No gesture recognizer is added: record actual delivered touches without changing arbitration.
 @MainActor final class ProbeWindow: UIWindow {
     var trace: Trace?
@@ -158,6 +132,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
     var running = false
     var firstVisibleRecorded = false
     var resolvedDetents: [UISheetPresentationController.Detent.Identifier: CGFloat] = [:]
+    var definition = NativeScenario.definitions["native.medium_large.programmatic"]!
     override func loadView() { view = CalibrationView(title: "Native Sheet Reference\nOpaque calibration surface") }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -193,16 +168,29 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         trials = Int(parts?.queryItems?.first(where: { $0.name == "trials" })?.value ?? "10") ?? 10
         start()
     }
-    func start() { guard !running else { return }; running = true; trial = 0; next() }
+    func start() {
+        guard !running else { return }
+        do {
+            definition = try NativeScenario.resolve(scenario, major: Int(UIDevice.current.systemVersion.split(separator: ".")[0]) ?? 0)
+            guard (1...100).contains(trials) else { throw ScenarioError.invalid("Trial count must be 1...100") }
+        } catch {
+            let rejected = Trace(scenario: scenario, clock: CACurrentMediaTime)
+            rejected.record("session", ["scenario_id": scenario, "configuration": ["status": "invalid_scenario"]])
+            rejected.fail("invalid_scenario", ["error": String(describing: error)])
+            return
+        }
+        trace = nil; running = true; trial = 0; next()
+    }
     func after(_ seconds: Double, _ work: @escaping () -> Void) { DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: work) }
     func next() {
         guard trial < trials else {
             running = false; trace?.event("batch.completed", ["trials": trials]); return
         }
         trial += 1
-        let t = Trace(scenario: scenario); trace = t; probe.trace = t
+        guard trace?.invalidated != true else { running = false; return }
+        let t = Trace(scenario: scenario, clock: CACurrentMediaTime); trace = t; probe.trace = t
         let vc = UIViewController(); vc.view = CalibrationView(title: "\(scenario)\nTrial \(trial)/\(trials)")
-        vc.modalPresentationStyle = scenario.contains("form") ? .formSheet : .pageSheet
+        vc.modalPresentationStyle = definition.style == "form_sheet" ? .formSheet : .pageSheet
         vc.preferredContentSize = CGSize(width: 320, height: 320)
         guard let config = vc.sheetPresentationController else { fatalError("Missing native sheet") }
         let fixed = UISheetPresentationController.Detent.custom(identifier: .init("fixed320")) { context in
@@ -217,31 +205,45 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         // A custom resolver probes native medium/large resolvedValue without changing those detents.
         // The measured iOS26 regular-width 320pt form resolves medium below320.
         // Native requires ascending detents; do not reuse the page-sheet order.
-        let narrow26Form = scenario.contains("form") && UIDevice.current.systemVersion.hasPrefix("26.") && traitCollection.horizontalSizeClass == .regular
+        let narrow26Form = definition.style == "form_sheet" && UIDevice.current.systemVersion.hasPrefix("26.") && traitCollection.horizontalSizeClass == .regular
         config.detents = narrow26Form ? [.medium(), fixed, .large()] : [fixed, .medium(), .large()]
-        config.selectedDetentIdentifier = scenario.contains("custom") ? .init("fixed320") : (scenario.contains("large.basic") ? .large : .medium)
+        config.selectedDetentIdentifier = definition.initial == "fixed320" ? .init("fixed320") : (definition.initial == "large" ? .large : .medium)
+        target = definition.initial
         config.prefersGrabberVisible = true
-        config.prefersPageSizing = !scenario.contains("form")
-        config.prefersEdgeAttachedInCompactHeight = scenario.contains("edge")
-        config.widthFollowsPreferredContentSizeWhenEdgeAttached = scenario.contains("width")
-        config.prefersScrollingExpandsWhenScrolledToEdge = !scenario.contains("content_first")
-        config.largestUndimmedDetentIdentifier = scenario.contains("nonmodal") ? .medium : nil
-        vc.isModalInPresentation = scenario.contains("disabled")
-        if #available(iOS 27.0, *), scenario.contains("placement.leading") { config.preferredPlacement = .leading }
-        if #available(iOS 27.0, *), scenario.contains("placement.trailing") { config.preferredPlacement = .trailing }
+        config.prefersPageSizing = definition.style == "page_sheet"
+        config.prefersEdgeAttachedInCompactHeight = definition.compactEdge
+        config.widthFollowsPreferredContentSizeWhenEdgeAttached = definition.preferredWidth
+        config.prefersScrollingExpandsWhenScrolledToEdge = definition.expandsOnScroll
+        config.largestUndimmedDetentIdentifier = definition.undimmed ? .medium : nil
+        vc.isModalInPresentation = definition.dismissalLocked
+        if #available(iOS 27.0, *), definition.placement == "leading" { config.preferredPlacement = .leading }
+        if #available(iOS 27.0, *), definition.placement == "trailing" { config.preferredPlacement = .trailing }
         config.delegate = self
-        if scenario.contains("scroll") {
+        if definition.scrolling {
             let s = UIScrollView(frame: vc.view.bounds); s.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             let content = CalibrationView(title: "Long scroll\nKnown extent 2400 pt"); content.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 2400)
             s.addSubview(content); s.contentSize = content.bounds.size; vc.view.addSubview(s); scroll = s
         } else { scroll = nil }
-        if scenario.contains("keyboard") {
+        if definition.keyboard {
             let field = UITextField(frame: CGRect(x: 20, y: 150, width: 280, height: 50))
             field.borderStyle = .roundedRect; field.placeholder = "Keyboard reference"; vc.view.addSubview(field)
             after(1.5) { field.becomeFirstResponder() }
         }
         sheet = vc; phase = "present"; previousY = nil; firstVisibleRecorded = false
         let screen = probe.screen
+        var effectiveConfiguration = definition.configuration(trial: trial, detents: config.detents.map { canonicalDetentID($0.identifier.rawValue)! })
+        effectiveConfiguration["presentation_style"] = vc.modalPresentationStyle == .formSheet ? "form_sheet" : "page_sheet"
+        effectiveConfiguration["preferred_content_size"] = ["width": vc.preferredContentSize.width, "height": vc.preferredContentSize.height]
+        effectiveConfiguration["page_sizing"] = config.prefersPageSizing
+        effectiveConfiguration["edge_attached_in_compact_height"] = config.prefersEdgeAttachedInCompactHeight
+        effectiveConfiguration["width_follows_preferred_content_size"] = config.widthFollowsPreferredContentSizeWhenEdgeAttached
+        effectiveConfiguration["scroll_expansion"] = config.prefersScrollingExpandsWhenScrolledToEdge
+        effectiveConfiguration["modal_in_presentation"] = vc.isModalInPresentation
+        effectiveConfiguration["largest_undimmed"] = canonicalDetentID(config.largestUndimmedDetentIdentifier?.rawValue) as Any? ?? NSNull()
+        effectiveConfiguration["grabber"] = config.prefersGrabberVisible
+        if #available(iOS 27.0, *) {
+            effectiveConfiguration["placement"] = config.preferredPlacement == .leading ? "leading" : (config.preferredPlacement == .trailing ? "trailing" : (config.preferredPlacement == .center ? "center" : "automatic"))
+        }
         t.record("session", ["scenario_id": scenario, "implementation": "native", "evidence_kind": "runtime",
             "os": ["version": UIDevice.current.systemVersion, "build": osBuild()],
             "device": ["model": deviceModel(),
@@ -253,8 +255,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
                 "safe_area": insets(view.safeAreaInsets), "size_classes": ["horizontal": traitCollection.horizontalSizeClass.rawValue == 1 ? "compact" : "regular", "vertical": traitCollection.verticalSizeClass.rawValue == 1 ? "compact" : "regular"],
                 "status_bar": ["hidden": probe.windowScene?.statusBarManager?.isStatusBarHidden as Any? ?? NSNull()], "keyboard": ["visible": false, "frame": rect(keyboardFrame)],
                 "system_settings": ["reduce_motion": UIAccessibility.isReduceMotionEnabled, "voice_over": UIAccessibility.isVoiceOverRunning, "content_size_category": traitCollection.preferredContentSizeCategory.rawValue]],
-            "configuration": ["trial": trial, "detents": narrow26Form ? ["medium", "fixed320", "large"] : ["fixed320", "medium", "large"], "surface": "opaque.white", "grabber": true, "page_sizing": config.prefersPageSizing,
-                "modal_in_presentation": vc.isModalInPresentation, "largest_undimmed": config.largestUndimmedDetentIdentifier?.rawValue as Any? ?? NSNull()]])
+            "configuration": effectiveConfiguration])
         link?.invalidate(); link = CADisplayLink(target: self, selector: #selector(sample(_:))); link!.add(to: .main, forMode: .common)
         t.event("present.requested")
         present(vc, animated: true) {
@@ -262,7 +263,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
             self.phase = "idle"
         }
         // Manual gesture scenarios intentionally stay open for external input replay.
-        guard !scenario.contains("drag") && !scenario.contains("scroll") && !scenario.contains("keyboard") else { return }
+        guard !definition.manual else { return }
         after(1.5) {
             self.target = "large"; self.phase = "detent"
             t.event("detent.requested", ["target": "large"])
@@ -274,15 +275,17 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
             config.animateChanges { config.selectedDetentIdentifier = .medium }
         }
         after(4.5) {
-            self.phase = "dismiss"; t.event("dismiss.requested")
+            self.phase = "dismiss"; self.target = nil; t.event("dismiss.requested")
             vc.dismiss(animated: true) {
-                t.event("dismiss.completed"); self.link?.invalidate(); self.sheet = nil
+                t.event("dismiss.completed", terminal: true); self.link?.invalidate(); self.sheet = nil
                 self.after(0.4) { self.next() }
             }
         }
     }
     func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ controller: UISheetPresentationController) {
-        trace?.event("detent.changed", ["selected": controller.selectedDetentIdentifier?.rawValue as Any? ?? NSNull()])
+        let raw = controller.selectedDetentIdentifier?.rawValue
+        target = canonicalDetentID(raw)
+        trace?.record("event", ["name": "detent.changed", "data": ["selected": canonicalDetentID(raw) as Any? ?? NSNull()], "raw_uikit_identifier": raw as Any? ?? NSNull()])
     }
     func presentationControllerDidDismiss(_ controller: UIPresentationController) {
         trace?.event("dismiss.interactive_completed"); link?.invalidate(); sheet = nil; running = false
@@ -345,11 +348,14 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         }
         probe.subviews.forEach { walk($0, 0) }
         trace.record("frame", ["metrics": metrics,
-            "state": ["phase": phase, "selected_detent": sheet.sheetPresentationController?.selectedDetentIdentifier?.rawValue as Any? ?? NSNull(),
+            "state": ["phase": phase, "selected_detent": canonicalDetentID(sheet.sheetPresentationController?.selectedDetentIdentifier?.rawValue) as Any? ?? NSNull(),
                 "target_detent": target as Any? ?? NSNull(), "gesture": probe.finger == nil ? "none" : "touch", "scroll_owner": NSNull(), "underlying_hit_test": NSNull()],
             "unavailable": ["sheet.radius": "Container scalar may not represent visible clipping shape; inspect raw layers",
                 "presenter.radius": "Root scalar does not identify wrapper clipping shape", "barrier.alpha": "Unclassified system layer", "underlying_hit_test": "Requires actual background touch",
+                "target_detent": "Dismissal has no configured detent target", "scroll_owner": "Native scroll arbitration instrumentation unavailable",
+                "sheet.detent_height": "Resolver context has not supplied the selected detent value", "sheet.velocity_y": "No consecutive valid geometry samples",
                 "finger.y": "No active delivered touch when null", "finger.velocity_y": "No consecutive delivered touch samples when null", "scroll.offset": "No scroll view in this scenario when null"],
+            "raw_uikit_identifier": ["selected_detent": sheet.sheetPresentationController?.selectedDetentIdentifier?.rawValue as Any? ?? NSNull()],
             "display": ["timestamp": display.timestamp, "target_timestamp": display.targetTimestamp, "duration": display.duration],
             "geometry_source": "coherent window presentation tree with stable model ancestry", "coherent_layer_count": samples.count,
             "legacy_mixed_tree_sheet_frame": rect(legacy), "raw_layers": layers, "keyboard_frame": rect(keyboardFrame)], time: t)
