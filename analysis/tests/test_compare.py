@@ -1,5 +1,6 @@
 """Synthetic mathematics fixtures only; no fixture is a native measurement."""
 import json
+import copy
 from pathlib import Path
 import subprocess
 import sys
@@ -15,7 +16,7 @@ def trace(implementation="native", offset=0, values=(0, 10, 20), times=(0, 100, 
         "implementation": implementation, "evidence_kind": "synthetic",
         "os": {"version": "26.4.1", "build": "SYNTHETIC"},
         "device": {"model": "SYNTHETIC", "logical_size": {"width": 400, "height": 800},
-                   "physical_size": {"width": 1200, "height": 2400}, "scale": 3, "refresh_hz": 60},
+                   "physical_size": {"width": 1200, "height": 2400}, "scale": 3, "refresh_hz": 60, "runtime_kind": "synthetic"},
         "environment": {"orientation": "portrait", "safe_area": {"top": 40, "left": 0, "bottom": 30, "right": 0},
                         "size_classes": {"horizontal": "compact", "vertical": "regular"},
                         "status_bar": {"visible": True}, "keyboard": {"visible": False, "frame": None}},
@@ -34,6 +35,26 @@ def config(**extra):
     return {"alignment": {"event": "gesture.ended", "occurrence": 0},
             "metrics": {"sheet.y": {"rms": 1, "max": 2, "final": .25}},
             "states": ["target_detent"], "max_gap_frames": 12, **extra}
+
+
+def full_config():
+    settings = json.loads((ROOT / "measurement/profiles/full.json").read_text())
+    settings["alignment"] = {"event": "gesture.ended", "occurrence": 0}
+    return settings
+
+
+def full_trace(implementation="native"):
+    """Synthetic provenance-marker simulation for eligibility-gate tests only."""
+    records = trace(implementation, times=(0, 16, 32))
+    records[0]["evidence_kind"] = "runtime"
+    records[0]["device"]["runtime_kind"] = "simulator"
+    settings = full_config()
+    for record in records:
+        if record["type"] == "frame":
+            record["metrics"].update({name: 1 if "scale" in name else 0 for name in settings["metrics"]})
+            record["state"].update({"selected_detent": "large", "target_detent": "large", "gesture": "none",
+                                    "scroll_owner": "sheet", "underlying_hit_test": "blocked"})
+    return records
 
 
 class ComparisonTests(unittest.TestCase):
@@ -183,6 +204,7 @@ class ComparisonTests(unittest.TestCase):
         native, candidate = trace(), trace("flutter")
         for records in (native, candidate):
             records[0]["evidence_kind"] = "runtime"
+            records[0]["device"]["runtime_kind"] = "simulator"
             records[0]["os"]["build"] = None
         self.assertEqual(self.run_compare(native, candidate)["verdict"], "FAIL")
 
@@ -218,6 +240,7 @@ class ComparisonTests(unittest.TestCase):
         native, candidate = trace(), trace("flutter")
         for records in (native, candidate):
             records[0]["evidence_kind"] = "runtime"
+            records[0]["device"]["runtime_kind"] = "simulator"
         report = self.run_compare(native, candidate)
         self.assertEqual(report["verdict"], "PASS")
         self.assertFalse(report["native_parity_eligible"])
@@ -251,6 +274,84 @@ class ComparisonTests(unittest.TestCase):
         self.assertEqual(report["verdict"], "PASS")
         self.assertEqual(report["metrics"]["sheet.y"]["samples"], 3)
         self.assertEqual(report["window"]["native_frames_outside"], 2)
+
+    def test_candidate_spike_between_native_samples_counts_in_max_error(self):
+        native = trace(values=(0, 0, 0), times=(0, 16, 32))
+        candidate = trace("flutter", values=(0, 100, 0, 0), times=(0, 8, 16, 32))
+        report = self.run_compare(native, candidate)
+        self.assertEqual(report["verdict"], "FAIL")
+        self.assertEqual(report["metrics"]["sheet.y"]["max"], 100)
+        self.assertEqual(report["metrics"]["sheet.y"]["samples"], 4)
+        self.assertEqual(report["comparison_grid"], "union_of_observed_timestamps")
+
+    def test_union_grid_velocity_counts_short_candidate_excursion(self):
+        native = trace(values=(0, 0, 0), times=(0, 16, 32))
+        candidate = trace("flutter", values=(0, 100, 0, 0), times=(0, 8, 16, 32))
+        report = self.run_compare(native, candidate)
+        self.assertEqual(report["metrics"]["sheet.y"]["velocity_max"], 12500)
+
+    def test_environment_change_cannot_be_hidden_by_auxiliary_policy(self):
+        native, candidate = full_trace(), full_trace("flutter")
+        for records in (native, candidate):
+            records.append({"schema_version": 1, "type": "event", "run_id": records[0]["run_id"], "seq": 5,
+                            "t_ns": 32_000_000, "name": "environment.changed", "data": {"orientation": "landscape"}})
+        settings = full_config()
+        settings["auxiliary_events"] = ["environment.changed"]
+        report = self.run_compare(native, candidate, settings)
+        self.assertEqual(report["verdict"], "FAIL")
+        self.assertIn("environment", " ".join(report["issues"]))
+
+    def test_empty_semantic_policy_cannot_hide_different_requested_targets(self):
+        native, candidate = full_trace(), full_trace("flutter")
+        for records, target in ((native, "large"), (candidate, "medium")):
+            records.append({"schema_version": 1, "type": "event", "run_id": records[0]["run_id"], "seq": 5,
+                            "t_ns": 32_000_000, "name": "detent.requested", "data": {"target": target}})
+        settings = full_config()
+        settings["exact_event_data"] = {}
+        report = self.run_compare(native, candidate, settings)
+        self.assertEqual(report["verdict"], "FAIL")
+        self.assertFalse(report["native_parity_eligible"])
+
+    def test_full_profile_requires_baseline_semantic_field_policy(self):
+        settings = full_config()
+        settings["exact_event_data"] = {}
+        report = self.run_compare(full_trace(), full_trace("flutter"), settings)
+        self.assertFalse(report["native_parity_eligible"])
+        self.assertIn("event_data.detent.requested.target", report["full_acceptance_missing"])
+
+    def test_only_approved_probe_markers_can_be_auxiliary(self):
+        settings = full_config()
+        settings["auxiliary_events"] = ["present.completed"]
+        self.assertEqual(self.run_compare(full_trace(), full_trace("flutter"), settings)["verdict"], "FAIL")
+
+    def test_matching_malformed_nested_metadata_is_rejected(self):
+        mutations = [
+            ("device", "scale", 0), ("device", "scale", True),
+            ("device", "logical_size", {"width": "bad", "height": -4}),
+            ("device", "physical_size", {"width": 1200, "height": 0}),
+            ("device", "model", 12), ("os", "version", 26), ("os", "build", 123),
+            ("environment", "safe_area", {"top": "40", "left": 0, "bottom": 30, "right": 0}),
+            ("environment", "size_classes", {"horizontal": "tiny", "vertical": "regular"}),
+            ("environment", "status_bar", "visible"),
+            ("environment", "keyboard", {"visible": "false", "frame": None}),
+        ]
+        for section, key, value in mutations:
+            with self.subTest(section=section, key=key, value=value):
+                native, candidate = trace(), trace("flutter")
+                for records in (native, candidate):
+                    records[0][section][key] = copy.deepcopy(value)
+                self.assertEqual(self.run_compare(native, candidate)["verdict"], "FAIL")
+
+    def test_runtime_kind_is_explicit_and_cannot_claim_synthetic_as_runtime(self):
+        for kind in (None, "unknown", "synthetic"):
+            with self.subTest(kind=kind):
+                native, candidate = full_trace(), full_trace("flutter")
+                for records in (native, candidate):
+                    if kind is None:
+                        records[0]["device"].pop("runtime_kind")
+                    else:
+                        records[0]["device"]["runtime_kind"] = kind
+                self.assertEqual(self.run_compare(native, candidate, full_config())["verdict"], "FAIL")
 
 
 if __name__ == "__main__":

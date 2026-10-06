@@ -9,6 +9,9 @@ import math
 from pathlib import Path
 import statistics
 import sys
+from functools import lru_cache
+
+APPROVED_AUXILIARY_EVENTS = frozenset({"detent.resolved", "batch.completed"})
 
 
 class TraceError(ValueError):
@@ -16,7 +19,12 @@ class TraceError(ValueError):
 
 
 def finite(value):
-    return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+    if not isinstance(value, (int, float)) or isinstance(value, bool):
+        return False
+    try:
+        return math.isfinite(value)
+    except OverflowError:
+        return False
 
 
 def require(condition, message):
@@ -24,10 +32,74 @@ def require(condition, message):
         raise TraceError(message)
 
 
+@lru_cache(maxsize=1)
+def trace_schema():
+    return json.loads((Path(__file__).resolve().parents[1] / "measurement/schema/trace.schema.json").read_text())
+
+
+def schema_equal(value, expected):
+    # JSON booleans are distinct from numbers even though Python True == 1.
+    return value == expected and (not isinstance(value, bool) and not isinstance(expected, bool)
+                                 or type(value) is type(expected))
+
+
+def validate_schema(value, schema, path="$", root=None):
+    """Validate the declarative subset used by our fixed v1 schema, not arbitrary schemas."""
+    root = schema if root is None else root
+    if "$ref" in schema:
+        reference = schema["$ref"]
+        require(reference.startswith("#/"), "only local trace schema references supported")
+        target = root
+        for key in reference[2:].split("/"):
+            target = target[key]
+        return validate_schema(value, target, path, root)
+    if "const" in schema:
+        require(schema_equal(value, schema["const"]), f"{path}: invalid constant")
+    if "enum" in schema:
+        require(any(schema_equal(value, choice) for choice in schema["enum"]), f"{path}: invalid enum value")
+    if "type" in schema:
+        kinds = schema["type"] if isinstance(schema["type"], list) else [schema["type"]]
+        matches = {"object": isinstance(value, dict), "array": isinstance(value, list),
+                   "string": isinstance(value, str), "number": finite(value),
+                   "integer": isinstance(value, int) and not isinstance(value, bool),
+                   "boolean": isinstance(value, bool), "null": value is None}
+        require(any(matches.get(kind, False) for kind in kinds), f"{path}: expected {kinds}")
+    if isinstance(value, dict):
+        for key in schema.get("required", []):
+            require(key in value, f"{path}.{key}: required field missing")
+        properties = schema.get("properties", {})
+        for key, item in value.items():
+            if key in properties:
+                validate_schema(item, properties[key], path + "." + key, root)
+            elif isinstance(schema.get("additionalProperties"), dict):
+                validate_schema(item, schema["additionalProperties"], path + "." + key, root)
+            elif schema.get("additionalProperties") is False:
+                raise TraceError(f"{path}.{key}: additional field not allowed")
+    if isinstance(value, str) and "minLength" in schema:
+        require(len(value) >= schema["minLength"], f"{path}: string too short")
+    if finite(value):
+        if "minimum" in schema:
+            require(value >= schema["minimum"], f"{path}: below minimum")
+        if "exclusiveMinimum" in schema:
+            require(value > schema["exclusiveMinimum"], f"{path}: must exceed minimum")
+    for child in schema.get("allOf", []):
+        validate_schema(value, child, path, root)
+    if "if" in schema:
+        try:
+            validate_schema(value, schema["if"], path, root)
+        except TraceError:
+            branch = schema.get("else")
+        else:
+            branch = schema.get("then")
+        if branch is not None:
+            validate_schema(value, branch, path, root)
+
+
 def validate(records, role):
     require(isinstance(records, list) and records, f"{role}: empty trace")
     header = records[0]
     require(isinstance(header, dict), f"{role}: malformed session")
+    validate_schema(header, trace_schema(), role + ".session")
     require(header.get("type") == "session", f"{role}: session must be first")
     required = ("scenario_id", "implementation", "evidence_kind", "os", "device", "environment", "configuration")
     require(all(key in header for key in required), f"{role}: incomplete session metadata")
@@ -43,6 +115,7 @@ def validate(records, role):
     frames, events = [], []
     for index, record in enumerate(records):
         require(isinstance(record, dict), f"{role}: record {index} is not an object")
+        validate_schema(record, trace_schema(), f"{role}.record[{index}]")
         require(record.get("schema_version") == 1, f"{role}: unsupported schema")
         require(record.get("run_id") == header.get("run_id") and bool(header.get("run_id")), f"{role}: inconsistent run_id")
         seq, timestamp = record.get("seq"), record.get("t_ns")
@@ -159,12 +232,20 @@ def compare(request):
         cfg = request.get("config", {})
         require(isinstance(cfg, dict) and cfg.get("metrics"), "explicit nonempty metric acceptance configuration required")
         baseline = json.loads((Path(__file__).resolve().parents[1] / "measurement/profiles/full.json").read_text())
+        policy = cfg.get("exact_event_data")
+        if policy is not None:
+            require(isinstance(policy, dict) and all(isinstance(name, str) and isinstance(fields, list)
+                    and all(isinstance(field, str) and field for field in fields) and len(set(fields)) == len(fields)
+                    for name, fields in policy.items()), "exact_event_data must map event names to unique semantic field lists")
         missing = []
         for name, required_limits in baseline["metrics"].items():
             given = cfg["metrics"].get(name, {})
             if not all(key in given and finite(given[key]) and given[key] <= limit for key, limit in required_limits.items()):
                 missing.append(name)
         missing += ["state." + name for name in baseline["states"] if name not in cfg.get("states", [])]
+        if policy is not None:
+            missing += [f"event_data.{name}.{field}" for name, fields in baseline["exact_event_data"].items()
+                        for field in fields if field not in policy.get(name, [])]
         if cfg.get("event_tolerance_frames", 1) > baseline["event_tolerance_frames"]:
             missing.append("event_timing_target")
         if cfg.get("max_gap_frames", 2) > baseline["max_gap_frames"]:
@@ -178,8 +259,10 @@ def compare(request):
         report["native_parity_eligible"] = report["proof_scope"] == "runtime_trace_pair_only" and not report["issues"] and not missing
         report["runs"] = {"native": nh["run_id"], "candidate": ch["run_id"], "scenario_id": nh["scenario_id"]}
         alignment = cfg.get("alignment", {})
+        require(not any(e["name"] == "environment.changed" for e in ne + ce), "environment changed: split analysis at event boundary")
         auxiliary = cfg.get("auxiliary_events", [])
         require(isinstance(auxiliary, list) and all(isinstance(name, str) for name in auxiliary), "invalid auxiliary event policy")
+        require(set(auxiliary) <= APPROVED_AUXILIARY_EVENTS, "auxiliary exclusions limited to approved probe markers: detent.resolved, batch.completed")
         require(alignment.get("event") not in auxiliary, "alignment event cannot be auxiliary")
         report["auxiliary_event_counts"] = {}
         for role, events in (("native", ne), ("candidate", ce)):
@@ -192,7 +275,6 @@ def compare(request):
         nt, ct = nev[boundary]["t_ns"], cev[boundary]["t_ns"]
         report["alignment"] = {"boundary": boundary, "native_t_ns": nt, "candidate_t_ns": ct,
                                "clock_offset_ns": ct - nt, "method": "observed_event_boundary"}
-        require(not any(e["name"] == "environment.changed" for e in ne + ce), "environment changed: split analysis at event boundary")
         hz = nh["device"]["refresh_hz"]
         require(finite(hz) and hz > 0, "native observable refresh_hz required for frame tolerances")
         frame_ms = 1000 / hz
@@ -207,13 +289,13 @@ def compare(request):
             report["event_timing"][key] = {"error_ms": error, "limit_ms": frame_ms * cfg.get("event_tolerance_frames", 1), "pass": passed}
             if not passed:
                 report["issues"].append(f"event timing exceeds one configured native-frame limit: {key}")
-            policy = cfg.get("exact_event_data")
+            mandatory_fields = baseline["exact_event_data"].get(n["name"], [])
             if policy is None:
-                data_match = n["data"] == c["data"]
+                data_match = n["data"] == c["data"] and all(field in n["data"] and n["data"][field] is not None for field in mandatory_fields)
             else:
-                require(isinstance(policy, dict), "exact_event_data must map event names to required semantic fields")
-                fields = policy.get(n["name"], [])
-                data_match = all(field in n["data"] and field in c["data"] and n["data"][field] == c["data"][field] for field in fields)
+                fields = set(mandatory_fields) | set(policy.get(n["name"], []))
+                data_match = all(field in n["data"] and field in c["data"] and n["data"][field] is not None
+                                 and n["data"][field] == c["data"][field] for field in fields)
             if not data_match:
                 report["issues"].append(f"event data/outcome mismatch: {key}")
         # Comparing exact event order also catches swapped same-time handoffs.
@@ -258,6 +340,9 @@ def compare(request):
                 report["issues"].append(f"{role}: sampling gap exceeds {cfg.get('max_gap_frames', 2)} native frames")
         report["coverage"] = {"native_start_ms": ntime[0] / 1_000_000, "native_end_ms": ntime[-1] / 1_000_000,
                               "candidate_start_ms": ctime[0] / 1_000_000, "candidate_end_ms": ctime[-1] / 1_000_000}
+        union_time = sorted(set(ntime) | {t for t in ctime if ntime[0] <= t <= ntime[-1]})
+        report["comparison_grid"] = "union_of_observed_timestamps"
+        report["comparison_samples"] = len(union_time)
         for name, limits in cfg["metrics"].items():
             require(isinstance(limits, dict) and limits, f"{name}: nonempty limits required")
             require(all(key in ("rms", "max", "final", "velocity_rms", "velocity_max", "absolute_mean", "settling_ms") and finite(value) and value >= 0 for key, value in limits.items()), f"{name}: invalid acceptance limits")
@@ -265,8 +350,9 @@ def compare(request):
             if not all(finite(x) for x in nvalues + cvalues):
                 report["issues"].append(f"required metric missing/null: {name}")
                 continue
-            aligned = [interpolate(ctime, cvalues, t) for t in ntime]
-            result = metric_report(ntime, nvalues, aligned, limits)
+            reference = [interpolate(ntime, nvalues, t) for t in union_time]
+            aligned = [interpolate(ctime, cvalues, t) for t in union_time]
+            result = metric_report(union_time, reference, aligned, limits)
             report["metrics"][name] = result
             if not result["pass"]:
                 report["issues"].append(f"metric exceeds limits: {name}")
