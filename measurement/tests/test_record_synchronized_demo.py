@@ -12,6 +12,7 @@ from measurement.scripts.record_synchronized_demo import (
     find_runtime,
     explicit_simulators,
     launch_command,
+    marker_gap_seconds,
     sha256_file,
     simulator_create_command,
     validate_simulator_identity,
@@ -21,6 +22,12 @@ from measurement.scripts.record_synchronized_demo import (
 
 
 class SynchronizedRecordingTests(unittest.TestCase):
+    def test_marker_gap_is_derived_from_timeline_duration(self):
+        self.assertEqual(marker_gap_seconds(66000), 65.0)
+        self.assertEqual(marker_gap_seconds(9000), 8.0)
+        with self.assertRaisesRegex(ValueError, "longer than marker window"):
+            marker_gap_seconds(1000)
+
     def test_runtime_selection_requires_exact_available_version(self):
         inventory = {
             "runtimes": [

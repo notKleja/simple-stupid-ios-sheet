@@ -108,6 +108,12 @@ def wait_for_ack(directory: Path, name: str, status: str, expected: dict[str, An
     raise RuntimeError(f"Missing valid {status} acknowledgement before deadline: {path}")
 
 
+def marker_gap_seconds(duration_ms: int, marker_window_ms: int = 1000) -> float:
+    if duration_ms <= marker_window_ms:
+        raise ValueError("timeline must be longer than marker window")
+    return (duration_ms - marker_window_ms) / 1000
+
+
 def alignment_transform(
     native_markers: tuple[float, float],
     flutter_markers: tuple[float, float],
@@ -373,7 +379,11 @@ def main() -> int:
         run(["xcrun", "simctl", "terminate", native_udid, NATIVE_BUNDLE], check=False)
         run(["xcrun", "simctl", "terminate", flutter_udid, FLUTTER_BUNDLE], check=False)
     marker_times = {"native": detect_sync_markers(native_video), "flutter": detect_sync_markers(flutter_video)}
-    transform = alignment_transform(marker_times["native"], marker_times["flutter"], marker_gap=65)
+    transform = alignment_transform(
+        marker_times["native"],
+        marker_times["flutter"],
+        marker_gap=marker_gap_seconds(timeline_summary["duration_ms"]),
+    )
     compose(native_video, flutter_video, composite_video,
             native_start=transform["native"]["start"], flutter_start=transform["flutter"]["start"],
             native_scale=transform["native"]["scale"], flutter_scale=transform["flutter"]["scale"])
