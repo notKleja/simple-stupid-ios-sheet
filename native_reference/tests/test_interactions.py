@@ -73,6 +73,38 @@ class InteractionAcceptanceTests(unittest.TestCase):
             runs=self.cohort();del runs[1][0][section][key]
             with self.subTest(key=key): self.assertRaises(ValueError,validate_interaction_cohort,runs)
 
+    def scroll_cohort(self):
+        runs=self.cohort()
+        for rows in runs:
+            rows[0]['scenario_id']='native.scroll.content_first'
+            rows[0]['configuration'].update(largest_undimmed=None,scroll_expansion=False)
+            rows[:]=[r for r in rows if not r.get('name','').startswith('background.') and r.get('name')!='input.touch']
+            for row in rows:
+                if row['type']=='frame': row['metrics'].update({'scroll.offset':100 if row['t_ns']>1000000000 else 0,'scroll.pan_velocity_y':500})
+            for name,ms,data in [('scroll.probe.requested',500,{'scroll_offset':0}),('input.touch',510,{'phase':0}),('input.touch',520,{'phase':1}),('input.touch',530,{'phase':3}),('scroll.probe.completed',2000,{'scroll_offset':100})]:
+                rows.append({'schema_version':1,'type':'event','run_id':rows[0]['run_id'],'t_ns':ms*1000000,'name':name,'data':data})
+            rows.sort(key=lambda r:r['t_ns'])
+            for seq,row in enumerate(rows):row['seq']=seq
+        return runs
+
+    def test_actual_scroll_samples_are_scoped_not_private_ownership(self):
+        from interaction_validation import validate_interaction_cohort
+        report=validate_interaction_cohort(self.scroll_cohort())[0]
+        self.assertEqual(report['scroll_end'],100)
+        self.assertEqual(report['private_scroll_owner'],'unresolved')
+        self.assertIs(report['full_trajectory_acceptance'],False)
+
+    def test_scroll_control_taps_or_missing_pan_cannot_prove_drag(self):
+        from interaction_validation import validate_interaction_cohort
+        runs=self.scroll_cohort()
+        for row in runs[1]:
+            if row.get('name')=='input.touch':row['data']['phase']=0
+        self.assertRaises(ValueError,validate_interaction_cohort,runs)
+        runs=self.scroll_cohort()
+        for row in runs[1]:
+            if row['type']=='frame':del row['metrics']['scroll.pan_velocity_y']
+        self.assertRaises(ValueError,validate_interaction_cohort,runs)
+
     def test_alpha_without_delivered_touch_and_activation_cannot_prove_nonmodal(self):
         from interaction_validation import nonmodal_outcomes
         self.assertRaises(ValueError, nonmodal_outcomes, [{"type":"frame", "metrics":{"barrier.alpha":0}, "state":{"underlying_hit_test":True}}])

@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+  "log_path": "artifacts/native/interactions/replay_logs/ios26_downward_attempt2.log.gz",
+  "log_sha256": "072c532de79d1af264a692f53fb7d992c82319a6ba6818ecb71c89d4fea80cf3",
+  "raw_log_sha256": "bddb36d41734a768ec523e002a2c3956967e834f88b8a98264a318063a29faed",
+  "test_case_results": [
+    "Test Case '-[NativeInteractionUITests.NativeInteractionUITests testDownwardScrollHandoff]' passed (121.661 seconds)."
+  ],
+  "execution_summaries": [
+    "Executed 1 test, with 0 failures (0 unexpected) in 121.661 (121.662) seconds",
+    "Executed 1 test, with 0 failures (0 unexpected) in 121.661 (121.663) seconds",
+    "Executed 1 test, with 0 failures (0 unexpected) in 121.661 (121.664) seconds"
+  ],
+  "xcodebuild_succeeded": true,
+  "observed_build_files": [
+    {
+      "path": "build/Interactions26PinnedDerivedData/Build/Products/Debug-iphonesimulator/NativeSheetHarness.app/NativeSheetHarness",
+      "sha256": "7ebc6f1da34002b3b1bae87a0a2221b61ff194f3130c90fbeb2b67d84c594940"
+    },
+    {
+      "path": "build/Interactions26PinnedDerivedData/Build/Products/Debug-iphonesimulator/NativeInteractionUITests-Runner.app/PlugIns/NativeInteractionUITests.xctest/NativeInteractionUITests",
+      "sha256": "711f8f6bf6b01b44d8326c505ee0117acbac4ce5f6df1bb2662e3a73d3e23f02"
+    },
+    {
+      "path": "build/Interactions26PinnedDerivedData/Build/Products/Debug-iphonesimulator/NativeInteractionUITests-Runner.app/PlugIns/NativeInteractionUITests.xctest/Info.plist",
+      "sha256": "e11fd0c708143ede7a353502a60576cc3f575447c5d5e7eafc6efc11797e6e51"
+    }
+  ],
+  "limitations": [
+    "XCTest success is not full native trajectory acceptance",
+    "Accepted cohorts separately validate actual delivered outcomes, source header and terminal integrity"
+  ]
+}

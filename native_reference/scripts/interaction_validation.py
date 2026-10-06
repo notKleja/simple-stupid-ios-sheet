@@ -38,7 +38,8 @@ def validate_interaction_run(rows):
     require(head.get('type')=='session' and head.get('native_contract_version')==2, 'canonical v2 session required')
     require(head.get('implementation')=='native' and head.get('evidence_kind')=='runtime', 'native runtime evidence required')
     require(head.get('scenario_id') in SCENARIOS, 'unsupported interaction scenario')
-    require(head.get('os',{}).get('version') and head['os'].get('build'), 'observed OS/build required')
+    require(isinstance(head.get('run_id'),str) and head['run_id'], 'run ID required')
+    require(all(isinstance(head.get('os',{}).get(k),str) and head['os'][k].strip() for k in ('version','build')), 'observed OS/build required')
     require(head.get('device',{}).get('runtime_kind') in ('simulator','virtual_device','physical_device'), 'runtime provenance required')
     device=head['device'];environment=head.get('environment',{})
     require(isinstance(device.get('model'),str) and device['model'], 'observed device model required')
@@ -118,7 +119,7 @@ def validate_interaction_cohort(runs):
     reports=[validate_interaction_run(rows) for rows in runs]
     heads=[rows[0] for rows in runs]
     require(len({h['run_id'] for h in heads})==10, 'unique run IDs required')
-    require(set(h['configuration']['trial'] for h in heads)==set(range(1,11)), 'unique trials1..10 required')
+    require(all(type(h['configuration']['trial']) is int for h in heads) and set(h['configuration']['trial'] for h in heads)==set(range(1,11)), 'unique integer trials1..10 required')
     require(len({h['provenance']['attempt_id'] for h in heads})==10, 'unique attempts required')
     require(all(identity(h)==identity(heads[0]) for h in heads), 'mixed OS/device/config/environment cohort')
     require(all(h['provenance']['native_source_revision']==heads[0]['provenance']['native_source_revision'] and h['provenance']['role']==heads[0]['provenance']['role'] for h in heads), 'mixed source/role cohort')

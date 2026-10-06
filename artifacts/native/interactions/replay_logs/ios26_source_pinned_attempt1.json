@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+  "log_path": "artifacts/native/interactions/replay_logs/ios26_source_pinned_attempt1.log.gz",
+  "log_sha256": "316d8c417e4882d3cc89548023df0c96d5694c5ff4fd928bde01282996a8e565",
+  "raw_log_sha256": "397fb9d33cb6f246fc0716b01d5f7dea712b15059355c53725d6e1ba80c6d1dc",
+  "test_case_results": [
+    "Test Case '-[NativeInteractionUITests.NativeInteractionUITests testDownwardScrollHandoff]' passed (152.998 seconds).",
+    "Test Case '-[NativeInteractionUITests.NativeInteractionUITests testNonmodalBackgroundControl]' passed (206.160 seconds).",
+    "Test Case '-[NativeInteractionUITests.NativeInteractionUITests testScrollContentFirst]' passed (128.416 seconds).",
+    "Test Case '-[NativeInteractionUITests.NativeInteractionUITests testScrollExpandsFirst]' passed (111.282 seconds)."
+  ],
+  "execution_summaries": [
+    "Executed 4 tests, with 0 failures (0 unexpected) in 598.856 (598.862) seconds",
+    "Executed 4 tests, with 0 failures (0 unexpected) in 598.856 (598.863) seconds",
+    "Executed 4 tests, with 0 failures (0 unexpected) in 598.856 (598.864) seconds"
+  ],
+  "xcodebuild_succeeded": true,
+  "observed_build_files": [
+    {
+      "path": "build/Interactions26PinnedDerivedData/Build/Products/Debug-iphonesimulator/NativeSheetHarness.app/NativeSheetHarness",
+      "sha256": "7ebc6f1da34002b3b1bae87a0a2221b61ff194f3130c90fbeb2b67d84c594940"
+    },
+    {
+      "path": "build/Interactions26PinnedDerivedData/Build/Products/Debug-iphonesimulator/NativeInteractionUITests-Runner.app/PlugIns/NativeInteractionUITests.xctest/NativeInteractionUITests",
+      "sha256": "711f8f6bf6b01b44d8326c505ee0117acbac4ce5f6df1bb2662e3a73d3e23f02"
+    },
+    {
+      "path": "build/Interactions26PinnedDerivedData/Build/Products/Debug-iphonesimulator/NativeInteractionUITests-Runner.app/PlugIns/NativeInteractionUITests.xctest/Info.plist",
+      "sha256": "e11fd0c708143ede7a353502a60576cc3f575447c5d5e7eafc6efc11797e6e51"
+    }
+  ],
+  "limitations": [
+    "XCTest success is not full native trajectory acceptance",
+    "Accepted cohorts separately validate actual delivered outcomes, source header and terminal integrity"
+  ]
+}

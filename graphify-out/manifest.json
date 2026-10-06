@@ -342,15 +342,15 @@
     "semantic_hash": ""
   },
   "native_reference/NativeSheetHarness/App.swift": {
-    "mtime": 1791318078.165241,
-    "seen": 1791318470.582735,
-    "ast_hash": "48e4aa01a65de35956675a8033276df0",
+    "mtime": 1791319212.441071,
+    "seen": 1791320527.9591491,
+    "ast_hash": "a3a2973b02a77f8bcb5e3e32f080702a",
     "semantic_hash": ""
   },
   "native_reference/NativeSheetHarness/NativeScenario.swift": {
-    "mtime": 1791312720.4872053,
-    "seen": 1791318470.582737,
-    "ast_hash": "2301e7c86e35a9d02ec548be5dafcb97",
+    "mtime": 1791319958.4443219,
+    "seen": 1791320527.95915,
+    "ast_hash": "3b97a0d7394123caf000e9d04f099f21",
     "semantic_hash": ""
   },
   "native_reference/NativeSheetHarness/SwiftUIReference.swift": {
@@ -384,9 +384,9 @@
     "semantic_hash": ""
   },
   "native_reference/scripts/collect_simulator.py": {
-    "mtime": 1791307173.244516,
-    "seen": 1791318470.582742,
-    "ast_hash": "fa91c6f47b49106485a9bb30f8f91cb1",
+    "mtime": 1791318815.023312,
+    "seen": 1791320527.959157,
+    "ast_hash": "c4415e9b2ed341f6c33d96a69c265232",
     "semantic_hash": ""
   },
   "native_reference/scripts/collect_vphone.py": {
@@ -1164,33 +1164,33 @@
     "semantic_hash": ""
   },
   "native_reference/NativeSheetHarness/InteractionProbe.swift": {
-    "mtime": 1791317581.391956,
-    "seen": 1791318470.5827358,
-    "ast_hash": "b704f7f05896bd9e6aee916e496910bf",
+    "mtime": 1791319958.4778655,
+    "seen": 1791320527.95915,
+    "ast_hash": "96e8be5a8515b6c52977e98b3c345de5",
     "semantic_hash": ""
   },
   "native_reference/XCTests/NativeInteractionUITests.swift": {
-    "mtime": 1791317715.6004572,
-    "seen": 1791318470.5827389,
-    "ast_hash": "a40616809dacc131393ef78ccb095fc4",
+    "mtime": 1791319958.5115156,
+    "seen": 1791320527.959153,
+    "ast_hash": "44e161a98ebe3490e936b4d00edaf157",
     "semantic_hash": ""
   },
   "native_reference/scripts/collect_interactions.py": {
-    "mtime": 1791318455.0625331,
-    "seen": 1791318470.582741,
-    "ast_hash": "0a47a89c2272f04408885bb7a2b78744",
+    "mtime": 1791321215.2463806,
+    "seen": 1791321527.907734,
+    "ast_hash": "23b19203b6affbeacd31c38fe59ee50b",
     "semantic_hash": ""
   },
   "native_reference/scripts/generate_xctest_project.py": {
-    "mtime": 1791317928.9637194,
-    "seen": 1791318470.582743,
-    "ast_hash": "c9b93aff918800f0a0f07ac161d500bf",
+    "mtime": 1791320141.5138316,
+    "seen": 1791320527.9591591,
+    "ast_hash": "e0d00d39735368345844e5254ac51993",
     "semantic_hash": ""
   },
   "native_reference/scripts/interaction_validation.py": {
-    "mtime": 1791318270.2702062,
-    "seen": 1791318470.5827441,
-    "ast_hash": "61fade941a4b5bf0221e4737faacf7b4",
+    "mtime": 1791320969.754048,
+    "seen": 1791321527.9077382,
+    "ast_hash": "06405e0e0c2554836846348998e1dbbc",
     "semantic_hash": ""
   },
   "native_reference/tests/TraceIOBenchmark.swift": {
@@ -1200,9 +1200,9 @@
     "semantic_hash": ""
   },
   "native_reference/tests/test_interactions.py": {
-    "mtime": 1791318232.7792604,
-    "seen": 1791318470.5827498,
-    "ast_hash": "a549c0c6f1e371534a413dfad1a8c17b",
+    "mtime": 1791321347.0437703,
+    "seen": 1791321527.907748,
+    "ast_hash": "5d52d0207125947a7bb7cf8fe514dd9b",
     "semantic_hash": ""
   },
   "spec/sheet-profile.schema.json": {
@@ -1221,6 +1221,210 @@
     "mtime": 1791316983.5773506,
     "seen": 1791318470.582774,
     "ast_hash": "37ac06853e992c2619c680c74d0bf1f1",
+    "semantic_hash": ""
+  },
+  "artifacts/native/interactions/vphone_nonmodal_delivery_failure/manifest.json": {
+    "mtime": 1791319854.9009528,
+    "seen": 1791320527.959072,
+    "ast_hash": "510e24b2c98995c4fc4f985c8a4e9ec4",
+    "semantic_hash": ""
+  },
+  "artifacts/native/timing/ios26_strict_anchored/manifest.json": {
+    "mtime": 1791318983.4716647,
+    "seen": 1791320527.9590888,
+    "ast_hash": "685274440dd46d4bf7fc4b99d3529218",
+    "semantic_hash": ""
+  },
+  "artifacts/native/timing/ios26_strict_anchored/runtime_inventory.json": {
+    "mtime": 1791318780.4900608,
+    "seen": 1791320527.95909,
+    "ast_hash": "12af3dabf1a277588e9b437ca5f37e3e",
+    "semantic_hash": ""
+  },
+  "artifacts/native/timing/ios27_strict_anchored/manifest.json": {
+    "mtime": 1791318984.1367362,
+    "seen": 1791320527.959091,
+    "ast_hash": "cf7ecd1fa71c4b563ce7f5f8c06c68c8",
+    "semantic_hash": ""
+  },
+  "artifacts/native/timing/ios27_strict_anchored/runtime_inventory.json": {
+    "mtime": 1791318784.1816254,
+    "seen": 1791320527.959092,
+    "ast_hash": "f2244813a955920f59d9f27afee13549",
+    "semantic_hash": ""
+  },
+  "native_reference/scripts/archive_vphone_failure.py": {
+    "mtime": 1791319850.0214202,
+    "seen": 1791320527.9591548,
+    "ast_hash": "3d34dd64333027185adfcdb3fcf68a15",
+    "semantic_hash": ""
+  },
+  "native_reference/scripts/replay_vphone_interactions.py": {
+    "mtime": 1791319441.5749207,
+    "seen": 1791320527.959163,
+    "ast_hash": "a9c49c1400b3ff98600cc6fd8e3cc24b",
+    "semantic_hash": ""
+  },
+  "native_reference/scripts/seal_timing_cohort.py": {
+    "mtime": 1791318978.5987432,
+    "seen": 1791320527.959164,
+    "ast_hash": "ee6e10c03898c0d613b8d4bd2d1d1c0e",
+    "semantic_hash": ""
+  },
+  "native_reference/scripts/validate_interactions.py": {
+    "mtime": 1791320969.8440895,
+    "seen": 1791321527.907744,
+    "ast_hash": "402fcf4c7179fb4f308451d35e9f14a4",
+    "semantic_hash": ""
+  },
+  "artifacts/native/interactions/diagnostic_cached26_content/manifest.json": {
+    "mtime": 1791320956.1948195,
+    "seen": 1791321527.907639,
+    "ast_hash": "9f44f64a820d13776f55dc629ed289d4",
+    "semantic_hash": ""
+  },
+  "artifacts/native/interactions/diagnostic_cached26_expands/manifest.json": {
+    "mtime": 1791320886.9843342,
+    "seen": 1791321527.90764,
+    "ast_hash": "0aa55451927ab6b92f739f1dd98c8d43",
+    "semantic_hash": ""
+  },
+  "artifacts/native/interactions/diagnostic_cached26_nonmodal/manifest.json": {
+    "mtime": 1791320868.0543752,
+    "seen": 1791321527.9076412,
+    "ast_hash": "428bdf2c8c9dbfc6631d63824f26121c",
+    "semantic_hash": ""
+  },
+  "artifacts/native/interactions/diagnostic_unpinned27_content/manifest.json": {
+    "mtime": 1791321112.6676662,
+    "seen": 1791321527.9076421,
+    "ast_hash": "8499b3de4a0d6a186427935edb53cfbb",
+    "semantic_hash": ""
+  },
+  "artifacts/native/interactions/diagnostic_unpinned27_expands/manifest.json": {
+    "mtime": 1791321116.181561,
+    "seen": 1791321527.9076428,
+    "ast_hash": "0e21e84fd923ee4da88177e8918664b5",
+    "semantic_hash": ""
+  },
+  "artifacts/native/interactions/diagnostic_unpinned27_nonmodal/manifest.json": {
+    "mtime": 1791320988.127823,
+    "seen": 1791321527.9076438,
+    "ast_hash": "436c218fe10fa3b138e6073247e0a013",
+    "semantic_hash": ""
+  },
+  "artifacts/native/interactions/ios26_content_first/manifest.json": {
+    "mtime": 1791321435.8285732,
+    "seen": 1791321527.907645,
+    "ast_hash": "f442aa088574941bcda19b94ae371381",
+    "semantic_hash": ""
+  },
+  "artifacts/native/interactions/ios26_downward/manifest.json": {
+    "mtime": 1791321222.2737236,
+    "seen": 1791321527.907645,
+    "ast_hash": "e6ba532f2e8d7e5c2ef29b01ae6bce15",
+    "semantic_hash": ""
+  },
+  "artifacts/native/interactions/ios26_expands_first/manifest.json": {
+    "mtime": 1791321516.400937,
+    "seen": 1791321527.907646,
+    "ast_hash": "039d6301a9bd04299391c7388a0f7120",
+    "semantic_hash": ""
+  },
+  "artifacts/native/interactions/ios26_nonmodal/manifest.json": {
+    "mtime": 1791321292.916259,
+    "seen": 1791321527.907646,
+    "ast_hash": "b4151de227b4123c5b46840c0be47239",
+    "semantic_hash": ""
+  },
+  "artifacts/native/interactions/ios27_content_first/manifest.json": {
+    "mtime": 1791321112.790927,
+    "seen": 1791321527.907648,
+    "ast_hash": "0acfcb33244124d1122743d654a8e58f",
+    "semantic_hash": ""
+  },
+  "artifacts/native/interactions/ios27_downward/manifest.json": {
+    "mtime": 1791321122.1369882,
+    "seen": 1791321527.907649,
+    "ast_hash": "78af81026824cf720adaa0fd6d852ec2",
+    "semantic_hash": ""
+  },
+  "artifacts/native/interactions/ios27_expands_first/manifest.json": {
+    "mtime": 1791321261.4800801,
+    "seen": 1791321527.907649,
+    "ast_hash": "b60e76ab83f735c7cdf55ce78282b3e1",
+    "semantic_hash": ""
+  },
+  "artifacts/native/interactions/ios27_nonmodal/manifest.json": {
+    "mtime": 1791321117.4940345,
+    "seen": 1791321527.90765,
+    "ast_hash": "c3e2baa8252b2818ca9772d51ee88fd3",
+    "semantic_hash": ""
+  },
+  "artifacts/native/interactions/replay_logs/ios26_source_pinned_attempt1.json": {
+    "mtime": 1791321499.6791978,
+    "seen": 1791321527.9076512,
+    "ast_hash": "010f4c44f1ce7fa4229007eb8a70f740",
+    "semantic_hash": ""
+  },
+  "artifacts/native/interactions/replay_logs/ios27_source_pinned.json": {
+    "mtime": 1791321261.7537005,
+    "seen": 1791321527.9076512,
+    "ast_hash": "8d2397d2654baff7a3359236c881b2cb",
+    "semantic_hash": ""
+  },
+  "artifacts/native/timing/coalescing_diagnostic/manifest.json": {
+    "mtime": 1791320568.0622544,
+    "seen": 1791321527.907667,
+    "ast_hash": "de5ccec10a0703f5d5cff5e5c297f309",
+    "semantic_hash": ""
+  },
+  "native_reference/scripts/archive_replay_log.py": {
+    "mtime": 1791321116.151562,
+    "seen": 1791321527.907731,
+    "ast_hash": "dcf992b2396a919dd4d7d51a1d967914",
+    "semantic_hash": ""
+  },
+  "native_reference/scripts/archive_timing_audit.py": {
+    "mtime": 1791320563.3836963,
+    "seen": 1791321527.907732,
+    "ast_hash": "620cfefce877fceaa1d03e43eef5822c",
+    "semantic_hash": ""
+  },
+  "native_reference/scripts/summarize_interactions.py": {
+    "mtime": 1791321589.4015334,
+    "seen": 1791321767.501375,
+    "ast_hash": "aad50d38b6e9ab2cbc6999240bd54726",
+    "semantic_hash": ""
+  },
+  "native_reference/INTERACTIONS_SUMMARY.md": {
+    "mtime": 1791321762.5508215,
+    "seen": 1791321767.501409,
+    "ast_hash": "cedc9792c5c1889611723a278cd94ea2",
+    "semantic_hash": ""
+  },
+  "native_reference/TIMING_DIAGNOSIS.md": {
+    "mtime": 1791320631.455686,
+    "seen": 1791321527.9077802,
+    "ast_hash": "54d34a2a88843c8bc20d5b3adbca22e3",
+    "semantic_hash": ""
+  },
+  "artifacts/native/interactions/ios26_downward_attempt2/manifest.json": {
+    "mtime": 1791321640.270931,
+    "seen": 1791321767.5012748,
+    "ast_hash": "4932e2613d1518191e5f1bb130ea7255",
+    "semantic_hash": ""
+  },
+  "artifacts/native/interactions/replay_logs/ios26_downward_attempt2.json": {
+    "mtime": 1791321640.4997194,
+    "seen": 1791321767.501285,
+    "ast_hash": "67bd29e7fd5375b9b01d311909b15b9c",
+    "semantic_hash": ""
+  },
+  "native_reference/interaction_measurements.json": {
+    "mtime": 1791321720.9568307,
+    "seen": 1791321767.501361,
+    "ast_hash": "db5c9633022efe92b0be108a6dc69ad0",
     "semantic_hash": ""
   }
 }

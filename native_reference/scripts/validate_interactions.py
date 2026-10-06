@@ -13,6 +13,7 @@ ROOT=Path(__file__).resolve().parents[2]
 def validate_manifest(path):
     manifest=json.loads(Path(path).read_text())
     require(manifest['status']=='accepted','manifest is not accepted')
+    require(manifest.get('acceptance_scope')=='observed_control_and_scroll_outcomes_only' and manifest.get('full_trajectory_acceptance') is False,'explicit scoped acceptance required')
     runs=[]
     for entry in manifest['entries']:
         source=ROOT/entry['path'];compressed=source.read_bytes();raw=gzip.decompress(compressed)

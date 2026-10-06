@@ -2,9 +2,11 @@
   "schema_version": 1,
   "scenario_id": "native.scroll.handoff.down",
   "status": "accepted",
+  "acceptance_scope": "observed_control_and_scroll_outcomes_only",
+  "full_trajectory_acceptance": false,
   "requested_status": "accepted",
   "issues": [],
-  "collection_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+  "collection_revision": "cb99612dc2dd626cad9cc91908704018bd945ce3",
   "entries": [
     {
       "run_id": "02EF497F-C9EF-4DB8-83CF-29CCF7D19669",
