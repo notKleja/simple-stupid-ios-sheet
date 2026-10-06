@@ -1,0 +1,6 @@
+name: ios_sheet_workspace
+publish_to: none
+environment:
+  sdk: '>=3.12.0 <4.0.0'
+workspace:
+  - packages/stupid_simple_sheet
