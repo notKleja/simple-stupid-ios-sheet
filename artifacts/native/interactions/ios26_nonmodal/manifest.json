@@ -1,0 +1,553 @@
+{
+  "schema_version": 1,
+  "scenario_id": "native.nonmodal.medium",
+  "status": "accepted",
+  "selection": {
+    "source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+    "source_marker": null,
+    "excluded_attempt_manifests": [],
+    "excluded_run_ids": []
+  },
+  "acceptance_scope": "observed_control_and_scroll_outcomes_only",
+  "full_trajectory_acceptance": false,
+  "requested_status": "accepted",
+  "issues": [],
+  "collection_revision": "cb99612dc2dd626cad9cc91908704018bd945ce3",
+  "entries": [
+    {
+      "run_id": "07C52618-EEBB-43DA-9F2D-580691203E07",
+      "trial": 10,
+      "attempt_id": "413AB885-ED2D-488E-8F0B-4400D6703E22",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal/native.nonmodal.medium-07C52618-EEBB-43DA-9F2D-580691203E07.jsonl.gz",
+      "sha256": "026e023c2bd3af5632f64a051264bd7571056522773c3d0d274093efb0468786",
+      "raw_sha256": "2342f1939c9406f664e5757df9f827afbf23c38823845c2e0bfd5c185cf8ef3c",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ],
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 44762375,
+        "unavailable_sheet_y_frames": 0,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "probes": [
+          {
+            "phase": "medium_initial",
+            "activated": true,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "large",
+            "activated": false,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "medium_return",
+            "activated": true,
+            "delivered_touch_events": 2
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "229CAC1B-343C-4496-9F33-6948E265B2F0",
+      "trial": 1,
+      "attempt_id": "69D58EA2-9346-4D11-8E90-2AF4865102C6",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal/native.nonmodal.medium-229CAC1B-343C-4496-9F33-6948E265B2F0.jsonl.gz",
+      "sha256": "648c86796a91f18cd910d3ea029bb3e5661e950d1b93cc24e0a642a103715308",
+      "raw_sha256": "b6170d4856c855fa638262c9f09c5a33b38c6ceda6cf2c5746f77797409cf1c6",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ],
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 49268209,
+        "unavailable_sheet_y_frames": 0,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "probes": [
+          {
+            "phase": "medium_initial",
+            "activated": true,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "large",
+            "activated": false,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "medium_return",
+            "activated": true,
+            "delivered_touch_events": 2
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "53D3AE0E-1E86-41F6-8AE7-E513969BEE2C",
+      "trial": 9,
+      "attempt_id": "2846808B-2ECD-4BD5-A4D7-BF1E74DC9910",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal/native.nonmodal.medium-53D3AE0E-1E86-41F6-8AE7-E513969BEE2C.jsonl.gz",
+      "sha256": "f959c2214aec824e6b991022d7fb6f35b678080903b31d9558d3e172a000cb1d",
+      "raw_sha256": "6d0daba45e2e5008350c111425b9b023e765f8ddb9d947606b58882428e90862",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ],
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 37362500,
+        "unavailable_sheet_y_frames": 0,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "probes": [
+          {
+            "phase": "medium_initial",
+            "activated": true,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "large",
+            "activated": false,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "medium_return",
+            "activated": true,
+            "delivered_touch_events": 2
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "54497919-E66C-4B4C-9C0C-1B88553396E4",
+      "trial": 7,
+      "attempt_id": "2F749859-E467-49FA-B98A-B335A4709CE9",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal/native.nonmodal.medium-54497919-E66C-4B4C-9C0C-1B88553396E4.jsonl.gz",
+      "sha256": "e13b440bcdee769db24659ac4d0858bf9891ca4a1d8b5096c7a905342c15b121",
+      "raw_sha256": "2b97f927e64498249498f05960fe9dee23bd2693db9d8e555ab2d1fdefe1d12e",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ],
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 41617292,
+        "unavailable_sheet_y_frames": 0,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "probes": [
+          {
+            "phase": "medium_initial",
+            "activated": true,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "large",
+            "activated": false,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "medium_return",
+            "activated": true,
+            "delivered_touch_events": 2
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "6213969C-C2E3-4BFF-B6C0-C36B80E62A82",
+      "trial": 6,
+      "attempt_id": "895D5973-D68B-45D6-B0FE-E72E992C20B3",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal/native.nonmodal.medium-6213969C-C2E3-4BFF-B6C0-C36B80E62A82.jsonl.gz",
+      "sha256": "37bc0e3f6e33234523ff661ce2433051a9c9cccf3c24be787b4f706724095ebd",
+      "raw_sha256": "c373723557ea489944d86c87390d6a48bcc1deae284e5f9bc5fdf155121eb52b",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ],
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 41057667,
+        "unavailable_sheet_y_frames": 0,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "probes": [
+          {
+            "phase": "medium_initial",
+            "activated": true,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "large",
+            "activated": false,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "medium_return",
+            "activated": true,
+            "delivered_touch_events": 2
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "8FA72EDF-7286-4062-8A79-F13CF863A72B",
+      "trial": 8,
+      "attempt_id": "3198977F-CBE7-4522-95F4-4BEF13B94B92",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal/native.nonmodal.medium-8FA72EDF-7286-4062-8A79-F13CF863A72B.jsonl.gz",
+      "sha256": "167b9dd43015d53ae12a495ed9d1d224cb0e95a381ba2316bb749d6b84438d87",
+      "raw_sha256": "d929986ee2acf2644fdb8c1baf04178c6cd3d075aaff5ae8d39b4f870d028293",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ],
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 33569791,
+        "unavailable_sheet_y_frames": 0,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "probes": [
+          {
+            "phase": "medium_initial",
+            "activated": true,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "large",
+            "activated": false,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "medium_return",
+            "activated": true,
+            "delivered_touch_events": 2
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "A0A13FE5-F398-463C-B872-CBAACBB59EBF",
+      "trial": 3,
+      "attempt_id": "A4D29672-4943-417E-92A7-D2BFBC9B4B22",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal/native.nonmodal.medium-A0A13FE5-F398-463C-B872-CBAACBB59EBF.jsonl.gz",
+      "sha256": "e812d73fb0e5e02766cf38d520948e6fcdc70f78a08360f0375e3e0aac061f83",
+      "raw_sha256": "91851e08923f2780e45059416dfee3bbb993242bb6aa93be49538efe3fb98a24",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ],
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 50038500,
+        "unavailable_sheet_y_frames": 0,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "probes": [
+          {
+            "phase": "medium_initial",
+            "activated": true,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "large",
+            "activated": false,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "medium_return",
+            "activated": true,
+            "delivered_touch_events": 2
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "B168E879-B88D-4D2F-BE7B-3ABFE41B3A1F",
+      "trial": 5,
+      "attempt_id": "2ABB3C9C-9976-4D4F-A3DF-24335A4388E9",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal/native.nonmodal.medium-B168E879-B88D-4D2F-BE7B-3ABFE41B3A1F.jsonl.gz",
+      "sha256": "a34500e50bd5b3a40a300c2a73908f607147cead870e1d0a6549d6cc397a7fe1",
+      "raw_sha256": "160eefa63b6c35cb4999d986db6d1c3a93a05ddce6a961cae3cc32b28d1f39a5",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ],
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 33410500,
+        "unavailable_sheet_y_frames": 0,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "probes": [
+          {
+            "phase": "medium_initial",
+            "activated": true,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "large",
+            "activated": false,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "medium_return",
+            "activated": true,
+            "delivered_touch_events": 2
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "DD38C77A-011A-440E-8A97-5FAB3173452B",
+      "trial": 4,
+      "attempt_id": "86D68A04-974D-4B65-AFDC-69FFBE8EC043",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal/native.nonmodal.medium-DD38C77A-011A-440E-8A97-5FAB3173452B.jsonl.gz",
+      "sha256": "bdf1f63d9af602ca70692c22a0b3ea1e5988f3f20b57f8cfbff70bee1754693e",
+      "raw_sha256": "11dabec4b64d8984ff57499e050842d38da742ebce75944f94e7baeb298c5798",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ],
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 40040667,
+        "unavailable_sheet_y_frames": 0,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "probes": [
+          {
+            "phase": "medium_initial",
+            "activated": true,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "large",
+            "activated": false,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "medium_return",
+            "activated": true,
+            "delivered_touch_events": 2
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "DDDA05F0-B3E0-46E9-BA52-3738850BD730",
+      "trial": 2,
+      "attempt_id": "63055ED1-AD2C-4DFE-9075-E93090387BA2",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal/native.nonmodal.medium-DDDA05F0-B3E0-46E9-BA52-3738850BD730.jsonl.gz",
+      "sha256": "4dd92c6788ede1c69d0cf69e39f3ef933ff3ab592d955306836da12efde35e8d",
+      "raw_sha256": "9068c269a71feadceebecaa4a44cf36c6510768ec2322ebbddde0274719dde0f",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ],
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 55647292,
+        "unavailable_sheet_y_frames": 1,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "probes": [
+          {
+            "phase": "medium_initial",
+            "activated": true,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "large",
+            "activated": false,
+            "delivered_touch_events": 2
+          },
+          {
+            "phase": "medium_return",
+            "activated": true,
+            "delivered_touch_events": 2
+          }
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "Acceptance is scoped to actual control/scroll outcomes; no full dynamics or private ownership accepted",
+    "Pilot/source-uncommitted attempts cannot become accepted native timing evidence",
+    "All collected failures and unavailable states retained"
+  ]
+}

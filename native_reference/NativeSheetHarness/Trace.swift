@@ -52,8 +52,14 @@ final class Trace {
     }
 
     func event(_ name: String, _ data: [String: Any] = [:], terminal: Bool = false) {
+        let before = clock()
         record("event", ["name": name, "data": data, "terminal": terminal])
+        let beforeSync = clock()
         try? handle.synchronize()
+        if ProcessInfo.processInfo.environment["NATIVE_IO_AUDIT"] == "1" {
+            record("event", ["name": "recorder.io", "data": ["for_event": name,
+                "write_ms": (beforeSync-before)*1000, "sync_ms": (clock()-beforeSync)*1000]])
+        }
     }
 
     func fail(_ code: String, _ data: [String: Any] = [:]) {

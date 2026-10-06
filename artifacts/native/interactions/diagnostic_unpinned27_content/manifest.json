@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "scenario_id": "native.scroll.content_first",
+  "status": "failed",
+  "acceptance_scope": "observed_control_and_scroll_outcomes_only",
+  "full_trajectory_acceptance": false,
+  "requested_status": "failed",
+  "issues": [
+    "Unresolved runtime source marker: unresolved"
+  ],
+  "collection_revision": "cb99612dc2dd626cad9cc91908704018bd945ce3",
+  "entries": [
+    {
+      "run_id": "035B6366-AF8D-47EC-9D99-6BB3C03E1117",
+      "trial": 2,
+      "attempt_id": "3B6660C6-AF63-4E23-81BD-BA8998C2742A",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_unpinned27_content/native.scroll.content_first-035B6366-AF8D-47EC-9D99-6BB3C03E1117.jsonl.gz",
+      "sha256": "cb675806935b4eaa329795663942a2e2d68ffa9b11f19321164a86c3d42e4c71",
+      "raw_sha256": "a2f5cd4124de931cda870e9a89571849fc0ca8d02430030dfdb099e743fd705c"
+    },
+    {
+      "run_id": "18283D2F-E25C-4A55-BA2B-8B141B8C9527",
+      "trial": 8,
+      "attempt_id": "0DF63064-E2DA-4C8E-BC55-3F5EA02BF1B0",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_unpinned27_content/native.scroll.content_first-18283D2F-E25C-4A55-BA2B-8B141B8C9527.jsonl.gz",
+      "sha256": "86c0e93d85e8dca2d37ed97463bd67a2786c07ca8626e4a2434b0c7023cd1ced",
+      "raw_sha256": "be5f73ef2c71099706f41917100c8ba3ac0fa5808616c0d97f4ec842f606a1c8"
+    },
+    {
+      "run_id": "33BD2462-A773-4AEB-B7AB-1D687857FA20",
+      "trial": 6,
+      "attempt_id": "12D34C6A-CEEA-4E51-921C-FB49F27DD5A0",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_unpinned27_content/native.scroll.content_first-33BD2462-A773-4AEB-B7AB-1D687857FA20.jsonl.gz",
+      "sha256": "83c430a627ab49039c2127089cc19ba639b84b35856c093b2913d8947ab66c4e",
+      "raw_sha256": "346878b45a458475cea4273aabb0025ff3dcabf316eba772fa6d8f2de619866c"
+    },
+    {
+      "run_id": "59B48188-28D3-4B27-A386-8F1375F2CCD6",
+      "trial": 10,
+      "attempt_id": "78D71941-AE04-4CC1-9B62-D4E504D4D0F0",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_unpinned27_content/native.scroll.content_first-59B48188-28D3-4B27-A386-8F1375F2CCD6.jsonl.gz",
+      "sha256": "15fc20997cb44ff2e804bc3bd34a201bd9ea4d899a1b8c4a6e71610862c80c6d",
+      "raw_sha256": "4572fc8d4dbd5f04bc10de695c7879f91ec9b1adeac5327b7bb3368dd5bae320"
+    },
+    {
+      "run_id": "9B5619AE-6577-4BD9-B070-31F08FB39C17",
+      "trial": 1,
+      "attempt_id": "E08DCA5E-F1F7-4BC5-823E-DB112E856897",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_unpinned27_content/native.scroll.content_first-9B5619AE-6577-4BD9-B070-31F08FB39C17.jsonl.gz",
+      "sha256": "5ba024c8d73c7e932fc2323f7d16074b3a2c5982b5334ef4f4e0015b41ba7bd6",
+      "raw_sha256": "9a575878234ec141845825564f2d02cb658b277181777a22bd149521c7dec8e1"
+    },
+    {
+      "run_id": "B19AD0B9-0B8D-459E-B6FB-96FFBF2DA073",
+      "trial": 9,
+      "attempt_id": "6AC551CC-CB98-4AD7-806A-00946AA5B9A0",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_unpinned27_content/native.scroll.content_first-B19AD0B9-0B8D-459E-B6FB-96FFBF2DA073.jsonl.gz",
+      "sha256": "a19217a6a720b02ee229666d16c5a46ffe58971c004adf57cd68b76163ba8458",
+      "raw_sha256": "4f6d6f81d48e51f4574322fbc1f267424dc41db38c6786024aa5ecb5b62c50b7"
+    },
+    {
+      "run_id": "C3FB400A-0667-45DF-8759-488DE3923A02",
+      "trial": 7,
+      "attempt_id": "7755087B-1431-4657-9CBE-6CA82D30BD8D",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_unpinned27_content/native.scroll.content_first-C3FB400A-0667-45DF-8759-488DE3923A02.jsonl.gz",
+      "sha256": "f519582f31c7a01f786bdd00e34f8aa13210e2ff6cc2e7d4cf0458c06d59f984",
+      "raw_sha256": "4d215f201063f1147996b2554cb22326edcc48134cc612e1886c7f1bfd9dd7db"
+    },
+    {
+      "run_id": "CC41DBEA-CE11-4352-9C95-B83BEA4CE924",
+      "trial": 5,
+      "attempt_id": "8174DCA1-96F9-43DE-8FCD-37CF58ADD3BC",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_unpinned27_content/native.scroll.content_first-CC41DBEA-CE11-4352-9C95-B83BEA4CE924.jsonl.gz",
+      "sha256": "1010105249927b320fb18de16dc99cf659d682aa2e7b0393a70562ab9079309d",
+      "raw_sha256": "8bdedfa13fd8636c38064ebb9f7ac04f487a211a3f634f8d7568640bd1f44840"
+    },
+    {
+      "run_id": "F8B5BF50-7B32-4349-9F6E-7CE7F7C89386",
+      "trial": 4,
+      "attempt_id": "B1A623A7-1ADD-4666-BA12-5105701BCF53",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_unpinned27_content/native.scroll.content_first-F8B5BF50-7B32-4349-9F6E-7CE7F7C89386.jsonl.gz",
+      "sha256": "6477af973537421ce14c721c3b7f0b7b9b7f07ff065ce3278432edf47ab8965c",
+      "raw_sha256": "780ffabf27e9ebf205af66a7e4136bf2dbd5c52cca0906b2b9d1b9586dab100a"
+    },
+    {
+      "run_id": "FAF519DF-6904-4D3F-9204-EAC42579C1A4",
+      "trial": 3,
+      "attempt_id": "2CE6B646-CF91-4A32-9D70-AC94BE73FB77",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_unpinned27_content/native.scroll.content_first-FAF519DF-6904-4D3F-9204-EAC42579C1A4.jsonl.gz",
+      "sha256": "bfa5efc12335d2bb75f277b1b7d0cc3d13e7eb10e68490062d882da837feaa06",
+      "raw_sha256": "23d734512edb5e320bab9d8f9f5376c13dc114e23c04a66102d90ef0bffa88e0"
+    }
+  ],
+  "limitations": [
+    "Acceptance is scoped to actual control/scroll outcomes; no full dynamics or private ownership accepted",
+    "Pilot/source-uncommitted attempts cannot become accepted native timing evidence",
+    "All collected failures and unavailable states retained"
+  ]
+}
