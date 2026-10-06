@@ -514,4 +514,4 @@ packages:
     version: "1.1.1"
 sdks:
   dart: ">=3.12.0 <3.999.0"
-  flutter: ">=3.32.0"
+  flutter: ">=3.44.0"

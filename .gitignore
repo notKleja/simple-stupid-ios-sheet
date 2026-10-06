@@ -12,3 +12,4 @@ Pods/
 *.xcworkspace/xcuserdata/
 *.xcodeproj/xcuserdata/
 work/
+test/.snaptest/

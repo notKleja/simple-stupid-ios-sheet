@@ -233,6 +233,31 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
   /// it past it's fully opened state.
   double get overshootResistance => 100;
 
+  /// Allows a preset to resist the delta that first crosses a boundary.
+  /// Generic routes retain the historical post-boundary resistance behavior.
+  @protected
+  bool get resistBoundaryCrossing => false;
+
+  /// Transfer-function seam for measured overdrag models. Values are relative
+  /// to the gesture reference height; positive delta moves towards dismissal.
+  @protected
+  double resistedDragDelta(double delta, double position, double boundary) {
+    final overshoot = (boundary - position).abs();
+    return delta / (1.0 + overshoot * overshootResistance);
+  }
+
+  /// Velocity seam for measured release models; preserves upstream defaults.
+  @protected
+  double resistedReleaseVelocity(double velocity, double position,
+      double boundary, double maxExtent) {
+    final overshoot = (position - boundary).abs();
+    return velocity / (maxExtent + overshoot * overshootResistance);
+  }
+
+  /// Read-only instrumentation state for preset recorders.
+  bool get isUserDragging => _isUserDragging;
+  double? get targetRelativePosition => _animationTargetValue;
+
   /// {@template clearBarrierImmediately}
   /// Whether this route should clear the modal barrier immediately when
   /// dismissed.
@@ -249,6 +274,11 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
   ///
   /// Defaults to [SheetDragHandoff.gestureStart], matching iOS sheet behavior.
   SheetDragHandoff get dragHandoff => SheetDragHandoff.gestureStart;
+
+  /// Whether an upward content gesture expands the sheet before scrolling.
+  /// Defaults to the existing drag-first behavior. Native presets may select
+  /// content-first behavior without replacing the scroll-drag detector.
+  bool get expandsWhenScrolledToEdge => true;
 
   /// Whether the sheet can be dragged.
   ///
@@ -439,8 +469,9 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
         child: _RelativeGestureDetector(
           dismissalMode: dismissalMode,
           dragHandoff: dragHandoff,
-          dragFromTrailingEdge: (_animationTargetValue ?? animation.value) <
-              effectiveSnappingConfig.maxExtent,
+          dragFromTrailingEdge: expandsWhenScrolledToEdge &&
+              (_animationTargetValue ?? animation.value) <
+                  effectiveSnappingConfig.maxExtent,
           onRelativeDragStart: () => _handleDragStart(context),
           onRelativeDragUpdate: (relativeDelta, referenceHeight, wouldScroll) =>
               _handleDragUpdate(
@@ -557,8 +588,11 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
     final belowMinAndCannotPop =
         cannotPop && currentValue < minSnap && delta > 0;
 
-    final applyResistance =
-        !draggable || currentValue > maxExtent || belowMinAndCannotPop;
+    final crossesBoundary = resistBoundaryCrossing &&
+        ((currentValue - delta > maxExtent) ||
+            (cannotPop && currentValue - delta < minSnap));
+    final applyResistance = !draggable || currentValue > maxExtent ||
+        belowMinAndCannotPop || crossesBoundary;
 
     if (wouldScroll && (currentValue - delta) > maxExtent) {
       // If the scrollable would scroll, and the sheet will be dragged past its
@@ -568,12 +602,7 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
       final stickingPoint = _stickingPoint ?? 1.0;
       // Reduce the delta with diminishing returns (resistance)
 
-      final overshoot = (stickingPoint - currentValue).abs();
-
-      final resistance = 1.0 /
-          (1.0 + overshoot * overshootResistance); // Exponential resistance
-
-      adjustedDelta = delta * resistance;
+      adjustedDelta = resistedDragDelta(delta, currentValue, stickingPoint);
     }
 
     final newValue = currentValue - adjustedDelta;
@@ -632,9 +661,9 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
       final snapTarget = currentValue > maxExtent ? maxExtent : stickingPoint;
       // Scale the velocity by the same resistance factor that was applied
       // during dragging
-      final overshoot = (currentValue - stickingPoint).abs();
-      final resistance = 1.0 / (maxExtent + overshoot * overshootResistance);
-      final adjustedVelocity = velocity * resistance;
+      final adjustedVelocity = resistedReleaseVelocity(
+        velocity, currentValue, stickingPoint, maxExtent,
+      );
 
       final backSim = motion.createSimulation(
         start: currentValue,
