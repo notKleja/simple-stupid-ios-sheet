@@ -12,6 +12,7 @@ Left: native UIKit reference. Right: Flutter `StupidSimpleIosSheetRoute`.
 - Completion acknowledgement delta: 4 ms
 - Composite: 2412×2622 H.264, constant 60 fps, 68.516667 seconds
 - Composite SHA-256: `b8ffb22b8df31d479170a7ee4e3ddde1af5c0a95527385ac51a098dd3b12cba5`
+- Feature source commit: `aed3f77a8f990349d7bcc0715335e2efb4ca0a15`
 - First and final visible markers drive affine time alignment; no artificial pre-roll is used
 
 Visible scenarios include medium/large page fluidity, custom-height resizing,
