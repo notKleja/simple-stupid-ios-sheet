@@ -40,7 +40,10 @@ def configurations(name, extra):
 
 app_config = configurations("app", {"PRODUCT_BUNDLE_IDENTIFIER":"dev.notkleja.NativeSheetHarness", "INFOPLIST_FILE":str(ROOT/"native_reference/NativeSheetHarness/Info.plist"), "LD_RUNPATH_SEARCH_PATHS":"$(inherited) @executable_path/Frameworks", "OTHER_LDFLAGS":"$(inherited) -framework UIKit -framework QuartzCore -framework SwiftUI"})
 revision = subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
-test_config = configurations("tests", {"PRODUCT_BUNDLE_IDENTIFIER":"dev.notkleja.NativeSheetHarnessUITests", "GENERATE_INFOPLIST_FILE":"YES", "INFOPLIST_KEY_NativeSourceRevision":revision, "TEST_TARGET_NAME":app_name, "LD_RUNPATH_SEARCH_PATHS":"$(inherited) @executable_path/Frameworks @loader_path/Frameworks"})
+test_plist = ROOT/'build/NativeInteractionTestInfo.plist'
+test_plist.write_bytes(plistlib.dumps({'CFBundleIdentifier':'$(PRODUCT_BUNDLE_IDENTIFIER)','CFBundleExecutable':'$(EXECUTABLE_NAME)',
+    'CFBundleName':'$(PRODUCT_NAME)','CFBundlePackageType':'BNDL','CFBundleVersion':'1','CFBundleShortVersionString':'1.0','NativeSourceRevision':revision}))
+test_config = configurations("tests", {"PRODUCT_BUNDLE_IDENTIFIER":"dev.notkleja.NativeSheetHarnessUITests", "GENERATE_INFOPLIST_FILE":"NO", "INFOPLIST_FILE":str(test_plist), "TEST_TARGET_NAME":app_name, "LD_RUNPATH_SEARCH_PATHS":"$(inherited) @executable_path/Frameworks @loader_path/Frameworks"})
 app_sources = add("app-sources","PBXSourcesBuildPhase",buildActionMask=2147483647,files=app_files,runOnlyForDeploymentPostprocessing=0)
 test_sources = add("test-sources","PBXSourcesBuildPhase",buildActionMask=2147483647,files=[test_file],runOnlyForDeploymentPostprocessing=0)
 app_frameworks = add("app-frameworks","PBXFrameworksBuildPhase",buildActionMask=2147483647,files=[],runOnlyForDeploymentPostprocessing=0)
