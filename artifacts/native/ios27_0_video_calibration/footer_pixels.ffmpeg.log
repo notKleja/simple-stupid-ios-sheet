@@ -1,0 +1,793 @@
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 19 >= 19
+    Last message repeated 4 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 20 >= 20
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 21 >= 21
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 22 >= 22
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 23 >= 23
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 24 >= 24
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 25 >= 25
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 26 >= 26
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 27 >= 27
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 28 >= 28
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 29 >= 29
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 30 >= 30
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 31 >= 31
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 32 >= 32
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 33 >= 33
+    Last message repeated 2 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 34 >= 34
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 35 >= 35
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 36 >= 36
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 37 >= 37
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 38 >= 38
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 39 >= 39
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 40 >= 40
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 41 >= 41
+    Last message repeated 2 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 42 >= 42
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 43 >= 43
+    Last message repeated 2 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 44 >= 44
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 45 >= 45
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 46 >= 46
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 47 >= 47
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 48 >= 48
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 49 >= 49
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 50 >= 50
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 51 >= 51
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 52 >= 52
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 53 >= 53
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 54 >= 54
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 55 >= 55
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 70 >= 70
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 71 >= 71
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 72 >= 72
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 73 >= 73
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 74 >= 74
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 75 >= 75
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 76 >= 76
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 80 >= 80
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 81 >= 81
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 82 >= 82
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 83 >= 83
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 84 >= 84
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 85 >= 85
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 86 >= 86
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 87 >= 87
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 88 >= 88
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 89 >= 89
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 90 >= 90
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 91 >= 91
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 92 >= 92
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 93 >= 93
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 119 >= 119
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 120 >= 120
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 121 >= 121
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 122 >= 122
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 123 >= 123
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 124 >= 124
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 125 >= 125
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 126 >= 126
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 127 >= 127
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 128 >= 128
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 129 >= 129
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 130 >= 130
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 131 >= 131
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 132 >= 132
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 158 >= 158
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 159 >= 159
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 160 >= 160
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 161 >= 161
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 162 >= 162
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 163 >= 163
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 164 >= 164
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 165 >= 165
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 166 >= 166
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 167 >= 167
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 168 >= 168
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 169 >= 169
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 170 >= 170
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 182 >= 182
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 183 >= 183
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 184 >= 184
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 185 >= 185
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 186 >= 186
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 187 >= 187
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 188 >= 188
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 189 >= 189
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 190 >= 190
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 191 >= 191
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 192 >= 192
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 193 >= 193
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 220 >= 220
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 221 >= 221
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 222 >= 222
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 223 >= 223
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 224 >= 224
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 225 >= 225
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 226 >= 226
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 227 >= 227
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 228 >= 228
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 229 >= 229
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 230 >= 230
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 231 >= 231
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 232 >= 232
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 233 >= 233
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 259 >= 259
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 260 >= 260
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 261 >= 261
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 262 >= 262
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 263 >= 263
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 264 >= 264
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 265 >= 265
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 266 >= 266
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 267 >= 267
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 268 >= 268
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 269 >= 269
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 270 >= 270
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 271 >= 271
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 298 >= 298
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 299 >= 299
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 300 >= 300
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 301 >= 301
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 302 >= 302
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 303 >= 303
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 304 >= 304
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 305 >= 305
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 306 >= 306
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 307 >= 307
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 308 >= 308
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 309 >= 309
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 310 >= 310
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 311 >= 311
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 322 >= 322
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 323 >= 323
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 324 >= 324
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 325 >= 325
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 326 >= 326
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 327 >= 327
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 328 >= 328
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 329 >= 329
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 330 >= 330
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 331 >= 331
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 332 >= 332
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 333 >= 333
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 360 >= 360
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 361 >= 361
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 362 >= 362
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 363 >= 363
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 364 >= 364
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 365 >= 365
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 366 >= 366
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 367 >= 367
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 368 >= 368
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 369 >= 369
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 370 >= 370
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 371 >= 371
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 372 >= 372
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 373 >= 373
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 399 >= 399
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 400 >= 400
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 401 >= 401
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 402 >= 402
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 403 >= 403
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 404 >= 404
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 405 >= 405
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 406 >= 406
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 407 >= 407
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 408 >= 408
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 409 >= 409
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 410 >= 410
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 411 >= 411
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 412 >= 412
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 438 >= 438
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 439 >= 439
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 440 >= 440
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 441 >= 441
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 442 >= 442
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 443 >= 443
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 444 >= 444
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 445 >= 445
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 446 >= 446
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 447 >= 447
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 448 >= 448
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 449 >= 449
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 450 >= 450
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 462 >= 462
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 463 >= 463
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 464 >= 464
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 465 >= 465
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 466 >= 466
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 467 >= 467
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 468 >= 468
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 469 >= 469
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 470 >= 470
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 471 >= 471
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 472 >= 472
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 473 >= 473
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 474 >= 474
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 501 >= 501
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 502 >= 502
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 503 >= 503
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 504 >= 504
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 505 >= 505
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 506 >= 506
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 507 >= 507
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 508 >= 508
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 509 >= 509
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 510 >= 510
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 511 >= 511
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 512 >= 512
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 513 >= 513
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 526 >= 526
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 541 >= 541
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 542 >= 542
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 543 >= 543
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 544 >= 544
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 545 >= 545
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 546 >= 546
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 547 >= 547
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 548 >= 548
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 549 >= 549
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 550 >= 550
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 551 >= 551
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 552 >= 552
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 553 >= 553
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 579 >= 579
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 580 >= 580
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 581 >= 581
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 582 >= 582
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 583 >= 583
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 584 >= 584
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 585 >= 585
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 586 >= 586
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 587 >= 587
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 588 >= 588
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 589 >= 589
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 590 >= 590
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 603 >= 603
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 604 >= 604
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 605 >= 605
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 606 >= 606
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 607 >= 607
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 608 >= 608
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 609 >= 609
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 610 >= 610
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 611 >= 611
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 612 >= 612
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 613 >= 613
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 614 >= 614
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 641 >= 641
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 642 >= 642
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 643 >= 643
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 644 >= 644
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 645 >= 645
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 646 >= 646
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 647 >= 647
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 648 >= 648
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 649 >= 649
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 650 >= 650
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 651 >= 651
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 652 >= 652
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 653 >= 653
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 680 >= 680
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 681 >= 681
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 682 >= 682
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 683 >= 683
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 684 >= 684
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 685 >= 685
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 686 >= 686
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 687 >= 687
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 688 >= 688
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 689 >= 689
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 690 >= 690
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 691 >= 691
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 692 >= 692
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 719 >= 719
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 720 >= 720
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 721 >= 721
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 722 >= 722
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 723 >= 723
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 724 >= 724
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 725 >= 725
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 726 >= 726
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 727 >= 727
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 728 >= 728
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 729 >= 729
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 730 >= 730
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 742 >= 742
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 743 >= 743
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 744 >= 744
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 745 >= 745
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 746 >= 746
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 747 >= 747
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 748 >= 748
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 749 >= 749
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 750 >= 750
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 751 >= 751
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 752 >= 752
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 753 >= 753
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 755 >= 755
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 781 >= 781
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 782 >= 782
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 783 >= 783
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 784 >= 784
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 785 >= 785
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 786 >= 786
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 787 >= 787
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 788 >= 788
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 789 >= 789
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 790 >= 790
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 791 >= 791
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 792 >= 792
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 793 >= 793
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 819 >= 819
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 820 >= 820
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 821 >= 821
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 822 >= 822
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 823 >= 823
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 824 >= 824
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 825 >= 825
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 826 >= 826
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 827 >= 827
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 828 >= 828
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 829 >= 829
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 830 >= 830
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 831 >= 831
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 832 >= 832
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 859 >= 859
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 860 >= 860
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 861 >= 861
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 862 >= 862
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 863 >= 863
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 864 >= 864
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 865 >= 865
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 866 >= 866
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 867 >= 867
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 868 >= 868
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 869 >= 869
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 870 >= 870
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 871 >= 871
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 882 >= 882
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 883 >= 883
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 884 >= 884
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 885 >= 885
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 886 >= 886
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 887 >= 887
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 888 >= 888
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 889 >= 889
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 890 >= 890
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 891 >= 891
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 892 >= 892
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 893 >= 893
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 921 >= 921
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 922 >= 922
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 923 >= 923
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 924 >= 924
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 925 >= 925
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 926 >= 926
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 927 >= 927
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 928 >= 928
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 929 >= 929
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 930 >= 930
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 931 >= 931
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 932 >= 932
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 933 >= 933
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 960 >= 960
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 961 >= 961
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 962 >= 962
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 963 >= 963
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 964 >= 964
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 965 >= 965
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 966 >= 966
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 967 >= 967
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 968 >= 968
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 969 >= 969
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 970 >= 970
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 971 >= 971
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 972 >= 972
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 999 >= 999
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1000 >= 1000
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1001 >= 1001
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1002 >= 1002
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1003 >= 1003
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1004 >= 1004
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1005 >= 1005
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1006 >= 1006
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1007 >= 1007
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1008 >= 1008
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1009 >= 1009
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1010 >= 1010
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1011 >= 1011
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1022 >= 1022
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1023 >= 1023
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1024 >= 1024
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1025 >= 1025
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1026 >= 1026
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1027 >= 1027
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1028 >= 1028
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1029 >= 1029
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1030 >= 1030
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1031 >= 1031
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1032 >= 1032
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1033 >= 1033
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1034 >= 1034
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1061 >= 1061
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1062 >= 1062
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1063 >= 1063
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1064 >= 1064
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1065 >= 1065
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1066 >= 1066
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1067 >= 1067
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1068 >= 1068
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1069 >= 1069
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1070 >= 1070
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1071 >= 1071
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1072 >= 1072
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1073 >= 1073
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1100 >= 1100
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1101 >= 1101
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1102 >= 1102
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1103 >= 1103
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1104 >= 1104
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1105 >= 1105
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1106 >= 1106
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1107 >= 1107
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1108 >= 1108
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1109 >= 1109
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1110 >= 1110
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1111 >= 1111
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1112 >= 1112
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1139 >= 1139
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1140 >= 1140
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1141 >= 1141
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1142 >= 1142
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1143 >= 1143
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1144 >= 1144
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1145 >= 1145
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1146 >= 1146
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1147 >= 1147
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1148 >= 1148
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1149 >= 1149
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1150 >= 1150
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1151 >= 1151
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1162 >= 1162
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1163 >= 1163
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1164 >= 1164
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1165 >= 1165
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1166 >= 1166
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1167 >= 1167
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1168 >= 1168
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1169 >= 1169
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1170 >= 1170
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1171 >= 1171
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1172 >= 1172
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1173 >= 1173
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1174 >= 1174
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1201 >= 1201
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1202 >= 1202
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1203 >= 1203
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1204 >= 1204
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1205 >= 1205
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1206 >= 1206
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1207 >= 1207
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1208 >= 1208
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1209 >= 1209
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1210 >= 1210
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1211 >= 1211
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1212 >= 1212
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1213 >= 1213
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1214 >= 1214
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1240 >= 1240
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1241 >= 1241
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1242 >= 1242
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1243 >= 1243
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1244 >= 1244
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1245 >= 1245
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1246 >= 1246
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1247 >= 1247
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1248 >= 1248
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1249 >= 1249
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1250 >= 1250
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1251 >= 1251
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1252 >= 1252
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1279 >= 1279
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1280 >= 1280
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1281 >= 1281
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1282 >= 1282
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1283 >= 1283
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1284 >= 1284
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1285 >= 1285
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1286 >= 1286
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1287 >= 1287
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1288 >= 1288
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1289 >= 1289
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1290 >= 1290
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1291 >= 1291
+    Last message repeated 2 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1302 >= 1302
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1303 >= 1303
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1304 >= 1304
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1305 >= 1305
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1306 >= 1306
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1307 >= 1307
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1308 >= 1308
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1309 >= 1309
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1310 >= 1310
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1311 >= 1311
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1312 >= 1312
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1313 >= 1313
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1314 >= 1314
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1341 >= 1341
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1342 >= 1342
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1343 >= 1343
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1344 >= 1344
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1345 >= 1345
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1346 >= 1346
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1347 >= 1347
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1348 >= 1348
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1349 >= 1349
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1350 >= 1350
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1351 >= 1351
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1352 >= 1352
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1353 >= 1353
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1354 >= 1354
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1380 >= 1380
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1381 >= 1381
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1382 >= 1382
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1383 >= 1383
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1384 >= 1384
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1385 >= 1385
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1386 >= 1386
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1387 >= 1387
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1388 >= 1388
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1389 >= 1389
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1390 >= 1390
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1391 >= 1391
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1392 >= 1392
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1419 >= 1419
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1420 >= 1420
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1421 >= 1421
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1422 >= 1422
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1423 >= 1423
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1424 >= 1424
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1425 >= 1425
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1426 >= 1426
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1427 >= 1427
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1428 >= 1428
+    Last message repeated 1 times
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1429 >= 1429
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1430 >= 1430
+[rawvideo @ 0x7607014f00] Application provided invalid, non monotonically increasing dts to muxer in stream 0: 1431 >= 1431

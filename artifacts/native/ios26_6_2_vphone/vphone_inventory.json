@@ -1,0 +1,14 @@
+{
+  "cloudOS": "26.4 (23E5207q)",
+  "controlSocket": "/Users/kleja/.vphone/machines/pinterest-analysis/vphone.sock",
+  "cpuCount": 8,
+  "ios": "26.6.2 (23G90)",
+  "libraryRoot": "/Users/kleja/.vphone/machines",
+  "log": "/Users/kleja/Library/Logs/vphone-launchpad/pinterest-analysis.log",
+  "memoryMB": 8192,
+  "name": "pinterest-analysis",
+  "network": "nat",
+  "panicked": false,
+  "state": "running",
+  "udid": "0000FE01-6C60007CAA0B0537"
+}
