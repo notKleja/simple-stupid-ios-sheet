@@ -18,6 +18,14 @@ import Foundation
         precondition(SynchronizedDemoPresentation.selectedSegment(language: "ar", toggleOn: true) == 0)
         precondition(SynchronizedDemoPresentation.segmentItems(language: "en") == ["First", "Second"])
         precondition(SynchronizedDemoPresentation.selectedSegment(language: "en", toggleOn: true) == 1)
+        precondition(SynchronizedDemoPresentation.switchOrder(language: "ar") == ["switch", "label"])
+        precondition(SynchronizedDemoPresentation.switchOrder(language: "en") == ["label", "switch"])
+        precondition(!SynchronizedDemoPresentation.syncMarkerVisible(elapsedMs: -1, durationMs: 66000))
+        precondition(SynchronizedDemoPresentation.syncMarkerVisible(elapsedMs: 0, durationMs: 66000))
+        precondition(SynchronizedDemoPresentation.syncMarkerVisible(elapsedMs: 999, durationMs: 66000))
+        precondition(!SynchronizedDemoPresentation.syncMarkerVisible(elapsedMs: 1000, durationMs: 66000))
+        precondition(SynchronizedDemoPresentation.syncMarkerVisible(elapsedMs: 65000, durationMs: 66000))
+        precondition(!SynchronizedDemoPresentation.syncMarkerVisible(elapsedMs: 66000, durationMs: 66000))
         print("Native synchronized demo contract PASS: 11 scenes, en/ar, absolute actions, RTL")
     }
 }

@@ -71,6 +71,23 @@ void main() {
     expect(directionality.textDirection, TextDirection.ltr);
   });
 
+  testWidgets('visible sync marker appears only during the first timeline second', (tester) async {
+    final timeline = DemoTimeline.fromJson(jsonDecode(fixture) as Map<String, Object?>);
+    Future<void> pump(int elapsed) => tester.pumpWidget(MaterialApp(home: DemoStage(timeline: timeline, elapsedMs: elapsed, implementation: 'Flutter')));
+    await pump(-1);
+    expect(find.byKey(const ValueKey('demo-sync-marker')), findsNothing);
+    await pump(0);
+    expect(find.byKey(const ValueKey('demo-sync-marker')), findsOneWidget);
+    await pump(999);
+    expect(find.byKey(const ValueKey('demo-sync-marker')), findsOneWidget);
+    await pump(1000);
+    expect(find.byKey(const ValueKey('demo-sync-marker')), findsNothing);
+    await pump(timeline.durationMs - 1000);
+    expect(find.byKey(const ValueKey('demo-sync-marker')), findsOneWidget);
+    await pump(timeline.durationMs);
+    expect(find.byKey(const ValueKey('demo-sync-marker')), findsNothing);
+  });
+
   testWidgets('component gallery supplies its own Material ancestor', (tester) async {
     await tester.pumpWidget(
       MaterialApp(

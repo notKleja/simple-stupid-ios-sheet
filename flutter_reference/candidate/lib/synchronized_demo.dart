@@ -131,6 +131,17 @@ class DemoStage extends StatelessWidget {
           child: Stack(
             children: [
               Positioned.fill(child: child ?? const SizedBox.shrink()),
+              if ((elapsedMs >= 0 && elapsedMs < 1000) ||
+                  (elapsedMs >= timeline.durationMs - 1000 && elapsedMs < timeline.durationMs))
+                Positioned(
+                  left: 20,
+                  bottom: 20,
+                  child: ColoredBox(
+                    key: const ValueKey('demo-sync-marker'),
+                    color: const Color(0xFFFF00FF),
+                    child: const SizedBox(width: 60, height: 60),
+                  ),
+                ),
               Positioned(
                 top: 10,
                 left: 12,

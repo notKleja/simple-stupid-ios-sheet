@@ -108,12 +108,59 @@ def wait_for_ack(directory: Path, name: str, status: str, expected: dict[str, An
     raise RuntimeError(f"Missing valid {status} acknowledgement before deadline: {path}")
 
 
-def compose_filter() -> str:
-    return (
-        "[0:v]setpts=PTS-STARTPTS[native];"
-        "[1:v]setpts=PTS-STARTPTS[flutter];"
-        "[native][flutter]hstack=inputs=2[out]"
-    )
+def alignment_transform(
+    native_markers: tuple[float, float],
+    flutter_markers: tuple[float, float],
+    *,
+    marker_gap: float,
+    pre_roll: float = 0,
+) -> dict[str, dict[str, float]]:
+    def transform(markers: tuple[float, float]) -> dict[str, float]:
+        observed_gap = markers[1] - markers[0]
+        if observed_gap <= 0:
+            raise RuntimeError("visible marker interval must be positive")
+        scale = marker_gap / observed_gap
+        start = max(0.0, markers[0] - pre_roll / scale)
+        return {"start": round(start, 6), "scale": round(scale, 9)}
+    return {"native": transform(native_markers), "flutter": transform(flutter_markers)}
+
+
+def compose_filter(native_start: float = 0, flutter_start: float = 0, native_scale: float = 1, flutter_scale: float = 1) -> str:
+    native_base = f"[0:v]trim=start={native_start:.6f},setpts=(PTS-STARTPTS)*{native_scale:.6f}" if native_start or native_scale != 1 else "[0:v]setpts=PTS-STARTPTS"
+    flutter_base = f"[1:v]trim=start={flutter_start:.6f},setpts=(PTS-STARTPTS)*{flutter_scale:.6f}" if flutter_start or flutter_scale != 1 else "[1:v]setpts=PTS-STARTPTS"
+    native_base += ",fps=60"
+    flutter_base += ",fps=60"
+    native = f"{native_base},tpad=stop_mode=clone:stop_duration=2[native]"
+    flutter = f"{flutter_base},tpad=stop_mode=clone:stop_duration=2[flutter]"
+    return f"{native};{flutter};[native][flutter]hstack=inputs=2:shortest=1[out]"
+
+
+def detect_sync_markers(path: Path) -> tuple[float, float]:
+    frames = run_json([
+        "ffprobe", "-v", "error", "-select_streams", "v:0",
+        "-show_entries", "frame=best_effort_timestamp_time", "-of", "json", str(path),
+    ]).get("frames", [])
+    decoded = subprocess.run([
+        "ffmpeg", "-v", "error", "-i", str(path),
+        "-vf", "scale=80:174:flags=neighbor,format=rgb24", "-fps_mode", "passthrough", "-f", "rawvideo", "-",
+    ], check=True, capture_output=True).stdout
+    frame_size = 80 * 174 * 3
+    frame_count = min(len(frames), len(decoded) // frame_size)
+    rising: list[float] = []
+    active = False
+    for index in range(frame_count):
+        frame = decoded[index * frame_size : (index + 1) * frame_size]
+        magenta = sum(
+            1 for offset in range(0, len(frame), 3)
+            if frame[offset] > 180 and frame[offset + 1] < 100 and frame[offset + 2] > 180
+        )
+        visible = magenta >= 6
+        if visible and not active:
+            rising.append(float(frames[index]["best_effort_timestamp_time"]))
+        active = visible
+    if len(rising) < 2:
+        raise RuntimeError(f"Two visible synchronization markers not found in {path}: {rising}")
+    return rising[0], rising[-1]
 
 
 def probe_media(path: Path) -> dict[str, Any]:
@@ -225,10 +272,10 @@ def launch(udid: str, bundle: str, start_epoch_ms: int, build: str) -> dict[str,
     return {"started_monotonic_ns": started, "output": result.stdout.strip()}
 
 
-def compose(native: Path, flutter: Path, output: Path) -> None:
+def compose(native: Path, flutter: Path, output: Path, *, native_start: float = 0, flutter_start: float = 0, native_scale: float = 1, flutter_scale: float = 1) -> None:
     run([
         "ffmpeg", "-y", "-i", str(native), "-i", str(flutter),
-        "-filter_complex", compose_filter(), "-map", "[out]", "-an",
+        "-filter_complex", compose_filter(native_start, flutter_start, native_scale, flutter_scale), "-map", "[out]", "-an",
         "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
         "-movflags", "+faststart", str(output),
     ])
@@ -325,7 +372,11 @@ def main() -> int:
         stop_recording(flutter_recorder)
         run(["xcrun", "simctl", "terminate", native_udid, NATIVE_BUNDLE], check=False)
         run(["xcrun", "simctl", "terminate", flutter_udid, FLUTTER_BUNDLE], check=False)
-    compose(native_video, flutter_video, composite_video)
+    marker_times = {"native": detect_sync_markers(native_video), "flutter": detect_sync_markers(flutter_video)}
+    transform = alignment_transform(marker_times["native"], marker_times["flutter"], marker_gap=65)
+    compose(native_video, flutter_video, composite_video,
+            native_start=transform["native"]["start"], flutter_start=transform["flutter"]["start"],
+            native_scale=transform["native"]["scale"], flutter_scale=transform["flutter"]["scale"])
 
     outputs = {"native": native_video, "flutter": flutter_video, "composite": composite_video}
     media = {name: probe_media(path) for name, path in outputs.items()}
@@ -343,6 +394,14 @@ def main() -> int:
     manifest["timeline_summary"] = timeline_summary
     manifest["verified_bundled_timeline_sha256"] = timeline_asset_hash
     manifest["acknowledgements"] = acknowledgements
+    manifest["visible_alignment"] = {
+        "marker": "60x60 magenta square shown during the first and final timeline seconds",
+        "raw_marker_timestamp_seconds": marker_times,
+        "composite_transform": transform,
+        "shared_preroll_seconds": 0,
+        "start_marker_delta_ms_before_alignment": abs(marker_times["native"][0] - marker_times["flutter"][0]) * 1000,
+        "end_marker_delta_ms_before_alignment": abs(marker_times["native"][1] - marker_times["flutter"][1]) * 1000,
+    }
     manifest["git_revision"] = run(["git", "rev-parse", "HEAD"], check=True).stdout.strip()
     manifest_path = output_dir / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")

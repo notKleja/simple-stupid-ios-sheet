@@ -6,6 +6,7 @@ from pathlib import Path
 
 from measurement.scripts.record_synchronized_demo import (
     build_manifest,
+    alignment_transform,
     bundled_timeline_paths,
     compose_filter,
     find_runtime,
@@ -32,12 +33,24 @@ class SynchronizedRecordingTests(unittest.TestCase):
             find_runtime(inventory, "26.4")
 
     def test_composition_keeps_both_inputs_without_retiming_or_optional_filters(self):
-        value = compose_filter()
+        value = compose_filter(0, 0, 1, 1)
         self.assertIn("[0:v]setpts=PTS-STARTPTS", value)
         self.assertIn("[1:v]setpts=PTS-STARTPTS", value)
         self.assertIn("hstack=inputs=2", value)
         self.assertNotIn("drawtext", value)
         self.assertNotIn("trim", value)
+
+    def test_visible_marker_alignment_starts_at_markers_on_fixed_clock(self):
+        transform = alignment_transform((5, 70), (8, 138), marker_gap=65)
+        self.assertEqual(transform["native"], {"start": 5.0, "scale": 1.0})
+        self.assertEqual(transform["flutter"], {"start": 8.0, "scale": 0.5})
+        value = compose_filter(5, 8, 1, .5)
+        self.assertIn("trim=start=5.000000", value)
+        self.assertIn("trim=start=8.000000", value)
+        self.assertIn("setpts=(PTS-STARTPTS)*0.500000", value)
+        self.assertEqual(value.count("fps=60"), 2)
+        self.assertEqual(value.count("tpad=stop_mode=clone:stop_duration=2"), 2)
+        self.assertIn("hstack=inputs=2:shortest=1", value)
 
     def test_launch_uses_installed_terminate_running_process_flag(self):
         self.assertEqual(

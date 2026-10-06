@@ -102,4 +102,12 @@ enum SynchronizedDemoPresentation {
         if language == "ar" { return toggleOn ? 0 : 1 }
         return toggleOn ? 1 : 0
     }
+
+    static func switchOrder(language: String) -> [String] {
+        language == "ar" ? ["switch", "label"] : ["label", "switch"]
+    }
+
+    static func syncMarkerVisible(elapsedMs: Int, durationMs: Int) -> Bool {
+        (elapsedMs >= 0 && elapsedMs < 1000) || (elapsedMs >= durationMs - 1000 && elapsedMs < durationMs)
+    }
 }

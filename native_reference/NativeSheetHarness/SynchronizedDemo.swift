@@ -20,6 +20,7 @@ import UIKit
     private let header = UILabel()
     private let backgroundTitle = UILabel()
     private let stateLabel = UILabel()
+    private let syncMarker = UIView()
 
     init(timeline: SynchronizedDemoTimeline, startEpochMs: Int) {
         self.timeline = timeline
@@ -60,6 +61,11 @@ import UIKit
         stateLabel.textAlignment = .center
         stateLabel.frame = CGRect(x: 28, y: 445, width: 346, height: 50)
         view.addSubview(stateLabel)
+
+        syncMarker.backgroundColor = UIColor(red: 1, green: 0, blue: 1, alpha: 1)
+        syncMarker.frame = CGRect(x: 20, y: 780, width: 60, height: 60)
+        syncMarker.isHidden = true
+        view.addSubview(syncMarker)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -78,6 +84,7 @@ import UIKit
 
     @objc private func tick() {
         let raw = Int(Date().timeIntervalSince1970 * 1000) - startEpochMs
+        syncMarker.isHidden = !SynchronizedDemoPresentation.syncMarkerVisible(elapsedMs: raw, durationMs: timeline.durationMs)
         elapsedMs = min(max(raw, 0), timeline.durationMs)
         let scene = timeline.scene(at: elapsedMs)
         if scene.id != currentSceneID { currentSceneID = scene.id; updateScene(scene) }
@@ -226,10 +233,13 @@ import UIKit
         stack.semanticContentAttribute = scene.direction == "rtl" ? .forceRightToLeft : .forceLeftToRight
         let title = UILabel(); title.font = .systemFont(ofSize: 24, weight: .semibold); title.text = scene.language == "ar" ? "معرض المكونات" : "Component gallery"; title.textAlignment = scene.language == "ar" ? .right : .left; stack.addArrangedSubview(title)
         let button = UIButton(type: .system); button.configuration = .filled(); button.setTitle(scene.language == "ar" ? "زر أساسي" : "Primary button", for: .normal); stack.addArrangedSubview(button)
-        let switchRow = UIStackView(); switchRow.axis = .horizontal
+        let switchRow = UIStackView(); switchRow.axis = .horizontal; switchRow.distribution = .equalSpacing
         let switchTitle = UILabel(); switchTitle.text = scene.language == "ar" ? "مفتاح تبديل" : "Toggle switch"; switchTitle.textAlignment = scene.language == "ar" ? .right : .left
         let toggle = UISwitch(); toggle.isOn = toggleValue; componentSwitch = toggle
-        switchRow.addArrangedSubview(switchTitle); switchRow.addArrangedSubview(toggle); stack.addArrangedSubview(switchRow)
+        for item in SynchronizedDemoPresentation.switchOrder(language: scene.language) {
+            switchRow.addArrangedSubview(item == "switch" ? toggle : switchTitle)
+        }
+        stack.addArrangedSubview(switchRow)
         let segmented = UISegmentedControl(items: SynchronizedDemoPresentation.segmentItems(language: scene.language)); segmented.selectedSegmentIndex = SynchronizedDemoPresentation.selectedSegment(language: scene.language, toggleOn: toggleValue); componentSegmented = segmented; stack.addArrangedSubview(segmented)
         let field = UITextField(); field.borderStyle = .roundedRect; field.placeholder = scene.language == "ar" ? "حقل نص" : "Text field"; field.textAlignment = scene.language == "ar" ? .right : .left; stack.addArrangedSubview(field)
         for index in 1...3 {
