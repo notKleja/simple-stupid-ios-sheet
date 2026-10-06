@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "status": "unresolved",
+  "notes": ["Populate with actual native/Flutter runtime pairs after identical replay; empty manifest must fail", "Paths resolve relative to this manifest", "Entry: cell_id,trial,check_id,native_path,candidate_path,config_path,recipe_path,runtime_input_verified; holdouts also require pre-frozen recipe_sha256", "Every required check/subcondition must pass within one independent trial before that trial counts; caller windows cannot replace matrix windows"],
+  "entries": []
+}

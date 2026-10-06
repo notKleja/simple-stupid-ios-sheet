@@ -1,2 +1,3 @@
-*
-!.gitignore
+cache/
+20??-??-??/
+.graphify*
