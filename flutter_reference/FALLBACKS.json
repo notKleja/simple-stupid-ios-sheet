@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "status": "research_candidate_not_native_parity",
+  "entries": [
+    {"parameter":"medium_height","value":"maximum/2","source":"explicit fallback for unmeasured environments","confidence":"unmeasured"},
+    {"parameter":"maximum_height","value":"Navigator layout height - top padding - resize keyboard inset","source":"derived Flutter layout envelope, not UIKit maximumDetentValue","confidence":"fallback"},
+    {"parameter":"corner_parameter","value":24,"unit":"pt","source":"stupid_simple_sheet SheetBackground default; RoundedSuperellipseBorder","confidence":"fallback"},
+    {"parameter":"side_bottom_inset","value":0,"unit":"pt","source":"unmeasured generic bottom attachment fallback","confidence":"fallback"},
+    {"parameter":"motion","value":"CupertinoMotion.smooth(snapToEnd:true), default500ms/bounce0","source":"motor1.1.0 constructor, not measured UIKit motion","confidence":"fallback"},
+    {"parameter":"snap","value":"FlingSnapPhysics","source":"upstream next-adjacent fling policy and Flutter kMinFlingVelocity","confidence":"fallback"},
+    {"parameter":"overdrag","value":"delta/(1+abs(boundary-position)*100)","source":"upstream generic mixin default in normalized units","confidence":"fallback"},
+    {"parameter":"release_resistance","value":"velocity/(maxExtent+overshoot*100)","source":"upstream generic mixin; preserved unless profile resolver supplied","confidence":"fallback"},
+    {"parameter":"barrier_alpha","value":0.2,"source":"upstream generic route color; native barrier measurement unresolved","confidence":"fallback"},
+    {"parameter":"grabber","value":{"width":36,"height":5,"top":8,"radius":2.5},"unit":"pt","source":"conventional candidate control styling; native dimensions not measured","confidence":"fallback"},
+    {"parameter":"native_402x874_rest","source":"native_reference/measurements.json,10trials per OS; sampled native container geometry","confidence":"qualified_resting_only"},
+    {"parameter":"native_402x874_transfer","source":"recorded-container fits; native coordinate coherence defects discovered","confidence":"hypothesis_not_accepted"},
+    {"parameter":"extent_epsilon","value":0.000001,"source":"software floating-point comparison tolerance; not native gesture threshold","confidence":"algorithm"},
+    {"parameter":"metadata_clock_precision","value":1000,"unit":"ns","source":"Dart Stopwatch microsecond samples converted to nanoseconds","confidence":"runtime_clock_precision"},
+    {"parameter":"replay_delays","value":[1500,3000,4500,400],"unit":"ms","source":"native reference scenario scheduling; commands recorded at actual receipt","confidence":"harness_configuration"}
+  ]
+}

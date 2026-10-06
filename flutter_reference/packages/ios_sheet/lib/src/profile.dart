@@ -18,6 +18,7 @@ class IosSheetProfile {
     this.detentToVisibleHeight = _fallbackVisible,
     this.dragResistance,
     this.releaseResistance,
+    this.fixedSurfaceDuringTransition = false,
   });
 
   static final ios26 = IosSheetProfile(
@@ -62,6 +63,7 @@ class IosSheetProfile {
 
   /// Returns the release velocity in points/second. Null preserves upstream.
   final IosResistanceResolver? releaseResistance;
+  final bool fixedSurfaceDuringTransition;
 
   IosSheetProfile copyWith({
     IosDetentResolver? mediumHeight,
@@ -74,6 +76,7 @@ class IosSheetProfile {
     IosDetentVisibleHeightResolver? detentToVisibleHeight,
     IosResistanceResolver? dragResistance,
     IosResistanceResolver? releaseResistance,
+    bool? fixedSurfaceDuringTransition,
   }) => IosSheetProfile(
     majorVersion: majorVersion,
     mediumHeight: mediumHeight ?? this.mediumHeight,
@@ -86,6 +89,8 @@ class IosSheetProfile {
     detentToVisibleHeight: detentToVisibleHeight ?? this.detentToVisibleHeight,
     dragResistance: dragResistance ?? this.dragResistance,
     releaseResistance: releaseResistance ?? this.releaseResistance,
+    fixedSurfaceDuringTransition:
+        fixedSurfaceDuringTransition ?? this.fixedSurfaceDuringTransition,
   );
 }
 
@@ -119,10 +124,12 @@ class IosSheetGeometryContext {
     required this.environment,
     required this.visibleHeight,
     required this.progress,
+    this.velocity = 0,
   });
   final IosSheetEnvironment environment;
   final double visibleHeight;
   final double progress;
+  final double velocity;
 }
 
 /// Per-frame geometry seam. A resolver can express measured continuous or
@@ -134,10 +141,12 @@ class IosSheetGeometry {
     this.bottomInset = 0,
     this.cornerRadius = 0,
     this.shape,
+    this.scale = 1,
   });
   final double sideInset;
   final double bottomInset;
   final double cornerRadius;
+  final double scale;
 
   /// Supports measured paths when a single scalar radius is insufficient.
   final ShapeBorder? shape;

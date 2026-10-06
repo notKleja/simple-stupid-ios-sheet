@@ -16,6 +16,7 @@ void main() {
     IosSheetProfile? profile,
     Widget? child,
     ValueChanged<String>? onSelected,
+    bool settle = true,
   }) async {
     await tester.binding.setSurfaceSize(const Size(400, 800));
     addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -55,7 +56,11 @@ void main() {
             ),
       ),
     );
-    await tester.pumpAndSettle();
+    if (settle) {
+      await tester.pumpAndSettle();
+    } else {
+      await tester.pump();
+    }
   }
 
   testWidgets('fixed detent resizes opaque surface to its resolved height', (
@@ -156,6 +161,67 @@ void main() {
   ) async {
     final detached = IosSheetController();
     expect(() => detached.selectDetent('large'), throwsStateError);
+  });
+
+  testWidgets('covered controller cannot accidentally dismiss the top sheet', (
+    tester,
+  ) async {
+    await present(tester);
+    final covered = controller;
+    final top = IosSheetController();
+    navigator.currentState!.push(
+      StupidSimpleIosSheetRoute<void>(
+        profile: IosSheetProfile.ios26,
+        controller: top,
+        child: const Center(child: Text('Top sheet')),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(() => covered.dismiss(), throwsStateError);
+    expect(find.text('Top sheet'), findsOneWidget);
+    top.dismiss();
+    await tester.pumpAndSettle();
+    expect(covered.isAttached, isTrue);
+  });
+
+  testWidgets('uniform floating scale preserves native aspect geometry', (
+    tester,
+  ) async {
+    await present(
+      tester,
+      profile: IosSheetProfile.ios26.copyWith(
+        geometry: (_) => const IosSheetGeometry(scale: .9, bottomInset: 8),
+        evidence: {'geometry': 'synthetic scale fixture'},
+      ),
+    );
+    final frame = controller.captureFrame();
+    expect(frame.metrics['sheet.x'], closeTo(20, .000001));
+    expect(frame.metrics['sheet.y'], closeTo(522, .000001));
+    expect(frame.metrics['sheet.width'], closeTo(360, .000001));
+    expect(frame.metrics['sheet.height'], closeTo(270, .000001));
+    expect(frame.metrics['sheet.bottom_inset'], closeTo(8, .000001));
+    expect(frame.state['selected_detent'], 'short');
+    expect(frame.state['underlying_hit_test'], isNull);
+    expect(frame.unavailable['underlying_hit_test'], isNotEmpty);
+  });
+
+  testWidgets('fixed-surface presentation moves without resizing content', (
+    tester,
+  ) async {
+    await present(
+      tester,
+      settle: false,
+      profile: IosSheetProfile.ios26.copyWith(
+        fixedSurfaceDuringTransition: true,
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(
+      controller.captureFrame().metrics['sheet.height'],
+      closeTo(300, .01),
+    );
+    await tester.pumpAndSettle();
+    expect(controller.captureFrame().metrics['sheet.y'], closeTo(500, .01));
   });
 
   testWidgets('custom snap physics is used for gesture target selection', (

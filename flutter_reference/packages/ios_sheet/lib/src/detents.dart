@@ -11,6 +11,7 @@ class IosSheetEnvironment {
     this.safeArea = EdgeInsets.zero,
     this.keyboardHeight = 0,
     this.contentHeight,
+    this.displayScale = 1,
   });
 
   final Size availableSize;
@@ -18,6 +19,7 @@ class IosSheetEnvironment {
   final EdgeInsets safeArea;
   final double keyboardHeight;
   final double? contentHeight;
+  final double displayScale;
 }
 
 typedef IosDetentResolver = double Function(IosSheetEnvironment environment);

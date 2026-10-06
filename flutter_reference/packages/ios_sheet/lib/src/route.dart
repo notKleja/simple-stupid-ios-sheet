@@ -5,6 +5,7 @@ import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 
 import 'detents.dart';
 import 'profile.dart';
+import 'trace.dart';
 
 const iosSheetSurfaceKey = ValueKey('ios-sheet-opaque-surface');
 
@@ -22,6 +23,13 @@ class IosSheetController extends ChangeNotifier {
   double get visibleHeight => _route?.visibleHeight ?? 0;
   bool get isModal => _route?.isModal ?? false;
 
+  /// Capture after layout/paint, typically from a post-frame callback.
+  IosSheetFrame captureFrame() {
+    final route = _route;
+    if (route == null) throw StateError('Sheet controller is detached');
+    return route.captureFrame();
+  }
+
   void selectDetent(String identifier) {
     final route = _route;
     if (route == null) throw StateError('Sheet controller is detached');
@@ -32,6 +40,7 @@ class IosSheetController extends ChangeNotifier {
   void dismiss([Object? result]) {
     final route = _route;
     if (route == null) throw StateError('Sheet controller is detached');
+    if (!route.isCurrent) throw StateError('Sheet is covered by another route');
     route.navigator?.pop(result);
   }
 
@@ -109,6 +118,84 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   String? _selectedIdentifier;
   String? _targetIdentifier;
   bool _presented = false;
+  double? _dismissStartExtent;
+  final _surfaceProbe = GlobalKey();
+
+  IosSheetGeometry get currentGeometry => profile.geometry(
+    IosSheetGeometryContext(
+      environment: environment,
+      visibleHeight: _layoutExtent * _referenceHeight,
+      progress: _layoutExtent,
+      velocity: controller?.velocity ?? 0,
+    ),
+  );
+
+  double get _layoutExtent {
+    if (!profile.fixedSurfaceDuringTransition) return controller?.value ?? 0;
+    return _dismissStartExtent ??
+        (!_presented ? snappingConfig.initialSnap : controller!.value);
+  }
+
+  IosSheetFrame captureFrame() {
+    final box = _surfaceProbe.currentContext?.findRenderObject();
+    if (box is! RenderBox || !box.hasSize) {
+      throw StateError('Sheet has not completed layout');
+    }
+    final topLeft = box.localToGlobal(Offset.zero);
+    final bottomRight = box.localToGlobal(box.size.bottomRight(Offset.zero));
+    final size = bottomRight - topLeft;
+    final env = environment;
+    final geometry = currentGeometry;
+    final selected = resolvedDetents
+        .where((e) => e.identifier == _selectedIdentifier)
+        .firstOrNull;
+    return IosSheetFrame(
+      metrics: {
+        'sheet.x': topLeft.dx,
+        'sheet.y': topLeft.dy,
+        'sheet.width': size.dx,
+        'sheet.height': size.dy,
+        'sheet.visible_height': math.max(
+          0,
+          math.min(bottomRight.dy, env.availableSize.height) -
+              math.max(0, topLeft.dy),
+        ),
+        'sheet.top': topLeft.dy,
+        'sheet.bottom': bottomRight.dy,
+        'sheet.left_inset': topLeft.dx,
+        'sheet.right_inset': env.availableSize.width - bottomRight.dx,
+        'sheet.bottom_inset': env.availableSize.height - bottomRight.dy,
+        'sheet.detent_height': selected?.height,
+        'sheet.radius': geometry.shape == null
+            ? geometry.cornerRadius * geometry.scale
+            : null,
+        'sheet.relative_progress': controller!.value,
+        'barrier.alpha': isModal ? modalBarrierColor.a : 0,
+        'sheet.velocity_y': null,
+        'finger.velocity_y': null,
+        'scroll.offset': null,
+      },
+      state: {
+        'selected_detent': _selectedIdentifier,
+        'target_detent': _targetIdentifier,
+        'gesture': isUserDragging ? 'dragging' : 'idle',
+        'scroll_owner': null,
+        'underlying_hit_test': null,
+        'dismissed': !isActive,
+        'surface': 'opaque',
+        'shape': geometry.shape == null ? 'rounded_superellipse' : 'custom',
+      },
+      unavailable: {
+        'sheet.velocity_y': 'derive from consecutive observed screen positions',
+        'finger.velocity_y': 'pointer recorder not attached',
+        'scroll.offset': 'scroll recorder not attached',
+        'scroll_owner': 'gesture ownership instrumentation pending',
+        'underlying_hit_test': 'no real background touch probe in this frame',
+        if (geometry.shape != null)
+          'sheet.radius': 'custom shape cannot be represented by one scalar',
+      },
+    );
+  }
 
   IosSheetEnvironment get environment {
     final media = MediaQuery.of(navigator!.context);
@@ -127,12 +214,14 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
       ),
       safeArea: media.viewPadding,
       keyboardHeight: keyboard,
+      displayScale: media.devicePixelRatio,
     );
     return IosSheetEnvironment(
       availableSize: base.availableSize,
       maximumDetentHeight: profile.maximumDetentHeight(base),
       safeArea: base.safeArea,
       keyboardHeight: base.keyboardHeight,
+      displayScale: base.displayScale,
     );
   }
 
@@ -312,13 +401,18 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
       child: child,
       builder: (context, child) {
         final env = environment;
-        final geometry = profile.geometry(
-          IosSheetGeometryContext(
-            environment: env,
-            visibleHeight: visibleHeight,
-            progress: controller!.value,
-          ),
-        );
+        final geometry = currentGeometry;
+        final fixedTransition =
+            profile.fixedSurfaceDuringTransition &&
+            (!_presented || _dismissStartExtent != null);
+        final layoutExtent = _layoutExtent;
+        final fraction = fixedTransition && layoutExtent > 0
+            ? (controller!.value / layoutExtent).clamp(0.0, 1.0)
+            : 1.0;
+        final transitionOffset =
+            (1 - fraction) *
+            (layoutExtent * _referenceHeight * geometry.scale +
+                geometry.bottomInset);
         final shape =
             geometry.shape ??
             RoundedSuperellipseBorder(
@@ -336,22 +430,29 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
           child: Align(
             alignment: Alignment.bottomCenter,
             child: Transform.translate(
-              offset: Offset(0, -geometry.bottomInset),
-              child: DecoratedBox(
-                key: iosSheetSurfaceKey,
-                decoration: ShapeDecoration(
-                  shape: shape,
-                  color: CupertinoDynamicColor.resolve(
-                    backgroundColor,
-                    context,
+              offset: Offset(0, transitionOffset - geometry.bottomInset),
+              child: Transform.scale(
+                alignment: Alignment.bottomCenter,
+                scale: geometry.scale,
+                child: DecoratedBox(
+                  key: iosSheetSurfaceKey,
+                  decoration: ShapeDecoration(
+                    shape: shape,
+                    color: CupertinoDynamicColor.resolve(
+                      backgroundColor,
+                      context,
+                    ),
                   ),
-                ),
-                child: ClipPath(
-                  clipper: ShapeBorderClipper(shape: shape),
-                  child: SheetDismissalTransition(
-                    animation: controller!,
-                    dismissalMode: dismissalMode,
-                    child: maybeSnapshotChild(child!),
+                  child: ClipPath(
+                    key: _surfaceProbe,
+                    clipper: ShapeBorderClipper(shape: shape),
+                    child: SheetDismissalTransition(
+                      animation: fixedTransition
+                          ? AlwaysStoppedAnimation(layoutExtent)
+                          : controller!,
+                      dismissalMode: dismissalMode,
+                      child: maybeSnapshotChild(child!),
+                    ),
                   ),
                 ),
               ),
@@ -378,6 +479,14 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
       ),
     ),
   );
+
+  @override
+  bool didPop(T? result) {
+    if (profile.fixedSurfaceDuringTransition) {
+      _dismissStartExtent = controller!.value;
+    }
+    return super.didPop(result);
+  }
 
   @override
   void dispose() {

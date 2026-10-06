@@ -5,3 +5,4 @@ environment:
 workspace:
   - packages/stupid_simple_sheet
   - packages/ios_sheet
+  - candidate

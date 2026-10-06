@@ -1,0 +1,21 @@
+name: ios_sheet_candidate
+description: "A new Flutter project."
+publish_to: 'none'
+resolution: workspace
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  simple_stupid_ios_sheet: 0.1.0-dev.1
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
