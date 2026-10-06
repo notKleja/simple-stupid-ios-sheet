@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "scenario_id": "native.medium_large.programmatic",
+  "status": "complete_resting_and_replay_timing_only",
+  "source_revision": "741175b42a2d056300be9c3fe4a4786be047b35a",
+  "scheduler": "strict DispatchSourceTimer, zero requested leeway, shared present boundary",
+  "entries": [
+    {
+      "path": "artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-051E3E77-237A-4124-AE71-FF35CA303C05.jsonl.gz",
+      "sha256": "38fec0a2495d3fa9fa23886f7b24a43cddab45d05a8bcf040217d51945bc3b65",
+      "run_id": "051E3E77-237A-4124-AE71-FF35CA303C05",
+      "trial": 2,
+      "attempt_id": "4CC99B66-9822-4FF5-A2EA-6478A768E31C",
+      "role": "training",
+      "source_revision": "741175b42a2d056300be9c3fe4a4786be047b35a",
+      "terminal": true
+    },
+    {
+      "path": "artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-05FD2258-A903-47F6-8BFC-D8CC554EDDC8.jsonl.gz",
+      "sha256": "d5e66af7548caf49abab4d5ae4cf188ea44f56cabd6824de6599e92a8558d155",
+      "run_id": "05FD2258-A903-47F6-8BFC-D8CC554EDDC8",
+      "trial": 3,
+      "attempt_id": "8F477540-A0C8-4745-8ED3-53E89D3E5AE5",
+      "role": "training",
+      "source_revision": "741175b42a2d056300be9c3fe4a4786be047b35a",
+      "terminal": true
+    },
+    {
+      "path": "artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-1BFF7838-6E7B-4DD8-9268-5C32916DD82B.jsonl.gz",
+      "sha256": "b9bee7d3a37a1d02293ed5061cad53b168d76ee5a5b529ab9489352eb77ed6db",
+      "run_id": "1BFF7838-6E7B-4DD8-9268-5C32916DD82B",
+      "trial": 10,
+      "attempt_id": "939F42D3-A7F6-41CF-BE99-767B4F3A5649",
+      "role": "training",
+      "source_revision": "741175b42a2d056300be9c3fe4a4786be047b35a",
+      "terminal": true
+    },
+    {
+      "path": "artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-93225134-E24C-403F-8FA8-0AF915248E36.jsonl.gz",
+      "sha256": "6cf634adf8ab369accae1020a5d65435f668d647d1e0f74a79db96dfeee50ef4",
+      "run_id": "93225134-E24C-403F-8FA8-0AF915248E36",
+      "trial": 9,
+      "attempt_id": "9509D3CA-E668-4EDA-9CEA-80A11738EF19",
+      "role": "training",
+      "source_revision": "741175b42a2d056300be9c3fe4a4786be047b35a",
+      "terminal": true
+    },
+    {
+      "path": "artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-A7C24858-B1E3-482D-8AAB-AABA7E3F4C88.jsonl.gz",
+      "sha256": "a258365433785480bdd3e5f4e009d23d25a36c37ddef4955c842728a59f1aa32",
+      "run_id": "A7C24858-B1E3-482D-8AAB-AABA7E3F4C88",
+      "trial": 8,
+      "attempt_id": "EF1DAB97-22FF-4341-8B89-5EB4EB01C166",
+      "role": "training",
+      "source_revision": "741175b42a2d056300be9c3fe4a4786be047b35a",
+      "terminal": true
+    },
+    {
+      "path": "artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-D9EEE96B-6AE1-4A16-ADC1-E3D3F1689D6B.jsonl.gz",
+      "sha256": "8a940f165db89b99484b9ce67a8300680294721db4e432d8ecc1ca1b1817d185",
+      "run_id": "D9EEE96B-6AE1-4A16-ADC1-E3D3F1689D6B",
+      "trial": 7,
+      "attempt_id": "01CD2CD8-E01F-45A5-A8D4-E5C2E05C764C",
+      "role": "training",
+      "source_revision": "741175b42a2d056300be9c3fe4a4786be047b35a",
+      "terminal": true
+    },
+    {
+      "path": "artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-DB36BB8C-1CC3-4A69-9066-8A92E715FB87.jsonl.gz",
+      "sha256": "e07b70b4e93c1501ff2b38423888f5ba71cd5135d0b8605145417bcf9b46afe2",
+      "run_id": "DB36BB8C-1CC3-4A69-9066-8A92E715FB87",
+      "trial": 6,
+      "attempt_id": "EB0922AA-1412-4934-82F3-513D123DA5D0",
+      "role": "training",
+      "source_revision": "741175b42a2d056300be9c3fe4a4786be047b35a",
+      "terminal": true
+    },
+    {
+      "path": "artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-E37BD61D-0CA1-4D2B-ADB8-EA88C677CE01.jsonl.gz",
+      "sha256": "a1d2298cb0c161efc142efd96b7bd9f0a33df125d00a62573d2a3a66b363dbd0",
+      "run_id": "E37BD61D-0CA1-4D2B-ADB8-EA88C677CE01",
+      "trial": 1,
+      "attempt_id": "275989AA-7C9C-472E-B68A-BAB0933B5BD4",
+      "role": "training",
+      "source_revision": "741175b42a2d056300be9c3fe4a4786be047b35a",
+      "terminal": true
+    },
+    {
+      "path": "artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-EFD875CE-D5D2-4D40-8493-A19CB1FBCF14.jsonl.gz",
+      "sha256": "f476265560a77cc101f33ba314a45e1fe252a58c5fa38a9193d105a380a63f7b",
+      "run_id": "EFD875CE-D5D2-4D40-8493-A19CB1FBCF14",
+      "trial": 4,
+      "attempt_id": "A35EA673-B4AB-450C-98A7-F0E1FC09663A",
+      "role": "training",
+      "source_revision": "741175b42a2d056300be9c3fe4a4786be047b35a",
+      "terminal": true
+    },
+    {
+      "path": "artifacts/native/timing/ios27_strict_anchored/native.medium_large.programmatic-FE5C9FD9-51CB-45AE-943B-26811F8AE974.jsonl.gz",
+      "sha256": "45e5ccdd8f14b48d52e5a64efa06eb316ca1c3908ad92130dadc969c9c1d2759",
+      "run_id": "FE5C9FD9-51CB-45AE-943B-26811F8AE974",
+      "trial": 5,
+      "attempt_id": "61AE5A26-97DC-4582-AD1F-8CC895101570",
+      "role": "training",
+      "source_revision": "741175b42a2d056300be9c3fe4a4786be047b35a",
+      "terminal": true
+    }
+  ],
+  "request_ms": [
+    {
+      "median": 1500.1577499999999,
+      "min": 1500.103209,
+      "max": 1500.336625
+    },
+    {
+      "median": 3000.2564795,
+      "min": 3000.122875,
+      "max": 3003.190875
+    },
+    {
+      "median": 4500.213728999999,
+      "min": 4500.104042,
+      "max": 4502.792958
+    }
+  ],
+  "limitations": [
+    "Actual raw command timestamps retained",
+    "Prior coalesced-timer cohorts invalid for nominal replay timing acceptance",
+    "Motion/shape/gesture calibration is separate",
+    "Raw header source marker unresolved in this recollection; build/collection revision pinned here without relabeling bytes"
+  ]
+}
