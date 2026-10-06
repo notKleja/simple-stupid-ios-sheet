@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "batch_id": "canonical-v2-timing-002",
+  "matrix": {
+    "path": "../../spec/test_matrix.json",
+    "sha256": "6d12d9b534451dc13b184a4f1ffd3e24821aabfc9887b90dce872ff64d93a933"
+  },
+  "profile": {
+    "path": "../profiles/full.json",
+    "sha256": "ebcd96dc8ff8e90aaeb52267062d2b8baa6a785498acb312a55a3663f275259d"
+  },
+  "holdout_definitions": {
+    "path": "../holdouts.json",
+    "sha256": "fecd3c4c0d8afc3eeead359752de439721225b107eeeca6b7743bdc9668fadc7"
+  },
+  "assignments": [
+    {
+      "split": "training",
+      "cell_id": "26/iphone_a/portrait/programmatic",
+      "expected_trials": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "native": {
+        "path": "cohorts/timing-native-ios26.json",
+        "sha256": "ef99108084b0b5ec3d01cfc062485a8f524f28c54732f1f5e593b44617d60bf3"
+      },
+      "candidate": {
+        "path": "cohorts/timing-flutter-ios26.json",
+        "sha256": "a56f76ad1c00c7f46419764321ea1bedd10f86a3ada1241aeb3b427fd7612305"
+      },
+      "recipe": {
+        "path": "../recipes/programmatic.json",
+        "sha256": "003d7a8c900c435036516ed2ef04d5cab1eae0d7e987439cd933b7741c363cf8"
+      },
+      "runtime_input_verified": true,
+      "verification_scope": "Actual complete programmatic request sequence/target payloads in both raw traces; no physical gesture claim."
+    },
+    {
+      "split": "training",
+      "cell_id": "27/iphone_a/portrait/programmatic",
+      "expected_trials": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "native": {
+        "path": "cohorts/timing-native-ios27.json",
+        "sha256": "4974ea9082a46e355d2428a9dbe982258cd79dacaae9f53ea32252e80d5a501f"
+      },
+      "candidate": {
+        "path": "cohorts/timing-flutter-ios27.json",
+        "sha256": "0f409403bdca5c951bc526d33cefe62313cd8747d2cf5eb59704dc53399ef200"
+      },
+      "recipe": {
+        "path": "../recipes/programmatic.json",
+        "sha256": "003d7a8c900c435036516ed2ef04d5cab1eae0d7e987439cd933b7741c363cf8"
+      },
+      "runtime_input_verified": true,
+      "verification_scope": "Actual complete programmatic request sequence/target payloads in both raw traces; no physical gesture claim."
+    }
+  ]
+}

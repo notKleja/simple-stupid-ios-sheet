@@ -10,6 +10,7 @@ python3 analysis/inspect_trace.py artifacts/native/example.jsonl.gz
 python3 analysis/compare.py native.jsonl.gz flutter.jsonl --config measurement/profiles/full.json
 python3 analysis/regression.py measurement/regression_manifest.json --matrix spec/test_matrix.json
 python3 analysis/spacing.py artifacts/native/cohort/*.jsonl.gz --output artifacts/analysis/spacing.json
+python3 analysis/runtime_batch.py run measurement/runtime/frozen/timing-v1/index.json --output artifacts/runtime/timing-v2-report.json
 ```
 
 Run from the repository root. Comparison and regression commands exit 0 for
@@ -176,6 +177,17 @@ Safe area, size classes, status bar and keyboard are checked.
 `device.runtime_kind` is mandatory: simulator, virtual_device, physical_device,
 or synthetic. Runtime evidence cannot claim synthetic provenance. Older files
 that omit provenance fail; it is never inferred from filenames.
+
+## Actual runtime batches
+
+`runtime_batch.py` consumes hash-pinned producer manifests through explicit
+adapters and immutable training/holdout split indexes. It uses the merged
+analyzer unchanged, pairs matching trial IDs deterministically, retains partial
+and failed attempts, and cannot cherry-pick a later complete attempt by score.
+Reports retain each strict per-phase result and aggregate full-case trial
+intersections; diagnostic data never counts toward acceptance.
+See `measurement/RUNTIME_CONTRACT.md` and `RUNTIME_SUMMARY.md` for the producer
+formats, exact current counts, source integrity and remaining limitations.
 
 Trace alignment, geometry comparison, motion fitting, parity tolerances, plots,
 and machine-readable PASS/FAIL reports live here.

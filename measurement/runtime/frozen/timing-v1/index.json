@@ -1,0 +1,34 @@
+{
+  "batch_id": "canonical-v2-timing-002",
+  "holdout_definitions": {
+    "path": "../../../holdouts.json",
+    "sha256": "fecd3c4c0d8afc3eeead359752de439721225b107eeeca6b7743bdc9668fadc7"
+  },
+  "matrix": {
+    "path": "../../../../spec/test_matrix.json",
+    "sha256": "6d12d9b534451dc13b184a4f1ffd3e24821aabfc9887b90dce872ff64d93a933"
+  },
+  "plan_sha256": "5bb885bcee6cb3f0151a0dc9973a19d55c03f060cf88c9f06a9dc611d7ff28a7",
+  "profile": {
+    "path": "../../../profiles/full.json",
+    "sha256": "ebcd96dc8ff8e90aaeb52267062d2b8baa6a785498acb312a55a3663f275259d"
+  },
+  "schema_version": 1,
+  "splits": [
+    {
+      "path": "diagnostic.json",
+      "sha256": "bc6edb55acb729a2cee368852ed33a822c77f5dfe221a3a4fdf1c6cdb69cf030",
+      "split": "diagnostic"
+    },
+    {
+      "path": "training.json",
+      "sha256": "be9986a99c1a81833d73f56fe6b6b83f986a23aa9297f9c44817bf41c0e49e0a",
+      "split": "training"
+    },
+    {
+      "path": "holdout.json",
+      "sha256": "63623fa506fa7d8a2cb351e6f1cfe6e00dea44863dff6043e86b8a979dba9ea5",
+      "split": "holdout"
+    }
+  ]
+}
