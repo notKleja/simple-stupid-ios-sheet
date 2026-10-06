@@ -13,12 +13,22 @@ func osBuild() -> String {
     #if targetEnvironment(simulator)
     return "unresolved-simulator-host-kernel-build-excluded"
     #else
+    if let plist = NSDictionary(contentsOfFile: "/System/Library/CoreServices/SystemVersion.plist"), let build = plist["ProductBuildVersion"] as? String { return build }
     var size = 0
     sysctlbyname("kern.osversion", nil, &size, nil, 0)
     var bytes = [CChar](repeating: 0, count: size)
     sysctlbyname("kern.osversion", &bytes, &size, nil, 0)
     return String(cString: bytes)
     #endif
+}
+
+func deviceModel() -> String {
+    if let model = ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"] { return model }
+    var size = 0
+    sysctlbyname("hw.machine", nil, &size, nil, 0)
+    var bytes = [CChar](repeating: 0, count: size)
+    sysctlbyname("hw.machine", &bytes, &size, nil, 0)
+    return String(cString: bytes)
 }
 
 @MainActor final class Trace {
@@ -109,6 +119,7 @@ func osBuild() -> String {
     var scroll: UIScrollView?
     var keyboardFrame = CGRect.zero
     var running = false
+    var firstVisibleRecorded = false
     override func loadView() { view = CalibrationView(title: "Native Sheet Reference\nOpaque calibration surface") }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -180,21 +191,22 @@ func osBuild() -> String {
             field.borderStyle = .roundedRect; field.placeholder = "Keyboard reference"; vc.view.addSubview(field)
             after(1.5) { field.becomeFirstResponder() }
         }
-        sheet = vc; phase = "present"; previousY = nil
+        sheet = vc; phase = "present"; previousY = nil; firstVisibleRecorded = false
         let screen = probe.screen
         t.record("session", ["scenario_id": scenario, "implementation": "native", "evidence_kind": "runtime",
             "os": ["version": UIDevice.current.systemVersion, "build": osBuild()],
-            "device": ["model": ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"] ?? UIDevice.current.model,
+            "device": ["model": deviceModel(),
                 "logical_size": ["width": screen.bounds.width, "height": screen.bounds.height],
                 "physical_size": ["width": screen.nativeBounds.width, "height": screen.nativeBounds.height],
-                "scale": screen.scale, "refresh_hz": screen.maximumFramesPerSecond],
+                "scale": screen.scale, "refresh_hz": screen.maximumFramesPerSecond,
+                "runtime_kind": ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"] != nil ? "simulator" : (deviceModel().hasPrefix("iPhone99") ? "virtual_device" : "physical_device")],
             "environment": ["orientation": view.window?.windowScene?.interfaceOrientation.isLandscape == true ? "landscape" : "portrait",
                 "safe_area": insets(view.safeAreaInsets), "size_classes": ["horizontal": traitCollection.horizontalSizeClass.rawValue == 1 ? "compact" : "regular", "vertical": traitCollection.verticalSizeClass.rawValue == 1 ? "compact" : "regular"],
                 "status_bar": ["hidden": prefersStatusBarHidden], "keyboard": ["visible": false, "frame": rect(keyboardFrame)]],
             "configuration": ["trial": trial, "detents": ["fixed320", "medium", "large"], "surface": "opaque.white", "grabber": true, "page_sizing": config.prefersPageSizing,
                 "modal_in_presentation": vc.isModalInPresentation, "largest_undimmed": config.largestUndimmedDetentIdentifier?.rawValue as Any? ?? NSNull()]])
         link?.invalidate(); link = CADisplayLink(target: self, selector: #selector(sample(_:))); link!.add(to: .main, forMode: .common)
-        t.event("present.requested"); t.event("present.started")
+        t.event("present.requested")
         present(vc, animated: true) {
             t.event("present.completed") // Completion callback does not establish physical settling.
             self.phase = "idle"
@@ -228,9 +240,18 @@ func osBuild() -> String {
     func layerInfo(_ view: UIView, in window: UIWindow) -> [String: Any] {
         let layer = view.layer.presentation() ?? view.layer
         let target = window.layer.presentation() ?? window.layer
+        let animations: [[String: Any]] = (view.layer.animationKeys() ?? []).compactMap { key in
+            guard let a = view.layer.animation(forKey: key) else { return nil }
+            var value: [String: Any] = ["key": key, "class": NSStringFromClass(type(of: a)), "duration": a.duration, "begin_time": a.beginTime, "speed": a.speed]
+            if let spring = a as? CASpringAnimation { value["spring"] = ["mass": spring.mass, "stiffness": spring.stiffness, "damping": spring.damping, "initial_velocity": spring.initialVelocity, "settling_duration": spring.settlingDuration] }
+            if let basic = a as? CABasicAnimation { value["key_path"] = basic.keyPath as Any? ?? NSNull() }
+            return value
+        }
         return ["class": NSStringFromClass(type(of: view)), "frame_window": rect(layer.convert(layer.bounds, to: target)),
             "bounds": rect(layer.bounds), "corner_radius": layer.cornerRadius, "corner_curve": layer.cornerCurve.rawValue,
             "opacity": layer.opacity, "hidden": layer.isHidden, "clips": layer.masksToBounds,
+            "background_alpha": layer.backgroundColor?.alpha as Any? ?? NSNull(), "masked_corners": layer.maskedCorners.rawValue,
+            "mask_class": layer.mask.map { NSStringFromClass(type(of: $0)) } as Any? ?? NSNull(), "animations": animations,
             "background": layer.backgroundColor.map { UIColor(cgColor: $0).description } as Any? ?? NSNull(),
             "transform": [layer.transform.m11, layer.transform.m12, layer.transform.m21, layer.transform.m22, layer.transform.m41, layer.transform.m42]]
     }
@@ -242,6 +263,10 @@ func osBuild() -> String {
         let r = l.convert(l.bounds, to: windowLayer)
         let pl = view.layer.presentation() ?? view.layer
         let t = CACurrentMediaTime()
+        if !firstVisibleRecorded && r.intersection(probe.bounds).height > 0 {
+            firstVisibleRecorded = true
+            trace.record("event", ["name": "present.first_visible", "data": ["detector": "first sampled positive visible height"]], time: t)
+        }
         let velocity = previousY.map { (Double(r.minY) - $0.0) / (t - $0.1) }
         previousY = (Double(r.minY), t)
         var metrics: [String: Any] = ["sheet.x": r.minX, "sheet.y": r.minY, "sheet.width": r.width, "sheet.height": r.height,
@@ -271,11 +296,20 @@ func osBuild() -> String {
 }
 
 @main @MainActor final class App: UIResponder, UIApplicationDelegate {
+    func application(_ application: UIApplication, configurationForConnecting session: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+        let config = UISceneConfiguration(name: "Default", sessionRole: session.role)
+        config.delegateClass = SceneDelegate.self
+        return config
+    }
+}
+
+@MainActor final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     let harness = Harness()
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions options: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        let w = ProbeWindow(frame: UIScreen.main.bounds); w.rootViewController = harness; w.makeKeyAndVisible(); window = w
-        return true
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options: UIScene.ConnectionOptions) {
+        guard let ws = scene as? UIWindowScene else { return }
+        let w = ProbeWindow(windowScene: ws); w.rootViewController = harness; w.makeKeyAndVisible(); window = w
+        if let url = options.urlContexts.first?.url { DispatchQueue.main.async { self.harness.open(url) } }
     }
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool { harness.open(url); return true }
+    func scene(_ scene: UIScene, openURLContexts urls: Set<UIOpenURLContext>) { if let url = urls.first?.url { harness.open(url) } }
 }

@@ -1,0 +1,965 @@
+{
+  "method": "median of samples in last 0.4s before next requested boundary; no curve fitting",
+  "profiles": [
+    {
+      "trace_count": 10,
+      "session": {
+        "configuration": {
+          "detents": [
+            "fixed320",
+            "medium",
+            "large"
+          ],
+          "grabber": true,
+          "largest_undimmed": null,
+          "modal_in_presentation": false,
+          "page_sizing": true,
+          "surface": "opaque.white",
+          "trial": 10
+        },
+        "device": {
+          "logical_size": {
+            "height": 874,
+            "width": 402
+          },
+          "model": "iPhone18,1",
+          "physical_size": {
+            "height": 2622,
+            "width": 1206
+          },
+          "refresh_hz": 60,
+          "scale": 3
+        },
+        "environment": {
+          "keyboard": {
+            "frame": {
+              "height": 0,
+              "width": 0,
+              "x": 0,
+              "y": 0
+            },
+            "visible": false
+          },
+          "orientation": "portrait",
+          "safe_area": {
+            "bottom": 34,
+            "left": 0,
+            "right": 0,
+            "top": 62
+          },
+          "size_classes": {
+            "horizontal": "compact",
+            "vertical": "regular"
+          },
+          "status_bar": {
+            "hidden": false
+          }
+        },
+        "evidence_kind": "runtime",
+        "implementation": "native",
+        "os": {
+          "build": "23E254a",
+          "version": "26.4.1"
+        },
+        "run_id": "163EBD4E-056A-4AB3-825D-2E27313B7371",
+        "scenario_id": "native.medium_large.programmatic",
+        "schema_version": 1,
+        "seq": 0,
+        "t_ns": 51772682717125,
+        "type": "session"
+      },
+      "artifacts": [
+        {
+          "path": "artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-163EBD4E-056A-4AB3-825D-2E27313B7371.jsonl.gz",
+          "sha256": "0103796a22febcb1ba9ddf66eb1b5c663dccb4e80167b79a2ec96780046727ea"
+        },
+        {
+          "path": "artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-2279A0D1-9E77-4880-8449-403C8D71F458.jsonl.gz",
+          "sha256": "5a9650c4803991f4f8b4340fbd1351b530308b2e5a3dac5d2a235e29d9c02e4e"
+        },
+        {
+          "path": "artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-639869C1-326B-478C-ABBB-C6E71708B6BD.jsonl.gz",
+          "sha256": "728115546964e19ba65075c90e81891bacdec949400d01826e8eabe2ba4a97b9"
+        },
+        {
+          "path": "artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-653B2880-C4FA-4929-93F0-5A686A1A4CC3.jsonl.gz",
+          "sha256": "6c20726c5b867af4aedef869c09f3c41cf250537bb6c3e9dab4da6f7a3723f90"
+        },
+        {
+          "path": "artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-66AA7D4D-6E06-421C-9238-BC2929410835.jsonl.gz",
+          "sha256": "78230b48f354157ea157f46d4a397233975c77034b0770a67dbab5d899e1386c"
+        },
+        {
+          "path": "artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-80FDD52B-52F9-4C9C-883D-C04EF00DD767.jsonl.gz",
+          "sha256": "0cc2c38dc61782fda8284b5adb82cc73515af8dbc1a4d7d8c0f2b238a11ab96b"
+        },
+        {
+          "path": "artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-8E6A87EB-C6B1-4AC9-B902-FC09BAB97E5F.jsonl.gz",
+          "sha256": "d9576e2588c695d71cbe6a2d358bb7d61773f683710fdaba69c39f535f9b19ed"
+        },
+        {
+          "path": "artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-A8985D2A-43A2-4CD1-9043-14967FFB93BA.jsonl.gz",
+          "sha256": "b5981ce69ba22e3345d90ae491526dff5f4645ed70e33fd7ee6e8e3c57a17973"
+        },
+        {
+          "path": "artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-B6290EC2-FA3B-49EE-A856-DF2A37DC94BC.jsonl.gz",
+          "sha256": "d3ee6caf02ea7b9145c58f0d455899d8b2b841f4136b0c0cea494a1f97abec54"
+        },
+        {
+          "path": "artifacts/native/ios26_4_1_scene_iphone17pro/native.medium_large.programmatic-B9AF9672-8D2E-4AEE-BDEE-192C4E7973C2.jsonl.gz",
+          "sha256": "6076f8b5da354cc496ad19e48239240443ad53a414d0e21b635184932558c3e8"
+        }
+      ],
+      "rest": {
+        "medium_initial": {
+          "presenter.radius": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.scale_x": {
+            "median": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.scale_y": {
+            "median": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.translation_x": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.translation_y": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.bottom": {
+            "median": 866.0,
+            "min": 866.0,
+            "max": 866.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.bottom_inset": {
+            "median": 8.0,
+            "min": 8.0,
+            "max": 8.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.height": {
+            "median": 450.9734660033168,
+            "min": 450.9734660033168,
+            "max": 450.9734660033168,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.left_inset": {
+            "median": 8.0,
+            "min": 8.0,
+            "max": 8.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.right_inset": {
+            "median": 8.0,
+            "min": 8.0,
+            "max": 8.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.top": {
+            "median": 415.0265339966832,
+            "min": 415.0265339966832,
+            "max": 415.0265339966832,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.velocity_y": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.visible_height": {
+            "median": 450.9734660033168,
+            "min": 450.9734660033168,
+            "max": 450.9734660033168,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.width": {
+            "median": 386.0,
+            "min": 386.0,
+            "max": 386.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.x": {
+            "median": 8.0,
+            "min": 8.0,
+            "max": 8.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.y": {
+            "median": 415.0265339966832,
+            "min": 415.0265339966832,
+            "max": 415.0265339966832,
+            "stddev": 0.0,
+            "trials": 10
+          }
+        },
+        "large": {
+          "presenter.radius": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.scale_x": {
+            "median": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.scale_y": {
+            "median": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.translation_x": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.translation_y": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.bottom": {
+            "median": 874.0,
+            "min": 874.0,
+            "max": 874.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.bottom_inset": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.height": {
+            "median": 812.0,
+            "min": 812.0,
+            "max": 812.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.left_inset": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.right_inset": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.top": {
+            "median": 62.0,
+            "min": 62.0,
+            "max": 62.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.velocity_y": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.visible_height": {
+            "median": 812.0,
+            "min": 812.0,
+            "max": 812.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.width": {
+            "median": 402.0,
+            "min": 402.0,
+            "max": 402.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.x": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.y": {
+            "median": 62.0,
+            "min": 62.0,
+            "max": 62.0,
+            "stddev": 0.0,
+            "trials": 10
+          }
+        },
+        "medium_return": {
+          "presenter.radius": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.scale_x": {
+            "median": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.scale_y": {
+            "median": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.translation_x": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.translation_y": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.bottom": {
+            "median": 866.0,
+            "min": 866.0,
+            "max": 866.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.bottom_inset": {
+            "median": 8.0,
+            "min": 8.0,
+            "max": 8.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.height": {
+            "median": 450.9734660033168,
+            "min": 450.9734660033168,
+            "max": 450.9734660033168,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.left_inset": {
+            "median": 8.0,
+            "min": 8.0,
+            "max": 8.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.right_inset": {
+            "median": 8.0,
+            "min": 8.0,
+            "max": 8.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.top": {
+            "median": 415.0265339966832,
+            "min": 415.0265339966832,
+            "max": 415.0265339966832,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.velocity_y": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.visible_height": {
+            "median": 450.9734660033168,
+            "min": 450.9734660033168,
+            "max": 450.9734660033168,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.width": {
+            "median": 386.0,
+            "min": 386.0,
+            "max": 386.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.x": {
+            "median": 8.0,
+            "min": 8.0,
+            "max": 8.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.y": {
+            "median": 415.0265339966832,
+            "min": 415.0265339966832,
+            "max": 415.0265339966832,
+            "stddev": 0.0,
+            "trials": 10
+          }
+        }
+      },
+      "resolved_detents": {
+        "maximum": [
+          778
+        ],
+        "medium": [
+          435.68000000000006
+        ],
+        "large": [
+          778
+        ],
+        "fixed": [
+          320
+        ]
+      },
+      "unresolved": [
+        "scalar visible radius",
+        "effective barrier alpha",
+        "gesture transfer",
+        "snap policy",
+        "scroll handoff",
+        "actual background touch",
+        "settling detector",
+        "stacking",
+        "keyboard",
+        "OS-wide/device-independent formulas"
+      ]
+    },
+    {
+      "trace_count": 10,
+      "session": {
+        "configuration": {
+          "detents": [
+            "fixed320",
+            "medium",
+            "large"
+          ],
+          "grabber": true,
+          "largest_undimmed": null,
+          "modal_in_presentation": false,
+          "page_sizing": true,
+          "surface": "opaque.white",
+          "trial": 3
+        },
+        "device": {
+          "logical_size": {
+            "height": 874,
+            "width": 402
+          },
+          "model": "iPhone19,2",
+          "physical_size": {
+            "height": 2622,
+            "width": 1206
+          },
+          "refresh_hz": 60,
+          "scale": 3
+        },
+        "environment": {
+          "keyboard": {
+            "frame": {
+              "height": 0,
+              "width": 0,
+              "x": 0,
+              "y": 0
+            },
+            "visible": false
+          },
+          "orientation": "portrait",
+          "safe_area": {
+            "bottom": 34,
+            "left": 0,
+            "right": 0,
+            "top": 62
+          },
+          "size_classes": {
+            "horizontal": "compact",
+            "vertical": "regular"
+          },
+          "status_bar": {
+            "hidden": false
+          }
+        },
+        "evidence_kind": "runtime",
+        "implementation": "native",
+        "os": {
+          "build": "24A434",
+          "version": "27.0"
+        },
+        "run_id": "1EE6DB5C-B84F-4281-A667-A564FE52FB5E",
+        "scenario_id": "native.medium_large.programmatic",
+        "schema_version": 1,
+        "seq": 0,
+        "t_ns": 51730946585666,
+        "type": "session"
+      },
+      "artifacts": [
+        {
+          "path": "artifacts/native/ios27_0_iphone18pro/native.medium_large.programmatic-1EE6DB5C-B84F-4281-A667-A564FE52FB5E.jsonl.gz",
+          "sha256": "f8bee231da1b2cb53dafc3a7e7d245c764690a177c1dad70c58098b138cd8d9a"
+        },
+        {
+          "path": "artifacts/native/ios27_0_iphone18pro/native.medium_large.programmatic-27226433-C0DD-4EDD-8481-B05B27504152.jsonl.gz",
+          "sha256": "f0364a1e679b944cb0e7d966c62cac396211c1c08661c0f1fab6d6ba953f3917"
+        },
+        {
+          "path": "artifacts/native/ios27_0_iphone18pro/native.medium_large.programmatic-6DCE8394-EFF5-4A67-8736-6DCCF51FC10E.jsonl.gz",
+          "sha256": "3657050e379245ed686edc2655d69ca7963dce1b6be6b565797919ba92941ba5"
+        },
+        {
+          "path": "artifacts/native/ios27_0_iphone18pro/native.medium_large.programmatic-98E7C33E-FF40-489C-B2A4-40B3B5898940.jsonl.gz",
+          "sha256": "e35bf20d58ad5a9378fea81e56684040be9fc58f84e3ada455c58c03ee6c726f"
+        },
+        {
+          "path": "artifacts/native/ios27_0_iphone18pro/native.medium_large.programmatic-A8733B15-300C-4AD2-88FE-580B150C7A13.jsonl.gz",
+          "sha256": "0f9f6bd4acf5d3247ffaf1fb91bb62c57ea7362a65a32b91bc5fff08db70c2b9"
+        },
+        {
+          "path": "artifacts/native/ios27_0_iphone18pro/native.medium_large.programmatic-B1D8F488-E96B-46C2-A437-EC4CF7223D68.jsonl.gz",
+          "sha256": "77ea54a3484f5d99a0222fb07aa0fe9cb36cd49f548b25a57f882c772dcc9daf"
+        },
+        {
+          "path": "artifacts/native/ios27_0_iphone18pro/native.medium_large.programmatic-B9B81613-E8CB-442E-B928-945B70D55177.jsonl.gz",
+          "sha256": "8c9c321124bd98f236f34fa0aa3df8b7bdf25b4992542dda0b46f02b2936275b"
+        },
+        {
+          "path": "artifacts/native/ios27_0_iphone18pro/native.medium_large.programmatic-C60053F0-1C4B-44C9-A283-E112B97E5600.jsonl.gz",
+          "sha256": "5e9708c8c57975a0c6b9288dee5272de168ceabb78d4a7c0aecb153bf8eb3d5c"
+        },
+        {
+          "path": "artifacts/native/ios27_0_iphone18pro/native.medium_large.programmatic-F7128F2E-3F9A-4CDC-B11F-3A55FD3BB732.jsonl.gz",
+          "sha256": "3682733cc6546e86d4b6c8f96098b394ddc58eac316f27771be41b6e03e2aa02"
+        },
+        {
+          "path": "artifacts/native/ios27_0_iphone18pro/native.medium_large.programmatic-F81D6EB5-A24E-46B8-928C-FC2AFA4F504A.jsonl.gz",
+          "sha256": "e9696d084067bccd8251c981b7aa35b459b343e9262601b55bb17c6dd09b7d2d"
+        }
+      ],
+      "rest": {
+        "medium_initial": {
+          "presenter.radius": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.scale_x": {
+            "median": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.scale_y": {
+            "median": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.translation_x": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.translation_y": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.bottom": {
+            "median": 866.0,
+            "min": 866.0,
+            "max": 866.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.bottom_inset": {
+            "median": 8.0,
+            "min": 8.0,
+            "max": 8.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.height": {
+            "median": 450.9734660033168,
+            "min": 450.9734660033168,
+            "max": 450.9734660033168,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.left_inset": {
+            "median": 8.0,
+            "min": 8.0,
+            "max": 8.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.right_inset": {
+            "median": 8.0,
+            "min": 8.0,
+            "max": 8.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.top": {
+            "median": 415.0265339966832,
+            "min": 415.0265339966832,
+            "max": 415.0265339966832,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.velocity_y": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.visible_height": {
+            "median": 450.9734660033168,
+            "min": 450.9734660033168,
+            "max": 450.9734660033168,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.width": {
+            "median": 386.0,
+            "min": 386.0,
+            "max": 386.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.x": {
+            "median": 8.0,
+            "min": 8.0,
+            "max": 8.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.y": {
+            "median": 415.0265339966832,
+            "min": 415.0265339966832,
+            "max": 415.0265339966832,
+            "stddev": 0.0,
+            "trials": 10
+          }
+        },
+        "large": {
+          "presenter.radius": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.scale_x": {
+            "median": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.scale_y": {
+            "median": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.translation_x": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.translation_y": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.bottom": {
+            "median": 874.0,
+            "min": 874.0,
+            "max": 874.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.bottom_inset": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.height": {
+            "median": 812.0,
+            "min": 812.0,
+            "max": 812.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.left_inset": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.right_inset": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.top": {
+            "median": 62.0,
+            "min": 62.0,
+            "max": 62.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.velocity_y": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.visible_height": {
+            "median": 812.0,
+            "min": 812.0,
+            "max": 812.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.width": {
+            "median": 402.0,
+            "min": 402.0,
+            "max": 402.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.x": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.y": {
+            "median": 62.0,
+            "min": 62.0,
+            "max": 62.0,
+            "stddev": 0.0,
+            "trials": 10
+          }
+        },
+        "medium_return": {
+          "presenter.radius": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.scale_x": {
+            "median": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.scale_y": {
+            "median": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.translation_x": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "presenter.translation_y": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.bottom": {
+            "median": 866.0,
+            "min": 866.0,
+            "max": 866.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.bottom_inset": {
+            "median": 8.0,
+            "min": 8.0,
+            "max": 8.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.height": {
+            "median": 450.9734660033168,
+            "min": 450.9734660033168,
+            "max": 450.9734660033168,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.left_inset": {
+            "median": 8.0,
+            "min": 8.0,
+            "max": 8.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.right_inset": {
+            "median": 8.0,
+            "min": 8.0,
+            "max": 8.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.top": {
+            "median": 415.0265339966832,
+            "min": 415.0265339966832,
+            "max": 415.0265339966832,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.velocity_y": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.visible_height": {
+            "median": 450.9734660033168,
+            "min": 450.9734660033168,
+            "max": 450.9734660033168,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.width": {
+            "median": 386.0,
+            "min": 386.0,
+            "max": 386.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.x": {
+            "median": 8.0,
+            "min": 8.0,
+            "max": 8.0,
+            "stddev": 0.0,
+            "trials": 10
+          },
+          "sheet.y": {
+            "median": 415.0265339966832,
+            "min": 415.0265339966832,
+            "max": 415.0265339966832,
+            "stddev": 0.0,
+            "trials": 10
+          }
+        }
+      },
+      "resolved_detents": {
+        "maximum": [
+          778
+        ],
+        "medium": [
+          435.68000000000006
+        ],
+        "large": [
+          778
+        ],
+        "fixed": [
+          320
+        ]
+      },
+      "unresolved": [
+        "scalar visible radius",
+        "effective barrier alpha",
+        "gesture transfer",
+        "snap policy",
+        "scroll handoff",
+        "actual background touch",
+        "settling detector",
+        "stacking",
+        "keyboard",
+        "OS-wide/device-independent formulas"
+      ]
+    }
+  ]
+}
