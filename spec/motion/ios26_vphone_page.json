@@ -149,6 +149,24 @@
       "name": "-[UIViewAnimationState animationForLayer:forKey:forView:]",
       "sha256": "38b4b3a1bf1b37aac1c41fa8b4e62726150590eea7e47e561bc017f05e407e72"
     },
+    "UIKitCore.0x1891e04cc": {
+      "address": "0x1891e04cc",
+      "file_offset": 754892,
+      "image": "UIKitCore",
+      "image_offset": 754892,
+      "length": 232,
+      "name": "-[UIViewAnimationState configureAnimation:forLayer:forKey:]",
+      "sha256": "7d72c000ca1ce0cc1389e6ba001f715fa016558fc0f3d39c982ffaf77c6825da"
+    },
+    "UIKitCore.0x1891e05b4": {
+      "address": "0x1891e05b4",
+      "file_offset": 755124,
+      "image": "UIKitCore",
+      "image_offset": 755124,
+      "length": 848,
+      "name": "-[UIViewAnimationState setAnimationAttributes:skipDelegateAssignment:customCurve:]",
+      "sha256": "4ce34d5c577fb9345b5695aa02373d82b3dbaedee6b37d569b51b844be1e0c70"
+    },
     "UIKitCore.0x18926ca6c": {
       "address": "0x18926ca6c",
       "file_offset": 1329772,
@@ -166,6 +184,24 @@
       "length": 400,
       "name": "__durationOfSpringAnimation",
       "sha256": "4ad224a81f1e662d7bbd36432573ee8e091ce37cb2db07f8f16fa0c74a7afea2"
+    },
+    "UIKitCore.0x189402884": {
+      "address": "0x189402884",
+      "file_offset": 2992260,
+      "image": "UIKitCore",
+      "image_offset": 2992260,
+      "length": 412,
+      "name": "__UILoadDefaultSpringParameters",
+      "sha256": "3497da02288e7b7cc6ab116b1a13195f0110ef25b4f25624defc6ec98e33cd65"
+    },
+    "UIKitCore.0x189403168": {
+      "address": "0x189403168",
+      "file_offset": 2994536,
+      "image": "UIKitCore",
+      "image_offset": 2994536,
+      "length": 264,
+      "name": "-[UISpringTimingParameters settlingDuration]",
+      "sha256": "579cecd9f25c8e2eef4e6a2b6e166a6eb201431278022e835198890d66efb4f5"
     },
     "UIKitCore.0x18955e47c": {
       "address": "0x18955e47c",
@@ -202,6 +238,15 @@
       "length": 232,
       "name": "+[UIViewSpringAnimationState defaultSpringAnimationForKey:mass:stiffness:damping:velocity:allowsOverdamping:]",
       "sha256": "8d3d3361cab252831caa9c3423d47038c14249ffad65432a7427f1578b280de3"
+    },
+    "UIKitCore.0x1896cc414": {
+      "address": "0x1896cc414",
+      "file_offset": 5915668,
+      "image": "UIKitCore",
+      "image_offset": 5915668,
+      "length": 664,
+      "name": "-[UIViewPropertyAnimator _basicAnimationForView:withKeyPath:]",
+      "sha256": "6aae1c3614ee06257056350c0637b8666cf045c2811789b935509d02c37d5972"
     },
     "UIKitCore.0x1898109cc": {
       "address": "0x1898109cc",
@@ -408,12 +453,13 @@
     "scenario_id": "native.geometry.smoke"
   },
   "source_hashes": {
-    "analysis_source": "c37ea18b511f07627a63d0311537e758ab62e628477bfbb8b2a669be67855a65",
+    "analysis_source": "8cf09c4dac8e4a478046197d65c440a29c6318e2fa7403cc58b690a22f63caf4",
     "object_archive": "68789a0c5803bf8d6c776399c08a10c710bff2c87ab5ee5b9658699882c17e29",
     "object_manifest": "a35d2e28df8dc9bb7ae6640144170acdf0c7ad11f587a827bec425da1b789513",
     "object_raw": "8caaed563c14f39bd5e812c1596cc1bf1a7730017e6d0df522579739c3d74dcd",
-    "research/os_motion/ios26_function_evidence.json": "df7cac4df3338ef2edf2ee0c96fc135619ca1f23df68897658741fa110b78b0a",
+    "research/os_motion/ios26_function_evidence.json": "50a3fdc13b2dd8c2d5ebdb37253d1bd4ce6b4f5549103dcf7b67a14cba2d7410",
     "research/os_motion/ios26_quartzcore_disassembly.txt": "f365a8023fe6cb5ac04a4ac5cfbfc1e385965eea64b3c849963211786dd94b3a",
+    "research/os_motion/ios26_uikit_attributes_disassembly.txt": "c7b5995eb72e9ec60161f147b85e0b50bf38bb2adef3df638949b9d88f570a6f",
     "research/os_motion/ios26_uikit_disassembly.txt": "ea71ef641e756211041da9b2e3e9d0b1f2864243effd6f5089dfe33e72378fea"
   },
   "source_kind": "authenticated_os_equation_recovery",

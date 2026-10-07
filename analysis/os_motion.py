@@ -655,7 +655,8 @@ def load_animation_objects(path: str | Path) -> list[AnimationInstall]:
 # a new accepted profile. A new build requires a new independently audited bundle.
 _RECOVERY_ROOT = Path(__file__).resolve().parents[1]
 _RECOVERY_FILES = {
-    'research/os_motion/ios26_function_evidence.json': 'df7cac4df3338ef2edf2ee0c96fc135619ca1f23df68897658741fa110b78b0a',
+    'research/os_motion/ios26_function_evidence.json': '50a3fdc13b2dd8c2d5ebdb37253d1bd4ce6b4f5549103dcf7b67a14cba2d7410',
+    'research/os_motion/ios26_uikit_attributes_disassembly.txt': 'c7b5995eb72e9ec60161f147b85e0b50bf38bb2adef3df638949b9d88f570a6f',
     'research/os_motion/ios26_uikit_disassembly.txt': 'ea71ef641e756211041da9b2e3e9d0b1f2864243effd6f5089dfe33e72378fea',
     'research/os_motion/ios26_quartzcore_disassembly.txt': 'f365a8023fe6cb5ac04a4ac5cfbfc1e385965eea64b3c849963211786dd94b3a',
 }
@@ -857,6 +858,12 @@ def recover_os_motion(animation_records: list[AnimationInstall], binaries: Mappi
         binary_data[name] = raw; symbols[name] = _function_symbols(raw)
     for function in static['functions'].values():
         name = function['image']; address = int(function['address'],16)
+        starts,names = symbols[name]
+        index = bisect.bisect_left(starts,address)
+        _require(index+1 < len(starts) and starts[index] == address
+                 and starts[index+1]-address == function['length'], 'binary function nlist range mismatch')
+        _require(address-int(static['images'][name]['vm_base'],16) == function['image_offset'],
+                 'binary function image offset mismatch')
         offset, raw = _binary_range(binary_data[name], address, function['length'])
         _require(offset == function['file_offset'] and _sha(raw) == function['sha256'], 'binary function hash/range mismatch')
         _require(symbols[name][1].get(address) == function['name'], 'binary function symbol mismatch')
@@ -872,6 +879,10 @@ def recover_os_motion(animation_records: list[AnimationInstall], binaries: Mappi
              and all(type(got) is AnimationInstall and got == expected for got, expected in zip(animation_records,trusted)),
              'input is not the authenticated complete object cohort')
     manifest = _json(_read(evidence.parent/'manifest.json'))
+    for name,declared in static['images'].items():
+        matching = [image for image in manifest['images'] if image['runtime_path'] == declared['runtime_path']]
+        _require(len(matching) == 1 and all(matching[0][key] == declared[key] for key in ('uuid','sha256')),
+                 'OS binary manifest identity mismatch: '+name)
     omega = constants['two_pi'] / constants['response']
     stiffness = omega*omega; damping = 2*math.sqrt(stiffness)
     duration = uikit_critical_duration(omega)

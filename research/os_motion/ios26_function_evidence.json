@@ -327,6 +327,51 @@
       "file_offset": 1329772,
       "length": 36,
       "sha256": "6f416d72891ace2ade1d4416e6e45ae44a4140046535ea954f24855f73942a90"
+    },
+    "UIKitCore.0x1891e04cc": {
+      "name": "-[UIViewAnimationState configureAnimation:forLayer:forKey:]",
+      "image": "UIKitCore",
+      "address": "0x1891e04cc",
+      "image_offset": 754892,
+      "file_offset": 754892,
+      "length": 232,
+      "sha256": "7d72c000ca1ce0cc1389e6ba001f715fa016558fc0f3d39c982ffaf77c6825da"
+    },
+    "UIKitCore.0x1891e05b4": {
+      "name": "-[UIViewAnimationState setAnimationAttributes:skipDelegateAssignment:customCurve:]",
+      "image": "UIKitCore",
+      "address": "0x1891e05b4",
+      "image_offset": 755124,
+      "file_offset": 755124,
+      "length": 848,
+      "sha256": "4ce34d5c577fb9345b5695aa02373d82b3dbaedee6b37d569b51b844be1e0c70"
+    },
+    "UIKitCore.0x189402884": {
+      "name": "__UILoadDefaultSpringParameters",
+      "image": "UIKitCore",
+      "address": "0x189402884",
+      "image_offset": 2992260,
+      "file_offset": 2992260,
+      "length": 412,
+      "sha256": "3497da02288e7b7cc6ab116b1a13195f0110ef25b4f25624defc6ec98e33cd65"
+    },
+    "UIKitCore.0x189403168": {
+      "name": "-[UISpringTimingParameters settlingDuration]",
+      "image": "UIKitCore",
+      "address": "0x189403168",
+      "image_offset": 2994536,
+      "file_offset": 2994536,
+      "length": 264,
+      "sha256": "579cecd9f25c8e2eef4e6a2b6e166a6eb201431278022e835198890d66efb4f5"
+    },
+    "UIKitCore.0x1896cc414": {
+      "name": "-[UIViewPropertyAnimator _basicAnimationForView:withKeyPath:]",
+      "image": "UIKitCore",
+      "address": "0x1896cc414",
+      "image_offset": 5915668,
+      "file_offset": 5915668,
+      "length": 664,
+      "sha256": "6aae1c3614ee06257056350c0637b8666cf045c2811789b935509d02c37d5972"
     }
   },
   "constants": {

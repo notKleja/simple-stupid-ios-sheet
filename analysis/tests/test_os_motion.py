@@ -513,6 +513,45 @@ class OSEquationTests(unittest.TestCase):
         self.assertAlmostEqual(v, 2, places=15)
         self.assertAlmostEqual(a, 0, places=14)
 
+    def test_damped_nonzero_velocity_positive_time_high_precision_fixture(self):
+        # Independent 90-digit Taylor sin(1)/cos(1), Decimal exp(-1):
+        # beta=wd=1, B=.5; this kills a doubled decay exponent.
+        expected=(.6464539518270309601492403961988505859,
+                  .5637228686528747679802708330444864967,
+                  -.4203536409598114562590224584866741650)
+        for allows in (False,True):
+            with self.subTest(allows=allows):
+                actual=self.spring(1,stiffness=2,damping=2,velocity=.5,overdamping=allows)
+                for got,want in zip(actual,expected):
+                    self.assertLessEqual(abs(got-want),64*math.ulp(want))
+
+    def test_allowed_over_nonzero_velocity_positive_time_literal_fixtures(self):
+        # m=1,k=2,c=3 gives beta=1.5,gamma=.5, roots -2,-1.
+        # At log(2) exponentials are 1/4 and 1/2; all expectations
+        # below follow by rational arithmetic independent of the helper.
+        for velocity,expected in ((.5,(1.125,.5,-1.75)),(-.5,(.875,.5,-1.25))):
+            with self.subTest(velocity=velocity):
+                actual=self.spring(math.log(2),stiffness=2,damping=3,velocity=velocity,overdamping=True)
+                for got,want in zip(actual,expected):
+                    self.assertLessEqual(abs(got-want),64*math.ulp(want))
+
+    def test_allowed_over_branch_requires_strictly_greater_zeta(self):
+        # zeta==1 with allows=True is critical, as is zeta>1
+        # with allows=False. Both use omega=2, B=1.5, t=.5.
+        expected=(.35621097794997593720783340221744348197,
+                  .73575888234288464319104754032292173489,
+                  -.36787944117144232159552377016146086745)
+        for damping,allows in ((4,True),(5,False)):
+            with self.subTest(damping=damping,allows=allows):
+                actual=self.spring(.5,damping=damping,velocity=.5,overdamping=allows)
+                for got,want in zip(actual,expected):
+                    self.assertLessEqual(abs(got-want),64*math.ulp(want))
+        # zeta=1.25 and allows=True selects roots -4,-1,
+        # A=1.5,B=-.5, with exp(-4*log2)=1/16, exp(-log2)=1/2.
+        actual=self.spring(math.log(2),damping=5,velocity=.5,overdamping=True)
+        for got,want in zip(actual,(1.15625,.125,-1.25)):
+            self.assertLessEqual(abs(got-want),64*math.ulp(want))
+
     def test_allowed_overdamped_independent_root_fixture(self):
         # Literal 23G90 update/eval stores fast coefficient +2, slow -1.
         # This statically recovered branch differs from the conventional law.
@@ -679,6 +718,78 @@ class OSRecoveryTests(unittest.TestCase):
             return raw
         with patch.object(Path,'read_bytes',corrupt), self.assertRaisesRegex(EvidenceError,'binary identity'):
             self.recover()
+
+    SUPPLEMENTARY_FUNCTIONS={
+        'UIKitCore.0x1891e04cc':(754892,232,'7d72c000ca1ce0cc1389e6ba001f715fa016558fc0f3d39c982ffaf77c6825da'),
+        'UIKitCore.0x1891e05b4':(755124,848,'4ce34d5c577fb9345b5695aa02373d82b3dbaedee6b37d569b51b844be1e0c70'),
+        'UIKitCore.0x189402884':(2992260,412,'3497da02288e7b7cc6ab116b1a13195f0110ef25b4f25624defc6ec98e33cd65'),
+        'UIKitCore.0x189403168':(2994536,264,'579cecd9f25c8e2eef4e6a2b6e166a6eb201431278022e835198890d66efb4f5'),
+        'UIKitCore.0x1896cc414':(5915668,664,'6aae1c3614ee06257056350c0637b8666cf045c2811789b935509d02c37d5972'),
+    }
+
+    def test_supplementary_artifact_and_functions_bind_canonical_provenance(self):
+        report=self.recover().to_dict();profile=report['production_profile']
+        relative='research/os_motion/ios26_uikit_attributes_disassembly.txt'
+        self.assertEqual(profile['source_hashes'].get(relative),
+                         'c7b5995eb72e9ec60161f147b85e0b50bf38bb2adef3df638949b9d88f570a6f')
+        for key,(offset,length,digest) in self.SUPPLEMENTARY_FUNCTIONS.items():
+            with self.subTest(function=key):
+                self.assertIn(key,profile['function_evidence'])
+                function=profile['function_evidence'][key]
+                self.assertEqual((function['image_offset'],function['file_offset'],function['length'],function['sha256']),
+                                 (offset,offset,length,digest))
+                self.assertEqual(function,report['function_evidence'][key])
+
+    def test_modified_or_deleted_supplementary_artifact_blocks_recovery_and_validation(self):
+        from unittest.mock import patch
+        supplemental=self.root/'research/os_motion/ios26_uikit_attributes_disassembly.txt'
+        original=Path.read_bytes
+        with tempfile.TemporaryDirectory() as temp:
+            profile=Path(temp)/'profile.json';profile.write_bytes(self.recover().profile_bytes())
+            for missing in (False,True):
+                def altered(path):
+                    if path==supplemental:
+                        if missing:raise FileNotFoundError(str(path))
+                        return original(path)+b'altered instruction evidence\n'
+                    return original(path)
+                for validate in (False,True):
+                    with self.subTest(missing=missing,validation=validate):
+                        with patch.object(Path,'read_bytes',altered), self.assertRaisesRegex(EvidenceError,'authentication file|evidence hash'):
+                            if validate:os_motion.validate_motion_manifest(profile,self.records,self.binaries)
+                            else:self.recover()
+
+    def test_supplementary_function_bytes_cannot_be_substituted(self):
+        from unittest.mock import patch
+        original=Path.read_bytes
+        for key,(offset,_,_) in self.SUPPLEMENTARY_FUNCTIONS.items():
+            def corrupt(path):
+                raw=original(path)
+                if path==self.binaries['UIKitCore']:
+                    raw=raw[:offset]+bytes([raw[offset]^1])+raw[offset+1:]
+                return raw
+            with self.subTest(function=key), patch.object(Path,'read_bytes',corrupt), self.assertRaisesRegex(EvidenceError,'binary identity'):
+                self.recover()
+
+    def test_supplementary_function_ranges_are_bound_to_actual_nlist_extents(self):
+        from unittest.mock import patch
+        original=os_motion._json
+        binary=self.binaries['UIKitCore'].read_bytes()
+        for key,(offset,length,_) in self.SUPPLEMENTARY_FUNCTIONS.items():
+            for field in ('image_offset','length'):
+                def mutate(data):
+                    value=original(data)
+                    # Before supplementary inclusion the mutation is ignored;
+                    # absence must not make this regression test error out.
+                    if type(value) is dict and 'functions' in value and key in value['functions']:
+                        entry=value['functions'][key]
+                        entry[field] += 4 if field=='image_offset' else -4
+                        if field=='length':
+                            # Matching short bytes/hash still cannot redefine
+                            # an authenticated construction function boundary.
+                            entry['sha256']=hashlib.sha256(binary[offset:offset+length-4]).hexdigest()
+                    return value
+                with self.subTest(function=key,field=field), patch.object(os_motion,'_json',mutate), self.assertRaisesRegex(EvidenceError,'function.*range|function.*offset'):
+                    self.recover()
 
     def test_equation_recovery_opens_only_authenticated_object_and_binary_inputs(self):
         from unittest.mock import patch

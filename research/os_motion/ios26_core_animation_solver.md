@@ -3,10 +3,12 @@
 Status: authenticated mathematical instruction transcription; window-y
 production profiles remain unresolved.
 
-The binary UUID/hash set, all 34 primary function ranges, exact VM/file offsets,
+The binary UUID/hash set, all 39 authenticated function ranges, exact VM/file offsets,
 function SHA-256 values and constant bytes are in ios26_function_evidence.json.
 Full instruction excerpts are in ios26_quartzcore_disassembly.txt and
-ios26_uikit_disassembly.txt.
+ios26_uikit_disassembly.txt, with the five supplementary construction functions
+in ios26_uikit_attributes_disassembly.txt. All three disassembly artifacts are
+authenticated recovery inputs.
 recover_os_motion recomputes every primary function range/hash and rejects a
 changed range, binary byte, UUID, static bundle or object cohort. The report
 and production manifest are canonical output from that recovery.

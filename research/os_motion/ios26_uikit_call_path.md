@@ -123,8 +123,11 @@ authenticated nlist and Mach-O VM-to-file mapping, are:
 | 0x189403168 | 264 | 579cecd9f25c8e2eef4e6a2b6e166a6eb201431278022e835198890d66efb4f5 |
 | 0x1896cc414 | 664 | 6aae1c3614ee06257056350c0637b8666cf045c2811789b935509d02c37d5972 |
 
-These supplementary functions are read-only diagnostic evidence, separate
-from the pinned 34-function recovery bundle consumed by the generator.
+These five construction functions and their disassembly are authenticated
+inputs to the same pinned 39-function recovery bundle consumed by the generator.
+Recovery checks their actual nlist start/end extents, symbols, VM/image/file
+offsets and bytes. Their records and artifact hash appear in canonical report
+and production-manifest provenance.
 
 Presentation/dismissal objects instead expose mass=3, stiffness=1000,
 damping=500, velocity=0, allowsOverdamping=false and duration=.5. The default
