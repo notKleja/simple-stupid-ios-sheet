@@ -28,6 +28,11 @@ import Foundation
         let config = page.configuration(trial: 1, detents: ["fixed320", "medium", "large"])
         let required = ["trial", "detents", "surface", "grabber", "page_sizing", "modal_in_presentation", "largest_undimmed", "presentation_style", "preferred_content_size", "placement", "edge_attached_in_compact_height", "width_follows_preferred_content_size", "scroll_expansion"]
         precondition(Set(required) == Set(config.keys), "Serialize complete effective scenario configuration")
+        precondition((try? NativeScenario.resolve("native.geometry.smoke", major:26))?.id == "native.geometry.smoke", "Explicit diagnostic geometry smoke definition missing")
+        let geometry = try NativeScenario.resolve("native.geometry.smoke", major:26)
+        precondition(geometry.initial == "fixed320", "Repeated geometry recipe must start at fixed320")
+        precondition(geometry.programmaticRequests.map(\.target) == ["medium","large","medium"], "Repeated geometry requests must preserve all phases")
+        precondition(geometry.programmaticRequests.map(\.after) == [1.5,3,4.5] && geometry.dismissAfter == 6, "Repeated geometry deadlines must be explicit")
         do { _ = try NativeScenario.resolve("native.typo.scroll", major: 27); fatalError("Unknown scenario silently accepted") } catch {}
         do { _ = try NativeScenario.resolve("native.form.placement.leading", major: 26); fatalError("Unavailable placement silently accepted") } catch {}
         let referenceURL = URL(string: "nativesheet://run?scenario=native.medium_large.programmatic&trials=1")!

@@ -1,0 +1,3232 @@
+{
+  "schema_version": 1,
+  "status": "measured_model_radii_contour_unresolved",
+  "source_base": "f112cb27f52adf86171ebd3c80c0bb02d37b44cf",
+  "source_state": "uncommitted source files pinned by exact hashes, not mislabeled as base implementation",
+  "source_hashes": {
+    "native_reference/NativeSheetHarness/App.swift": "7b8d7ae3260346685fd8ec54c6b253a7eefadf3a77781d69edde60e79b4792a7",
+    "native_reference/NativeSheetHarness/GeometryProbe.swift": "3df19d79eb4169a7497d31ae2ffee45a5817d6ae3f05e5df37d53bc6ffc4dd32",
+    "native_reference/NativeSheetHarness/InteractionProbe.swift": "c9f0de0ea96d5c0bf949088f802632aa7d77f008cb8be9470edd045af4712274",
+    "native_reference/NativeSheetHarness/NativeScenario.swift": "b98bc76cf111cf8baa4754bcac49fad70b62233c903c2c318ba62e60807a43e7",
+    "native_reference/NativeSheetHarness/SwiftUIReference.swift": "6451434717819dfcf79744de2b068beefef430c3b9b31fe34466ddebe8cfd13c",
+    "native_reference/NativeSheetHarness/Trace.swift": "4610cccc6c0a320297e2bb20f62f3442d62b706df18e071b498d94586f21f8d2",
+    "native_reference/NativeSheetHarness/Info.plist": "b40dd80ebfa38ca49328c0b88016a682dfa5ac1e357676512f455cec3e7efe6a"
+  },
+  "binary_sha256": "bd521eb9cd915ba999dbfd6acfa47b3eb3ecd3a17881583561162a3f28fd6b9c",
+  "udid": "65F498C4-3EAE-4074-89A9-312ED7E7ACE9",
+  "runtime": {
+    "isAvailable": true,
+    "version": "27.0",
+    "isInternal": false,
+    "buildversion": "24A434",
+    "supportedArchitectures": [
+      "arm64"
+    ],
+    "supportedDeviceTypes": [
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 18 Pro.simdevicetype",
+        "name": "iPhone 18 Pro",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-18-Pro"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 18 Pro Max.simdevicetype",
+        "name": "iPhone 18 Pro Max",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-18-Pro-Max"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 17 Pro.simdevicetype",
+        "name": "iPhone 17 Pro",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 17 Pro Max.simdevicetype",
+        "name": "iPhone 17 Pro Max",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro-Max"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 17e.simdevicetype",
+        "name": "iPhone 17e",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-17e"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone Air.simdevicetype",
+        "name": "iPhone Air",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-Air"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 17.simdevicetype",
+        "name": "iPhone 17",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 16 Pro.simdevicetype",
+        "name": "iPhone 16 Pro",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 16 Pro Max.simdevicetype",
+        "name": "iPhone 16 Pro Max",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro-Max"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 16e.simdevicetype",
+        "name": "iPhone 16e",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-16e"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 16.simdevicetype",
+        "name": "iPhone 16",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-16"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 16 Plus.simdevicetype",
+        "name": "iPhone 16 Plus",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-16-Plus"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 15 Pro.simdevicetype",
+        "name": "iPhone 15 Pro",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 15 Pro Max.simdevicetype",
+        "name": "iPhone 15 Pro Max",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro-Max"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 15.simdevicetype",
+        "name": "iPhone 15",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-15"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 15 Plus.simdevicetype",
+        "name": "iPhone 15 Plus",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-15-Plus"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 14 Pro.simdevicetype",
+        "name": "iPhone 14 Pro",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-14-Pro"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 14 Pro Max.simdevicetype",
+        "name": "iPhone 14 Pro Max",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-14-Pro-Max"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 14.simdevicetype",
+        "name": "iPhone 14",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-14"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 14 Plus.simdevicetype",
+        "name": "iPhone 14 Plus",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-14-Plus"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone SE (3rd generation).simdevicetype",
+        "name": "iPhone SE (3rd generation)",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 13 Pro.simdevicetype",
+        "name": "iPhone 13 Pro",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 13 Pro Max.simdevicetype",
+        "name": "iPhone 13 Pro Max",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro-Max"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 13.simdevicetype",
+        "name": "iPhone 13",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-13"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 13 mini.simdevicetype",
+        "name": "iPhone 13 mini",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-13-mini"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 12 Pro.simdevicetype",
+        "name": "iPhone 12 Pro",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 12 Pro Max.simdevicetype",
+        "name": "iPhone 12 Pro Max",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro-Max"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 12.simdevicetype",
+        "name": "iPhone 12",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-12"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 12 mini.simdevicetype",
+        "name": "iPhone 12 mini",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-12-mini"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone SE (2nd generation).simdevicetype",
+        "name": "iPhone SE (2nd generation)",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-SE--2nd-generation-"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 11 Pro.simdevicetype",
+        "name": "iPhone 11 Pro",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-11-Pro"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 11 Pro Max.simdevicetype",
+        "name": "iPhone 11 Pro Max",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-11-Pro-Max"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPhone 11.simdevicetype",
+        "name": "iPhone 11",
+        "productFamily": "iPhone",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-11"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 13-inch (M5) (16GB).simdevicetype",
+        "name": "iPad Pro 13-inch (M5) (16GB)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M5-16GB"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 13-inch (M5).simdevicetype",
+        "name": "iPad Pro 13-inch (M5)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M5-12GB"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 11-inch (M5) (16GB).simdevicetype",
+        "name": "iPad Pro 11-inch (M5) (16GB)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-M5-16GB"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 11-inch (M5).simdevicetype",
+        "name": "iPad Pro 11-inch (M5)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-M5-12GB"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 11-inch (M4) (16GB).simdevicetype",
+        "name": "iPad Pro 11-inch (M4) (16GB)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-M4-16GB"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 11-inch (M4).simdevicetype",
+        "name": "iPad Pro 11-inch (M4)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-M4-8GB"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 13-inch (M4) (16GB).simdevicetype",
+        "name": "iPad Pro 13-inch (M4) (16GB)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M4-16GB"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro 13-inch (M4).simdevicetype",
+        "name": "iPad Pro 13-inch (M4)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M4-8GB"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air 13-inch (M4).simdevicetype",
+        "name": "iPad Air 13-inch (M4)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Air-13-inch-M4"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air 11-inch (M4).simdevicetype",
+        "name": "iPad Air 11-inch (M4)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Air-11-inch-M4"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad (A16).simdevicetype",
+        "name": "iPad (A16)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-A16"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air 13-inch (M3).simdevicetype",
+        "name": "iPad Air 13-inch (M3)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Air-13-inch-M3"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air 11-inch (M3).simdevicetype",
+        "name": "iPad Air 11-inch (M3)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Air-11-inch-M3"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air 11-inch (M2).simdevicetype",
+        "name": "iPad Air 11-inch (M2)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Air-11-inch-M2"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air 13-inch (M2).simdevicetype",
+        "name": "iPad Air 13-inch (M2)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Air-13-inch-M2"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad mini (A17 Pro).simdevicetype",
+        "name": "iPad mini (A17 Pro)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-mini-A17-Pro"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (11-inch) (4th generation) (16GB).simdevicetype",
+        "name": "iPad Pro (11-inch) (4th generation) (16GB)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-4th-generation-16GB"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (11-inch) (4th generation).simdevicetype",
+        "name": "iPad Pro (11-inch) (4th generation)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-4th-generation-8GB"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (12.9-inch) (6th generation) (16GB).simdevicetype",
+        "name": "iPad Pro (12.9-inch) (6th generation) (16GB)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-12-9-inch-6th-generation-16GB"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (12.9-inch) (6th generation).simdevicetype",
+        "name": "iPad Pro (12.9-inch) (6th generation)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-12-9-inch-6th-generation-8GB"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad (10th generation).simdevicetype",
+        "name": "iPad (10th generation)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-10th-generation"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air (5th generation).simdevicetype",
+        "name": "iPad Air (5th generation)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Air-5th-generation"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad mini (6th generation).simdevicetype",
+        "name": "iPad mini (6th generation)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-mini-6th-generation"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (11-inch) (3rd generation).simdevicetype",
+        "name": "iPad Pro (11-inch) (3rd generation)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-3rd-generation"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (12.9-inch) (5th generation).simdevicetype",
+        "name": "iPad Pro (12.9-inch) (5th generation)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-12-9-inch-5th-generation"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad (9th generation).simdevicetype",
+        "name": "iPad (9th generation)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-9th-generation"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Air (4th generation).simdevicetype",
+        "name": "iPad Air (4th generation)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Air--4th-generation-"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (11-inch) (2nd generation).simdevicetype",
+        "name": "iPad Pro (11-inch) (2nd generation)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro--11-inch---2nd-generation-"
+      },
+      {
+        "bundlePath": "/Library/Developer/CoreSimulator/Profiles/DeviceTypes/iPad Pro (12.9-inch) (4th generation).simdevicetype",
+        "name": "iPad Pro (12.9-inch) (4th generation)",
+        "productFamily": "iPad",
+        "identifier": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro--12-9-inch---4th-generation-"
+      }
+    ],
+    "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-27-0",
+    "platform": "iOS",
+    "bundlePath": "/Library/Developer/CoreSimulator/Volumes/iOS_24A434/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime",
+    "runtimeRoot": "/Library/Developer/CoreSimulator/Volumes/iOS_24A434/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot",
+    "lastUsage": {
+      "arm64": "2026-10-07T10:23:38Z"
+    },
+    "name": "iOS 27.0"
+  },
+  "entries": [
+    {
+      "path": "artifacts/native/geometry_v2/ios27/attempt1/traces/native.geometry.smoke-02904179-5C56-44B9-816A-AABA4F9D8BEB.jsonl.gz",
+      "sha256": "a35060949377d9ce557fdb246060062e968608d130c96a952fbd4559e2ea0992",
+      "raw_sha256": "55c55d8752f69b34713a66d5bf9f2f979b0e9f403848eba2cd55d5a4f25693e7",
+      "status": "model_window_complete",
+      "failure": null,
+      "run_id": "02904179-5C56-44B9-816A-AABA4F9D8BEB",
+      "trial": 8,
+      "attempt_id": "457171D2-36E6-4AF6-93A4-1AD1FD31CC84"
+    },
+    {
+      "path": "artifacts/native/geometry_v2/ios27/attempt1/traces/native.geometry.smoke-0DE9D75E-3D0E-4216-9667-03D29E5A44BA.jsonl.gz",
+      "sha256": "cbc51a10ef929b6d4df549558cbb5d3e92deeca0d5afc899bd88e2e5e3167808",
+      "raw_sha256": "b1ce6c098f390a454972cf1be21fc2a29ff05dad200acd57001f31552566f211",
+      "status": "model_window_complete",
+      "failure": null,
+      "run_id": "0DE9D75E-3D0E-4216-9667-03D29E5A44BA",
+      "trial": 4,
+      "attempt_id": "5C86E526-9776-4195-99E0-A6A3355F8075"
+    },
+    {
+      "path": "artifacts/native/geometry_v2/ios27/attempt1/traces/native.geometry.smoke-0F27937C-B990-4422-B7C3-681D7E1351AB.jsonl.gz",
+      "sha256": "f75747ab90d516874572bc07ab698cbd6f2773e222328d33a572e31f81caecef",
+      "raw_sha256": "df139f2e15b9acc1b6799abdd2c01e07869f3a57dd5b1a6e2c52a7cbcaa6a55b",
+      "status": "model_window_complete",
+      "failure": null,
+      "run_id": "0F27937C-B990-4422-B7C3-681D7E1351AB",
+      "trial": 9,
+      "attempt_id": "256E6DAA-B66D-4D5E-A90B-D3138DFB67F8"
+    },
+    {
+      "path": "artifacts/native/geometry_v2/ios27/attempt1/traces/native.geometry.smoke-1015EF35-9AC5-40BC-AC9B-536209EA2B33.jsonl.gz",
+      "sha256": "259f6b559706622957f583173254967254c7c964c9479dd96e3537d1f218a6dd",
+      "raw_sha256": "44334332d73819676f0fe3ff2e9a78be262a021ad334e9f9dc19c941874ce8ad",
+      "status": "model_window_complete",
+      "failure": null,
+      "run_id": "1015EF35-9AC5-40BC-AC9B-536209EA2B33",
+      "trial": 10,
+      "attempt_id": "DBEA2AB0-05D8-4245-AB81-2712D409A068"
+    },
+    {
+      "path": "artifacts/native/geometry_v2/ios27/attempt1/traces/native.geometry.smoke-24A2F9B7-A2A6-4ECC-8733-62BF74174006.jsonl.gz",
+      "sha256": "e25889d0abc16a0e413bfd93e5768571cc6cca90bb7426da302740d7ecfabf31",
+      "raw_sha256": "9770d43b680f96de06700ead49802eed644aabe7698d37ee269772ae32091a60",
+      "status": "model_window_complete",
+      "failure": null,
+      "run_id": "24A2F9B7-A2A6-4ECC-8733-62BF74174006",
+      "trial": 2,
+      "attempt_id": "2F1B94C2-E5F9-4CBD-89C2-CF73B154FEC1"
+    },
+    {
+      "path": "artifacts/native/geometry_v2/ios27/attempt1/traces/native.geometry.smoke-27C0A308-B269-4D60-8625-1A8176F47383.jsonl.gz",
+      "sha256": "b988ea4067a218bf0ced01866c37110a8ad742804bf9a0fac49c99ab84834eda",
+      "raw_sha256": "13d49f836f3f244208090d8036b2178a9eab4b8864d290deade0944b7b9dfd91",
+      "status": "model_window_complete",
+      "failure": null,
+      "run_id": "27C0A308-B269-4D60-8625-1A8176F47383",
+      "trial": 5,
+      "attempt_id": "AF52B4C4-6795-41D4-B4EC-6B128E3C2C33"
+    },
+    {
+      "path": "artifacts/native/geometry_v2/ios27/attempt1/traces/native.geometry.smoke-6CCD56C3-FD15-478C-B849-07EAA9CC5EE2.jsonl.gz",
+      "sha256": "b5901a097993075ff339f649c8849ed44c30aa57f61a96a5d4a50295167c5213",
+      "raw_sha256": "b5a97d49c44553001ef342f085d9071af264834434b429008e336e8b844b5816",
+      "status": "model_window_complete",
+      "failure": null,
+      "run_id": "6CCD56C3-FD15-478C-B849-07EAA9CC5EE2",
+      "trial": 7,
+      "attempt_id": "4F40364C-5AFC-401D-99EE-7A637B372585"
+    },
+    {
+      "path": "artifacts/native/geometry_v2/ios27/attempt1/traces/native.geometry.smoke-97984A2B-AB81-4D13-86B1-ECAEFBC7A5C7.jsonl.gz",
+      "sha256": "ea962535225c060e95ea2548711124da51f94199eebb1b2d2321685d69b2d70f",
+      "raw_sha256": "f71406fdd512ae09b3740b87325c66928d3157b8253d8623fe5c1199bfb6351b",
+      "status": "model_window_complete",
+      "failure": null,
+      "run_id": "97984A2B-AB81-4D13-86B1-ECAEFBC7A5C7",
+      "trial": 3,
+      "attempt_id": "BA9851AA-CF76-4A29-AA86-CDDFCC363464"
+    },
+    {
+      "path": "artifacts/native/geometry_v2/ios27/attempt1/traces/native.geometry.smoke-D4E5781F-4440-42EB-9992-E5ECF647AB14.jsonl.gz",
+      "sha256": "103692b6d0f255136eac41d46fd8caaf93adb29f34ce03b99d9c3b7b39fa6682",
+      "raw_sha256": "5a501bebac572c447657415f83bd4374e3fc289dfa804e0492803a2d0140279a",
+      "status": "model_window_complete",
+      "failure": null,
+      "run_id": "D4E5781F-4440-42EB-9992-E5ECF647AB14",
+      "trial": 6,
+      "attempt_id": "6677C5AF-BF87-49A9-A28F-4C88641F3BF1"
+    },
+    {
+      "path": "artifacts/native/geometry_v2/ios27/attempt1/traces/native.geometry.smoke-FDA78BF4-C5FA-40FC-BFD9-253A8C2BF3DA.jsonl.gz",
+      "sha256": "80077cdc25c3d64491b8e36bdc15673ec658b8949e354c1003d2a4bff95e9067",
+      "raw_sha256": "cfd395144c91b2b5fe72fb36b35a1b5749023342c250dc47439f95afe7c54d5e",
+      "status": "model_window_complete",
+      "failure": null,
+      "run_id": "FDA78BF4-C5FA-40FC-BFD9-253A8C2BF3DA",
+      "trial": 1,
+      "attempt_id": "FB38DE2B-D6A7-4D80-BBFF-1F20A588EB3C"
+    }
+  ],
+  "summary": {
+    "schema_version": 1,
+    "capability_status": "measured_model_radii_contour_unresolved",
+    "source_hashes": {
+      "native_reference/NativeSheetHarness/App.swift": "7b8d7ae3260346685fd8ec54c6b253a7eefadf3a77781d69edde60e79b4792a7",
+      "native_reference/NativeSheetHarness/GeometryProbe.swift": "3df19d79eb4169a7497d31ae2ffee45a5817d6ae3f05e5df37d53bc6ffc4dd32",
+      "native_reference/NativeSheetHarness/InteractionProbe.swift": "c9f0de0ea96d5c0bf949088f802632aa7d77f008cb8be9470edd045af4712274",
+      "native_reference/NativeSheetHarness/NativeScenario.swift": "b98bc76cf111cf8baa4754bcac49fad70b62233c903c2c318ba62e60807a43e7",
+      "native_reference/NativeSheetHarness/SwiftUIReference.swift": "6451434717819dfcf79744de2b068beefef430c3b9b31fe34466ddebe8cfd13c",
+      "native_reference/NativeSheetHarness/Trace.swift": "4610cccc6c0a320297e2bb20f62f3442d62b706df18e071b498d94586f21f8d2",
+      "native_reference/NativeSheetHarness/Info.plist": "b40dd80ebfa38ca49328c0b88016a682dfa5ac1e357676512f455cec3e7efe6a"
+    },
+    "session": {
+      "configuration": {
+        "detents": [
+          "fixed320",
+          "medium",
+          "large"
+        ],
+        "edge_attached_in_compact_height": false,
+        "grabber": true,
+        "largest_undimmed": null,
+        "modal_in_presentation": false,
+        "page_sizing": true,
+        "placement": "automatic",
+        "preferred_content_size": {
+          "height": 320,
+          "width": 320
+        },
+        "presentation_style": "page_sheet",
+        "scroll_expansion": true,
+        "surface": "opaque.white",
+        "trial": 8,
+        "width_follows_preferred_content_size": false
+      },
+      "device": {
+        "logical_size": {
+          "height": 874,
+          "width": 402
+        },
+        "model": "iPhone18,1",
+        "physical_size": {
+          "height": 2622,
+          "width": 1206
+        },
+        "refresh_hz": 60,
+        "refresh_hz_source": "UIScreen.maximumFramesPerSecond; measured cadence is per-frame",
+        "runtime_kind": "simulator",
+        "scale": 3
+      },
+      "environment": {
+        "keyboard": {
+          "frame": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "visible": false
+        },
+        "orientation": "portrait",
+        "safe_area": {
+          "bottom": 34,
+          "left": 0,
+          "right": 0,
+          "top": 62
+        },
+        "size_classes": {
+          "horizontal": "compact",
+          "vertical": "regular"
+        },
+        "status_bar": {
+          "hidden": false
+        },
+        "system_settings": {
+          "content_size_category": "UICTContentSizeCategoryL",
+          "reduce_motion": false,
+          "voice_over": false
+        }
+      },
+      "evidence_kind": "runtime",
+      "geometry_probe": {
+        "accepted": false,
+        "schema_version": 1,
+        "scope": "public_geometry_diagnostic_not_contour"
+      },
+      "implementation": "native",
+      "native_contract_version": 2,
+      "os": {
+        "build": "24A434",
+        "version": "27.0"
+      },
+      "provenance": {
+        "attempt_id": "457171D2-36E6-4AF6-93A4-1AD1FD31CC84",
+        "native_source_revision": "uncommitted-task3b-source-files-pinned-by-manifest",
+        "role": "training",
+        "source_hashes": {
+          "native_reference/NativeSheetHarness/App.swift": "7b8d7ae3260346685fd8ec54c6b253a7eefadf3a77781d69edde60e79b4792a7",
+          "native_reference/NativeSheetHarness/GeometryProbe.swift": "3df19d79eb4169a7497d31ae2ffee45a5817d6ae3f05e5df37d53bc6ffc4dd32",
+          "native_reference/NativeSheetHarness/Info.plist": "b40dd80ebfa38ca49328c0b88016a682dfa5ac1e357676512f455cec3e7efe6a",
+          "native_reference/NativeSheetHarness/InteractionProbe.swift": "c9f0de0ea96d5c0bf949088f802632aa7d77f008cb8be9470edd045af4712274",
+          "native_reference/NativeSheetHarness/NativeScenario.swift": "b98bc76cf111cf8baa4754bcac49fad70b62233c903c2c318ba62e60807a43e7",
+          "native_reference/NativeSheetHarness/SwiftUIReference.swift": "6451434717819dfcf79744de2b068beefef430c3b9b31fe34466ddebe8cfd13c",
+          "native_reference/NativeSheetHarness/Trace.swift": "4610cccc6c0a320297e2bb20f62f3442d62b706df18e071b498d94586f21f8d2"
+        }
+      },
+      "run_id": "02904179-5C56-44B9-816A-AABA4F9D8BEB",
+      "scenario_id": "native.geometry.smoke",
+      "schema_version": 1,
+      "seq": 0,
+      "t_ns": 86054657075875,
+      "type": "session"
+    },
+    "trial_count": 10,
+    "phases": {
+      "fixed320": {
+        "sheet": {
+          "corners": {
+            "top_left": {
+              "median": 38.0,
+              "min": 38,
+              "max": 38,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 38.0,
+              "min": 38,
+              "max": 38,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 20.0,
+              "min": 20,
+              "max": 20,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 20.0,
+              "min": 20,
+              "max": 20,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .fixed(radius: 38.0), topRightRadius: .fixed(radius: 38.0), bottomLeftRadius: .fixed(radius: 20.0), bottomRightRadius: .fixed(radius: 20.0))"
+          ]
+        },
+        "sheet.ancestor.1": {
+          "corners": {
+            "top_left": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .unspecified, topRightRadius: .unspecified, bottomLeftRadius: .unspecified, bottomRightRadius: .unspecified)"
+          ]
+        },
+        "sheet.ancestor.2": {
+          "corners": {
+            "top_left": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .unspecified, topRightRadius: .unspecified, bottomLeftRadius: .unspecified, bottomRightRadius: .unspecified)"
+          ]
+        },
+        "sheet.child.1": {
+          "corners": {
+            "top_left": {
+              "median": 38.0,
+              "min": 38,
+              "max": 38,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 38.0,
+              "min": 38,
+              "max": 38,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 20.0,
+              "min": 20,
+              "max": 20,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 20.0,
+              "min": 20,
+              "max": 20,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .fixed(radius: 38.0), topRightRadius: .fixed(radius: 38.0), bottomLeftRadius: .fixed(radius: 20.0), bottomRightRadius: .fixed(radius: 20.0))"
+          ]
+        },
+        "sheet.child.2": {
+          "corners": {
+            "top_left": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .capsule, topRightRadius: .capsule, bottomLeftRadius: .capsule, bottomRightRadius: .capsule)"
+          ]
+        },
+        "sheet.child.3": {
+          "corners": {
+            "top_left": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .capsule, topRightRadius: .capsule, bottomLeftRadius: .capsule, bottomRightRadius: .capsule)"
+          ]
+        }
+      },
+      "medium_initial": {
+        "sheet": {
+          "corners": {
+            "top_left": {
+              "median": 38.0,
+              "min": 38,
+              "max": 38,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 38.0,
+              "min": 38,
+              "max": 38,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 20.0,
+              "min": 20,
+              "max": 20,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 20.0,
+              "min": 20,
+              "max": 20,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .fixed(radius: 38.0), topRightRadius: .fixed(radius: 38.0), bottomLeftRadius: .fixed(radius: 20.0), bottomRightRadius: .fixed(radius: 20.0))"
+          ]
+        },
+        "sheet.ancestor.1": {
+          "corners": {
+            "top_left": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .unspecified, topRightRadius: .unspecified, bottomLeftRadius: .unspecified, bottomRightRadius: .unspecified)"
+          ]
+        },
+        "sheet.ancestor.2": {
+          "corners": {
+            "top_left": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .unspecified, topRightRadius: .unspecified, bottomLeftRadius: .unspecified, bottomRightRadius: .unspecified)"
+          ]
+        },
+        "sheet.child.1": {
+          "corners": {
+            "top_left": {
+              "median": 38.0,
+              "min": 38,
+              "max": 38,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 38.0,
+              "min": 38,
+              "max": 38,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 20.0,
+              "min": 20,
+              "max": 20,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 20.0,
+              "min": 20,
+              "max": 20,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .fixed(radius: 38.0), topRightRadius: .fixed(radius: 38.0), bottomLeftRadius: .fixed(radius: 20.0), bottomRightRadius: .fixed(radius: 20.0))"
+          ]
+        },
+        "sheet.child.2": {
+          "corners": {
+            "top_left": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .capsule, topRightRadius: .capsule, bottomLeftRadius: .capsule, bottomRightRadius: .capsule)"
+          ]
+        },
+        "sheet.child.3": {
+          "corners": {
+            "top_left": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .capsule, topRightRadius: .capsule, bottomLeftRadius: .capsule, bottomRightRadius: .capsule)"
+          ]
+        }
+      },
+      "large": {
+        "sheet": {
+          "corners": {
+            "top_left": {
+              "median": 38.0,
+              "min": 38,
+              "max": 38,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 38.0,
+              "min": 38,
+              "max": 38,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .fixed(radius: 38.0), topRightRadius: .fixed(radius: 38.0), bottomLeftRadius: .unspecified, bottomRightRadius: .unspecified)"
+          ]
+        },
+        "sheet.ancestor.1": {
+          "corners": {
+            "top_left": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .unspecified, topRightRadius: .unspecified, bottomLeftRadius: .unspecified, bottomRightRadius: .unspecified)"
+          ]
+        },
+        "sheet.ancestor.2": {
+          "corners": {
+            "top_left": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .unspecified, topRightRadius: .unspecified, bottomLeftRadius: .unspecified, bottomRightRadius: .unspecified)"
+          ]
+        },
+        "sheet.child.1": {
+          "corners": {
+            "top_left": {
+              "median": 38.0,
+              "min": 38,
+              "max": 38,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 38.0,
+              "min": 38,
+              "max": 38,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .fixed(radius: 38.0), topRightRadius: .fixed(radius: 38.0), bottomLeftRadius: .unspecified, bottomRightRadius: .unspecified)"
+          ]
+        },
+        "sheet.child.2": {
+          "corners": {
+            "top_left": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .capsule, topRightRadius: .capsule, bottomLeftRadius: .capsule, bottomRightRadius: .capsule)"
+          ]
+        },
+        "sheet.child.3": {
+          "corners": {
+            "top_left": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .capsule, topRightRadius: .capsule, bottomLeftRadius: .capsule, bottomRightRadius: .capsule)"
+          ]
+        }
+      },
+      "medium_return": {
+        "sheet": {
+          "corners": {
+            "top_left": {
+              "median": 38.0,
+              "min": 38,
+              "max": 38,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 38.0,
+              "min": 38,
+              "max": 38,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 20.0,
+              "min": 20,
+              "max": 20,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 20.0,
+              "min": 20,
+              "max": 20,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .fixed(radius: 38.0), topRightRadius: .fixed(radius: 38.0), bottomLeftRadius: .fixed(radius: 20.0), bottomRightRadius: .fixed(radius: 20.0))"
+          ]
+        },
+        "sheet.ancestor.1": {
+          "corners": {
+            "top_left": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .unspecified, topRightRadius: .unspecified, bottomLeftRadius: .unspecified, bottomRightRadius: .unspecified)"
+          ]
+        },
+        "sheet.ancestor.2": {
+          "corners": {
+            "top_left": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 0.0,
+              "min": 0,
+              "max": 0,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .unspecified, topRightRadius: .unspecified, bottomLeftRadius: .unspecified, bottomRightRadius: .unspecified)"
+          ]
+        },
+        "sheet.child.1": {
+          "corners": {
+            "top_left": {
+              "median": 38.0,
+              "min": 38,
+              "max": 38,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 38.0,
+              "min": 38,
+              "max": 38,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0,
+                38.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 20.0,
+              "min": 20,
+              "max": 20,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 20.0,
+              "min": 20,
+              "max": 20,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0,
+                20.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .fixed(radius: 38.0), topRightRadius: .fixed(radius: 38.0), bottomLeftRadius: .fixed(radius: 20.0), bottomRightRadius: .fixed(radius: 20.0))"
+          ]
+        },
+        "sheet.child.2": {
+          "corners": {
+            "top_left": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .capsule, topRightRadius: .capsule, bottomLeftRadius: .capsule, bottomRightRadius: .capsule)"
+          ]
+        },
+        "sheet.child.3": {
+          "corners": {
+            "top_left": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "top_right": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_left": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            },
+            "bottom_right": {
+              "median": 2.0,
+              "min": 2,
+              "max": 2,
+              "stddev_population": 0.0,
+              "trial_medians": [
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "physical_pixel_quantization": {
+                "display_scale": 3,
+                "min_integer_pixel_residual": 0,
+                "max_integer_pixel_residual": 0,
+                "coordinate_system": "model_local_points_times_scale_not_rendered_radius",
+                "source_values_rounded": false
+              }
+            }
+          },
+          "configuration_descriptions": [
+            "UICornerConfiguration(topLeftRadius: .capsule, topRightRadius: .capsule, bottomLeftRadius: .capsule, bottomRightRadius: .capsule)"
+          ]
+        }
+      }
+    },
+    "rendered_contour_accepted": false,
+    "barrier_accepted": false,
+    "presenter_accepted": false,
+    "statistics_method": "median and population dispersion of ten independent trial medians; min/max and pixel residuals over observed window samples",
+    "limits": [
+      "Four corners never collapsed to one scalar",
+      "Model/configuration parameters are not rendered contour or Flutter parity",
+      "Configuration descriptions are raw diagnostic strings, not private-class selection rules"
+    ]
+  },
+  "collector_elapsed_s": 76.15368762498838,
+  "batch_completed": true,
+  "lifecycle": {
+    "before": {
+      "returncode": 3,
+      "stdout": "",
+      "stderr": "An error was encountered processing the command (domain=NSPOSIXErrorDomain, code=3):\nSimulator device failed to terminate dev.notkleja.NativeSheetHarness.\nfound nothing to terminate\nUnderlying error (domain=NSPOSIXErrorDomain, code=3):\n\tThe request to terminate \"dev.notkleja.NativeSheetHarness\" failed. found nothing to terminate\n\tfound nothing to terminate\n"
+    },
+    "after": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "failure": null,
+  "limits": [
+    "Ten independent run/trial/attempt IDs; no prior Task3A smoke reused",
+    "Every failed trial remains in this full attempt; no favorable substitution",
+    "Model/configuration radii only; canonical radius/contour/barrier/presenter acceptance unchanged"
+  ]
+}

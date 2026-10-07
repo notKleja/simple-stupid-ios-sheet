@@ -202,6 +202,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
             interaction = InteractionProbe(self); interaction?.installPresenter()
             probe.touchObserver = { [weak self] touch, point in self?.interaction?.observe(touch, point: point) }
         }
+        interaction?.invalidateDynamics()
         trace = nil; running = true; trial = trialOffset; next()
     }
     func after(_ seconds: Double, from origin: DispatchTime? = nil, _ work: @escaping () -> Void) {
@@ -226,10 +227,11 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
     }
     func next() {
         guard trial < trials + trialOffset else {
+            interaction?.invalidateDynamics()
             running = false; trace?.event("batch.completed", ["trials": trials]); return
         }
         trial += 1
-        guard trace?.invalidated != true else { running = false; return }
+        guard trace?.invalidated != true else { interaction?.invalidateDynamics(); running = false; return }
         let t = Trace(scenario: scenario, clock: CACurrentMediaTime); trace = t; probe.trace = t
         let vc = UIViewController(); vc.view = CalibrationView(title: "\(scenario)\nTrial \(trial)/\(trials)")
         vc.modalPresentationStyle = definition.style == "form_sheet" ? .formSheet : .pageSheet
@@ -289,7 +291,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         if #available(iOS 27.0, *) {
             effectiveConfiguration["placement"] = config.preferredPlacement == .leading ? "leading" : (config.preferredPlacement == .trailing ? "trailing" : (config.preferredPlacement == .center ? "center" : "automatic"))
         }
-        t.record("session", ["scenario_id": scenario, "implementation": "native", "evidence_kind": "runtime",
+        var session: [String:Any] = ["scenario_id": scenario, "implementation": "native", "evidence_kind": "runtime",
             "os": ["version": UIDevice.current.systemVersion, "build": osBuild()],
             "device": ["model": deviceModel(),
                 "logical_size": ["width": screen.bounds.width, "height": screen.bounds.height],
@@ -303,7 +305,16 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
             "configuration": effectiveConfiguration,
             "provenance": ["attempt_id": replayRequest["attempt_id"] as? String ?? ProcessInfo.processInfo.environment["NATIVE_ATTEMPT_ID"] ?? UUID().uuidString,
                 "role": replayRequest["role"] as? String ?? ProcessInfo.processInfo.environment["NATIVE_ROLE"] ?? "training",
-                "native_source_revision": replayRequest["source_revision"] as? String ?? ProcessInfo.processInfo.environment["NATIVE_SOURCE_REVISION"] ?? "working_tree_uncommitted"]])
+                "native_source_revision": replayRequest["source_revision"] as? String ?? ProcessInfo.processInfo.environment["NATIVE_SOURCE_REVISION"] ?? "working_tree_uncommitted"]]
+        if scenario == "native.geometry.smoke" {
+            session["geometry_probe"] = ["schema_version":1,"accepted":false,"scope":"public_geometry_diagnostic_not_contour"]
+            if let json=ProcessInfo.processInfo.environment["NATIVE_GEOMETRY_SOURCE_HASHES"],
+               let data=json.data(using:.utf8), let hashes=try? JSONSerialization.jsonObject(with:data) as? [String:String] {
+                var provenance=session["provenance"] as! [String:Any]
+                provenance["source_hashes"]=hashes;session["provenance"]=provenance
+            }
+        }
+        t.record("session", session)
         link?.invalidate(); link = CADisplayLink(target: self, selector: #selector(sample(_:))); link!.add(to: .main, forMode: .common)
         let replayOrigin = DispatchTime.now()
         t.event("present.requested")
@@ -313,19 +324,17 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         }
         // Manual gesture scenarios intentionally stay open for external input replay.
         guard !definition.manual else { return }
-        after(1.5, from: replayOrigin) {
-            self.target = "large"; self.phase = "detent"
-            t.event("detent.requested", ["target": "large"])
-            config.animateChanges { config.selectedDetentIdentifier = .large }
+        for request in definition.programmaticRequests {
+            after(request.after, from: replayOrigin) {
+                self.target=request.target;self.phase="detent"
+                t.event("detent.requested",["target":request.target])
+                config.animateChanges { config.selectedDetentIdentifier=request.target == "large" ? .large : .medium }
+            }
         }
-        after(3, from: replayOrigin) {
-            self.target = "medium"; self.phase = "detent"
-            t.event("detent.requested", ["target": "medium"])
-            config.animateChanges { config.selectedDetentIdentifier = .medium }
-        }
-        after(4.5, from: replayOrigin) {
+        after(definition.dismissAfter, from: replayOrigin) {
             self.phase = "dismiss"; self.target = nil; t.event("dismiss.requested")
             vc.dismiss(animated: true) {
+                self.interaction?.invalidateDynamics()
                 t.event("dismiss.completed", terminal: true); self.link?.invalidate(); self.sheet = nil
                 self.after(0.4) { self.next() }
             }
@@ -341,6 +350,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         guard let sheet, let trace else { return }
         phase = "dismiss"; target = nil; trace.event("dismiss.requested")
         sheet.dismiss(animated: true) {
+            self.interaction?.invalidateDynamics()
             trace.event("dismiss.completed", terminal: true)
             self.link?.invalidate(); self.sheet = nil; self.running = false
             self.interaction?.status.text = "Experiment complete"
@@ -352,6 +362,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         trace?.record("event", ["name": "detent.changed", "data": ["selected": canonicalDetentID(raw) as Any? ?? NSNull()], "raw_uikit_identifier": raw as Any? ?? NSNull()])
     }
     func presentationControllerDidDismiss(_ controller: UIPresentationController) {
+        interaction?.invalidateDynamics()
         trace?.event("dismiss.interactive_completed"); link?.invalidate(); sheet = nil; running = false
     }
     func layerInfo(_ view: UIView, in window: UIWindow, samples: [ObjectIdentifier: CALayer]) -> [String: Any] {
@@ -384,13 +395,19 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
     }
     @objc func sample(_ display: CADisplayLink) {
         guard let trace, let sheet else { return }
+        defer { if trace.invalidated { interaction?.invalidateDynamics() } }
         let container = sheet.presentationController?.presentedView ?? sheet.view!
         let l = container.layer.presentation() ?? container.layer
         let windowLayer = probe.layer.presentation() ?? probe.layer
         let samples = coherentLayerSamples(probe.layer)
+        let geometryDiagnostic: [String:Any]? = scenario == "native.geometry.smoke" ?
+            GeometryProbe.observe(presentedView:container,presentingView:view,window:probe,
+                presentationSamples:samples,presentationWindowRect:{ sampledWindowRect($0,window:self.probe.layer,samples:samples) }) : nil
         guard let r = sampledWindowRect(container.layer, window: probe.layer, samples: samples) else {
-            trace.record("frame", ["metrics": ["sheet.x": NSNull(), "sheet.y": NSNull(), "sheet.width": NSNull(), "sheet.height": NSNull()],
-                "state": ["phase": phase], "unavailable": ["sheet.y": "No coherent presentation ancestry or unsupported nonaffine transform"], "coherent_layer_count": samples.count])
+            var frame: [String:Any] = ["metrics": ["sheet.x": NSNull(), "sheet.y": NSNull(), "sheet.width": NSNull(), "sheet.height": NSNull()],
+                "state": ["phase": phase], "unavailable": ["sheet.y": "No coherent presentation ancestry or unsupported nonaffine transform"], "coherent_layer_count": samples.count]
+            if let geometryDiagnostic { frame["geometry_probe"] = geometryDiagnostic }
+            trace.record("frame",frame)
             return
         }
         let legacy = l.convert(l.bounds, to: windowLayer)
@@ -431,7 +448,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
             node.subviews.forEach { walk($0, depth + 1) }
         }
         probe.subviews.forEach { walk($0, 0) }
-        trace.record("frame", ["metrics": metrics,
+        var frame: [String:Any] = ["metrics": metrics,
             "state": ["phase": phase, "selected_detent": canonicalDetentID(sheet.sheetPresentationController?.selectedDetentIdentifier?.rawValue) as Any? ?? NSNull(),
                 "target_detent": target as Any? ?? NSNull(), "gesture": probe.finger == nil ? "none" : "touch", "scroll_owner": NSNull(), "underlying_hit_test": interaction?.lastOutcome as Any? ?? NSNull(),
                 "scroll_pan_state": scroll?.panGestureRecognizer.state.rawValue as Any? ?? NSNull(), "observed_movement_consumer": movementConsumer as Any? ?? NSNull()],
@@ -444,7 +461,9 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
             "display": ["timestamp": display.timestamp, "target_timestamp": display.targetTimestamp, "duration": display.duration],
             "geometry_source": "coherent window presentation tree with stable model ancestry", "coherent_layer_count": samples.count,
             "legacy_mixed_tree_sheet_frame": rect(legacy), "raw_layers": layers, "keyboard_frame": rect(keyboardFrame),
-            "provenance": ["movement_consumer": "derived from consecutive observed offset/position deltas; not private gesture ownership"]], time: t)
+            "provenance": ["movement_consumer": "derived from consecutive observed offset/position deltas; not private gesture ownership"]]
+        if let geometryDiagnostic { frame["geometry_probe"] = geometryDiagnostic }
+        trace.record("frame",frame,time:t)
     }
 }
 

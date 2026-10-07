@@ -32,11 +32,23 @@ struct NativeScenario {
     var compactEdge = false
     var preferredWidth = false
     var minimumMajor = 26
+    var dynamics = false
+    var programmaticRequests: [(after:Double,target:String)] {
+        id == "native.geometry.smoke" ? [(1.5,"medium"),(3,"large"),(4.5,"medium")] : [(1.5,"large"),(3,"medium")]
+    }
+    var dismissAfter: Double { id == "native.geometry.smoke" ? 6 : 4.5 }
 
     static let definitions: [String: NativeScenario] = {
         var result: [String: NativeScenario] = [:]
         func add(_ scenario: NativeScenario) { result[scenario.id] = scenario }
         add(NativeScenario(id: "native.medium_large.programmatic"))
+        add(NativeScenario(id: "native.geometry.smoke", initial:"fixed320"))
+        // Request grid axes live in the separate dynamics-v2 recipe, not in
+        // semantic sheet configuration. These are observer fixtures only.
+        add(NativeScenario(id: "native.dynamics.handle", manual: true, scrolling: true, dynamics: true))
+        add(NativeScenario(id: "native.dynamics.handle.locked", manual: true, scrolling: true, dismissalLocked: true, dynamics: true))
+        add(NativeScenario(id: "native.dynamics.scroll", manual: true, scrolling: true, dynamics: true))
+        add(NativeScenario(id: "native.dynamics.scroll.locked", manual: true, scrolling: true, dismissalLocked: true, dynamics: true))
         add(NativeScenario(id: "native.medium.basic", manual: true))
         add(NativeScenario(id: "native.large.basic", initial: "large", manual: true))
         add(NativeScenario(id: "native.custom.320", initial: "fixed320", manual: true))
@@ -71,3 +83,12 @@ struct NativeScenario {
 }
 
 enum ScenarioError: Error { case invalid(String) }
+
+/// Pure lifetime policy also exercised by the host contract. No observation
+/// may escape into a different run or after any run/sheet termination.
+struct DynamicsObserverLifetime {
+    let runID: String
+    func mustStop(currentRunID: String?, running: Bool, sheetPresent: Bool, invalidated: Bool) -> Bool {
+        currentRunID != runID || !running || !sheetPresent || invalidated
+    }
+}

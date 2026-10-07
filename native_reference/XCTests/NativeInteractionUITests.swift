@@ -2,12 +2,16 @@ import XCTest
 import Foundation
 
 final class NativeInteractionUITests: XCTestCase {
-    func launch(_ scenario: String, trial: Int) -> XCUIApplication {
+    func launch(_ scenario: String, trial: Int, dynamicsRecipe: [String: Any]? = nil) -> XCUIApplication {
         continueAfterFailure = false
         let app = XCUIApplication(bundleIdentifier: "dev.notkleja.NativeSheetHarness")
         app.launchEnvironment = ["NATIVE_AUTORUN":"1", "NATIVE_SCENARIO":scenario, "NATIVE_TRIALS":"1",
             "NATIVE_TRIAL_OFFSET":String(trial-1), "NATIVE_ATTEMPT_ID":UUID().uuidString, "NATIVE_ROLE":"training",
             "NATIVE_SOURCE_REVISION":Bundle(for:NativeInteractionUITests.self).object(forInfoDictionaryKey:"NativeSourceRevision") as? String ?? "unresolved"]
+        if let recipe = dynamicsRecipe {
+            let data = try! JSONSerialization.data(withJSONObject: recipe, options: [.sortedKeys])
+            app.launchEnvironment["NATIVE_DYNAMICS_RECIPE"] = String(decoding: data, as: UTF8.self)
+        }
         if let root = ProcessInfo.processInfo.environment["SIMULATOR_ROOT"],
            let plist = NSDictionary(contentsOfFile: root + "/System/Library/CoreServices/SystemVersion.plist"),
            let build = plist["ProductBuildVersion"] as? String { app.launchEnvironment["NATIVE_OS_BUILD"] = build }
@@ -67,6 +71,30 @@ final class NativeInteractionUITests: XCTestCase {
 
     func testScrollExpandsFirst() { scroll("native.scroll.medium_large") }
     func testScrollContentFirst() { scroll("native.scroll.content_first") }
+
+    /// Future replay helper, deliberately not a runtime test/cohort in Task4A.
+    /// Coordinates and press/drag calls are requests. Only the app's passive
+    /// window observer establishes delivered position/time/finite-difference velocity.
+    /// Does not implement nested/pager fixtures, velocity thresholds or phase interrupts.
+    func requestDynamicsPath(_ app: XCUIApplication, origin: String, diagonal: Bool,
+                             downward: Bool, secondGesture: Bool) {
+        XCTAssertTrue(["handle", "content"].contains(origin), "Origin has no native fixture")
+        guard ["handle", "content"].contains(origin) else { return }
+        app.buttons["probe.begin"].tap() // App schedules 100/200ms on one request clock.
+        let sheet = app.scrollViews["sheet.scroll"]
+        XCTAssertTrue(sheet.exists)
+        let startY: CGFloat = origin == "handle" ? 0.03 : (downward ? 0.35 : 0.85)
+        let endY: CGFloat = downward ? 0.95 : 0.15
+        let from = sheet.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+        let to = sheet.coordinate(withNormalizedOffset: CGVector(dx: diagonal ? 0.8 : 0.5, dy: endY))
+        from.press(forDuration: 0.1, thenDragTo: to)
+        if secondGesture {
+            // A second request is not proof that scroll top was reached.
+            from.press(forDuration: 0.1, thenDragTo: to)
+        }
+        wait(0.5)
+        app.buttons["probe.end"].tap()
+    }
 
     func testDownwardScrollHandoff() {
         for trial in 1...10 {
