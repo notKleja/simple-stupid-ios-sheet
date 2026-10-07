@@ -180,19 +180,43 @@ void main() {
     expect(sheet.snapshotState().motionRequest, same(original));
     expect(sheet.unscaledTrajectoryHeight, 300);
   });
+  testWidgets('injected model must preserve finite initial point velocity', (
+    tester,
+  ) async {
+    final model = _ControlledModel();
+    await present(tester, model: model);
+    sheet.selectDetent('large');
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    // ignore: invalid_use_of_protected_member
+    expect(route.controller!.velocity, greaterThan(0));
+    final original = sheet.snapshotState().motionRequest;
+    for (final velocity in [0.0, double.nan]) {
+      model.initialVelocityOverride = velocity;
+      expect(() => sheet.selectDetent('short'), throwsStateError);
+      expect(sheet.selectedDetentIdentifier, 'large');
+      expect(sheet.snapshotState().motionRequest, same(original));
+    }
+    await tester.pumpAndSettle();
+  });
 }
 
 class _ControlledModel implements IosSheetTrajectoryModel {
   bool wrongTarget = false;
   bool wrongPosition = false;
+  double? initialVelocityOverride;
   @override
   IosSheetTrajectory createTrajectory(IosSheetMotionRequest request) {
     final base = FallbackIosSheetTrajectoryModel(
       const CupertinoMotion.smooth(snapToEnd: true),
     ).createTrajectory(request);
     return IosSheetTrajectory(
-      simulation: wrongPosition
-          ? _ShiftedSimulation(base.simulation)
+      simulation: wrongPosition || initialVelocityOverride != null
+          ? _ControlledSimulation(
+              base.simulation,
+              positionShift: wrongPosition ? 1 : 0,
+              initialVelocityOverride: initialVelocityOverride,
+            )
           : base.simulation,
       targetPoints: request.targetPoints + (wrongTarget ? 1 : 0),
       provenance: 'synthetic injected model, not native evidence',
@@ -201,13 +225,21 @@ class _ControlledModel implements IosSheetTrajectoryModel {
   }
 }
 
-class _ShiftedSimulation extends Simulation {
-  _ShiftedSimulation(this.inner);
+class _ControlledSimulation extends Simulation {
+  _ControlledSimulation(
+    this.inner, {
+    required this.positionShift,
+    required this.initialVelocityOverride,
+  });
   final Simulation inner;
+  final double positionShift;
+  final double? initialVelocityOverride;
   @override
-  double x(double time) => inner.x(time) + 1;
+  double x(double time) => inner.x(time) + positionShift;
   @override
-  double dx(double time) => inner.dx(time);
+  double dx(double time) => time == 0 && initialVelocityOverride != null
+      ? initialVelocityOverride!
+      : inner.dx(time);
   @override
   bool isDone(double time) => inner.isDone(time);
 }

@@ -466,12 +466,17 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
         (trajectoryModel ?? FallbackIosSheetTrajectoryModel(motion))
             .createTrajectory(request);
     final initialPosition = trajectory.simulation.x(0);
+    final initialVelocity = trajectory.simulation.dx(0);
     if (trajectory.targetPoints != request.targetPoints ||
         !initialPosition.isFinite ||
+        !initialVelocity.isFinite ||
         (initialPosition - request.positionPoints).abs() >
+            precisionErrorTolerance ||
+        (initialVelocity - request.velocityPointsPerSecond).abs() >
             precisionErrorTolerance) {
       throw StateError(
-        'Trajectory must preserve the requested target and initial position',
+        'Trajectory must preserve the requested target, initial position, '
+        'and initial velocity',
       );
     }
     _motionRequest = request;
