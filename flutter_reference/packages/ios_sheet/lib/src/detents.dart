@@ -1,26 +1,8 @@
 import 'package:flutter/widgets.dart';
 
 import 'profile.dart';
-
-/// Runtime layout inputs. Heights are logical points, not physical pixels.
-@immutable
-class IosSheetEnvironment {
-  const IosSheetEnvironment({
-    required this.availableSize,
-    required this.maximumDetentHeight,
-    this.safeArea = EdgeInsets.zero,
-    this.keyboardHeight = 0,
-    this.contentHeight,
-    this.displayScale = 1,
-  });
-
-  final Size availableSize;
-  final double maximumDetentHeight;
-  final EdgeInsets safeArea;
-  final double keyboardHeight;
-  final double? contentHeight;
-  final double displayScale;
-}
+import 'environment.dart';
+export 'environment.dart' show IosSheetEnvironment;
 
 typedef IosDetentResolver = double Function(IosSheetEnvironment environment);
 

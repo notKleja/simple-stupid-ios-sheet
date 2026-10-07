@@ -30,6 +30,18 @@ enum SheetDragHandoff {
   continuous,
 }
 
+/// Simulation creation context; values remain in the generic normalized axis.
+enum SheetSimulationPhase {
+  /// Initial route presentation.
+  presentation,
+  /// Programmatic or gesture-selected detent motion.
+  detentSnap,
+  /// Return after existing boundary resistance.
+  overdragReturn,
+  /// Route dismissal, optionally carrying an observed release.
+  dismissal,
+}
+
 /// A modal route that displays a sheet that slides up from the bottom.
 ///
 /// The sheet can be dismissed by dragging down or by tapping the barrier.
@@ -228,6 +240,18 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
 
   /// The motion configuration for the sheet animation.
   Motion get motion;
+
+  /// Narrow creation seam. The default forwards the historical inputs exactly.
+  /// A preset can observe the current controller before animateWith replaces
+  /// its simulation.
+  @protected
+  Simulation createSheetSimulation({
+    required SheetSimulationPhase phase,
+    required double start,
+    required double end,
+    required double velocity,
+    double? dragReleaseVelocity,
+  }) => motion.createSimulation(start: start, end: end, velocity: velocity);
 
   /// How much resistance the sheet should give when the user tries to drag
   /// it past it's fully opened state.
@@ -446,10 +470,14 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
     _animationTargetValue = endValue;
     _stickingPoint = endValue;
     _updateSnapshotState();
-    return motion.createSimulation(
+    return createSheetSimulation(
+      phase: forward
+          ? SheetSimulationPhase.presentation
+          : SheetSimulationPhase.dismissal,
       end: endValue,
       start: animation?.value ?? 0,
       velocity: -(v ?? 0),
+      dragReleaseVelocity: v == null ? null : -v,
     );
   }
 
@@ -665,10 +693,12 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
         velocity, currentValue, stickingPoint, maxExtent,
       );
 
-      final backSim = motion.createSimulation(
+      final backSim = createSheetSimulation(
+        phase: SheetSimulationPhase.overdragReturn,
         start: currentValue,
         end: snapTarget,
         velocity: -adjustedVelocity,
+        dragReleaseVelocity: -adjustedVelocity,
       );
       controller!.animateWith(backSim);
       _dragEndVelocity = null;
@@ -689,10 +719,12 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
         navigator?.pop();
       } else {
         // Animate to the target snap point
-        final snapSim = motion.createSimulation(
+        final snapSim = createSheetSimulation(
+          phase: SheetSimulationPhase.detentSnap,
           start: currentValue,
           end: targetValue,
           velocity: -_dragEndVelocity!,
+          dragReleaseVelocity: -_dragEndVelocity!,
         );
         controller!.animateWith(snapSim);
         _dragEndVelocity = null;
@@ -804,7 +836,8 @@ mixin StupidSimpleSheetController<T> on StupidSimpleSheetTransitionMixin<T> {
       target = relativePosition;
     }
 
-    final simulation = motion.createSimulation(
+    final simulation = createSheetSimulation(
+      phase: SheetSimulationPhase.detentSnap,
       start: controller!.value,
       end: target,
       velocity: controller!.velocity,
@@ -859,7 +892,8 @@ mixin StupidSimpleSheetController<T> on StupidSimpleSheetTransitionMixin<T> {
         return TickerFuture.complete();
       }
 
-      final simulation = motion.createSimulation(
+      final simulation = createSheetSimulation(
+        phase: SheetSimulationPhase.detentSnap,
         start: currentPosition,
         end: targetPosition,
         velocity: controller!.velocity,
