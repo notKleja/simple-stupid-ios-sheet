@@ -201,5 +201,133 @@ class ConditionsBatchTests(unittest.TestCase):
         self.assertEqual(index.read_bytes(), before)
 
 
+class LegacyMarkerGateTests(unittest.TestCase):
+    """No-map v1 inputs isolate each ignored marker, without mocking freeze/run."""
+    setUp = fixtures.RuntimeBatchTests.setUp
+    tearDown = fixtures.RuntimeBatchTests.tearDown
+    save = fixtures.RuntimeBatchTests.save
+    invoke = fixtures.RuntimeBatchTests.invoke
+    cohort = fixtures.RuntimeBatchTests.cohort
+
+    def legacy_documents(self, context=None, marker=None):
+        recipe = copy.deepcopy(self.recipe)
+        assignment = {"split": "training", "cell_id": "26/iphone_a/portrait/basic", "expected_trials": [1],
+            "native": self.cohort("native", [(1, 1, {})]), "candidate": self.cohort("flutter", [(1, 1, {})]),
+            "runtime_input_verified": True}
+        if context == "recipe":
+            recipe[marker] = conditions() if marker == "conditions" else 2
+        if context == "assignment":
+            assignment[marker] = None if marker == "conditions" else 2
+        assignment["recipe"] = self.save("legacy-recipe.json", recipe)
+        documents = {"schema_version": 1, "batch_id": "SYNTHETIC-legacy", "assignments": [assignment],
+            "matrix": self.save("legacy-matrix.json", self.matrix), "profile": self.save("legacy-profile.json", self.profile)}
+        if context in ("plan", "index"):
+            documents[marker] = None
+        return documents
+
+    def direct_index(self, documents, split_marker=None):
+        # Real caller-supplied files bypass freeze on purpose; every reference is hashed.
+        index = {key: value for key, value in documents.items() if key != "assignments"}
+        index["splits"] = []
+        for split in ("diagnostic", "training", "holdout"):
+            payload = {"schema_version": 1, "batch_id": "SYNTHETIC-legacy", "split": split,
+                "assignments": documents["assignments"] if split == "training" else []}
+            if split_marker and split == "training":
+                payload[split_marker] = None
+            index["splits"].append({"split": split, **self.save("direct-" + split + ".json", payload)})
+        return self.save("direct-index.json", index)
+
+    def test_freeze_rejects_assignment_revision_without_a_map(self):
+        plan = self.save("legacy-plan.json", self.legacy_documents("assignment", "scenario_revision"))
+        code, result = self.invoke("freeze", plan["path"], "--output-directory", str(self.base / "frozen"))
+        self.assertEqual(code, 1, result)
+        self.assertIn("scenario_revision", json.dumps(result))
+
+    def test_freeze_rejects_recipe_revision_without_a_map(self):
+        plan = self.save("legacy-plan.json", self.legacy_documents("recipe", "scenario_revision"))
+        code, result = self.invoke("freeze", plan["path"], "--output-directory", str(self.base / "frozen"))
+        self.assertEqual(code, 1, result)
+        self.assertIn("scenario_revision", json.dumps(result))
+
+    def test_freeze_still_rejects_recipe_conditions_without_a_map(self):
+        plan = self.save("legacy-plan.json", self.legacy_documents("recipe", "conditions"))
+        code, result = self.invoke("freeze", plan["path"], "--output-directory", str(self.base / "frozen"))
+        self.assertEqual(code, 1, result)
+        self.assertIn("conditions", json.dumps(result))
+
+    def test_direct_v1_run_rejects_assignment_revision(self):
+        index = self.direct_index(self.legacy_documents("assignment", "scenario_revision"))
+        _, result = self.invoke("run", index["path"])
+        self.assertEqual(result["pair_counts"]["paired"], 0)
+        self.assertIn("scenario_revision", json.dumps(result["issues"]))
+
+    def test_direct_v1_run_rejects_recipe_revision(self):
+        index = self.direct_index(self.legacy_documents("recipe", "scenario_revision"))
+        _, result = self.invoke("run", index["path"])
+        self.assertEqual(result["pair_counts"]["paired"], 0)
+        self.assertIn("scenario_revision", json.dumps(result["issues"]))
+
+    def test_direct_v1_run_rejects_recipe_conditions(self):
+        index = self.direct_index(self.legacy_documents("recipe", "conditions"))
+        _, result = self.invoke("run", index["path"])
+        self.assertEqual(result["pair_counts"]["paired"], 0)
+        self.assertIn("conditions", json.dumps(result["issues"]))
+
+    def test_null_markers_at_other_legacy_boundaries_are_not_ignored(self):
+        for context, marker in (("plan", "conditions"), ("plan", "scenario_revision"),
+                                ("index", "conditions"), ("index", "scenario_revision"),
+                                ("assignment", "conditions"), ("assignment", "scenario_map"),
+                                ("recipe", "scenario_map")):
+            with self.subTest(context=context, marker=marker):
+                self.tmp.cleanup()
+                self.setUp()
+                documents = self.legacy_documents(context, marker)
+                if context == "plan":
+                    plan = self.save("legacy-plan.json", documents)
+                    code, result = self.invoke("freeze", plan["path"], "--output-directory", str(self.base / "frozen"))
+                    self.assertEqual(code, 1, result)
+                else:
+                    index = self.direct_index(documents)
+                    _, result = self.invoke("run", index["path"])
+                    self.assertEqual(result["pair_counts"]["paired"], 0)
+                self.assertIn(marker, json.dumps(result))
+
+    def test_v1_split_payload_markers_are_rejected(self):
+        index = self.direct_index(self.legacy_documents(), split_marker="scenario_revision")
+        _, result = self.invoke("run", index["path"])
+        self.assertEqual(result["pair_counts"]["paired"], 0)
+        self.assertIn("scenario_revision", json.dumps(result["issues"]))
+
+    def test_genuinely_legacy_freeze_and_direct_run_remain_supported(self):
+        documents = self.legacy_documents()
+        plan = self.save("legacy-plan.json", documents)
+        code, frozen = self.invoke("freeze", plan["path"], "--output-directory", str(self.base / "frozen"))
+        self.assertEqual(code, 0, frozen)
+        for index_path in (frozen["index_path"], self.direct_index(documents)["path"]):
+            code, result = self.invoke("run", index_path)
+            self.assertEqual(code, 0, result["issues"])
+            self.assertEqual(result["pair_counts"], {"paired": 1, "unresolved": 0})
+
+    def test_training_filter_cannot_hide_v2_markers_in_a_held_recipe(self):
+        held_case = copy.deepcopy(self.matrix["cases"][0])
+        held_case.update(id="held", role="holdout")
+        self.matrix["cases"].append(held_case)
+        index = self.direct_index(self.legacy_documents())
+        index_document = json.loads(Path(index["path"]).read_text())
+        held_recipe = {**self.recipe, "role": "holdout", "conditions": conditions()}
+        held_assignment = {"split": "holdout", "cell_id": "26/iphone_a/portrait/held", "expected_trials": [1],
+            "native": self.cohort("native", [(1, 2, {})], split="holdout", label="held"),
+            "candidate": self.cohort("flutter", [(1, 2, {})], split="holdout", label="held"),
+            "recipe": self.save("held-recipe.json", held_recipe), "runtime_input_verified": True}
+        for ref in index_document["splits"]:
+            if ref["split"] == "holdout":
+                ref.update(self.save("direct-holdout.json", {"schema_version": 1,
+                    "batch_id": "SYNTHETIC-legacy", "split": "holdout", "assignments": [held_assignment]}))
+        index = self.save("direct-index.json", index_document)
+        _, result = self.invoke("run", index["path"], "--split", "training")
+        self.assertEqual(result["pair_counts"]["paired"], 0)
+        self.assertIn("conditions", json.dumps(result["issues"]))
+
+
 if __name__ == "__main__":
     unittest.main()

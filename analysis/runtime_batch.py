@@ -23,10 +23,17 @@ PROGRAMMATIC_EVENTS = ["present.requested", "present.first_visible", "present.co
                        "dismiss.requested", "dismiss.completed"]
 ROOT = Path(__file__).resolve().parents[1]
 CONDITION_IDENTITY = ("recipe_id", "recipe_revision", "parameters", "input_source", "accessibility")
+V2_ONLY_MARKERS = frozenset({"scenario_map", "scenario_revision", "conditions"})
 
 
 def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def reject_legacy_v2_markers(value, context):
+    require(isinstance(value, dict), f"{context}: object required")
+    markers = sorted(V2_ONLY_MARKERS.intersection(value))
+    require(not markers, f"{context}: v2-only markers {markers} require an explicit v2 plan/index")
 
 
 def serialize(value):
@@ -139,7 +146,8 @@ def freeze(plan_path, output):
     plan = json.loads(plan_path.read_text())
     require(type(plan.get("schema_version")) is int and plan["schema_version"] in (1, 2) and isinstance(plan.get("batch_id"), str) and plan["batch_id"], "versioned batch ID required")
     legacy = plan["schema_version"] == 1
-    require(not legacy or "scenario_map" not in plan, "v2 scenario map requires a v2 plan")
+    if legacy:
+        reject_legacy_v2_markers(plan, "legacy plan")
     require(legacy or "scenario_map" in plan, "v2 plan requires an explicit scenario map reference")
     mapping = None if legacy else load_scenario_map(plan["scenario_map"], plan_path.parent)
     matrix, _ = read_contract_ref(plan["matrix"], plan_path.parent, legacy)
@@ -148,6 +156,8 @@ def freeze(plan_path, output):
     assignments = {split: [] for split in SPLITS}
     occupied = set()
     for assignment in plan.get("assignments", []):
+        if legacy:
+            reject_legacy_v2_markers(assignment, "legacy assignment")
         split, cell_id = assignment["split"], assignment["cell_id"]
         require(split in SPLITS and cell_id in expected, "unknown split/cell assignment")
         require((split, cell_id) not in occupied, "one immutable cohort pair per split/cell revision required")
@@ -158,7 +168,7 @@ def freeze(plan_path, output):
         require(isinstance(trials, list) and trials and all(type(t) is int and t > 0 for t in trials) and len(set(trials)) == len(trials), "unique positive expected trial IDs required")
         recipe, _ = read_ref(assignment["recipe"], plan_path.parent)
         if legacy:
-            require("conditions" not in recipe, "v2 recipe conditions require a v2 plan")
+            reject_legacy_v2_markers(recipe, "legacy recipe")
         else:
             resolved = resolve_scenario(mapping, expected[cell_id]["scenario_id"], assignment.get("scenario_revision"))
             validate_recipe(recipe, expected[cell_id], resolved["revision"])
@@ -371,7 +381,8 @@ def run(index_path, split_filter=None):
         index = json.loads(index_path.read_text())
         require(type(index.get("schema_version")) is int and index["schema_version"] in (1, 2) and {ref["split"] for ref in index["splits"]} == set(SPLITS), "all frozen split files required")
         legacy = index["schema_version"] == 1
-        require(not legacy or "scenario_map" not in index, "v2 scenario map cannot be ignored by a v1 index")
+        if legacy:
+            reject_legacy_v2_markers(index, "legacy index")
         require(legacy or "scenario_map" in index, "v2 index requires a scenario map reference")
         mapping = None if legacy else load_scenario_map(index["scenario_map"], index_path.parent)
         if not legacy:
@@ -397,15 +408,23 @@ def run(index_path, split_filter=None):
         registry = {}
         for split_ref in index["splits"]:
             payload, _ = read_ref(split_ref, index_path.parent)
+            if legacy:
+                reject_legacy_v2_markers(payload, "legacy split")
             split = split_ref["split"]
             require(payload["split"] == split and payload["batch_id"] == index["batch_id"], "frozen split identity mismatch")
             for assignment in payload["assignments"]:
+                if legacy:
+                    reject_legacy_v2_markers(assignment, "legacy assignment")
+                    recipe, _ = read_ref(assignment["recipe"], index_path.parent)
+                    reject_legacy_v2_markers(recipe, "legacy recipe")
                 native, nr = load_cohort(assignment["native"], index_path.parent, "native", split, result["artifact_audit"])
                 candidate, cr = load_cohort(assignment["candidate"], index_path.parent, "flutter", split, result["artifact_audit"])
                 for item in result["artifact_audit"]:
                     if item.get("reason") == "cohort split mismatch" and "cohort split mismatch" not in result["issues"]:
                         result["issues"].append("cohort split mismatch")
                 for record in nr + cr:
+                    if legacy:
+                        reject_legacy_v2_markers(record["header"], "legacy trace session")
                     for identity_key in ((record["header"]["implementation"], "run", record["header"]["run_id"]), ("hash", record["artifact"]["sha256"])):
                         require(identity_key not in registry or registry[identity_key] == (split, assignment["cell_id"], record["artifact"]["trial"]), "artifact/run reuse crosses split or independent trial boundary")
                         registry[identity_key] = (split, assignment["cell_id"], record["artifact"]["trial"])
@@ -430,7 +449,6 @@ def run(index_path, split_filter=None):
                 views = (n["rows"], c["rows"])
                 try:
                     if legacy:
-                        require(not any("conditions" in record["header"] or "scenario_revision" in record["header"] for record in (n, c)), "v2 trace conditions require an explicit v2 scenario map")
                         require(schema_equal(identity(n["header"]), identity(c["header"])), "incompatible canonical metadata/configuration")
                         require(n["header"]["scenario_id"] == cell["scenario_id"], "source scenario does not match frozen case")
                     else:
