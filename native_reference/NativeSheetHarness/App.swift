@@ -328,7 +328,9 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
                 if row["type"] as? String == "animation_probe.error" { t.fail("animation_probe_failed", row) }
                 else { t.record("animation_install", row, time: row["transaction_time"] as? Double) }
             }
-            animationProbe = observer; observer.start(phase: "presentation")
+            animationProbe = observer
+            do { try observer.start(phase: "presentation") }
+            catch { t.fail("animation_probe_start_failed", ["error": String(describing: error)]); running = false; return }
         } else {
             link = CADisplayLink(target: self, selector: #selector(sample(_:))); link!.add(to: .main, forMode: .common)
         }

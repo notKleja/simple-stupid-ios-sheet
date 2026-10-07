@@ -4,12 +4,14 @@ import ObjectiveC.runtime
 import Darwin
 import MachO
 
-enum AnimationProbeError: Error { case unsupportedValue(String), serialization(String) }
+enum AnimationProbeError: Error { case unsupportedValue(String), serialization(String), reusedProbe, stoppedProbe }
 
 /// Install-boundary observations only. No display link, screen-coordinate
 /// conversion, trajectory sampler, or changes to the installed CA object.
 final class AnimationProbe {
     private static var active: AnimationProbe?
+    private static let lifecycleLock = NSRecursiveLock()
+    private static let recursionKey = "dev.notkleja.animation-probe.logging"
     private static let hook: Void = {
         let original = class_getInstanceMethod(CALayer.self, #selector(CALayer.add(_:forKey:)))!
         let replacement = class_getInstanceMethod(CALayer.self, #selector(CALayer.motionProbeAdd(_:forKey:)))!
@@ -22,33 +24,63 @@ final class AnimationProbe {
     // Retain model layers until stop so reused addresses cannot reuse an ID.
     private var layers: [CALayer] = []
     private var phase = "present"
-    private var recording = false
-    private(set) var invalidated = false
+    private let stateLock = NSRecursiveLock()
+    private let sinkLock = NSRecursiveLock()
+    private var started = false
+    private var stopped = false
+    private var failed = false
+    var invalidated: Bool { stateLock.lock(); defer { stateLock.unlock() }; return failed }
 
     init(runID: String, trial: Int, sink: @escaping ([String: Any]) -> Void) {
         self.runID = runID; self.trial = trial; self.sink = sink
     }
-    func start(phase: String) {
+    func start(phase: String) throws {
         precondition(Thread.isMainThread, "Probe lifecycle belongs to main thread")
-        Self.active?.stop(); self.phase = phase
+        stateLock.lock()
+        guard !started && !stopped else { stateLock.unlock(); throw AnimationProbeError.reusedProbe }
+        started = true; self.phase = phase; stateLock.unlock()
+        Self.lifecycleLock.lock(); defer { Self.lifecycleLock.unlock() }
+        Self.active?.stop()
         _ = Self.hook; Self.active = self
     }
-    func setPhase(_ value: String) { phase = value }
+    func setPhase(_ value: String) { stateLock.lock(); defer { stateLock.unlock() }; phase = value }
     func stop() {
+        Self.lifecycleLock.lock(); defer { Self.lifecycleLock.unlock() }
         if Self.active === self { Self.active = nil }
-        layers.removeAll()
+        stateLock.lock(); defer { stateLock.unlock() }
+        stopped = true; layers.removeAll(); ids.removeAll()
+    }
+    private func deliver(_ row: [String: Any]) {
+        sinkLock.lock(); defer { sinkLock.unlock() }
+        let thread = Thread.current.threadDictionary
+        let prior = thread[Self.recursionKey]
+        thread[Self.recursionKey] = true
+        defer { if let prior { thread[Self.recursionKey] = prior } else { thread.removeObject(forKey: Self.recursionKey) } }
+        sink(row)
+    }
+    private func fail(_ error: String, animation: CAAnimation, key: String?) {
+        stateLock.lock()
+        guard !failed && !stopped else { stateLock.unlock(); return }
+        failed = true; stateLock.unlock()
+        let row: [String: Any] = ["type": "animation_probe.error", "run_id": runID,
+            "trial": trial, "animation_class": NSStringFromClass(type(of: animation)),
+            "key": key as Any? ?? NSNull(), "key_path": (animation as? CAPropertyAnimation)?.keyPath as Any? ?? NSNull(), "error": error]
+        // Trace/App lifecycle belongs to main. Off-thread failures are explicit
+        // terminal evidence delivered there, never concurrent FileHandle writes.
+        if Thread.isMainThread { deliver(row) }
+        else { DispatchQueue.main.async { self.deliver(row) } }
     }
     fileprivate static func capture(_ layer: CALayer, _ animation: CAAnimation, _ key: String?) {
-        guard let probe = active, !probe.recording, !probe.invalidated else { return }
-        probe.recording = true
-        defer { probe.recording = false }
-        do { probe.sink(try probe.snapshot(layer: layer, animation: animation, key: key, phase: probe.phase)) }
+        guard Thread.current.threadDictionary[recursionKey] as? Bool != true else { return }
+        lifecycleLock.lock(); let probe = active; lifecycleLock.unlock()
+        guard let probe else { return }
+        guard Thread.isMainThread else { probe.fail("off_thread_capture: run is invalid; original installation forwarded", animation: animation, key: key); return }
+        probe.stateLock.lock()
+        guard !probe.failed && !probe.stopped else { probe.stateLock.unlock(); return }
+        let phase = probe.phase; probe.stateLock.unlock()
+        do { probe.deliver(try probe.snapshot(layer: layer, animation: animation, key: key, phase: phase)) }
         catch {
-            probe.invalidated = true
-            probe.sink(["type": "animation_probe.error", "run_id": probe.runID,
-                "trial": probe.trial, "animation_class": NSStringFromClass(type(of: animation)),
-                "key": key as Any? ?? NSNull(), "key_path": (animation as? CAPropertyAnimation)?.keyPath as Any? ?? NSNull(),
-                "error": String(describing: error)])
+            probe.fail(String(describing: error), animation: animation, key: key)
         }
     }
     private func layerID(_ layer: CALayer) -> String {
@@ -57,6 +89,8 @@ final class AnimationProbe {
         let id = "layer.\(ids.count + 1)"; ids[key] = id; layers.append(layer); return id
     }
     func snapshot(layer: CALayer, animation: CAAnimation, key: String?, phase: String) throws -> [String: Any] {
+        stateLock.lock(); defer { stateLock.unlock() }
+        guard !stopped else { throw AnimationProbeError.stoppedProbe }
         let now = CACurrentMediaTime()
         // Capture the call stack before serialization or forwarding.
         let addresses = Thread.callStackReturnAddresses

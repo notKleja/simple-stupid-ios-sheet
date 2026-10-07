@@ -68,12 +68,54 @@ import QuartzCore
         precondition(opaque["bytes"] == nil && opaque["description"] == nil)
         var installed: [[String: Any]] = []
         let recorder = AnimationProbe(runID: "install-run", trial: 1, sink: { installed.append($0) })
-        recorder.start(phase: "present")
+        try recorder.start(phase: "present")
         let actual = CABasicAnimation(keyPath: "opacity"); actual.fromValue = 0; actual.toValue = 1; actual.duration = 2
         layer.add(actual, forKey: "audit-opacity")
         precondition(installed.count == 1 && layer.animation(forKey: "audit-opacity")?.duration == 2, "Capture must forward original installation")
         recorder.stop(); layer.add(actual, forKey: "after-stop")
         precondition(installed.count == 1, "No cross-run or post-stop capture")
+        do { try recorder.start(phase: "restarted"); fatalError("A stopped run must not restart with stale identities") } catch {}
+        var reentry: [[String: Any]] = []
+        let nestedLayer = CALayer()
+        let recursive = AnimationProbe(runID: "reentry-run", trial: 1) { row in
+            reentry.append(row)
+            nestedLayer.add(actual, forKey: "logger-induced")
+        }
+        try recursive.start(phase: "present")
+        layer.add(actual, forKey: "outer")
+        precondition(reentry.count == 1 && nestedLayer.animation(forKey: "logger-induced") != nil, "Thread-local recursion guard must still forward nested installs")
+        recursive.stop()
+        var failures: [[String: Any]] = []
+        let concurrent = AnimationProbe(runID: "concurrent-run", trial: 1) { failures.append($0) }
+        try concurrent.start(phase: "present")
+        let backgroundLayer = CALayer(); let completed = DispatchGroup(); completed.enter()
+        DispatchQueue.global().async {
+            backgroundLayer.add(actual, forKey: "concurrent-legitimate")
+            precondition(backgroundLayer.animation(forKey: "concurrent-legitimate") != nil, "Original background install forwards before its transaction/thread ends")
+            completed.leave()
+        }
+        precondition(completed.wait(timeout: .now() + 5) == .success, "Hook must not deadlock concurrent installation")
+        let deadline = Date().addingTimeInterval(2)
+        while failures.isEmpty && Date() < deadline { RunLoop.main.run(until: Date().addingTimeInterval(0.01)) }
+        precondition(concurrent.invalidated && failures.count == 1 && failures[0]["type"] as? String == "animation_probe.error", "Unsupported off-thread capture must explicitly fail the run, never be silently suppressed")
+        precondition((failures[0]["error"] as? String)?.contains("off_thread_capture") == true)
+        concurrent.stop()
+        do { try concurrent.start(phase: "retry"); fatalError("An invalidated run must not restart") } catch {}
+        var overlapRows: [[String: Any]] = []
+        let overlapBackground = CALayer()
+        let overlap = AnimationProbe(runID: "overlap-run", trial: 1) { row in
+            overlapRows.append(row)
+            if row["type"] as? String == "animation_install" {
+                let worker = DispatchGroup(); worker.enter()
+                DispatchQueue.global().async { overlapBackground.add(actual, forKey: "during-main-logging"); worker.leave() }
+                precondition(worker.wait(timeout: .now() + 5) == .success, "Concurrent capture during sink delivery cannot deadlock")
+            }
+        }
+        try overlap.start(phase: "present"); layer.add(actual, forKey: "overlap-main")
+        let overlapDeadline = Date().addingTimeInterval(2)
+        while overlapRows.count < 2 && Date() < overlapDeadline { RunLoop.main.run(until: Date().addingTimeInterval(0.01)) }
+        precondition(overlap.invalidated && overlapRows.filter { $0["type"] as? String == "animation_probe.error" }.count == 1, "A different thread's legitimate install must not disappear under the logger recursion guard")
+        overlap.stop()
         precondition(!String(data: immutable, encoding: .utf8)!.contains("sheet.y"))
         print("PASS NativeAnimationProbeTests: complete immutable objects, timing, spring, backtrace, run IDs, forwarding, fail closed")
     }
