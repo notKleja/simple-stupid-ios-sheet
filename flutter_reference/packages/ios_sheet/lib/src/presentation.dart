@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
@@ -42,7 +44,9 @@ class IosSheetUnderlyingHitObservation {
   final Duration deliveredAt;
 }
 
-/// Scoped passive pointer observation. Never consumes input or joins an arena.
+/// Scoped passive stationary-tap observation. Never consumes input or joins an
+/// arena. Movement invalidates this exact-point probe rather than assuming tap
+/// slop or interpreting a drag as a blocked tap.
 class IosSheetUnderlyingControlProbe {
   IosSheetUnderlyingControlProbe({
     required this.probeIdentifier,
@@ -60,14 +64,27 @@ class IosSheetUnderlyingControlProbe {
   bool _cancelled = false, _activated = false, _disposed = false;
   void _observe(PointerEvent event) {
     if (event.viewId != viewId) return;
+    if (_completedAt != null) {
+      dispose();
+      return;
+    }
     if (event is PointerDownEvent &&
         event.position == position &&
         _pointer == null)
       _pointer = event.pointer;
     if (event.pointer != _pointer) return;
-    if (event is PointerCancelEvent) _cancelled = true;
-    if (event is PointerUpEvent && event.position == position)
-      _completedAt = event.timeStamp;
+    if (event is PointerCancelEvent ||
+        (event is PointerMoveEvent && event.position != position)) {
+      _cancelled = true;
+      dispose();
+      return;
+    }
+    if (event is PointerUpEvent) {
+      if (event.position == position) _completedAt = event.timeStamp;
+      // Text-field callbacks can run in the arena sweep after global routing.
+      // Allow that same dispatch, then freeze before unrelated later input.
+      scheduleMicrotask(dispose);
+    }
   }
 
   /// Call only from the real underlying control activation callback.

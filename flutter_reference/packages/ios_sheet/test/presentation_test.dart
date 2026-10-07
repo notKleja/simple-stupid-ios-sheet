@@ -131,6 +131,70 @@ void main() {
     expect(observations, isEmpty);
   });
 
+  testWidgets('completed blocked probe cannot absorb a later independent tap', (
+    tester,
+  ) async {
+    await present(tester);
+    final point = tester.getCenter(find.text('Underlying control'));
+    sheet.selectDetent('large');
+    await tester.pumpAndSettle();
+    sheet.beginUnderlyingControlProbe(
+      probeIdentifier: 'blocked-original',
+      controlIdentifier: 'underlying',
+      position: point,
+    );
+    await tester.tapAt(point);
+    expect(activations, 0);
+
+    sheet.selectDetent('medium');
+    await tester.pumpAndSettle();
+    await tester.tapAt(point);
+    expect(activations, 1); // Independent real control activation.
+    final original = sheet.completeUnderlyingControlProbe()!;
+    expect(original.probeIdentifier, 'blocked-original');
+    expect(original.activated, isFalse);
+    expect(observations.map((value) => value.activated), [false]);
+    expect(sheet.captureFrame().state['underlying_hit_test'], isFalse);
+  });
+
+  testWidgets('cancelled pointer stream leaves observed hit test unknown', (
+    tester,
+  ) async {
+    await present(tester);
+    final point = tester.getCenter(find.text('Underlying control'));
+    sheet.beginUnderlyingControlProbe(
+      probeIdentifier: 'cancelled',
+      controlIdentifier: 'underlying',
+      position: point,
+    );
+    final gesture = await tester.startGesture(point);
+    await gesture.cancel();
+    expect(activations, 0);
+    expect(sheet.completeUnderlyingControlProbe(), isNull);
+    expect(observations, isEmpty);
+    expect(sheet.captureFrame().state['underlying_hit_test'], isNull);
+  });
+
+  testWidgets('non-tap stream returning to its origin is not a completed tap', (
+    tester,
+  ) async {
+    await present(tester);
+    final point = tester.getCenter(find.text('Underlying control'));
+    sheet.beginUnderlyingControlProbe(
+      probeIdentifier: 'drag-return',
+      controlIdentifier: 'underlying',
+      position: point,
+    );
+    final gesture = await tester.startGesture(point);
+    await gesture.moveBy(const Offset(80, 80));
+    await gesture.moveBy(const Offset(-80, -80));
+    await gesture.up();
+    expect(activations, 0);
+    expect(sheet.completeUnderlyingControlProbe(), isNull);
+    expect(observations, isEmpty);
+    expect(sheet.captureFrame().state['underlying_hit_test'], isNull);
+  });
+
   testWidgets(
     'underlying control inside rendered sheet does not click through',
     (tester) async {
