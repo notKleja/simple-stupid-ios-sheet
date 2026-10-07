@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'environment.dart';
+import 'motion.dart';
 
 enum IosSheetPhase {
   presenting,
@@ -46,6 +47,8 @@ class IosSheetState {
     required this.environment,
     required Map<String, IosSheetCapabilityStatus> capabilities,
     required Map<String, String> provenance,
+    this.motionRequest,
+    this.motionTargetPoints,
   }) : capabilities = Map.unmodifiable(capabilities),
        provenance = Map.unmodifiable(provenance);
   final Rect frame;
@@ -61,4 +64,6 @@ class IosSheetState {
   final IosSheetEnvironment environment;
   final Map<String, IosSheetCapabilityStatus> capabilities;
   final Map<String, String> provenance;
+  final IosSheetMotionRequest? motionRequest;
+  final double? motionTargetPoints;
 }

@@ -203,6 +203,27 @@ void main() {
     expect(selections, ['large']);
   });
 
+  testWidgets('programmatic dismissal during snap preserves current velocity', (
+    tester,
+  ) async {
+    await present(tester);
+    final route =
+        ModalRoute.of(tester.element(find.text('Sheet content')))!
+            as StupidSimpleIosSheetRoute<void>;
+    // ignore: invalid_use_of_protected_member
+    final engine = route.controller!;
+    controller.selectDetent('large');
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    final position = engine.value;
+    final velocity = engine.velocity;
+    expect(velocity, greaterThan(0));
+    controller.dismiss();
+    expect(engine.value, closeTo(position, 1e-10));
+    expect(engine.velocity, closeTo(velocity, 1e-10));
+    await tester.pumpAndSettle();
+  });
+
   testWidgets(
     'state snapshot uses observed window points without native velocity guesses',
     (tester) async {

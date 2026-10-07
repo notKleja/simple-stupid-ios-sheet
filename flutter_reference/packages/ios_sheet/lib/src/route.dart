@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'package:flutter/foundation.dart' show precisionErrorTolerance;
 
 import 'package:flutter/cupertino.dart';
 import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
@@ -7,6 +8,7 @@ import 'detents.dart';
 import 'environment.dart';
 import 'profile.dart';
 import 'state.dart';
+import 'motion.dart';
 import 'trace.dart';
 
 const iosSheetSurfaceKey = ValueKey('ios-sheet-opaque-surface');
@@ -106,6 +108,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     this.onSelectedDetentChanged,
     this.onPresented,
     this.onDismissed,
+    this.trajectoryModel,
     super.settings,
   }) : detents = List.unmodifiable(detents),
        _sheetController = controller {
@@ -138,6 +141,9 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   final ValueChanged<String>? onSelectedDetentChanged;
   final VoidCallback? onPresented;
   final VoidCallback? onDismissed;
+  final IosSheetTrajectoryModel? trajectoryModel;
+  IosSheetMotionRequest? _motionRequest;
+  IosSheetTrajectory? _trajectory;
 
   String? _selectedIdentifier;
   String? _targetIdentifier;
@@ -256,22 +262,26 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
       sheetDragging: isUserDragging,
       scroll: const IosSheetScrollObservation(),
       environment: environment,
+      motionRequest: _motionRequest,
+      motionTargetPoints: _trajectory?.targetPoints,
       capabilities: {
         'rendered_frame': IosSheetCapabilityStatus.observed,
         'profile': profile.isMeasured
             ? IosSheetCapabilityStatus.accepted
             : IosSheetCapabilityStatus.fallback,
-        'motion': IosSheetCapabilityStatus.fallback,
+        'motion': _trajectory?.capability ?? IosSheetCapabilityStatus.fallback,
         'corners': IosSheetCapabilityStatus.unavailable,
         'velocity': IosSheetCapabilityStatus.unavailable,
         'scroll': IosSheetCapabilityStatus.unavailable,
       },
       provenance: {
         ...profile.evidence,
+        if (_trajectory != null) 'motion': _trajectory!.provenance,
         'frame': 'last laid-out RenderBox in logical window coordinates',
         'velocity':
             'screen velocity not observed; normalized engine velocity is not substituted',
-        'corners': 'four-corner resolver not connected; legacy shape remains a fallback',
+        'corners':
+            'four-corner resolver not connected; legacy shape remains a fallback',
         'scroll': 'scroll observation adapter not attached',
         'keyboard':
             'MediaQuery obscured inset observed; full keyboard frame unavailable',
@@ -419,6 +429,56 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
 
   @override
   Motion get motion => profile.motion;
+
+  @override
+  Simulation createSheetSimulation({
+    required SheetSimulationPhase phase,
+    required double start,
+    required double end,
+    required double velocity,
+    double? dragReleaseVelocity,
+  }) {
+    final height = _referenceHeight;
+    final currentPosition = controller?.value ?? start;
+    final currentVelocity = controller?.velocity ?? velocity;
+    final request = IosSheetMotionRequest(
+      kind: switch (phase) {
+        SheetSimulationPhase.presentation => IosSheetMotionKind.presentation,
+        SheetSimulationPhase.detentSnap => IosSheetMotionKind.detentSnap,
+        SheetSimulationPhase.overdragReturn =>
+          IosSheetMotionKind.overdragReturn,
+        SheetSimulationPhase.dismissal => IosSheetMotionKind.dismissal,
+      },
+      positionPoints: currentPosition * height,
+      velocityPointsPerSecond:
+          (dragReleaseVelocity ?? currentVelocity) * height,
+      targetPoints: end * height,
+      referenceHeightPoints: height,
+      dragReleaseVelocityPointsPerSecond: dragReleaseVelocity == null
+          ? null
+          : dragReleaseVelocity * height,
+      velocitySource: dragReleaseVelocity == null
+          ? IosSheetVelocitySource.controller
+          : IosSheetVelocitySource.dragRelease,
+      environment: environment,
+    );
+    final trajectory =
+        (trajectoryModel ?? FallbackIosSheetTrajectoryModel(motion))
+            .createTrajectory(request);
+    final initialPosition = trajectory.simulation.x(0);
+    if (trajectory.targetPoints != request.targetPoints ||
+        !initialPosition.isFinite ||
+        (initialPosition - request.positionPoints).abs() >
+            precisionErrorTolerance) {
+      throw StateError(
+        'Trajectory must preserve the requested target and initial position',
+      );
+    }
+    _motionRequest = request;
+    _trajectory = trajectory;
+    return normalizeIosSheetTrajectory(trajectory, height);
+  }
+
   @override
   bool get resistBoundaryCrossing => profile.dragResistance != null;
   @override
