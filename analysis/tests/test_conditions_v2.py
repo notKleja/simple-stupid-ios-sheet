@@ -29,6 +29,7 @@ class ConditionsBatchTests(unittest.TestCase):
         self.mapping = {"schema_version": 2, "entries": [{"matrix": "synthetic.runtime",
             "native": "native.synthetic.runtime", "flutter": "flutter.synthetic.runtime", "revision": 2}]}
         self.assignment_revision = 2
+        self.matrix["cases"][0]["required_checks"][0].update(phase="present", applicability_policy_id="present.v1")
 
     def cohort(self, role, change=None):
         records = fixtures.rows(role)

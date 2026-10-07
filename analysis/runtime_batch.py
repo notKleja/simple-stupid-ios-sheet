@@ -24,6 +24,13 @@ PROGRAMMATIC_EVENTS = ["present.requested", "present.first_visible", "present.co
 ROOT = Path(__file__).resolve().parents[1]
 CONDITION_IDENTITY = ("recipe_id", "recipe_revision", "parameters", "input_source", "accessibility")
 V2_ONLY_MARKERS = frozenset({"scenario_map", "scenario_revision", "conditions"})
+OBSERVABLE_FIELDS = {
+    "target_detent": ("state.target_detent",),
+    "scroll": ("state.scroll_owner", "metrics.scroll.offset"),
+    "hit_testing": ("state.underlying_hit_test",),
+    "keyboard": ("observations.keyboard",), "stack_layers": ("observations.stack_layers",),
+    "contour": ("observations.contour",), "performance": ("observations.performance",),
+}
 
 
 def sha(path):
@@ -105,6 +112,80 @@ def validate_recipe(recipe, cell, revision):
     return declared
 
 
+def phase_policy(profile, contract):
+    identifier = contract.get("applicability_policy_id")
+    policies = profile.get("applicability_policies", {})
+    require(isinstance(identifier, str) and identifier in policies, "explicit known applicability policy ID required")
+    policy = policies[identifier]
+    require(isinstance(policy, dict) and set(policy) == {"phase", "observables"}, "malformed phase policy")
+    require(policy["phase"] == contract.get("phase"), "matrix phase does not match profile policy")
+    rules = policy["observables"]
+    require(isinstance(rules, dict) and set(rules) == set(OBSERVABLE_FIELDS), "phase policy must govern all seven observables")
+    require(all(value in ("required", "not_applicable", "unavailable") for value in rules.values()), "unknown applicability status")
+    require(rules["target_detent"] != "not_applicable" or policy["phase"] == "dismiss", "target detent exemption requires explicit dismissal phase policy")
+    if policy["phase"] == "dismiss":
+        require(contract["window"]["start_event"] == "dismiss.requested" and
+                contract["window"]["end_event"] == "dismiss.completed", "dismissal policy requires observed dismissal boundaries")
+    require("applicability" not in contract or schema_equal(contract["applicability"], rules), "matrix cannot relax the profile phase policy")
+    return identifier, policy
+
+
+def agree_phase_policy(profile, contract, headers):
+    identifier, policy = phase_policy(profile, contract)
+    for header in headers:
+        declaration = header.get("conditions", {}).get("applicability", {}).get(policy["phase"])
+        require(schema_equal(declaration, policy["observables"]), "trace/recipe applicability must agree with the profile phase policy")
+    return identifier, policy
+
+
+def scope_phase(profile, contract, rows, policy_info):
+    identifier, policy = policy_info
+    cfg = {**profile, "states": list(profile.get("states", []))}
+    audit = {"policy_id": identifier, "phase": policy["phase"], "approved_exemptions": [],
+             "unresolved_observables": [], "missing_observables": [], "reason_failures": []}
+    for group, status in policy["observables"].items():
+        fields = OBSERVABLE_FIELDS[group]
+        if status == "not_applicable":
+            for field in fields:
+                section, key = field.split(".", 1)
+                if section == "state" and key in cfg["states"]:
+                    cfg["states"].remove(key)
+                elif section == "metrics":
+                    cfg.get("metrics", {}).pop(key, None)
+                audit["approved_exemptions"].append(field)
+            continue
+        unresolved = status == "unavailable"
+        for records in rows:
+            events = indexed_events([row for row in records if row["type"] == "event"])
+            start = f"{contract['window']['start_event']}#{contract['window']['start_occurrence']}"
+            end = f"{contract['window']['end_event']}#{contract['window']['end_occurrence']}"
+            require(start in events and end in events, "missing applicability phase boundary")
+            frames = [row for row in records if row["type"] == "frame" and events[start]["t_ns"] <= row["t_ns"] < events[end]["t_ns"]]
+            if not frames:
+                unresolved = True
+            for frame in frames:
+                for field in fields:
+                    section, key = field.split(".", 1)
+                    value = frame.get(section, {}).get(key)
+                    if status == "required" and (value is None or value == {} or value == [] or value == ""):
+                        unresolved = True
+                        audit["missing_observables"].append(field)
+                    if status == "unavailable":
+                        reason = frame.get("unavailable", {}).get(field, frame.get("unavailable", {}).get(key))
+                        if not isinstance(reason, str) or not reason.strip():
+                            audit["reason_failures"].append("missing_reason")
+        # This slice has no reviewed structured comparators. Presence is not
+        # native contour/keyboard/stack/performance parity; do not manufacture PASS.
+        if group in ("keyboard", "stack_layers", "contour", "performance") and status == "required":
+            unresolved = True
+            audit.setdefault("unsupported_comparisons", []).append(group)
+        if unresolved:
+            audit["unresolved_observables"].append(group)
+    for key in ("approved_exemptions", "unresolved_observables", "missing_observables", "reason_failures"):
+        audit[key] = sorted(set(audit[key]))
+    return cfg, audit
+
+
 def mapped_pair(n, c, entry, recipe_conditions):
     for record, role in ((n, "native"), (c, "flutter")):
         header = record["header"]
@@ -152,7 +233,7 @@ def freeze(plan_path, output):
     mapping = None if legacy else load_scenario_map(plan["scenario_map"], plan_path.parent)
     matrix, _ = read_contract_ref(plan["matrix"], plan_path.parent, legacy)
     expected = cells(matrix)
-    read_contract_ref(plan["profile"], plan_path.parent, legacy)
+    profile, _ = read_contract_ref(plan["profile"], plan_path.parent, legacy)
     assignments = {split: [] for split in SPLITS}
     occupied = set()
     for assignment in plan.get("assignments", []):
@@ -172,6 +253,8 @@ def freeze(plan_path, output):
         else:
             resolved = resolve_scenario(mapping, expected[cell_id]["scenario_id"], assignment.get("scenario_revision"))
             validate_recipe(recipe, expected[cell_id], resolved["revision"])
+            for contract in expected[cell_id]["check_contracts"].values():
+                agree_phase_policy(profile, contract, [recipe])
         entry = {**assignment, "expected_trials": sorted(trials)}
         for key in ("native", "candidate", "recipe"):
             entry[key] = relocate(assignment[key], plan_path.parent, output)
@@ -453,6 +536,8 @@ def run(index_path, split_filter=None):
                         require(n["header"]["scenario_id"] == cell["scenario_id"], "source scenario does not match frozen case")
                     else:
                         views = mapped_pair(n, c, entry, recipe_conditions)
+                        for contract in cell["check_contracts"].values():
+                            agree_phase_policy(profile, contract, [recipe, n["header"], c["header"]])
                 except TraceError as error:
                     result["pair_counts"]["unresolved"] += 1
                     result["issues"].append(f"{cell_id}/trial{trial}: {error}")
@@ -476,11 +561,27 @@ def run(index_path, split_filter=None):
                 result["pairs"].append(pair)
                 result["pair_counts"]["paired"] += 1
                 for check_id, contract in cell["check_contracts"].items():
-                    cfg = {**profile, "window": contract["window"], "alignment": {"event": contract["window"]["start_event"], "occurrence": contract["window"]["start_occurrence"]}}
+                    applicability = None
+                    scoped = profile
+                    if not legacy:
+                        scoped, applicability = scope_phase(profile, contract, views, phase_policy(profile, contract))
+                    cfg = {**scoped, "window": contract["window"], "alignment": {"event": contract["window"]["start_event"], "occurrence": contract["window"]["start_occurrence"]}}
                     # Approved exclusions are explicit; all other analyzer gates remain intact.
                     cfg["auxiliary_events"] = ["detent.resolved", "batch.completed"]
                     report = compare({"native": views[0], "candidate": views[1], "config": cfg})
                     status = outcome(report)
+                    if applicability is not None:
+                        approved = set(applicability["approved_exemptions"])
+                        missing = set(report.get("full_acceptance_missing", []))
+                        ready = not applicability["unresolved_observables"] and not applicability["reason_failures"]
+                        eligible = (ready and report.get("verdict") == "PASS" and
+                            report.get("proof_scope") == "runtime_trace_pair_only" and missing <= approved)
+                        applicability["phase_eligible"] = eligible
+                        applicability["scope"] = "profile-approved phase applicability; analyzer report unchanged"
+                        if eligible:
+                            status = "PASS"
+                        elif status != "FAIL":
+                            status = "UNRESOLVED"
                     reasons = []
                     action_failed = False
                     for record in (n, c):
@@ -506,6 +607,8 @@ def run(index_path, split_filter=None):
                         status = "FAIL"
                     phase = {"cell_id": cell_id, "trial": trial, "split": split, "check_id": check_id,
                              "status": status, "reasons": reasons, "analyzer": report}
+                    if applicability is not None:
+                        phase["applicability"] = applicability
                     result["phases"].append(phase)
                     result["phase_counts"][status] += 1
                     if split != "diagnostic":
