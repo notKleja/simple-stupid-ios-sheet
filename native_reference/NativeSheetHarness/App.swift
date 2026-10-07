@@ -142,8 +142,13 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
     var priorScrollMotion: (Double, Double)?
     var replayRequest: [String: Any] = [:]
     var animationProbe: AnimationProbe?
+    var animationCommitProbe: AnimationCommitProbe?
+    var animationCommitOnly: Bool {
+        replayRequest["capture_mode"] as? String == "animation_commit_objects" ||
+        ProcessInfo.processInfo.environment["NATIVE_CAPTURE_MODE"] == "animation_commit_objects"
+    }
     var animationObjectsOnly: Bool {
-        replayRequest["capture_mode"] as? String == "animation_objects" ||
+        animationCommitOnly || replayRequest["capture_mode"] as? String == "animation_objects" ||
         ProcessInfo.processInfo.environment["NATIVE_CAPTURE_MODE"] == "animation_objects"
     }
     override func loadView() { view = CalibrationView(title: "Native Sheet Reference\nOpaque calibration surface") }
@@ -320,10 +325,18 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
                 provenance["source_hashes"]=hashes;session["provenance"]=provenance
             }
         }
-        if animationObjectsOnly { session["capture_mode"] = "animation_objects" }
+        if animationObjectsOnly { session["capture_mode"] = animationCommitOnly ? "animation_commit_objects" : "animation_objects" }
         t.record("session", session)
         link?.invalidate(); link = nil
-        if animationObjectsOnly {
+        if animationCommitOnly {
+            let observer = AnimationCommitProbe(runID: t.id, trial: trial) { row in
+                if row["type"] as? String == "animation_commit.error" { t.fail("animation_commit_probe_failed", row) }
+                else { t.record(row["type"] as! String, row, time: row["transaction_time"] as? Double) }
+            }
+            animationCommitProbe = observer
+            do { try observer.start(phase: "presentation") }
+            catch { t.fail("animation_commit_start_failed", ["error": String(describing: error)]); running = false; return }
+        } else if animationObjectsOnly {
             let observer = AnimationProbe(runID: t.id, trial: trial) { row in
                 if row["type"] as? String == "animation_probe.error" { t.fail("animation_probe_failed", row) }
                 else { t.record("animation_install", row, time: row["transaction_time"] as? Double) }
@@ -337,6 +350,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         let replayOrigin = DispatchTime.now()
         t.event("present.requested")
         present(vc, animated: true) {
+            self.animationCommitProbe?.checkpoint("present_completed")
             t.event("present.completed") // Completion callback does not establish physical settling.
             self.phase = "idle"
         }
@@ -345,6 +359,8 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         for request in definition.programmaticRequests {
             after(request.after, from: replayOrigin) {
                 self.animationProbe?.setPhase("\(self.target ?? "unknown")_to_\(request.target)")
+                self.animationCommitProbe?.checkpoint("before_detent_request")
+                self.animationCommitProbe?.setPhase("\(self.target ?? "unknown")_to_\(request.target)")
                 self.target=request.target;self.phase="detent"
                 t.event("detent.requested",["target":request.target])
                 config.animateChanges { config.selectedDetentIdentifier=request.target == "large" ? .large : .medium }
@@ -352,11 +368,15 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         }
         after(definition.dismissAfter, from: replayOrigin) {
             self.animationProbe?.setPhase("dismissal")
+            self.animationCommitProbe?.checkpoint("before_dismiss_request")
+            self.animationCommitProbe?.setPhase("dismissal")
             self.phase = "dismiss"; self.target = nil; t.event("dismiss.requested")
             vc.dismiss(animated: true) {
+                self.animationCommitProbe?.checkpoint("dismiss_completed")
                 self.interaction?.invalidateDynamics()
                 t.event("dismiss.completed", terminal: true); self.link?.invalidate(); self.sheet = nil
                 self.animationProbe?.stop()
+                self.animationCommitProbe?.stop()
                 self.after(0.4) { self.next() }
             }
         }

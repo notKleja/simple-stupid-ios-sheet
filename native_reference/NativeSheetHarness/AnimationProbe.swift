@@ -88,7 +88,7 @@ final class AnimationProbe {
         if let id = ids[key] { return id }
         let id = "layer.\(ids.count + 1)"; ids[key] = id; layers.append(layer); return id
     }
-    func snapshot(layer: CALayer, animation: CAAnimation, key: String?, phase: String) throws -> [String: Any] {
+    func snapshot(layer: CALayer, animation: CAAnimation, key: String?, phase: String, includePresentation: Bool = true) throws -> [String: Any] {
         stateLock.lock(); defer { stateLock.unlock() }
         guard !stopped else { throw AnimationProbeError.stoppedProbe }
         let now = CACurrentMediaTime()
@@ -100,9 +100,9 @@ final class AnimationProbe {
                 "address": String(format: "0x%llx", UInt64(UInt(bitPattern: Unmanaged.passUnretained(layer).toOpaque()))),
                 "class": NSStringFromClass(type(of: layer)),
                 "parent_id": layer.superlayer.map(layerID) as Any? ?? NSNull(),
-                "model_state": try state(layer), "presentation_state": try layer.presentation().map(state) as Any? ?? NSNull(),
-                "ancestry": try ancestry(layer)],
-            "key": key as Any? ?? NSNull(), "animation": try object(animation, layer: layer),
+                "model_state": try state(layer), "presentation_state": includePresentation ? try layer.presentation().map(state) as Any? ?? NSNull() : NSNull(),
+                "ancestry": try ancestry(layer, includePresentation: includePresentation)],
+            "key": key as Any? ?? NSNull(), "animation": try object(animation, layer: layer, includePresentation: includePresentation),
             "transaction": ["duration": CATransaction.animationDuration(), "disable_actions": CATransaction.disableActions(),
                 "timing_function": timing(CATransaction.animationTimingFunction())],
             "backtrace": addresses.map(Self.frame)]
@@ -142,12 +142,12 @@ final class AnimationProbe {
          "transform": matrix(layer.transform), "sublayer_transform": matrix(layer.sublayerTransform),
          "opacity": Double(layer.opacity), "z_position": Double(layer.zPosition), "geometry_flipped": layer.isGeometryFlipped]
     }
-    private func ancestry(_ layer: CALayer) throws -> [[String: Any]] {
+    private func ancestry(_ layer: CALayer, includePresentation: Bool) throws -> [[String: Any]] {
         var result: [[String: Any]] = []; var cursor = layer.superlayer
         while let parent = cursor {
             result.append(["id": layerID(parent), "address": String(format: "0x%llx", UInt64(UInt(bitPattern: Unmanaged.passUnretained(parent).toOpaque()))),
                 "class": NSStringFromClass(type(of: parent)), "model_state": try state(parent),
-                "presentation_state": try parent.presentation().map(state) as Any? ?? NSNull()])
+                "presentation_state": includePresentation ? try parent.presentation().map(state) as Any? ?? NSNull() : NSNull()])
             cursor = parent.superlayer
         }
         return result
@@ -171,14 +171,14 @@ final class AnimationProbe {
         }?.rawValue ?? "custom"
         return ["name": name, "control_points": points]
     }
-    private func object(_ a: CAAnimation, layer: CALayer) throws -> [String: Any] {
+    private func object(_ a: CAAnimation, layer: CALayer, includePresentation: Bool) throws -> [String: Any] {
         let basic = a as? CABasicAnimation; let property = a as? CAPropertyAnimation
         let spring = a as? CASpringAnimation; let keyframe = a as? CAKeyframeAnimation; let transition = a as? CATransition
         let keyPath = property?.keyPath
         return ["animation_class": NSStringFromClass(type(of: a)), "key_path": keyPath as Any? ?? NSNull(),
             "from_value": try value(basic?.fromValue), "to_value": try value(basic?.toValue), "by_value": try value(basic?.byValue),
             "model_value": try value(keyPath.flatMap { layer.value(forKeyPath: $0) }),
-            "current_value": try value(keyPath.flatMap { layer.presentation()?.value(forKeyPath: $0) }),
+            "current_value": includePresentation ? try value(keyPath.flatMap { layer.presentation()?.value(forKeyPath: $0) }) : NSNull(),
             "timing_function": timing(a.timingFunction),
             "spring": spring.map { ["mass": Double($0.mass), "stiffness": Double($0.stiffness), "damping": Double($0.damping),
                 "initial_velocity": Double($0.initialVelocity), "settling_duration": $0.settlingDuration,
@@ -187,7 +187,7 @@ final class AnimationProbe {
             "repeat_count": Double(a.repeatCount), "repeat_duration": a.repeatDuration, "autoreverses": a.autoreverses,
             "fill_mode": a.fillMode.rawValue, "additive": property?.isAdditive as Any? ?? NSNull(),
             "cumulative": property?.isCumulative as Any? ?? NSNull(), "removed_on_completion": a.isRemovedOnCompletion,
-            "children": try (a as? CAAnimationGroup)?.animations?.map { try object($0, layer: layer) } as Any? ?? NSNull(),
+            "children": try (a as? CAAnimationGroup)?.animations?.map { try object($0, layer: layer, includePresentation: includePresentation) } as Any? ?? NSNull(),
             "keyframe": try keyframe.map { ["values": try value($0.values), "key_times": try value($0.keyTimes),
                 "timing_functions": $0.timingFunctions?.map(timing) as Any? ?? NSNull(), "path": try value($0.path),
                 "calculation_mode": $0.calculationMode.rawValue, "rotation_mode": $0.rotationMode?.rawValue as Any? ?? NSNull(),
@@ -265,7 +265,9 @@ final class AnimationProbe {
 extension CALayer {
     @objc fileprivate func motionProbeAdd(_ animation: CAAnimation, forKey key: String?) {
         AnimationProbe.capture(self, animation, key)
+        let installation = AnimationCommitProbe.beforeAdd(self, animation, key)
         // After swizzling, this selector is the original implementation.
         motionProbeAdd(animation, forKey: key)
+        AnimationCommitProbe.afterAdd(installation)
     }
 }
