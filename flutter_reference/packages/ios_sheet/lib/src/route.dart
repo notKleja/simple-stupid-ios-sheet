@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 
 import 'detents.dart';
+import 'environment.dart';
 import 'profile.dart';
+import 'state.dart';
 import 'trace.dart';
 
 const iosSheetSurfaceKey = ValueKey('ios-sheet-opaque-surface');
@@ -43,6 +45,12 @@ class IosSheetController extends ChangeNotifier {
     final route = _route;
     if (route == null) throw StateError('Sheet controller is detached');
     return route.captureFrame();
+  }
+
+  IosSheetState snapshotState() {
+    final route = _route;
+    if (route == null) throw StateError('Sheet controller is detached');
+    return route.snapshotState();
   }
 
   void selectDetent(String identifier) {
@@ -219,19 +227,70 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     );
   }
 
-  IosSheetFrame captureFrame() {
-    _synchronizeEngineSelection();
+  /// Pure observation. Semantic synchronization remains in animation handling.
+  IosSheetState snapshotState() {
     final bounds = _renderedRect;
     if (bounds == null) {
       throw StateError('Sheet has not completed layout');
     }
+    return IosSheetState(
+      frame: bounds,
+      velocity: null,
+      phase: _dismissing
+          ? IosSheetPhase.dismissing
+          : !isActive
+          ? IosSheetPhase.dismissed
+          : !_presented
+          ? IosSheetPhase.presenting
+          : isUserDragging
+          ? IosSheetPhase.dragging
+          : controller!.isAnimating
+          ? IosSheetPhase.snapping
+          : IosSheetPhase.presented,
+      selectedDetent: _selectedIdentifier,
+      targetDetent: _engineTargetIdentifier,
+      restingDetent: _restingIdentifier,
+      gesture: _activePointers.isEmpty
+          ? IosSheetGestureState.none
+          : IosSheetGestureState.touch,
+      sheetDragging: isUserDragging,
+      scroll: const IosSheetScrollObservation(),
+      environment: environment,
+      capabilities: {
+        'rendered_frame': IosSheetCapabilityStatus.observed,
+        'profile': profile.isMeasured
+            ? IosSheetCapabilityStatus.accepted
+            : IosSheetCapabilityStatus.fallback,
+        'motion': IosSheetCapabilityStatus.fallback,
+        'corners': IosSheetCapabilityStatus.unavailable,
+        'velocity': IosSheetCapabilityStatus.unavailable,
+        'scroll': IosSheetCapabilityStatus.unavailable,
+      },
+      provenance: {
+        ...profile.evidence,
+        'frame': 'last laid-out RenderBox in logical window coordinates',
+        'velocity':
+            'screen velocity not observed; normalized engine velocity is not substituted',
+        'corners': 'four-corner resolver not connected; legacy shape remains a fallback',
+        'scroll': 'scroll observation adapter not attached',
+        'keyboard':
+            'MediaQuery obscured inset observed; full keyboard frame unavailable',
+        'traits':
+            'size classes/content category/stack depth unavailable without platform or stack adapters',
+      },
+    );
+  }
+
+  IosSheetFrame captureFrame() {
+    final observed = snapshotState();
+    final bounds = observed.frame;
     final topLeft = bounds.topLeft;
     final bottomRight = bounds.bottomRight;
     final size = bounds.size;
-    final env = environment;
+    final env = observed.environment;
     final geometry = currentGeometry;
     final selected = resolvedDetents
-        .where((e) => e.identifier == _selectedIdentifier)
+        .where((e) => e.identifier == observed.selectedDetent)
         .firstOrNull;
     return IosSheetFrame(
       metrics: {
@@ -258,9 +317,11 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
         'scroll.offset': null,
       },
       state: {
-        'selected_detent': _selectedIdentifier,
-        'target_detent': _targetIdentifier,
-        'gesture': _activePointers.isEmpty ? 'none' : 'touch',
+        'selected_detent': observed.selectedDetent,
+        'target_detent': observed.targetDetent,
+        'gesture': observed.gesture == IosSheetGestureState.none
+            ? 'none'
+            : 'touch',
         'scroll_owner': null,
         'underlying_hit_test': null,
         'dismissed': !isActive,
@@ -273,7 +334,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
         'scroll.offset': 'scroll recorder not attached',
         'scroll_owner': 'gesture ownership instrumentation pending',
         'underlying_hit_test': 'no real background touch probe in this frame',
-        if (_targetIdentifier == null)
+        if (observed.targetDetent == null)
           'target_detent': _dismissing
               ? 'Dismissal has no configured detent target'
               : 'No committed configured snap target while dragging or retargeting',
@@ -281,9 +342,9 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
           'sheet.radius': 'custom shape cannot be represented by one scalar',
       },
       implementationProvenance: {
-        'resting_detent': _restingIdentifier,
+        'resting_detent': observed.restingDetent,
         'resting_detector': 'engine not animating, no drag, extent epsilon1e-6',
-        'sheet_gesture': isUserDragging ? 'dragging' : 'idle',
+        'sheet_gesture': observed.sheetDragging ? 'dragging' : 'idle',
         'pointer_observation_scope': 'delivered pointers inside sheet content',
       },
     );
@@ -306,15 +367,24 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
       ),
       safeArea: media.viewPadding,
       keyboardHeight: keyboard,
+      observedKeyboardHeight: media.viewInsets.bottom,
       displayScale: media.devicePixelRatio,
+      orientation: size.width == size.height
+          ? IosSheetOrientation.unknown
+          : size.height > size.width
+          ? IosSheetOrientation.portrait
+          : IosSheetOrientation.landscape,
+      textScale:
+          media.textScaler == TextScaler.linear(media.textScaler.scale(1))
+          ? media.textScaler.scale(1)
+          : null,
+      reduceMotion: media.disableAnimations,
+      platformBrightness: media.platformBrightness,
+      locale: Localizations.maybeLocaleOf(navigator!.context),
+      textDirection: Directionality.maybeOf(navigator!.context),
+      stack: IosSheetStackContext(isTopmost: isCurrent),
     );
-    return IosSheetEnvironment(
-      availableSize: base.availableSize,
-      maximumDetentHeight: profile.maximumDetentHeight(base),
-      safeArea: base.safeArea,
-      keyboardHeight: base.keyboardHeight,
-      displayScale: base.displayScale,
-    );
+    return base.withMaximumDetentHeight(profile.maximumDetentHeight(base));
   }
 
   double get _referenceHeight => profile.detentToVisibleHeight(

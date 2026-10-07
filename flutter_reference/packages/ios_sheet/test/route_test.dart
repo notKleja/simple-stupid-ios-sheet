@@ -20,6 +20,7 @@ void main() {
     MediaQueryData? media,
     List<IosSheetDetent>? detents,
     String initial = 'short',
+    IosSheetKeyboardPolicy keyboardPolicy = IosSheetKeyboardPolicy.resize,
   }) async {
     await tester.binding.setSurfaceSize(media?.size ?? const Size(400, 800));
     addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -51,6 +52,7 @@ void main() {
         initialDetentIdentifier: initial,
         largestUndimmedDetentIdentifier: undimmed,
         controller: controller,
+        keyboardPolicy: keyboardPolicy,
         interactiveDismissDisabled: interactiveDismissDisabled,
         draggable: draggable,
         contentInteraction: interaction,
@@ -169,6 +171,81 @@ void main() {
     final detached = IosSheetController();
     expect(() => detached.selectDetent('large'), throwsStateError);
   });
+
+  testWidgets('repeated captureFrame is observational during engine retarget', (
+    tester,
+  ) async {
+    final selections = <String>[];
+    await present(tester, onSelected: selections.add);
+    final route =
+        ModalRoute.of(tester.element(find.text('Sheet content')))!
+            as StupidSimpleIosSheetRoute<void>;
+    // First enter the forward animation status at an unconfigured extent.
+    // The next retarget has no status change to synchronize semantic IDs yet.
+    route.animateToRelative(.7);
+    route.animateToRelative(1);
+    expect(controller.selectedDetentIdentifier, 'short');
+    expect(controller.targetDetentIdentifier, 'large');
+    var notifications = 0;
+    controller.addListener(() => notifications++);
+    final first = controller.captureFrame();
+    final second = controller.captureFrame();
+    expect(selections, isEmpty);
+    expect(notifications, 0);
+    expect(controller.selectedDetentIdentifier, 'short');
+    expect(controller.targetDetentIdentifier, 'large');
+    expect(first.state['selected_detent'], 'short');
+    expect(first.state['target_detent'], 'large');
+    expect(second.metrics, first.metrics);
+    expect(second.state, first.state);
+    await tester.pumpAndSettle();
+    expect(controller.selectedDetentIdentifier, 'large');
+    expect(selections, ['large']);
+  });
+
+  testWidgets(
+    'state snapshot uses observed window points without native velocity guesses',
+    (tester) async {
+      await present(tester);
+      final state = controller.snapshotState();
+      expect(state.position, const Offset(0, 500));
+      expect(state.frame.size, const Size(400, 300));
+      expect(state.velocity, isNull);
+      expect(state.phase, IosSheetPhase.presented);
+      expect(state.selectedDetent, 'short');
+      expect(state.restingDetent, 'short');
+      expect(state.capabilities['motion'], IosSheetCapabilityStatus.fallback);
+      expect(
+        state.capabilities['corners'],
+        IosSheetCapabilityStatus.unavailable,
+      );
+      expect(
+        state.capabilities['velocity'],
+        IosSheetCapabilityStatus.unavailable,
+      );
+      expect(state.provenance['velocity'], isNotEmpty);
+    },
+  );
+
+  testWidgets(
+    'overlay policy does not hide observed keyboard in state snapshot',
+    (tester) async {
+      await present(
+        tester,
+        keyboardPolicy: IosSheetKeyboardPolicy.overlay,
+        media: const MediaQueryData(
+          size: Size(400, 800),
+          viewInsets: EdgeInsets.only(bottom: 300),
+        ),
+      );
+      final state = controller.snapshotState();
+      expect(state.environment.observedKeyboardHeight, 300);
+      expect(state.environment.appliedKeyboardAvoidance, 0);
+      expect(state.environment.observedKeyboardFrame, isNull);
+      expect(state.environment.horizontalSizeClass, IosSheetSizeClass.unknown);
+      expect(controller.visibleHeight, 300);
+    },
+  );
 
   testWidgets('covered controller cannot accidentally dismiss the top sheet', (
     tester,
