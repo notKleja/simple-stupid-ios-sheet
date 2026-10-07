@@ -79,6 +79,19 @@ def _schema(value: Any, required, optional=(), *, context: str) -> None:
     _require(set(value) <= required | optional, 'forbidden extra ' + context + ' fields: ' + ', '.join(sorted(set(value) - required - optional)))
 
 
+def _metadata_types(value: dict, *, strings=(), nullable_strings=(), integers=(), numbers=(), booleans=(), context: str) -> None:
+    """Validate declared metadata leaves; CA data/tag schemas stay separate."""
+    rules = ((strings, lambda v: type(v) is str),
+             (nullable_strings, lambda v: v is None or type(v) is str),
+             (integers, lambda v: type(v) is int),
+             (numbers, lambda v: type(v) in (int, float)),
+             (booleans, lambda v: type(v) is bool))
+    for fields, valid in rules:
+        for field in fields:
+            if field in value:
+                _require(valid(value[field]), 'forbidden ' + context + ' metadata type: ' + field)
+
+
 CONFIG_FIELDS = frozenset(('detents edge_attached_in_compact_height grabber largest_undimmed modal_in_presentation '
                            'page_sizing placement preferred_content_size presentation_style scroll_expansion surface width_follows_preferred_content_size').split())
 COMMON_FIELDS = frozenset('schema_version type run_id seq t_ns'.split())
@@ -89,8 +102,10 @@ SCENARIO_EVENTS = (('present.requested', {}), ('present.completed', {}), ('deten
 
 def _geometry_schema(value: dict) -> None:
     _schema(value, 'model runtime_kind logical_size physical_size scale refresh_hz refresh_hz_source'.split(), context='device geometry')
+    _metadata_types(value, strings=('model', 'runtime_kind', 'refresh_hz_source'), numbers=('scale', 'refresh_hz'), context='device geometry')
     for key in ('logical_size', 'physical_size'):
         _schema(value[key], ('width', 'height'), context='device geometry ' + key)
+        _metadata_types(value[key], numbers=('width', 'height'), context='device size')
     _require(value['logical_size'] == {'width': 430, 'height': 932}
              and value['physical_size'] == {'width': 1290, 'height': 2796} and value['scale'] == 3, 'wrong cohort geometry')
 
@@ -103,12 +118,24 @@ def _environment_schema(value: dict) -> None:
     _schema(value['system_settings'], ('reduce_motion', 'voice_over', 'content_size_category'), context='system settings')
     _schema(value['keyboard'], ('visible', 'frame'), context='static keyboard')
     _schema(value['keyboard']['frame'], ('x', 'y', 'width', 'height'), context='static keyboard rectangle')
+    _metadata_types(value, strings=('orientation',), context='environment')
+    _metadata_types(value['safe_area'], numbers=('top', 'left', 'right', 'bottom'), context='safe area')
+    _metadata_types(value['size_classes'], strings=('horizontal', 'vertical'), context='size classes')
+    _metadata_types(value['status_bar'], booleans=('hidden',), context='status bar')
+    _metadata_types(value['system_settings'], strings=('content_size_category',), booleans=('reduce_motion', 'voice_over'), context='system settings')
+    _metadata_types(value['keyboard'], booleans=('visible',), context='keyboard')
+    _metadata_types(value['keyboard']['frame'], numbers=('x', 'y', 'width', 'height'), context='static keyboard rectangle')
     _require(value['keyboard'] == {'visible': False, 'frame': {'x': 0, 'y': 0, 'width': 0, 'height': 0}}, 'wrong static keyboard configuration')
 
 
 def _configuration_schema(value: dict, session=False) -> None:
     _schema(value, CONFIG_FIELDS | ({'trial'} if session else set()), context='scenario configuration')
     _schema(value['preferred_content_size'], ('width', 'height'), context='preferred content size')
+    _metadata_types(value, strings=('placement', 'presentation_style', 'surface'), nullable_strings=('largest_undimmed',),
+                    integers=('trial',), booleans=('edge_attached_in_compact_height', 'grabber', 'modal_in_presentation',
+                                                  'page_sizing', 'scroll_expansion', 'width_follows_preferred_content_size'), context='configuration')
+    _metadata_types(value['preferred_content_size'], numbers=('width', 'height'), context='preferred size')
+    _require(type(value['detents']) is list and all(type(v) is str for v in value['detents']), 'forbidden detent metadata type')
 
 
 def _manifest_schema(value: dict) -> None:
@@ -117,29 +144,43 @@ def _manifest_schema(value: dict) -> None:
                     'environment device_geometry resolved_detents runs').split(), ('determinism_policy', 'promotion_status'), context='manifest')
     _schema(value['os'], ('version', 'build'), context='OS')
     _schema(value['device'], ('model', 'runtime_kind'), context='device')
+    _metadata_types(value, strings=('evidence_kind', 'capture_mode', 'scenario_id', 'records_file', 'native_source_revision',
+                                   'compressed_sha256', 'raw_sha256', 'promotion_status'), integers=('schema_version', 'trial_count', 'record_count'), context='manifest')
+    _metadata_types(value['os'], strings=('version', 'build'), context='OS')
+    _metadata_types(value['device'], strings=('model', 'runtime_kind'), context='device')
     _geometry_schema(value['device_geometry']); _environment_schema(value['environment']); _configuration_schema(value['configuration'])
     _schema(value['resolved_detents'], ('fixed', 'medium', 'large', 'maximum'), context='resolved detents')
+    _metadata_types(value['resolved_detents'], numbers=('fixed', 'medium', 'large', 'maximum'), context='resolved detents')
     request = value['capture_request']
     _schema(request, 'attempt_id capture_mode role scenario_id source_revision trial trials'.split(), context='capture request')
+    _metadata_types(request, strings=('attempt_id', 'capture_mode', 'role', 'scenario_id', 'source_revision'), integers=('trial', 'trials'), context='capture request')
     _require(request['source_revision'] == value['native_source_revision'] and request['capture_mode'] == value['capture_mode']
              and request['scenario_id'] == value['scenario_id'] and request['trial'] == 1 and request['trials'] == 10
              and request['role'] == 'os_object_evidence' and isinstance(request['attempt_id'], str) and request['attempt_id'], 'capture request provenance mismatch')
     for source in value['source_files']:
         _schema(source, ('path', 'sha256'), ('repository_path',), context='source authentication')
+        _metadata_types(source, strings=('path', 'sha256', 'repository_path'), context='source authentication')
     for image in value['images']:
         _schema(image, ('path', 'sha256', 'runtime_path', 'uuid'), context='image authentication')
+        _metadata_types(image, strings=('path', 'sha256', 'runtime_path', 'uuid'), context='image authentication')
     for run in value['runs']:
         _schema(run, ('run_id', 'trial', 'raw_sha256', 'install_count'), context='manifest run')
+        _metadata_types(run, strings=('run_id', 'raw_sha256'), integers=('trial', 'install_count'), context='manifest run')
     if 'determinism_policy' in value:
         _schema(value['determinism_policy'], ('fields', 'excluded'), ('begin_time_policy',), context='determinism policy')
+        _metadata_types(value['determinism_policy'], strings=('fields', 'begin_time_policy'), context='determinism policy')
+        _require(type(value['determinism_policy']['excluded']) is list and all(type(v) is str for v in value['determinism_policy']['excluded']), 'forbidden exclusion metadata type')
         _require('begin_time' not in value['determinism_policy']['excluded'], 'begin_time semantics cannot be excluded')
 
 
 def _record_schema(row: dict) -> None:
+    _require(isinstance(row, dict), 'missing record object')
+    _metadata_types(row, strings=('type', 'run_id'), integers=('schema_version', 'seq', 't_ns'), context='record')
     kind = row.get('type')
     if kind == 'animation_install':
         _schema(row, COMMON_FIELDS | set('trial phase transaction_time layer key animation transaction backtrace'.split()), context='animation install')
         _require(row['key'] is None or isinstance(row['key'], str), 'forbidden installation key payload')
+        _metadata_types(row, strings=('phase',), integers=('trial',), numbers=('transaction_time',), context='install')
     elif kind == 'session':
         _schema(row, COMMON_FIELDS | set(('capture_mode configuration device environment evidence_kind geometry_probe implementation '
                                           'native_contract_version os provenance scenario_id').split()), context='session')
@@ -147,16 +188,22 @@ def _record_schema(row: dict) -> None:
         _geometry_schema(row['device']); _environment_schema(row['environment']); _configuration_schema(row['configuration'], session=True)
         _schema(row['provenance'], ('attempt_id', 'role', 'native_source_revision'), context='session provenance')
         _schema(row['geometry_probe'], ('accepted', 'schema_version', 'scope'), context='geometry probe scope')
+        _metadata_types(row, strings=('capture_mode', 'evidence_kind', 'implementation', 'scenario_id'), integers=('native_contract_version',), context='session')
+        _metadata_types(row['os'], strings=('version', 'build'), context='OS')
+        _metadata_types(row['provenance'], strings=('attempt_id', 'role', 'native_source_revision'), context='provenance')
+        _metadata_types(row['geometry_probe'], strings=('scope',), integers=('schema_version',), booleans=('accepted',), context='geometry probe')
         _require(row['implementation'] == 'native' and row['evidence_kind'] == 'runtime' and row['native_contract_version'] == 2
                  and row['geometry_probe'] == {'accepted': False, 'schema_version': 1, 'scope': 'public_geometry_diagnostic_not_contour'}, 'wrong session evidence scope')
     elif kind == 'event':
         _require(row.get('name') != 'run.error', 'failed capture')
         _schema(row, COMMON_FIELDS | {'name', 'data', 'terminal'}, context='event')
+        _metadata_types(row, strings=('name',), booleans=('terminal',), context='event')
         _require(isinstance(row['terminal'], bool), 'invalid event terminal flag')
         name = row['name']
         fields = {'detent.resolved': ('fixed', 'medium', 'large', 'maximum'), 'detent.requested': ('target',), 'batch.completed': ('trials',)}
         _require(name in fields or name in ('present.requested', 'present.completed', 'dismiss.requested', 'dismiss.completed'), 'forbidden scenario event name')
         _schema(row['data'], fields.get(name, ()), context='event data')
+        _metadata_types(row['data'], strings=('target',), numbers=('fixed', 'medium', 'large', 'maximum'), integers=('trials',), context='event data')
         _require(row['terminal'] == (name == 'dismiss.completed'), 'invalid terminal completion flag')
     else:
         raise EvidenceError('forbidden record type')
@@ -167,17 +214,23 @@ def _ca_value_schema(value: Any) -> None:
     if isinstance(value, dict):
         if 'encoding' in value:
             _schema(value, ('encoding', 'bytes_base64'), context='encoded CA value')
+            _metadata_types(value, strings=('encoding', 'bytes_base64'), context='encoded CA value')
         elif 'ieee754' in value:
             _schema(value, ('ieee754', 'bits_hex'), context='IEEE tag')
+            _metadata_types(value, strings=('ieee754', 'bits_hex'), context='IEEE tag')
         elif 'opaque_reference' in value:
             _schema(value, ('opaque_reference',), context='opaque reference')
+            _schema(value['opaque_reference'], ('cf_type_id', 'runtime_class', 'address', 'reason'), context='opaque reference')
+            _metadata_types(value['opaque_reference'], strings=('runtime_class', 'address', 'reason'), integers=('cf_type_id',), context='opaque reference')
         elif value.get('type') == 'CGColor':
             _schema(value, ('type', 'components', 'color_space'), context='CGColor value')
+            _metadata_types(value, strings=('type',), nullable_strings=('color_space',), context='CGColor')
             _ca_value_schema(value['components'])
         elif value.get('type') == 'CGPath':
             _schema(value, ('type', 'elements'), context='CGPath value')
             for element in value['elements']:
                 _schema(element, ('type', 'points'), context='CGPath element'); _ca_value_schema(element['points'])
+                _metadata_types(element, integers=('type',), context='CGPath element')
         else:
             raise EvidenceError('forbidden unlisted CA value payload')
     elif isinstance(value, list):
@@ -190,6 +243,7 @@ def _ca_value_schema(value: Any) -> None:
 def _timing_schema(value: Any) -> None:
     if value is not None:
         _schema(value, ('name', 'control_points'), context='timing function')
+        _metadata_types(value, strings=('name',), context='timing function')
         _ca_value_schema(value['control_points'])
 
 
@@ -394,9 +448,11 @@ def _animation(value: dict) -> None:
     _timing_schema(value['timing_function'])
     if value['transition'] is not None:
         _schema(value['transition'], ('type', 'subtype', 'start_progress', 'end_progress'), context='CA transition')
+        _metadata_types(value['transition'], strings=('type',), nullable_strings=('subtype',), context='transition')
         _require(_number(value['transition']['start_progress']) and _number(value['transition']['end_progress']), 'invalid transition progress')
     if value['keyframe'] is not None:
         _schema(value['keyframe'], ('values key_times timing_functions path calculation_mode rotation_mode tension_values continuity_values bias_values').split(), context='CA keyframe')
+        _metadata_types(value['keyframe'], strings=('calculation_mode',), nullable_strings=('rotation_mode',), context='keyframe')
         for field in ('values', 'key_times', 'path', 'tension_values', 'continuity_values', 'bias_values'):
             _ca_value_schema(value['keyframe'][field])
         for timing in value['keyframe']['timing_functions'] or []:
@@ -561,6 +617,7 @@ def load_animation_objects(path: str | Path) -> list[AnimationInstall]:
                 frames = row.get('backtrace'); _require(isinstance(frames, list) and bool(frames), 'missing backtrace')
                 for frame in frames:
                     _require(set(frame) == {'address', 'image', 'image_uuid', 'image_base', 'image_offset', 'symbol', 'symbol_address'}, 'missing backtrace fields')
+                    _metadata_types(frame, strings=('address', 'image', 'image_uuid', 'image_base'), nullable_strings=('symbol', 'symbol_address'), integers=('image_offset',), context='backtrace')
                     _require((frame['image'], frame['image_uuid']) in images, 'unresolved backtrace image')
                     _require(isinstance(frame['image_offset'], int) and not isinstance(frame['image_offset'], bool)
                              and frame['image_offset'] >= 0, 'invalid backtrace image offset')

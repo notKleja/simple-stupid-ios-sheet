@@ -442,6 +442,52 @@ class OSMotionTests(unittest.TestCase):
         frame.update({'address': '0x4000', 'image_base': '0x1000', 'image_offset': 0x3000})
         self.reject('backtrace.*executable')
 
+    def metadata_fixture(self):
+        for row in self.install_rows:
+            row['backtrace'][0]['symbol'] = 'literal_symbol'
+            row['animation']['transition'] = {'type': 'fade', 'subtype': None, 'start_progress': 0, 'end_progress': 1}
+            row['animation']['keyframe'] = {'values': [0, 1], 'key_times': [0, 1], 'timing_functions': None,
+                                          'path': None, 'calculation_mode': 'linear', 'rotation_mode': None,
+                                          'tension_values': None, 'continuity_values': None, 'bias_values': None}
+            row['animation']['from_value'] = {'type': 'CGColor', 'components': [0, 0, 0, 1], 'color_space': 'kCGColorSpaceSRGB'}
+
+    def test_rejects_nested_samples_in_every_string_metadata_category(self):
+        slots = [('backtrace', 'symbol'), ('transition', 'type'), ('transition', 'subtype'),
+                 ('keyframe', 'calculation_mode'), ('keyframe', 'rotation_mode'), ('color', 'color_space')]
+        for section, field in slots:
+            for payload in ({'sheet.y': 123}, {'frame': {'y': 123, 't': 456}}, [123, 456], 123, True):
+                with self.subTest(section=section, field=field, payload=payload):
+                    self.metadata_fixture()
+                    targets = [self.install_rows[0]] if section == 'backtrace' else self.install_rows
+                    for row in targets:
+                        target = row['backtrace'][0] if section == 'backtrace' else row['animation']['from_value'] if section == 'color' else row['animation'][section]
+                        target[field] = copy.deepcopy(payload)
+                    self.reject('metadata type')
+
+    def test_preserves_valid_optional_null_and_string_metadata(self):
+        for value in (None, 'literal_optional'):
+            with self.subTest(value=value):
+                self.metadata_fixture()
+                for row in self.install_rows:
+                    row['backtrace'][0]['symbol'] = value
+                    row['animation']['transition']['subtype'] = value
+                    row['animation']['keyframe']['rotation_mode'] = value
+                    row['animation']['from_value']['color_space'] = value
+                self.seal()
+                item = load_animation_objects(self.path)[0]
+                self.assertEqual(item.record['backtrace'][0]['symbol'], value)
+                self.assertEqual(item.animation['transition']['subtype'], value)
+                self.assertEqual(item.animation['keyframe']['rotation_mode'], value)
+                self.assertEqual(item.animation['from_value']['color_space'], value)
+
+    def test_rejects_null_in_required_string_metadata(self):
+        for section, field in [('transition', 'type'), ('keyframe', 'calculation_mode')]:
+            with self.subTest(section=section):
+                self.metadata_fixture()
+                for row in self.install_rows:
+                    row['animation'][section][field] = None
+                self.reject('metadata type')
+
 
 if __name__ == '__main__':
     unittest.main()
