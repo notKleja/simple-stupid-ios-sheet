@@ -56,12 +56,114 @@ def bundled_timeline_paths(native_app: Path, flutter_app: Path) -> dict[str, Pat
     }
 
 
+def bundled_provenance_paths(native_app: Path, flutter_app: Path) -> dict[str, Path]:
+    return {
+        "native": native_app / "synchronized-demo-provenance.json",
+        "flutter": flutter_app / "Frameworks/App.framework/flutter_assets/assets/synchronized-demo-provenance.json",
+    }
+
+
 def verify_timeline_assets(selected: Path, bundled: dict[str, Path]) -> str:
     expected = sha256_file(selected)
     for implementation, path in bundled.items():
         if not path.is_file() or sha256_file(path) != expected:
             raise RuntimeError(f"{implementation} bundled timeline does not match selected timeline")
     return expected
+
+
+def verify_matched_build_provenance(
+    native: dict[str, Any], flutter: dict[str, Any], timeline_sha256: str, current_source_revision: str,
+    *, source_tree_clean: bool = True, current_source_tree_fingerprint: str | None = None,
+) -> str:
+    """Require both app bundles to attest to this source revision and recipe."""
+    for implementation, provenance in (("native", native), ("flutter", flutter)):
+        if provenance.get("schema_version") != 1:
+            raise RuntimeError(f"{implementation} build provenance schema_version must equal 1")
+        revision = provenance.get("git_revision")
+        if not isinstance(revision, str) or not revision:
+            raise RuntimeError(f"{implementation} build provenance requires git_revision")
+        if provenance.get("timeline_sha256") != timeline_sha256:
+            raise RuntimeError(f"{implementation} build provenance timeline_sha256 does not match selected timeline")
+    if native["git_revision"] != flutter["git_revision"]:
+        raise RuntimeError("native and Flutter bundles must attest to the same git revision")
+    if native["git_revision"] != current_source_revision:
+        raise RuntimeError("bundle git revision does not match current source revision")
+    if not source_tree_clean:
+        if not isinstance(current_source_tree_fingerprint, str) or not current_source_tree_fingerprint:
+            raise RuntimeError("dirty source tree requires a deterministic source-tree fingerprint")
+        for implementation, provenance in (("native", native), ("flutter", flutter)):
+            if provenance.get("source_tree_fingerprint") != current_source_tree_fingerprint:
+                raise RuntimeError(f"{implementation} source-tree fingerprint does not match current dirty source tree")
+    return native["git_revision"]
+
+
+_GENERATED_OUTPUT_PREFIXES = ("artifacts/", "build/", "graphify-out/", "work/")
+
+
+def source_tree_input_paths(tracked_paths: list[str], untracked_paths: list[str]) -> list[str]:
+    """Return auditable source inputs, excluding known generated outputs only."""
+    relevant_untracked = [
+        path for path in untracked_paths
+        if not path.startswith(_GENERATED_OUTPUT_PREFIXES)
+    ]
+    return sorted(set(tracked_paths) | set(relevant_untracked))
+
+
+def source_tree_is_clean_from_paths(
+    changed_tracked_paths: list[str], source_inputs: list[str], untracked_paths: list[str]
+) -> bool:
+    relevant_untracked = set(source_inputs) & set(untracked_paths)
+    return not changed_tracked_paths and not relevant_untracked
+
+
+def _git_paths(*args: str) -> list[str]:
+    return [path for path in run(["git", *args]).stdout.split("\0") if path]
+
+
+def tracked_source_is_clean() -> bool:
+    tracked_paths = _git_paths("ls-files", "-z")
+    untracked_paths = _git_paths("ls-files", "--others", "--exclude-standard", "-z")
+    changed = _git_paths("diff", "--name-only", "-z") + _git_paths("diff", "--cached", "--name-only", "-z")
+    inputs = source_tree_input_paths(tracked_paths, untracked_paths)
+    return source_tree_is_clean_from_paths(changed, inputs, untracked_paths)
+
+
+def current_source_tree_fingerprint() -> str:
+    digest = hashlib.sha256()
+    tracked_paths = _git_paths("ls-files", "-z")
+    untracked_paths = _git_paths("ls-files", "--others", "--exclude-standard", "-z")
+    for relative in source_tree_input_paths(tracked_paths, untracked_paths):
+        path = ROOT / relative
+        if not path.is_file():
+            raise RuntimeError(f"cannot fingerprint missing tracked source file: {relative}")
+        encoded_path = relative.encode("utf-8")
+        contents = path.read_bytes()
+        digest.update(len(encoded_path).to_bytes(8, "big"))
+        digest.update(encoded_path)
+        digest.update(len(contents).to_bytes(8, "big"))
+        digest.update(contents)
+    return digest.hexdigest()
+
+
+def load_matched_build_provenance(
+    native_app: Path, flutter_app: Path, timeline_sha256: str, current_source_revision: str,
+    *, source_tree_clean: bool, current_source_tree_fingerprint: str | None,
+) -> tuple[dict[str, dict[str, Any]], str]:
+    provenance: dict[str, dict[str, Any]] = {}
+    for implementation, path in bundled_provenance_paths(native_app, flutter_app).items():
+        if not path.is_file():
+            raise RuntimeError(f"{implementation} build provenance is missing: {path}")
+        try:
+            value = json.loads(path.read_text())
+        except json.JSONDecodeError as error:
+            raise RuntimeError(f"{implementation} build provenance is invalid JSON: {path}") from error
+        if not isinstance(value, dict):
+            raise RuntimeError(f"{implementation} build provenance must be an object")
+        provenance[implementation] = value
+    return provenance, verify_matched_build_provenance(
+        provenance["native"], provenance["flutter"], timeline_sha256, current_source_revision,
+        source_tree_clean=source_tree_clean, current_source_tree_fingerprint=current_source_tree_fingerprint,
+    )
 
 
 def validate_simulator_identity(
@@ -303,8 +405,15 @@ def main() -> int:
         raise RuntimeError("Both built .app bundles are required")
     timeline_value = json.loads(args.timeline.read_text())
     timeline_summary = validate_timeline(timeline_value)
-    runtime = find_runtime(run_json(["xcrun", "simctl", "list", "runtimes", "-j"]), args.runtime_version)
     timeline_asset_hash = verify_timeline_assets(args.timeline, bundled_timeline_paths(args.native_app, args.flutter_app))
+    current_source_revision = run(["git", "rev-parse", "HEAD"]).stdout.strip()
+    source_tree_clean = tracked_source_is_clean()
+    source_tree_fingerprint = None if source_tree_clean else current_source_tree_fingerprint()
+    build_provenance, matched_build_revision = load_matched_build_provenance(
+        args.native_app, args.flutter_app, timeline_asset_hash, current_source_revision,
+        source_tree_clean=source_tree_clean, current_source_tree_fingerprint=source_tree_fingerprint,
+    )
+    runtime = find_runtime(run_json(["xcrun", "simctl", "list", "runtimes", "-j"]), args.runtime_version)
     run_id = time.strftime("%Y%m%d-%H%M%S")
     output_dir = args.output_root / run_id
     output_dir.mkdir(parents=True, exist_ok=False)
@@ -403,6 +512,8 @@ def main() -> int:
     manifest["launches"] = launch_results
     manifest["timeline_summary"] = timeline_summary
     manifest["verified_bundled_timeline_sha256"] = timeline_asset_hash
+    manifest["verified_build_provenance"] = build_provenance
+    manifest["matched_build_revision"] = matched_build_revision
     manifest["acknowledgements"] = acknowledgements
     manifest["visible_alignment"] = {
         "marker": "60x60 magenta square shown during the first and final timeline seconds",
@@ -412,7 +523,7 @@ def main() -> int:
         "start_marker_delta_ms_before_alignment": abs(marker_times["native"][0] - marker_times["flutter"][0]) * 1000,
         "end_marker_delta_ms_before_alignment": abs(marker_times["native"][1] - marker_times["flutter"][1]) * 1000,
     }
-    manifest["git_revision"] = run(["git", "rev-parse", "HEAD"], check=True).stdout.strip()
+    manifest["git_revision"] = current_source_revision
     manifest_path = output_dir / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
     print(json.dumps({"output_dir": str(output_dir), "composite": str(composite_video), "manifest": str(manifest_path), "simulators": simulators}, indent=2))

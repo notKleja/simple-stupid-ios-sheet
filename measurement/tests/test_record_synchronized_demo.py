@@ -15,8 +15,11 @@ from measurement.scripts.record_synchronized_demo import (
     marker_gap_seconds,
     sha256_file,
     simulator_create_command,
+    source_tree_input_paths,
+    source_tree_is_clean_from_paths,
     validate_simulator_identity,
     validate_ack,
+    verify_matched_build_provenance,
     verify_timeline_assets,
 )
 
@@ -94,6 +97,73 @@ class SynchronizedRecordingTests(unittest.TestCase):
             paths["flutter"].write_text('{"schema_version":2}')
             with self.assertRaisesRegex(RuntimeError, "bundled timeline"):
                 verify_timeline_assets(selected, paths)
+
+    def test_build_provenance_requires_same_revision_and_recipe_hash(self):
+        recipe_hash = "a" * 64
+        provenance = {
+            "schema_version": 1,
+            "git_revision": "b" * 40,
+            "timeline_sha256": recipe_hash,
+        }
+        self.assertEqual(
+            verify_matched_build_provenance(provenance, dict(provenance), recipe_hash, "b" * 40),
+            "b" * 40,
+        )
+        mismatched = dict(provenance)
+        mismatched["git_revision"] = "c" * 40
+        with self.assertRaisesRegex(RuntimeError, "same git revision"):
+            verify_matched_build_provenance(provenance, mismatched, recipe_hash, "b" * 40)
+        with self.assertRaisesRegex(RuntimeError, "current source revision"):
+            verify_matched_build_provenance(provenance, dict(provenance), recipe_hash, "d" * 40)
+        missing_recipe = dict(provenance)
+        missing_recipe.pop("timeline_sha256")
+        with self.assertRaisesRegex(RuntimeError, "timeline_sha256"):
+            verify_matched_build_provenance(missing_recipe, dict(provenance), recipe_hash, "b" * 40)
+
+    def test_dirty_source_requires_an_exact_matching_tree_fingerprint(self):
+        recipe_hash = "a" * 64
+        provenance = {
+            "schema_version": 1,
+            "git_revision": "b" * 40,
+            "timeline_sha256": recipe_hash,
+            "source_tree_fingerprint": "c" * 64,
+        }
+        with self.assertRaisesRegex(RuntimeError, "source-tree fingerprint"):
+            verify_matched_build_provenance(
+                provenance,
+                dict(provenance),
+                recipe_hash,
+                "b" * 40,
+                source_tree_clean=False,
+                current_source_tree_fingerprint="d" * 64,
+            )
+        self.assertEqual(
+            verify_matched_build_provenance(
+                provenance,
+                dict(provenance),
+                recipe_hash,
+                "b" * 40,
+                source_tree_clean=False,
+                current_source_tree_fingerprint="c" * 64,
+            ),
+            "b" * 40,
+        )
+
+    def test_untracked_source_input_marks_tree_dirty_and_is_fingerprinted(self):
+        inputs = source_tree_input_paths(
+            ["flutter_reference/candidate/lib/main.dart"],
+            [
+                "flutter_reference/candidate/lib/local_demo.dart",
+                "native_reference/NativeSheetHarness/LocalDemo.strings",
+                "build/native/iphonesimulator/Generated.app/Info.plist",
+                "artifacts/video/old/manifest.json",
+            ],
+        )
+        self.assertIn("flutter_reference/candidate/lib/local_demo.dart", inputs)
+        self.assertIn("native_reference/NativeSheetHarness/LocalDemo.strings", inputs)
+        self.assertNotIn("build/native/iphonesimulator/Generated.app/Info.plist", inputs)
+        self.assertNotIn("artifacts/video/old/manifest.json", inputs)
+        self.assertFalse(source_tree_is_clean_from_paths([], inputs, ["flutter_reference/candidate/lib/local_demo.dart"]))
 
     def test_explicit_devices_must_match_requested_type_and_runtime(self):
         inventory = {
