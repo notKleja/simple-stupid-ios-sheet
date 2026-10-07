@@ -1,0 +1,266 @@
+{
+  "capture_mode": "animation_objects",
+  "capture_request": {
+    "attempt_id": "7c282000-b03b-4643-a161-43ebf17692a6",
+    "capture_mode": "animation_objects",
+    "role": "os_object_evidence",
+    "scenario_id": "native.geometry.smoke",
+    "source_revision": "ee5cdbb326de0266fbaa598dcf61b3ae9529367d",
+    "trial": 1,
+    "trials": 10
+  },
+  "compressed_sha256": "68789a0c5803bf8d6c776399c08a10c710bff2c87ab5ee5b9658699882c17e29",
+  "determinism_policy": {
+    "excluded": [
+      "begin_time",
+      "current_value",
+      "model_value",
+      "opaque_reference.address"
+    ],
+    "fields": "Exact per-phase object multisets, including construction fields and endpoints; raw order retained; no averaging or fitting"
+  },
+  "device": {
+    "model": "iPhone99,11",
+    "runtime_kind": "virtual_device"
+  },
+  "device_geometry": {
+    "logical_size": {
+      "height": 932,
+      "width": 430
+    },
+    "model": "iPhone99,11",
+    "physical_size": {
+      "height": 2796,
+      "width": 1290
+    },
+    "refresh_hz": 60,
+    "refresh_hz_source": "UIScreen.maximumFramesPerSecond; measured cadence is per-frame",
+    "runtime_kind": "virtual_device",
+    "scale": 3
+  },
+  "environment": {
+    "keyboard": {
+      "frame": {
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      },
+      "visible": false
+    },
+    "orientation": "portrait",
+    "safe_area": {
+      "bottom": 34,
+      "left": 0,
+      "right": 0,
+      "top": 59
+    },
+    "size_classes": {
+      "horizontal": "compact",
+      "vertical": "regular"
+    },
+    "status_bar": {
+      "hidden": false
+    },
+    "system_settings": {
+      "content_size_category": "UICTContentSizeCategoryL",
+      "reduce_motion": false,
+      "voice_over": false
+    }
+  },
+  "evidence_kind": "runtime_animation_install",
+  "images": [
+    {
+      "path": "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/AccessibilityBundles/UIKit.axbundle/UIKit",
+      "runtime_path": "/System/Library/AccessibilityBundles/UIKit.axbundle/UIKit",
+      "sha256": "d89effa1eb6a0f63dacc4e9c499a56e3ed78a9d19c52497ae30a35cdedc6ea74",
+      "uuid": "5414D803-4E97-34AB-94F7-35CEB7A75371"
+    },
+    {
+      "path": "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation",
+      "runtime_path": "/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation",
+      "sha256": "98d8500f52b93d7565a2dd4eb3313fca07a0c8590a2ee5949af484f77614ab9a",
+      "uuid": "101EB2F1-1915-34A0-8BC9-631D03753B84"
+    },
+    {
+      "path": "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/Frameworks/Foundation.framework/Foundation",
+      "runtime_path": "/System/Library/Frameworks/Foundation.framework/Foundation",
+      "sha256": "0f2000994ccc289094b3d07e874d15892cdb6a88184092dee144a7994891d1a6",
+      "uuid": "73841AA3-BFDD-322D-8DC2-E5185A14DEE1"
+    },
+    {
+      "path": "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/Frameworks/QuartzCore.framework/QuartzCore",
+      "runtime_path": "/System/Library/Frameworks/QuartzCore.framework/QuartzCore",
+      "sha256": "0c4e3dacb205fe1755db40502b4efa8afda2582ee69512caa3181706d3b41304",
+      "uuid": "8F1E0B3F-ADD6-3710-A790-009333597AB4"
+    },
+    {
+      "path": "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/PrivateFrameworks/CoreAutoLayout.framework/CoreAutoLayout",
+      "runtime_path": "/System/Library/PrivateFrameworks/CoreAutoLayout.framework/CoreAutoLayout",
+      "sha256": "240061e197dd68747e3b5f2d401b7aa0aed5f1843e2e64e65e5d9eaff673b463",
+      "uuid": "FFBCB1C4-E3BC-3B5D-A7E5-51A4A85DCDA9"
+    },
+    {
+      "path": "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/PrivateFrameworks/GraphicsServices.framework/GraphicsServices",
+      "runtime_path": "/System/Library/PrivateFrameworks/GraphicsServices.framework/GraphicsServices",
+      "sha256": "e0afc5bfc55adaa9a051c22ed1f09734a90c0470996075c056f09101d9ba6a4a",
+      "uuid": "411165E2-EE8E-380E-B254-9977273971E3"
+    },
+    {
+      "path": "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore",
+      "runtime_path": "/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore",
+      "sha256": "6c93b6072b4033166bd6025f2a068961f687710a61f73db3ecfa6e40b49a9f4e",
+      "uuid": "0D94422F-FE7C-302E-B896-3BC5873C0CFC"
+    },
+    {
+      "path": "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/PrivateFrameworks/UpdateCycle.framework/UpdateCycle",
+      "runtime_path": "/System/Library/PrivateFrameworks/UpdateCycle.framework/UpdateCycle",
+      "sha256": "d7f1f6f4634e37f7fc4adfd302c939cf8440bba3a9f5cf7fe9d757aa2d0e0c1a",
+      "uuid": "26FAB814-4C8F-3A06-B45E-CBA271020DC4"
+    },
+    {
+      "path": "probe/NativeSheetHarness",
+      "runtime_path": "/private/var/containers/Bundle/Application/201641B9-C2D2-49AC-B13D-1593FC5101F8/NativeSheetHarness.app/NativeSheetHarness",
+      "sha256": "7b8aec0c2dbb5db37705a0a8d460a0c8d0d0c848fe46c54ce5a10e9139af9a43",
+      "uuid": "2F9BFD48-37F6-3B59-AEB7-4EC6BF54BB56"
+    },
+    {
+      "path": "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/usr/lib/dyld",
+      "runtime_path": "/usr/lib/dyld",
+      "sha256": "0f3fc612a713eade6fbeeb648b940f1c12e4672035d325d9f966eefaf00e6278",
+      "uuid": "0F8D35B6-556F-3E34-8EAA-80AB54047DC5"
+    },
+    {
+      "path": "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/usr/lib/system/libdispatch.dylib",
+      "runtime_path": "/usr/lib/system/libdispatch.dylib",
+      "sha256": "025152364c2c03ff3a8a1a32e22dbf1ad465128a980ee841d206b2a4a667946c",
+      "uuid": "49C0CD3E-A696-3B11-BA92-5755F0C3C6E3"
+    }
+  ],
+  "native_source_revision": "ee5cdbb326de0266fbaa598dcf61b3ae9529367d",
+  "os": {
+    "build": "23G90",
+    "version": "26.6.2"
+  },
+  "promotion_status": "No production profile. Opaque, nonfinite, unmatched private objects remain ineligible.",
+  "raw_sha256": "8caaed563c14f39bd5e812c1596cc1bf1a7730017e6d0df522579739c3d74dcd",
+  "record_count": 1350,
+  "records_file": "animation-objects.jsonl.gz",
+  "runs": [
+    {
+      "install_count": 135,
+      "raw_sha256": "74e26bab636dc8977bd97ca88343c2a2079b4154f8fecd68896e21a16a4cc324",
+      "run_id": "E2AD5969-F03D-40F7-BE2C-52DCD45FF643",
+      "trial": 1
+    },
+    {
+      "install_count": 135,
+      "raw_sha256": "74cbfbf8122919aadf92d5a5e2ac85b9e7c22bc9644535d9a5d063acc8238cb7",
+      "run_id": "390B77D4-0FB3-4AF9-B5C9-3F3A48B865F4",
+      "trial": 2
+    },
+    {
+      "install_count": 135,
+      "raw_sha256": "f1044cf81ec1941f3db9674d4e96fd17d878e07dbadec50c5a70ca45c882c9bf",
+      "run_id": "A65142DE-EE25-4506-A507-30D9E77FFD03",
+      "trial": 3
+    },
+    {
+      "install_count": 135,
+      "raw_sha256": "7960a9704c88bab3c01d605b1f99a030857af41ae8fa4d4e11f9f0b6cf3a399e",
+      "run_id": "385F0B3A-094A-4765-9BA4-D34463C09D8D",
+      "trial": 4
+    },
+    {
+      "install_count": 135,
+      "raw_sha256": "ad41c62b4158989484b58e9184807a3e41e28f417a03d0b84c751188e9e85bc1",
+      "run_id": "49440CED-D1D3-4293-8A08-AAFAD17C929B",
+      "trial": 5
+    },
+    {
+      "install_count": 135,
+      "raw_sha256": "568424265d590c456ffe35fa35e985fbace35fa92e52e810bc7380566670e487",
+      "run_id": "D999B891-7016-4B9A-A929-B72031A10294",
+      "trial": 6
+    },
+    {
+      "install_count": 135,
+      "raw_sha256": "87b6696a5a56f614bd0d1a66b1e9ef348ed5665be8cc40633ba4dedd57188f03",
+      "run_id": "2678B196-30E1-4F7A-B0E7-9B70A897A693",
+      "trial": 7
+    },
+    {
+      "install_count": 135,
+      "raw_sha256": "afe5e3419264bf59d173b430dafd21b9fcc676c65a58f2dcc365c26da9e6d0b3",
+      "run_id": "6FF7C1FA-C231-47B6-AF6A-77E33AF9F6DD",
+      "trial": 8
+    },
+    {
+      "install_count": 135,
+      "raw_sha256": "704d697b1e4c5bf9e6e6351a164a9ae7e7b4848f9ea86bf5a61d542527eeeb9d",
+      "run_id": "CC8E0C02-72B0-46CC-847F-5787B2AC15ED",
+      "trial": 9
+    },
+    {
+      "install_count": 135,
+      "raw_sha256": "fbc069a05a51558d9bec35a7e2b8fb20c29b864df6f0b03bd7e770720fb9d07a",
+      "run_id": "72E10CAF-47E7-4DDD-90CB-7062481828A6",
+      "trial": 10
+    }
+  ],
+  "scenario_id": "native.geometry.smoke",
+  "schema_version": 1,
+  "source_files": [
+    {
+      "path": "source/AccessibilityProbe.swift",
+      "repository_path": "native_reference/NativeSheetHarness/AccessibilityProbe.swift",
+      "sha256": "495cf95c04cf689c4e9af1804c96e90bd6aa1f0f236c98dcadd4cdfa816217ce"
+    },
+    {
+      "path": "source/AnimationProbe.swift",
+      "repository_path": "native_reference/NativeSheetHarness/AnimationProbe.swift",
+      "sha256": "6c519daf36f62d606a7b6a696574add57cfa755a520e6265000612478e42a33b"
+    },
+    {
+      "path": "source/App.swift",
+      "repository_path": "native_reference/NativeSheetHarness/App.swift",
+      "sha256": "36bb170f6d48e68cfd470244ab4184d5646538659de9bb6dc1e556b8ea2efe3a"
+    },
+    {
+      "path": "source/EnvironmentProbe.swift",
+      "repository_path": "native_reference/NativeSheetHarness/EnvironmentProbe.swift",
+      "sha256": "a113c6becf819c8b113642cae3e549ad18477316b3d93760ee7d0f6b0e42bb6a"
+    },
+    {
+      "path": "source/GeometryProbe.swift",
+      "repository_path": "native_reference/NativeSheetHarness/GeometryProbe.swift",
+      "sha256": "3df19d79eb4169a7497d31ae2ffee45a5817d6ae3f05e5df37d53bc6ffc4dd32"
+    },
+    {
+      "path": "source/InteractionProbe.swift",
+      "repository_path": "native_reference/NativeSheetHarness/InteractionProbe.swift",
+      "sha256": "fceca8f642a53a02da2bb7091d0423f5b8af24a39b4e2f4a8f08a345aad8f814"
+    },
+    {
+      "path": "source/KeyboardProbe.swift",
+      "repository_path": "native_reference/NativeSheetHarness/KeyboardProbe.swift",
+      "sha256": "d15a9e2793d65a8475ddbca0efbd05e8435e15974d59fc0e3974a2cc5c5f45fd"
+    },
+    {
+      "path": "source/NativeScenario.swift",
+      "repository_path": "native_reference/NativeSheetHarness/NativeScenario.swift",
+      "sha256": "190cdfda1868cc06bf2a10897726fd4fbca380f41c09fff95c2a461022d41cec"
+    },
+    {
+      "path": "source/SwiftUIReference.swift",
+      "repository_path": "native_reference/NativeSheetHarness/SwiftUIReference.swift",
+      "sha256": "6451434717819dfcf79744de2b068beefef430c3b9b31fe34466ddebe8cfd13c"
+    },
+    {
+      "path": "source/Trace.swift",
+      "repository_path": "native_reference/NativeSheetHarness/Trace.swift",
+      "sha256": "4610cccc6c0a320297e2bb20f62f3442d62b706df18e071b498d94586f21f8d2"
+    }
+  ],
+  "trial_count": 10
+}

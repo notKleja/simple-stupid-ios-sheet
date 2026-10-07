@@ -1,0 +1,84 @@
+import Foundation
+
+func canonicalDetentID(_ raw: String?) -> String? {
+    switch raw {
+    case "com.apple.UIKit.medium": return "medium"
+    case "com.apple.UIKit.large": return "large"
+    default: return raw
+    }
+}
+
+struct NativeScenario {
+    let id: String
+    var style = "page_sheet"
+    var placement = "automatic"
+    var initial = "medium"
+    var manual = false
+    var scrolling = false
+    var keyboard = false
+    var expandsOnScroll = true
+    var undimmed = false
+    var dismissalLocked = false
+    var compactEdge = false
+    var preferredWidth = false
+    var minimumMajor = 26
+    var dynamics = false
+    var programmaticRequests: [(after:Double,target:String)] {
+        id == "native.geometry.smoke" ? [(1.5,"medium"),(3,"large"),(4.5,"medium")] : [(1.5,"large"),(3,"medium")]
+    }
+    var dismissAfter: Double { id == "native.geometry.smoke" ? 6 : 4.5 }
+
+    static let definitions: [String: NativeScenario] = {
+        var result: [String: NativeScenario] = [:]
+        func add(_ scenario: NativeScenario) { result[scenario.id] = scenario }
+        add(NativeScenario(id: "native.medium_large.programmatic"))
+        add(NativeScenario(id: "native.geometry.smoke", initial:"fixed320"))
+        // Request grid axes live in the separate dynamics-v2 recipe, not in
+        // semantic sheet configuration. These are observer fixtures only.
+        add(NativeScenario(id: "native.dynamics.handle", manual: true, scrolling: true, dynamics: true))
+        add(NativeScenario(id: "native.dynamics.handle.locked", manual: true, scrolling: true, dismissalLocked: true, dynamics: true))
+        add(NativeScenario(id: "native.dynamics.scroll", manual: true, scrolling: true, dynamics: true))
+        add(NativeScenario(id: "native.dynamics.scroll.locked", manual: true, scrolling: true, dismissalLocked: true, dynamics: true))
+        add(NativeScenario(id: "native.medium.basic", manual: true))
+        add(NativeScenario(id: "native.large.basic", initial: "large", manual: true))
+        add(NativeScenario(id: "native.custom.320", initial: "fixed320", manual: true))
+        add(NativeScenario(id: "native.medium_large.drag", manual: true))
+        add(NativeScenario(id: "native.nonmodal.medium", manual: true, undimmed: true))
+        add(NativeScenario(id: "native.dismiss.disabled", manual: true, dismissalLocked: true))
+        add(NativeScenario(id: "native.scroll.medium_large", manual: true, scrolling: true))
+        add(NativeScenario(id: "native.scroll.content_first", manual: true, scrolling: true, expandsOnScroll: false))
+        add(NativeScenario(id: "native.scroll.handoff.down", initial: "large", manual: true, scrolling: true))
+        add(NativeScenario(id: "native.keyboard.medium", manual: true, keyboard: true))
+        add(NativeScenario(id: "native.edge.width", compactEdge: true, preferredWidth: true))
+        add(NativeScenario(id: "native.form", style: "form_sheet"))
+        add(NativeScenario(id: "native.form.placement.leading", style: "form_sheet", placement: "leading", minimumMajor: 27))
+        add(NativeScenario(id: "native.form.placement.trailing", style: "form_sheet", placement: "trailing", minimumMajor: 27))
+        return result
+    }()
+
+    static func resolve(_ id: String, major: Int) throws -> NativeScenario {
+        guard let scenario = definitions[id] else { throw ScenarioError.invalid("Unknown scenario ID: \(id)") }
+        guard major >= scenario.minimumMajor else { throw ScenarioError.invalid("Scenario \(id) requires iOS \(scenario.minimumMajor)+") }
+        return scenario
+    }
+
+    func configuration(trial: Int, detents: [String]) -> [String: Any] {
+        ["trial": trial, "detents": detents, "surface": "opaque.white", "grabber": true,
+         "page_sizing": style == "page_sheet", "modal_in_presentation": dismissalLocked,
+         "largest_undimmed": undimmed ? "medium" : NSNull(), "presentation_style": style,
+         "preferred_content_size": ["width": 320, "height": 320], "placement": placement,
+         "edge_attached_in_compact_height": compactEdge, "width_follows_preferred_content_size": preferredWidth,
+         "scroll_expansion": expandsOnScroll]
+    }
+}
+
+enum ScenarioError: Error { case invalid(String) }
+
+/// Pure lifetime policy also exercised by the host contract. No observation
+/// may escape into a different run or after any run/sheet termination.
+struct DynamicsObserverLifetime {
+    let runID: String
+    func mustStop(currentRunID: String?, running: Bool, sheetPresent: Bool, invalidated: Bool) -> Bool {
+        currentRunID != runID || !running || !sheetPresent || invalidated
+    }
+}
