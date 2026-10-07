@@ -10,9 +10,30 @@
     "trials": 10
   },
   "compressed_sha256": "68789a0c5803bf8d6c776399c08a10c710bff2c87ab5ee5b9658699882c17e29",
+  "configuration": {
+    "detents": [
+      "fixed320",
+      "medium",
+      "large"
+    ],
+    "edge_attached_in_compact_height": false,
+    "grabber": true,
+    "largest_undimmed": null,
+    "modal_in_presentation": false,
+    "page_sizing": true,
+    "placement": "automatic",
+    "preferred_content_size": {
+      "height": 320,
+      "width": 320
+    },
+    "presentation_style": "page_sheet",
+    "scroll_expansion": true,
+    "surface": "opaque.white",
+    "width_follows_preferred_content_size": false
+  },
   "determinism_policy": {
+    "begin_time_policy": "Retain zero/nonzero semantics and all relative/child delays; no absolute-origin normalization is proven or applied.",
     "excluded": [
-      "begin_time",
       "current_value",
       "model_value",
       "opaque_reference.address"
@@ -146,6 +167,12 @@
   "raw_sha256": "8caaed563c14f39bd5e812c1596cc1bf1a7730017e6d0df522579739c3d74dcd",
   "record_count": 1350,
   "records_file": "animation-objects.jsonl.gz",
+  "resolved_detents": {
+    "fixed": 320,
+    "large": 839,
+    "maximum": 839,
+    "medium": 469.84000000000003
+  },
   "runs": [
     {
       "install_count": 135,
