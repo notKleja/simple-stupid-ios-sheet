@@ -289,7 +289,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         if #available(iOS 27.0, *) {
             effectiveConfiguration["placement"] = config.preferredPlacement == .leading ? "leading" : (config.preferredPlacement == .trailing ? "trailing" : (config.preferredPlacement == .center ? "center" : "automatic"))
         }
-        t.record("session", ["scenario_id": scenario, "implementation": "native", "evidence_kind": "runtime",
+        var session: [String:Any] = ["scenario_id": scenario, "implementation": "native", "evidence_kind": "runtime",
             "os": ["version": UIDevice.current.systemVersion, "build": osBuild()],
             "device": ["model": deviceModel(),
                 "logical_size": ["width": screen.bounds.width, "height": screen.bounds.height],
@@ -303,7 +303,11 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
             "configuration": effectiveConfiguration,
             "provenance": ["attempt_id": replayRequest["attempt_id"] as? String ?? ProcessInfo.processInfo.environment["NATIVE_ATTEMPT_ID"] ?? UUID().uuidString,
                 "role": replayRequest["role"] as? String ?? ProcessInfo.processInfo.environment["NATIVE_ROLE"] ?? "training",
-                "native_source_revision": replayRequest["source_revision"] as? String ?? ProcessInfo.processInfo.environment["NATIVE_SOURCE_REVISION"] ?? "working_tree_uncommitted"]])
+                "native_source_revision": replayRequest["source_revision"] as? String ?? ProcessInfo.processInfo.environment["NATIVE_SOURCE_REVISION"] ?? "working_tree_uncommitted"]]
+        if scenario == "native.geometry.smoke" {
+            session["geometry_probe"] = ["schema_version":1,"accepted":false,"scope":"public_geometry_diagnostic_not_contour"]
+        }
+        t.record("session", session)
         link?.invalidate(); link = CADisplayLink(target: self, selector: #selector(sample(_:))); link!.add(to: .main, forMode: .common)
         let replayOrigin = DispatchTime.now()
         t.event("present.requested")
@@ -388,9 +392,14 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         let l = container.layer.presentation() ?? container.layer
         let windowLayer = probe.layer.presentation() ?? probe.layer
         let samples = coherentLayerSamples(probe.layer)
+        let geometryDiagnostic: [String:Any]? = scenario == "native.geometry.smoke" ?
+            GeometryProbe.observe(presentedView:container,presentingView:view,window:probe,
+                presentationSamples:samples,presentationWindowRect:{ sampledWindowRect($0,window:self.probe.layer,samples:samples) }) : nil
         guard let r = sampledWindowRect(container.layer, window: probe.layer, samples: samples) else {
-            trace.record("frame", ["metrics": ["sheet.x": NSNull(), "sheet.y": NSNull(), "sheet.width": NSNull(), "sheet.height": NSNull()],
-                "state": ["phase": phase], "unavailable": ["sheet.y": "No coherent presentation ancestry or unsupported nonaffine transform"], "coherent_layer_count": samples.count])
+            var frame: [String:Any] = ["metrics": ["sheet.x": NSNull(), "sheet.y": NSNull(), "sheet.width": NSNull(), "sheet.height": NSNull()],
+                "state": ["phase": phase], "unavailable": ["sheet.y": "No coherent presentation ancestry or unsupported nonaffine transform"], "coherent_layer_count": samples.count]
+            if let geometryDiagnostic { frame["geometry_probe"] = geometryDiagnostic }
+            trace.record("frame",frame)
             return
         }
         let legacy = l.convert(l.bounds, to: windowLayer)
@@ -431,7 +440,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
             node.subviews.forEach { walk($0, depth + 1) }
         }
         probe.subviews.forEach { walk($0, 0) }
-        trace.record("frame", ["metrics": metrics,
+        var frame: [String:Any] = ["metrics": metrics,
             "state": ["phase": phase, "selected_detent": canonicalDetentID(sheet.sheetPresentationController?.selectedDetentIdentifier?.rawValue) as Any? ?? NSNull(),
                 "target_detent": target as Any? ?? NSNull(), "gesture": probe.finger == nil ? "none" : "touch", "scroll_owner": NSNull(), "underlying_hit_test": interaction?.lastOutcome as Any? ?? NSNull(),
                 "scroll_pan_state": scroll?.panGestureRecognizer.state.rawValue as Any? ?? NSNull(), "observed_movement_consumer": movementConsumer as Any? ?? NSNull()],
@@ -444,7 +453,9 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
             "display": ["timestamp": display.timestamp, "target_timestamp": display.targetTimestamp, "duration": display.duration],
             "geometry_source": "coherent window presentation tree with stable model ancestry", "coherent_layer_count": samples.count,
             "legacy_mixed_tree_sheet_frame": rect(legacy), "raw_layers": layers, "keyboard_frame": rect(keyboardFrame),
-            "provenance": ["movement_consumer": "derived from consecutive observed offset/position deltas; not private gesture ownership"]], time: t)
+            "provenance": ["movement_consumer": "derived from consecutive observed offset/position deltas; not private gesture ownership"]]
+        if let geometryDiagnostic { frame["geometry_probe"] = geometryDiagnostic }
+        trace.record("frame",frame,time:t)
     }
 }
 

@@ -27,6 +27,7 @@ struct NativeScenario {
         var result: [String: NativeScenario] = [:]
         func add(_ scenario: NativeScenario) { result[scenario.id] = scenario }
         add(NativeScenario(id: "native.medium_large.programmatic"))
+        add(NativeScenario(id: "native.geometry.smoke"))
         add(NativeScenario(id: "native.medium.basic", manual: true))
         add(NativeScenario(id: "native.large.basic", initial: "large", manual: true))
         add(NativeScenario(id: "native.custom.320", initial: "fixed320", manual: true))

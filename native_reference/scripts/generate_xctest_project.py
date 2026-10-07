@@ -26,6 +26,11 @@ test_path = ROOT/"native_reference/XCTests/NativeInteractionUITests.swift"
 test_ref = add("test-source", "PBXFileReference", lastKnownFileType="sourcecode.swift", path=str(test_path), sourceTree="<absolute>")
 refs.append(test_ref)
 test_file = add("test-source-build", "PBXBuildFile", fileRef=test_ref)
+geometry_test_files = []
+for seed, path in [("geometry-contract", ROOT/"native_reference/tests/GeometryProbeContractTests.swift"),
+                   ("geometry-probe", ROOT/"native_reference/NativeSheetHarness/GeometryProbe.swift")]:
+    ref = add(seed, "PBXFileReference", lastKnownFileType="sourcecode.swift", path=str(path), sourceTree="<absolute>")
+    refs.append(ref);geometry_test_files.append(add(seed+"-build", "PBXBuildFile", fileRef=ref))
 products = add("products", "PBXGroup", children=[app_product,test_product], name="Products", sourceTree="<group>")
 group = add("root-group", "PBXGroup", children=refs+[products], sourceTree="<group>")
 project_id = hashlib.sha1(b"project").hexdigest()[:24].upper()
@@ -45,7 +50,7 @@ test_plist.write_bytes(plistlib.dumps({'CFBundleIdentifier':'$(PRODUCT_BUNDLE_ID
     'CFBundleName':'$(PRODUCT_NAME)','CFBundlePackageType':'BNDL','CFBundleVersion':'1','CFBundleShortVersionString':'1.0','NativeSourceRevision':revision}))
 test_config = configurations("tests", {"PRODUCT_BUNDLE_IDENTIFIER":"dev.notkleja.NativeSheetHarnessUITests", "GENERATE_INFOPLIST_FILE":"NO", "INFOPLIST_FILE":str(test_plist), "TEST_TARGET_NAME":app_name, "LD_RUNPATH_SEARCH_PATHS":"$(inherited) @executable_path/Frameworks @loader_path/Frameworks"})
 app_sources = add("app-sources","PBXSourcesBuildPhase",buildActionMask=2147483647,files=app_files,runOnlyForDeploymentPostprocessing=0)
-test_sources = add("test-sources","PBXSourcesBuildPhase",buildActionMask=2147483647,files=[test_file],runOnlyForDeploymentPostprocessing=0)
+test_sources = add("test-sources","PBXSourcesBuildPhase",buildActionMask=2147483647,files=[test_file]+geometry_test_files,runOnlyForDeploymentPostprocessing=0)
 app_frameworks = add("app-frameworks","PBXFrameworksBuildPhase",buildActionMask=2147483647,files=[],runOnlyForDeploymentPostprocessing=0)
 test_frameworks = add("test-frameworks","PBXFrameworksBuildPhase",buildActionMask=2147483647,files=[],runOnlyForDeploymentPostprocessing=0)
 add("app-target","PBXNativeTarget",buildConfigurationList=app_config,buildPhases=[app_sources,app_frameworks],buildRules=[],dependencies=[],name=app_name,productName=app_name,productReference=app_product,productType="com.apple.product-type.application")

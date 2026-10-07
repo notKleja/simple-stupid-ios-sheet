@@ -28,6 +28,7 @@ import Foundation
         let config = page.configuration(trial: 1, detents: ["fixed320", "medium", "large"])
         let required = ["trial", "detents", "surface", "grabber", "page_sizing", "modal_in_presentation", "largest_undimmed", "presentation_style", "preferred_content_size", "placement", "edge_attached_in_compact_height", "width_follows_preferred_content_size", "scroll_expansion"]
         precondition(Set(required) == Set(config.keys), "Serialize complete effective scenario configuration")
+        precondition((try? NativeScenario.resolve("native.geometry.smoke", major:26))?.id == "native.geometry.smoke", "Explicit diagnostic geometry smoke definition missing")
         do { _ = try NativeScenario.resolve("native.typo.scroll", major: 27); fatalError("Unknown scenario silently accepted") } catch {}
         do { _ = try NativeScenario.resolve("native.form.placement.leading", major: 26); fatalError("Unavailable placement silently accepted") } catch {}
         print("Native contract checks PASS: serialization terminal/sequence, null reasons, canonical IDs, scenario validation/configuration")
