@@ -102,3 +102,33 @@ known profile/matrix path+hash pairs use the byte-identical v1 snapshots; other
 hash mismatches still reject. Raw traces, frozen assignments and saved reports
 are never rewritten. A new orchestrator run truthfully records its new source
 hash rather than pretending to be the historical executable.
+
+## Additive v2 model-radius checks
+
+Check `model_radius` uses phase `geometry`, an explicit observed start/end
+window, and policy `model_radius.v1` (or an equally reviewed hash-pinned policy).
+The additive optional applicability group `model_radius` governs all four
+clockwise corner metrics together. Existing seven-group declarations remain
+valid. A required model-radius check cannot label its group not-applicable;
+other phases may explicitly exclude it. Missing/null corners in either trace
+stay unresolved, while observed corner discrepancies exceed the unchanged
+0.5pt max/final target and FAIL independently.
+
+The approved profile `check_families.model_radius.metrics` supplies each corner's
+limits; `compare.py` requires all four configured limits and a declared window.
+No scalar fills a missing corner. Only this check replaces the scalar-radius
+requirement; every other comparator gate remains intact. It reports model-only
+scope and cannot gain full native-parity eligibility. Legacy v1 batch indexes
+cannot introduce this v2 family; the regression runner rejects scalar comparison
+mislabeling as `model_radius`. Genuine historical v1 inputs remain unchanged.
+
+Direct comparator and regression entry points also select the additive v2
+schema whenever a session declares `conditions`. Every source record validates
+before comparison windowing, even without a model-radius check family: malformed
+corner metrics outside the evaluated window cannot be hidden. Conditionless
+historical v1 records retain their original schema validation.
+
+Rendered `contour` is a separate required structured observation/comparator.
+Four model radii, even matching exactly, do not satisfy rendered-path/raster
+evidence or make that unsupported comparison pass. See
+`MODEL_RADIUS_COVERAGE.md` for the current software/evidence boundary.

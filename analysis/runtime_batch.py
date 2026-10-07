@@ -12,7 +12,7 @@ import re
 import sys
 import importlib.util
 
-from compare import TraceError, compare, read_jsonl, require, schema_equal, validate, validate_schema, indexed_events
+from compare import TraceError, compare, read_jsonl, require, schema_equal, validate, validate_schema, indexed_events, MODEL_RADIUS_METRICS
 from regression import cells, normalize_window
 
 SPLITS = ("diagnostic", "training", "holdout")
@@ -31,7 +31,9 @@ OBSERVABLE_FIELDS = {
     "keyboard": ("observations.keyboard",), "stack_layers": ("observations.stack_layers",),
     "contour": ("observations.contour",), "performance": ("observations.performance",),
 }
+OPTIONAL_OBSERVABLE_FIELDS = {"model_radius": tuple("metrics." + key for key in MODEL_RADIUS_METRICS)}
 PHASE_START_FAMILIES = {
+    "geometry": ("geometry.", "check.model_radius"),
     "present": ("present.", "check.present."),
     "detent": ("detent.", "check.detent.", "check.change_detent."),
     "gesture": ("gesture.", "input.touch", "check.drag", "check.slow_drag", "check.fast_drag", "check.overdrag", "check.grab"),
@@ -133,8 +135,14 @@ def phase_policy(profile, contract):
     require(isinstance(policy, dict) and set(policy) == {"phase", "observables"}, "malformed phase policy")
     require(policy["phase"] == contract.get("phase"), "matrix phase does not match profile policy")
     rules = policy["observables"]
-    require(isinstance(rules, dict) and set(rules) == set(OBSERVABLE_FIELDS), "phase policy must govern all seven observables")
+    require(isinstance(rules, dict) and set(OBSERVABLE_FIELDS) <= set(rules) <=
+            set(OBSERVABLE_FIELDS) | set(OPTIONAL_OBSERVABLE_FIELDS), "phase policy must govern all seven observables; only approved additive groups allowed")
+    if contract.get("check", contract["id"]) == "model_radius":
+        require(policy["phase"] == "geometry" and rules.get("model_radius") in ("required", "unavailable"),
+                "model-radius check requires an explicit geometry observation policy")
     require(all(value in ("required", "not_applicable", "unavailable") for value in rules.values()), "unknown applicability status")
+    require(rules.get("model_radius") != "required" or contract.get("check", contract["id"]) == "model_radius",
+            "required model radii need their explicit four-corner comparison family")
     require(rules["target_detent"] != "not_applicable" or policy["phase"] == "dismiss", "target detent exemption requires explicit dismissal phase policy")
     start_event = contract["window"]["start_event"]
     families = PHASE_START_FAMILIES.get(policy["phase"])
@@ -161,8 +169,16 @@ def scope_phase(profile, contract, rows, policy_info):
            "states": list(profile.get("states", []))}
     audit = {"policy_id": identifier, "phase": policy["phase"], "approved_exemptions": [],
              "unresolved_observables": [], "missing_observables": [], "reason_failures": []}
+    if contract.get("check", contract["id"]) == "model_radius":
+        family = profile.get("check_families", {}).get("model_radius", {})
+        require(set(family.get("metrics", {})) == set(MODEL_RADIUS_METRICS), "approved four-corner model-radius profile required")
+        cfg["metrics"].update(copy.deepcopy(family["metrics"]))
+        cfg["metrics"].pop("sheet.radius", None)
+        cfg["check_family"] = "model_radius"
+        audit["approved_exemptions"].append("sheet.radius")
+        audit["evidence_scope"] = "model_configuration_radii_only_not_rendered_contour"
     for group, status in policy["observables"].items():
-        fields = OBSERVABLE_FIELDS[group]
+        fields = (OBSERVABLE_FIELDS | OPTIONAL_OBSERVABLE_FIELDS)[group]
         if status == "not_applicable":
             for field in fields:
                 section, key = field.split(".", 1)
@@ -391,6 +407,8 @@ def validate_v2(rows, role, artifact):
     require(all(row["seq"] == i for i, row in enumerate(rows)), "partial/lost record sequence")
     require(not any(event["name"] == "run.error" for event in events), "run.error explicitly invalidates evidence")
     for row in frames:
+        if "conditions" in header:
+            validate_schema(row, schema)
         for section in ("metrics", "state"):
             for key, value in row[section].items():
                 if value is None:
@@ -494,6 +512,9 @@ def run(index_path, split_filter=None):
         result["required_checks"] = sum(len(cell["check_contracts"]) for cell in expected.values())
         result["coverage"] = {cell_id: {"status": "UNRESOLVED", "complete_trials": [], "required_trials": matrix.get("minimum_trials", 10)} for cell_id in expected}
         result["coverage_counts"]["UNRESOLVED"] = len(expected)
+        require(not legacy or all(contract.get("check", contract["id"]) != "model_radius"
+                for cell in expected.values() for contract in cell["check_contracts"].values()),
+                "model-radius checks require an explicit v2 conditions plan")
         profile, _ = read_contract_ref(index["profile"], index_path.parent, legacy)
         if "holdout_definitions" in index:
             read_ref(index["holdout_definitions"], index_path.parent)

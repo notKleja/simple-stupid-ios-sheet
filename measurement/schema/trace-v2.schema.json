@@ -38,10 +38,21 @@
       }
     }},
     {"if": {"properties": {"type": {"const": "event"}}}, "then": {"required": ["name", "data"], "properties": {"name": {"type": "string", "minLength": 1}, "data": {"type": "object"}}}},
-    {"if": {"properties": {"type": {"const": "frame"}}}, "then": {"required": ["metrics", "state"], "properties": {"metrics": {"type": "object", "additionalProperties": {"type": ["number", "null"]}}, "state": {"type": "object"}}}},
+    {"if": {"properties": {"type": {"const": "frame"}}}, "then": {"required": ["metrics", "state"], "properties": {
+      "metrics": {"type": "object", "additionalProperties": {"type": ["number", "null"]}, "properties": {
+        "sheet.radius.top_left": {"$ref": "#/$defs/modelRadius"}, "sheet.radius.top_right": {"$ref": "#/$defs/modelRadius"},
+        "sheet.radius.bottom_right": {"$ref": "#/$defs/modelRadius"}, "sheet.radius.bottom_left": {"$ref": "#/$defs/modelRadius"}
+      }}, "state": {"type": "object"}}, "allOf": [
+        {"if": {"properties": {"metrics": {"required": ["sheet.radius.top_left"], "properties": {"sheet.radius.top_left": {"type": "null"}}}}}, "then": {"required": ["unavailable"], "properties": {"unavailable": {"required": ["sheet.radius.top_left"], "properties": {"sheet.radius.top_left": {"$ref": "#/$defs/unavailableReason"}}}}}},
+        {"if": {"properties": {"metrics": {"required": ["sheet.radius.top_right"], "properties": {"sheet.radius.top_right": {"type": "null"}}}}}, "then": {"required": ["unavailable"], "properties": {"unavailable": {"required": ["sheet.radius.top_right"], "properties": {"sheet.radius.top_right": {"$ref": "#/$defs/unavailableReason"}}}}}},
+        {"if": {"properties": {"metrics": {"required": ["sheet.radius.bottom_right"], "properties": {"sheet.radius.bottom_right": {"type": "null"}}}}}, "then": {"required": ["unavailable"], "properties": {"unavailable": {"required": ["sheet.radius.bottom_right"], "properties": {"sheet.radius.bottom_right": {"$ref": "#/$defs/unavailableReason"}}}}}},
+        {"if": {"properties": {"metrics": {"required": ["sheet.radius.bottom_left"], "properties": {"sheet.radius.bottom_left": {"type": "null"}}}}}, "then": {"required": ["unavailable"], "properties": {"unavailable": {"required": ["sheet.radius.bottom_left"], "properties": {"sheet.radius.bottom_left": {"$ref": "#/$defs/unavailableReason"}}}}}}
+      ]}},
     {"if": {"properties": {"type": {"const": "session"}, "evidence_kind": {"const": "runtime"}}}, "then": {"properties": {"device": {"properties": {"runtime_kind": {"enum": ["simulator", "virtual_device", "physical_device"]}}}}}}
   ],
   "$defs": {
+    "modelRadius": {"type": ["number", "null"], "minimum": 0, "description": "Logical-point model/configuration radius, not a rendered contour"},
+    "unavailableReason": {"type": "string", "minLength": 1, "pattern": "\\S"},
     "size": {"type": "object", "required": ["width", "height"], "properties": {"width": {"type": "number", "exclusiveMinimum": 0}, "height": {"type": "number", "exclusiveMinimum": 0}}},
     "nullableRect": {"type": ["object", "null"], "required": ["x", "y", "width", "height"], "properties": {"x": {"type": "number"}, "y": {"type": "number"}, "width": {"type": "number", "minimum": 0}, "height": {"type": "number", "minimum": 0}}},
 
@@ -93,7 +104,7 @@
         "target_detent": {"$ref": "#/$defs/applicabilityStatus"}, "scroll": {"$ref": "#/$defs/applicabilityStatus"},
         "hit_testing": {"$ref": "#/$defs/applicabilityStatus"}, "keyboard": {"$ref": "#/$defs/applicabilityStatus"},
         "stack_layers": {"$ref": "#/$defs/applicabilityStatus"}, "contour": {"$ref": "#/$defs/applicabilityStatus"},
-        "performance": {"$ref": "#/$defs/applicabilityStatus"}
+        "performance": {"$ref": "#/$defs/applicabilityStatus"}, "model_radius": {"$ref": "#/$defs/applicabilityStatus"}
       }
     },
     "applicabilityStatus": {"enum": ["required", "not_applicable", "unavailable"]}

@@ -18,7 +18,14 @@
   },
   "states": ["selected_detent", "target_detent", "gesture", "scroll_owner", "underlying_hit_test"],
   "exact_event_data": {"detent.requested": ["target"], "detent.changed": ["selected"], "scroll.handoff": ["owner"], "input.touch": ["phase", "x", "y"]},
+  "check_families": {
+    "model_radius": {"provenance": "Existing scalar-radius acceptance target applied independently to four model/configuration values; not contour acceptance", "metrics": {
+      "sheet.radius.top_left": {"max": 0.5, "final": 0.5}, "sheet.radius.top_right": {"max": 0.5, "final": 0.5},
+      "sheet.radius.bottom_right": {"max": 0.5, "final": 0.5}, "sheet.radius.bottom_left": {"max": 0.5, "final": 0.5}
+    }}
+  },
   "applicability_policies": {
+    "model_radius.v1": {"phase": "geometry", "observables": {"target_detent": "required", "scroll": "not_applicable", "hit_testing": "not_applicable", "keyboard": "not_applicable", "stack_layers": "not_applicable", "contour": "not_applicable", "performance": "not_applicable", "model_radius": "required"}},
     "present.v1": {"phase": "present", "observables": {"target_detent": "required", "scroll": "not_applicable", "hit_testing": "not_applicable", "keyboard": "not_applicable", "stack_layers": "not_applicable", "contour": "not_applicable", "performance": "not_applicable"}},
     "detent.v1": {"phase": "detent", "observables": {"target_detent": "required", "scroll": "not_applicable", "hit_testing": "not_applicable", "keyboard": "not_applicable", "stack_layers": "not_applicable", "contour": "not_applicable", "performance": "not_applicable"}},
     "drag.v1": {"phase": "gesture", "observables": {"target_detent": "unavailable", "scroll": "not_applicable", "hit_testing": "not_applicable", "keyboard": "not_applicable", "stack_layers": "not_applicable", "contour": "not_applicable", "performance": "not_applicable"}},
