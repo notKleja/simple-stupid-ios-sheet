@@ -9,6 +9,7 @@ import 'environment.dart';
 import 'profile.dart';
 import 'state.dart';
 import 'motion.dart';
+import 'presentation.dart';
 import 'trace.dart';
 
 const iosSheetSurfaceKey = ValueKey('ios-sheet-opaque-surface');
@@ -54,6 +55,21 @@ class IosSheetController extends ChangeNotifier {
     if (route == null) throw StateError('Sheet controller is detached');
     return route.snapshotState();
   }
+
+  void beginUnderlyingControlProbe({
+    required String probeIdentifier,
+    required String controlIdentifier,
+    required Offset position,
+  }) {
+    final route = _route;
+    if (route == null) throw StateError('Sheet controller is detached');
+    route._beginUnderlyingProbe(probeIdentifier, controlIdentifier, position);
+  }
+
+  void recordUnderlyingControlActivation(String identifier) =>
+      _route?._underlyingProbe?.recordControlActivation(identifier);
+  IosSheetUnderlyingHitObservation? completeUnderlyingControlProbe() =>
+      _route?._completeUnderlyingProbe();
 
   void selectDetent(String identifier) {
     final route = _route;
@@ -109,6 +125,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     this.onPresented,
     this.onDismissed,
     this.trajectoryModel,
+    this.onUnderlyingHitObserved,
     super.settings,
   }) : detents = List.unmodifiable(detents),
        _sheetController = controller {
@@ -142,6 +159,9 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   final VoidCallback? onPresented;
   final VoidCallback? onDismissed;
   final IosSheetTrajectoryModel? trajectoryModel;
+  final ValueChanged<IosSheetUnderlyingHitObservation>? onUnderlyingHitObserved;
+  IosSheetUnderlyingControlProbe? _underlyingProbe;
+  IosSheetUnderlyingHitObservation? _underlyingObservation;
   IosSheetMotionRequest? _motionRequest;
   IosSheetTrajectory? _trajectory;
 
@@ -264,6 +284,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
       environment: environment,
       motionRequest: _motionRequest,
       motionTargetPoints: _trajectory?.targetPoints,
+      presentation: presentationState,
       capabilities: {
         'rendered_frame': IosSheetCapabilityStatus.observed,
         'profile': profile.isMeasured
@@ -321,7 +342,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
         'sheet.relative_progress': controller!.value,
         'sheet.trajectory_height_unscaled': unscaledTrajectoryHeight,
         'sheet.surface_height_unscaled': unscaledSurfaceHeight,
-        'barrier.alpha': isModal ? modalBarrierColor.a : 0,
+        'barrier.alpha': observed.presentation!.effectiveBarrierAlpha,
         'sheet.velocity_y': null,
         'finger.velocity_y': null,
         'scroll.offset': null,
@@ -333,7 +354,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
             ? 'none'
             : 'touch',
         'scroll_owner': null,
-        'underlying_hit_test': null,
+        'underlying_hit_test': _underlyingObservation?.activated,
         'dismissed': !isActive,
         'surface': 'opaque',
         'shape': geometry.shape == null ? 'rounded_superellipse' : 'custom',
@@ -343,7 +364,9 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
         'finger.velocity_y': 'pointer recorder not attached',
         'scroll.offset': 'scroll recorder not attached',
         'scroll_owner': 'gesture ownership instrumentation pending',
-        'underlying_hit_test': 'no real background touch probe in this frame',
+        if (_underlyingObservation == null)
+          'underlying_hit_test':
+              'no completed actually delivered underlying control probe',
         if (observed.targetDetent == null)
           'target_detent': _dismissing
               ? 'Dismissal has no configured detent target'
@@ -356,6 +379,9 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
         'resting_detector': 'engine not animating, no drag, extent epsilon1e-6',
         'sheet_gesture': observed.sheetDragging ? 'dragging' : 'idle',
         'pointer_observation_scope': 'delivered pointers inside sheet content',
+        if (_underlyingObservation != null)
+          'underlying_hit_test_scope':
+              'last completed delivered tap/control activation probe, not a continuous mask',
       },
     );
   }
@@ -425,6 +451,40 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
       environment,
     );
     return unscaledTrajectoryHeight > thresholdHeight + 0.000001;
+  }
+
+  IosSheetPresentationState get presentationState => IosSheetPresentationState(
+    effectiveBarrierAlpha: isModal ? modalBarrierColor.a : 0,
+    underlyingPointerEligible: !isModal,
+    underlyingSemanticsEligible: !isModal,
+    sheetBounds: _renderedRect,
+    capability: IosSheetCapabilityStatus.fallback,
+    provenance:
+        'existing largest-undimmed threshold and configured alpha; unmeasured fallback, no native curve',
+  );
+  void _beginUnderlyingProbe(
+    String probeIdentifier,
+    String controlIdentifier,
+    Offset position,
+  ) {
+    if (_underlyingProbe != null)
+      throw StateError('Underlying control probe already active');
+    _underlyingProbe = IosSheetUnderlyingControlProbe(
+      probeIdentifier: probeIdentifier,
+      controlIdentifier: controlIdentifier,
+      position: position,
+      viewId: View.of(navigator!.context).viewId,
+    );
+  }
+
+  IosSheetUnderlyingHitObservation? _completeUnderlyingProbe() {
+    final observed = _underlyingProbe?.complete();
+    _underlyingProbe = null;
+    if (observed != null) {
+      _underlyingObservation = observed;
+      onUnderlyingHitObserved?.call(observed);
+    }
+    return observed;
   }
 
   @override
@@ -727,12 +787,14 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   @override
   Widget buildModalBarrier() => AnimatedBuilder(
     animation: controller!,
-    builder: (context, _) => IgnorePointer(
-      ignoring: !isModal,
+    builder: (context, _) => IosSheetLiveBarrierRouting(
+      presentation: () => presentationState,
       child: ExcludeSemantics(
-        excluding: !isModal,
+        excluding: presentationState.underlyingSemanticsEligible,
         child: ModalBarrier(
-          color: isModal ? barrierColor : null,
+          color: presentationState.effectiveBarrierAlpha > 0
+              ? barrierColor
+              : null,
           dismissible: barrierDismissible,
           semanticsLabel: barrierLabel,
           onDismiss: () => navigator?.maybePop(),
@@ -754,6 +816,8 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
 
   @override
   void dispose() {
+    _underlyingProbe?.dispose();
+    _underlyingProbe = null;
     controller?.removeListener(_animationChanged);
     controller?.removeStatusListener(_statusChanged);
     _sheetController?._detach(this);

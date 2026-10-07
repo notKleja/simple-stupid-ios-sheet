@@ -12,6 +12,7 @@ void main() {
     String? undimmed,
     bool interactiveDismissDisabled = false,
     bool draggable = true,
+    bool dismissible = true,
     IosSheetContentInteraction interaction = IosSheetContentInteraction.resizes,
     IosSheetProfile? profile,
     Widget? child,
@@ -55,6 +56,7 @@ void main() {
         keyboardPolicy: keyboardPolicy,
         interactiveDismissDisabled: interactiveDismissDisabled,
         draggable: draggable,
+        dismissible: dismissible,
         contentInteraction: interaction,
         onSelectedDetentChanged: onSelected,
         child:
@@ -98,6 +100,38 @@ void main() {
     await tester.tapAt(const Offset(200, 20));
     expect(backgroundTaps, 0);
     expect(controller.isModal, isTrue);
+  });
+
+  testWidgets('threshold reversal blocks actual taps before the next build', (
+    tester,
+  ) async {
+    await present(
+      tester,
+      undimmed: 'short',
+      dismissible: false,
+      media: const MediaQueryData(
+        size: Size(400, 800),
+        padding: EdgeInsets.only(top: 60),
+        viewPadding: EdgeInsets.only(top: 60),
+      ),
+    );
+    final point = tester.getCenter(find.text('Background control'));
+    final route =
+        ModalRoute.of(tester.element(find.text('Sheet content')))!
+            as StupidSimpleIosSheetRoute<void>;
+    // ignore: invalid_use_of_protected_member
+    final engine = route.controller!;
+    engine.value = .6; // Producer progress changed; barrier build has not run.
+    expect(controller.isModal, isTrue);
+    await tester.tapAt(point);
+    expect(backgroundTaps, 0);
+    engine.value = .4;
+    await tester.tapAt(point);
+    expect(backgroundTaps, 1);
+    engine.value = .6;
+    await tester.tapAt(point);
+    expect(backgroundTaps, 1);
+    await tester.pumpAndSettle();
   });
 
   testWidgets('selected detent callback follows settled programmatic changes', (
