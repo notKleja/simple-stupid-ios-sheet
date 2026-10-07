@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/notKleja/simple-stupid-ios-sheet/measurement/scenario-map-v2",
+  "title": "Explicit matrix/native/Flutter scenario registry v2",
+  "$comment": "Null registry IDs mean unimplemented. Aliases require a complete explicit entry; strings or filenames never establish equivalence.",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "entries"],
+  "properties": {
+    "schema_version": {"const": 2},
+    "entries": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/entry"}}
+  },
+  "$defs": {
+    "entry": {
+      "type": "object", "additionalProperties": false,
+      "required": ["matrix", "native", "flutter", "revision"],
+      "properties": {
+        "matrix": {"type": "string", "minLength": 1},
+        "native": {"type": ["string", "null"], "minLength": 1},
+        "flutter": {"type": ["string", "null"], "minLength": 1},
+        "revision": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}

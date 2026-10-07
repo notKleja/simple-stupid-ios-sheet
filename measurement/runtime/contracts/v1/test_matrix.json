@@ -1,0 +1,3006 @@
+{
+  "schema_version": 1,
+  "policy": "Each case crossed with OS/device geometry/orientation; unavailable cells remain unresolved",
+  "environment_axes": {
+    "ios_major": [
+      26,
+      27
+    ],
+    "device_geometry": [
+      "iphone_a",
+      "iphone_b"
+    ],
+    "orientation": [
+      "portrait",
+      "landscape"
+    ]
+  },
+  "minimum_trials": 10,
+  "geometry_requirement": "Bind iphone_a and iphone_b to two observed distinct logical display sizes; inventory is not a measurement",
+  "required_dimensions": {
+    "detents": [
+      "small_custom",
+      "medium",
+      "large",
+      "medium_large",
+      "custom_large",
+      "three_custom"
+    ],
+    "interaction": [
+      "present",
+      "dismiss",
+      "slow_drag",
+      "fast_drag",
+      "overdrag",
+      "cancel",
+      "scroll_handoff",
+      "background_touch"
+    ],
+    "modal": [
+      "modal",
+      "nonmodal",
+      "interactive_dismiss_disabled"
+    ],
+    "content": [
+      "fixed",
+      "short_scroll",
+      "long_scroll",
+      "horizontal_pager",
+      "text_field",
+      "dynamic_height"
+    ]
+  },
+  "cases": [
+    {
+      "id": "programmatic",
+      "scenario_id": "native.medium_large.programmatic",
+      "role": "training",
+      "detents": "medium_large",
+      "interaction": "present",
+      "modal": "modal",
+      "content": "fixed",
+      "checks": [
+        "present",
+        "large_to_medium",
+        "medium_to_large",
+        "dismiss",
+        "side_spacing",
+        "presenter"
+      ],
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "large_to_medium",
+        "medium_to_large",
+        "dismiss",
+        "side_spacing",
+        "presenter"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "detent.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "large_to_medium",
+          "check": "large_to_medium",
+          "parameters": {},
+          "window": {
+            "start_event": "detent.requested",
+            "start_occurrence": 1,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          },
+          "expected_events": {
+            "detent.requested#1": {
+              "target": "medium"
+            }
+          }
+        },
+        {
+          "id": "medium_to_large",
+          "check": "medium_to_large",
+          "parameters": {},
+          "window": {
+            "start_event": "detent.requested",
+            "start_occurrence": 0,
+            "end_event": "detent.requested",
+            "end_occurrence": 1
+          },
+          "expected_events": {
+            "detent.requested#0": {
+              "target": "large"
+            }
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "side_spacing",
+          "check": "side_spacing",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "presenter",
+          "check": "presenter",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "small",
+      "scenario_id": "custom.small",
+      "role": "training",
+      "detents": "small_custom",
+      "interaction": "present",
+      "modal": "modal",
+      "content": "fixed",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "medium",
+      "scenario_id": "medium.basic",
+      "role": "training",
+      "detents": "medium",
+      "interaction": "present",
+      "modal": "modal",
+      "content": "fixed",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "large",
+      "scenario_id": "large.basic",
+      "role": "training",
+      "detents": "large",
+      "interaction": "dismiss",
+      "modal": "modal",
+      "content": "fixed",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "custom_large",
+      "scenario_id": "custom_large.programmatic",
+      "role": "training",
+      "detents": "custom_large",
+      "interaction": "present",
+      "modal": "modal",
+      "content": "fixed",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "three_custom",
+      "scenario_id": "custom.three",
+      "role": "training",
+      "detents": "three_custom",
+      "interaction": "slow_drag",
+      "modal": "modal",
+      "content": "fixed",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "slow_drag"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "slow_drag",
+          "check": "slow_drag",
+          "parameters": {},
+          "window": {
+            "start_event": "check.slow_drag.started",
+            "start_occurrence": 0,
+            "end_event": "check.slow_drag.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "slow_drag",
+      "scenario_id": "medium_large.drag.slow",
+      "role": "training",
+      "detents": "medium_large",
+      "interaction": "slow_drag",
+      "modal": "modal",
+      "content": "fixed",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "slow_drag"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "slow_drag",
+          "check": "slow_drag",
+          "parameters": {},
+          "window": {
+            "start_event": "check.slow_drag.started",
+            "start_occurrence": 0,
+            "end_event": "check.slow_drag.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "fast_drag",
+      "scenario_id": "medium_large.drag.fast",
+      "role": "training",
+      "detents": "medium_large",
+      "interaction": "fast_drag",
+      "modal": "modal",
+      "content": "fixed",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "fast_drag"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "fast_drag",
+          "check": "fast_drag",
+          "parameters": {},
+          "window": {
+            "start_event": "check.fast_drag.started",
+            "start_occurrence": 0,
+            "end_event": "check.fast_drag.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "overdrag",
+      "scenario_id": "medium_large.overdrag",
+      "role": "training",
+      "detents": "medium_large",
+      "interaction": "overdrag",
+      "modal": "modal",
+      "content": "fixed",
+      "distances_pt": [
+        10,
+        20,
+        40,
+        80,
+        120,
+        180
+      ],
+      "directions": [
+        "above_max",
+        "below_min"
+      ],
+      "coverage_dimensions": {
+        "overdrag_distance_pt": [
+          10,
+          20,
+          40,
+          80,
+          120,
+          180
+        ],
+        "overdrag_direction": [
+          "above_max",
+          "below_min"
+        ]
+      },
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "overdrag"
+      ],
+      "required_checks": [
+        {
+          "id": "present@overdrag_distance_pt=10,overdrag_direction=above_max",
+          "check": "present",
+          "parameters": {
+            "overdrag_distance_pt": 10,
+            "overdrag_direction": "above_max"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@overdrag_distance_pt=10,overdrag_direction=above_max",
+          "check": "dismiss",
+          "parameters": {
+            "overdrag_distance_pt": 10,
+            "overdrag_direction": "above_max"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "overdrag@overdrag_distance_pt=10,overdrag_direction=above_max",
+          "check": "overdrag",
+          "parameters": {
+            "overdrag_distance_pt": 10,
+            "overdrag_direction": "above_max"
+          },
+          "window": {
+            "start_event": "check.overdrag.started",
+            "start_occurrence": 0,
+            "end_event": "check.overdrag.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@overdrag_distance_pt=10,overdrag_direction=below_min",
+          "check": "present",
+          "parameters": {
+            "overdrag_distance_pt": 10,
+            "overdrag_direction": "below_min"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@overdrag_distance_pt=10,overdrag_direction=below_min",
+          "check": "dismiss",
+          "parameters": {
+            "overdrag_distance_pt": 10,
+            "overdrag_direction": "below_min"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "overdrag@overdrag_distance_pt=10,overdrag_direction=below_min",
+          "check": "overdrag",
+          "parameters": {
+            "overdrag_distance_pt": 10,
+            "overdrag_direction": "below_min"
+          },
+          "window": {
+            "start_event": "check.overdrag.started",
+            "start_occurrence": 0,
+            "end_event": "check.overdrag.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@overdrag_distance_pt=20,overdrag_direction=above_max",
+          "check": "present",
+          "parameters": {
+            "overdrag_distance_pt": 20,
+            "overdrag_direction": "above_max"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@overdrag_distance_pt=20,overdrag_direction=above_max",
+          "check": "dismiss",
+          "parameters": {
+            "overdrag_distance_pt": 20,
+            "overdrag_direction": "above_max"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "overdrag@overdrag_distance_pt=20,overdrag_direction=above_max",
+          "check": "overdrag",
+          "parameters": {
+            "overdrag_distance_pt": 20,
+            "overdrag_direction": "above_max"
+          },
+          "window": {
+            "start_event": "check.overdrag.started",
+            "start_occurrence": 0,
+            "end_event": "check.overdrag.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@overdrag_distance_pt=20,overdrag_direction=below_min",
+          "check": "present",
+          "parameters": {
+            "overdrag_distance_pt": 20,
+            "overdrag_direction": "below_min"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@overdrag_distance_pt=20,overdrag_direction=below_min",
+          "check": "dismiss",
+          "parameters": {
+            "overdrag_distance_pt": 20,
+            "overdrag_direction": "below_min"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "overdrag@overdrag_distance_pt=20,overdrag_direction=below_min",
+          "check": "overdrag",
+          "parameters": {
+            "overdrag_distance_pt": 20,
+            "overdrag_direction": "below_min"
+          },
+          "window": {
+            "start_event": "check.overdrag.started",
+            "start_occurrence": 0,
+            "end_event": "check.overdrag.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@overdrag_distance_pt=40,overdrag_direction=above_max",
+          "check": "present",
+          "parameters": {
+            "overdrag_distance_pt": 40,
+            "overdrag_direction": "above_max"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@overdrag_distance_pt=40,overdrag_direction=above_max",
+          "check": "dismiss",
+          "parameters": {
+            "overdrag_distance_pt": 40,
+            "overdrag_direction": "above_max"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "overdrag@overdrag_distance_pt=40,overdrag_direction=above_max",
+          "check": "overdrag",
+          "parameters": {
+            "overdrag_distance_pt": 40,
+            "overdrag_direction": "above_max"
+          },
+          "window": {
+            "start_event": "check.overdrag.started",
+            "start_occurrence": 0,
+            "end_event": "check.overdrag.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@overdrag_distance_pt=40,overdrag_direction=below_min",
+          "check": "present",
+          "parameters": {
+            "overdrag_distance_pt": 40,
+            "overdrag_direction": "below_min"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@overdrag_distance_pt=40,overdrag_direction=below_min",
+          "check": "dismiss",
+          "parameters": {
+            "overdrag_distance_pt": 40,
+            "overdrag_direction": "below_min"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "overdrag@overdrag_distance_pt=40,overdrag_direction=below_min",
+          "check": "overdrag",
+          "parameters": {
+            "overdrag_distance_pt": 40,
+            "overdrag_direction": "below_min"
+          },
+          "window": {
+            "start_event": "check.overdrag.started",
+            "start_occurrence": 0,
+            "end_event": "check.overdrag.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@overdrag_distance_pt=80,overdrag_direction=above_max",
+          "check": "present",
+          "parameters": {
+            "overdrag_distance_pt": 80,
+            "overdrag_direction": "above_max"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@overdrag_distance_pt=80,overdrag_direction=above_max",
+          "check": "dismiss",
+          "parameters": {
+            "overdrag_distance_pt": 80,
+            "overdrag_direction": "above_max"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "overdrag@overdrag_distance_pt=80,overdrag_direction=above_max",
+          "check": "overdrag",
+          "parameters": {
+            "overdrag_distance_pt": 80,
+            "overdrag_direction": "above_max"
+          },
+          "window": {
+            "start_event": "check.overdrag.started",
+            "start_occurrence": 0,
+            "end_event": "check.overdrag.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@overdrag_distance_pt=80,overdrag_direction=below_min",
+          "check": "present",
+          "parameters": {
+            "overdrag_distance_pt": 80,
+            "overdrag_direction": "below_min"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@overdrag_distance_pt=80,overdrag_direction=below_min",
+          "check": "dismiss",
+          "parameters": {
+            "overdrag_distance_pt": 80,
+            "overdrag_direction": "below_min"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "overdrag@overdrag_distance_pt=80,overdrag_direction=below_min",
+          "check": "overdrag",
+          "parameters": {
+            "overdrag_distance_pt": 80,
+            "overdrag_direction": "below_min"
+          },
+          "window": {
+            "start_event": "check.overdrag.started",
+            "start_occurrence": 0,
+            "end_event": "check.overdrag.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@overdrag_distance_pt=120,overdrag_direction=above_max",
+          "check": "present",
+          "parameters": {
+            "overdrag_distance_pt": 120,
+            "overdrag_direction": "above_max"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@overdrag_distance_pt=120,overdrag_direction=above_max",
+          "check": "dismiss",
+          "parameters": {
+            "overdrag_distance_pt": 120,
+            "overdrag_direction": "above_max"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "overdrag@overdrag_distance_pt=120,overdrag_direction=above_max",
+          "check": "overdrag",
+          "parameters": {
+            "overdrag_distance_pt": 120,
+            "overdrag_direction": "above_max"
+          },
+          "window": {
+            "start_event": "check.overdrag.started",
+            "start_occurrence": 0,
+            "end_event": "check.overdrag.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@overdrag_distance_pt=120,overdrag_direction=below_min",
+          "check": "present",
+          "parameters": {
+            "overdrag_distance_pt": 120,
+            "overdrag_direction": "below_min"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@overdrag_distance_pt=120,overdrag_direction=below_min",
+          "check": "dismiss",
+          "parameters": {
+            "overdrag_distance_pt": 120,
+            "overdrag_direction": "below_min"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "overdrag@overdrag_distance_pt=120,overdrag_direction=below_min",
+          "check": "overdrag",
+          "parameters": {
+            "overdrag_distance_pt": 120,
+            "overdrag_direction": "below_min"
+          },
+          "window": {
+            "start_event": "check.overdrag.started",
+            "start_occurrence": 0,
+            "end_event": "check.overdrag.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@overdrag_distance_pt=180,overdrag_direction=above_max",
+          "check": "present",
+          "parameters": {
+            "overdrag_distance_pt": 180,
+            "overdrag_direction": "above_max"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@overdrag_distance_pt=180,overdrag_direction=above_max",
+          "check": "dismiss",
+          "parameters": {
+            "overdrag_distance_pt": 180,
+            "overdrag_direction": "above_max"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "overdrag@overdrag_distance_pt=180,overdrag_direction=above_max",
+          "check": "overdrag",
+          "parameters": {
+            "overdrag_distance_pt": 180,
+            "overdrag_direction": "above_max"
+          },
+          "window": {
+            "start_event": "check.overdrag.started",
+            "start_occurrence": 0,
+            "end_event": "check.overdrag.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@overdrag_distance_pt=180,overdrag_direction=below_min",
+          "check": "present",
+          "parameters": {
+            "overdrag_distance_pt": 180,
+            "overdrag_direction": "below_min"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@overdrag_distance_pt=180,overdrag_direction=below_min",
+          "check": "dismiss",
+          "parameters": {
+            "overdrag_distance_pt": 180,
+            "overdrag_direction": "below_min"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "overdrag@overdrag_distance_pt=180,overdrag_direction=below_min",
+          "check": "overdrag",
+          "parameters": {
+            "overdrag_distance_pt": 180,
+            "overdrag_direction": "below_min"
+          },
+          "window": {
+            "start_event": "check.overdrag.started",
+            "start_occurrence": 0,
+            "end_event": "check.overdrag.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "cancel",
+      "scenario_id": "dismiss.cancel",
+      "role": "training",
+      "detents": "medium_large",
+      "interaction": "cancel",
+      "modal": "modal",
+      "content": "fixed",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "cancel"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "cancel",
+          "check": "cancel",
+          "parameters": {},
+          "window": {
+            "start_event": "check.cancel.started",
+            "start_occurrence": 0,
+            "end_event": "check.cancel.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "disabled",
+      "scenario_id": "dismiss.disabled",
+      "role": "training",
+      "detents": "medium_large",
+      "interaction": "overdrag",
+      "modal": "interactive_dismiss_disabled",
+      "content": "fixed",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "overdrag"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "overdrag",
+          "check": "overdrag",
+          "parameters": {},
+          "window": {
+            "start_event": "check.overdrag.started",
+            "start_occurrence": 0,
+            "end_event": "check.overdrag.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "nonmodal",
+      "scenario_id": "nonmodal.medium",
+      "role": "training",
+      "detents": "medium_large",
+      "interaction": "background_touch",
+      "modal": "nonmodal",
+      "content": "fixed",
+      "checks": [
+        "tap",
+        "scroll",
+        "control_activation",
+        "focus",
+        "threshold_crossing"
+      ],
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "background_touch",
+        "tap",
+        "scroll",
+        "control_activation",
+        "focus",
+        "threshold_crossing"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "background_touch",
+          "check": "background_touch",
+          "parameters": {},
+          "window": {
+            "start_event": "check.background_touch.started",
+            "start_occurrence": 0,
+            "end_event": "check.background_touch.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "tap",
+          "check": "tap",
+          "parameters": {},
+          "window": {
+            "start_event": "check.tap.started",
+            "start_occurrence": 0,
+            "end_event": "check.tap.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "scroll",
+          "check": "scroll",
+          "parameters": {},
+          "window": {
+            "start_event": "check.scroll.started",
+            "start_occurrence": 0,
+            "end_event": "check.scroll.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "control_activation",
+          "check": "control_activation",
+          "parameters": {},
+          "window": {
+            "start_event": "check.control_activation.started",
+            "start_occurrence": 0,
+            "end_event": "check.control_activation.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "focus",
+          "check": "focus",
+          "parameters": {},
+          "window": {
+            "start_event": "check.focus.started",
+            "start_occurrence": 0,
+            "end_event": "check.focus.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "threshold_crossing",
+          "check": "threshold_crossing",
+          "parameters": {},
+          "window": {
+            "start_event": "check.threshold_crossing.started",
+            "start_occurrence": 0,
+            "end_event": "check.threshold_crossing.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "modal",
+      "scenario_id": "modal.background",
+      "role": "training",
+      "detents": "medium_large",
+      "interaction": "background_touch",
+      "modal": "modal",
+      "content": "fixed",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "background_touch"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "background_touch",
+          "check": "background_touch",
+          "parameters": {},
+          "window": {
+            "start_event": "check.background_touch.started",
+            "start_occurrence": 0,
+            "end_event": "check.background_touch.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "short_scroll",
+      "scenario_id": "scroll.short",
+      "role": "training",
+      "detents": "medium_large",
+      "interaction": "scroll_handoff",
+      "modal": "modal",
+      "content": "short_scroll",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "scroll_handoff"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "scroll_handoff",
+          "check": "scroll_handoff",
+          "parameters": {},
+          "window": {
+            "start_event": "check.scroll_handoff.started",
+            "start_occurrence": 0,
+            "end_event": "check.scroll_handoff.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "long_scroll",
+      "scenario_id": "scroll.long",
+      "role": "training",
+      "detents": "medium_large",
+      "interaction": "scroll_handoff",
+      "modal": "modal",
+      "content": "long_scroll",
+      "offsets_pt": [
+        0,
+        1,
+        400
+      ],
+      "origins": [
+        "grabber",
+        "content",
+        "interactive_child"
+      ],
+      "coverage_dimensions": {
+        "scroll_offset_pt": [
+          0,
+          1,
+          400
+        ],
+        "gesture_origin": [
+          "grabber",
+          "content",
+          "interactive_child"
+        ]
+      },
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "scroll_handoff"
+      ],
+      "required_checks": [
+        {
+          "id": "present@scroll_offset_pt=0,gesture_origin=grabber",
+          "check": "present",
+          "parameters": {
+            "scroll_offset_pt": 0,
+            "gesture_origin": "grabber"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@scroll_offset_pt=0,gesture_origin=grabber",
+          "check": "dismiss",
+          "parameters": {
+            "scroll_offset_pt": 0,
+            "gesture_origin": "grabber"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "scroll_handoff@scroll_offset_pt=0,gesture_origin=grabber",
+          "check": "scroll_handoff",
+          "parameters": {
+            "scroll_offset_pt": 0,
+            "gesture_origin": "grabber"
+          },
+          "window": {
+            "start_event": "check.scroll_handoff.started",
+            "start_occurrence": 0,
+            "end_event": "check.scroll_handoff.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@scroll_offset_pt=0,gesture_origin=content",
+          "check": "present",
+          "parameters": {
+            "scroll_offset_pt": 0,
+            "gesture_origin": "content"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@scroll_offset_pt=0,gesture_origin=content",
+          "check": "dismiss",
+          "parameters": {
+            "scroll_offset_pt": 0,
+            "gesture_origin": "content"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "scroll_handoff@scroll_offset_pt=0,gesture_origin=content",
+          "check": "scroll_handoff",
+          "parameters": {
+            "scroll_offset_pt": 0,
+            "gesture_origin": "content"
+          },
+          "window": {
+            "start_event": "check.scroll_handoff.started",
+            "start_occurrence": 0,
+            "end_event": "check.scroll_handoff.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@scroll_offset_pt=0,gesture_origin=interactive_child",
+          "check": "present",
+          "parameters": {
+            "scroll_offset_pt": 0,
+            "gesture_origin": "interactive_child"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@scroll_offset_pt=0,gesture_origin=interactive_child",
+          "check": "dismiss",
+          "parameters": {
+            "scroll_offset_pt": 0,
+            "gesture_origin": "interactive_child"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "scroll_handoff@scroll_offset_pt=0,gesture_origin=interactive_child",
+          "check": "scroll_handoff",
+          "parameters": {
+            "scroll_offset_pt": 0,
+            "gesture_origin": "interactive_child"
+          },
+          "window": {
+            "start_event": "check.scroll_handoff.started",
+            "start_occurrence": 0,
+            "end_event": "check.scroll_handoff.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@scroll_offset_pt=1,gesture_origin=grabber",
+          "check": "present",
+          "parameters": {
+            "scroll_offset_pt": 1,
+            "gesture_origin": "grabber"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@scroll_offset_pt=1,gesture_origin=grabber",
+          "check": "dismiss",
+          "parameters": {
+            "scroll_offset_pt": 1,
+            "gesture_origin": "grabber"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "scroll_handoff@scroll_offset_pt=1,gesture_origin=grabber",
+          "check": "scroll_handoff",
+          "parameters": {
+            "scroll_offset_pt": 1,
+            "gesture_origin": "grabber"
+          },
+          "window": {
+            "start_event": "check.scroll_handoff.started",
+            "start_occurrence": 0,
+            "end_event": "check.scroll_handoff.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@scroll_offset_pt=1,gesture_origin=content",
+          "check": "present",
+          "parameters": {
+            "scroll_offset_pt": 1,
+            "gesture_origin": "content"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@scroll_offset_pt=1,gesture_origin=content",
+          "check": "dismiss",
+          "parameters": {
+            "scroll_offset_pt": 1,
+            "gesture_origin": "content"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "scroll_handoff@scroll_offset_pt=1,gesture_origin=content",
+          "check": "scroll_handoff",
+          "parameters": {
+            "scroll_offset_pt": 1,
+            "gesture_origin": "content"
+          },
+          "window": {
+            "start_event": "check.scroll_handoff.started",
+            "start_occurrence": 0,
+            "end_event": "check.scroll_handoff.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@scroll_offset_pt=1,gesture_origin=interactive_child",
+          "check": "present",
+          "parameters": {
+            "scroll_offset_pt": 1,
+            "gesture_origin": "interactive_child"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@scroll_offset_pt=1,gesture_origin=interactive_child",
+          "check": "dismiss",
+          "parameters": {
+            "scroll_offset_pt": 1,
+            "gesture_origin": "interactive_child"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "scroll_handoff@scroll_offset_pt=1,gesture_origin=interactive_child",
+          "check": "scroll_handoff",
+          "parameters": {
+            "scroll_offset_pt": 1,
+            "gesture_origin": "interactive_child"
+          },
+          "window": {
+            "start_event": "check.scroll_handoff.started",
+            "start_occurrence": 0,
+            "end_event": "check.scroll_handoff.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@scroll_offset_pt=400,gesture_origin=grabber",
+          "check": "present",
+          "parameters": {
+            "scroll_offset_pt": 400,
+            "gesture_origin": "grabber"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@scroll_offset_pt=400,gesture_origin=grabber",
+          "check": "dismiss",
+          "parameters": {
+            "scroll_offset_pt": 400,
+            "gesture_origin": "grabber"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "scroll_handoff@scroll_offset_pt=400,gesture_origin=grabber",
+          "check": "scroll_handoff",
+          "parameters": {
+            "scroll_offset_pt": 400,
+            "gesture_origin": "grabber"
+          },
+          "window": {
+            "start_event": "check.scroll_handoff.started",
+            "start_occurrence": 0,
+            "end_event": "check.scroll_handoff.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@scroll_offset_pt=400,gesture_origin=content",
+          "check": "present",
+          "parameters": {
+            "scroll_offset_pt": 400,
+            "gesture_origin": "content"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@scroll_offset_pt=400,gesture_origin=content",
+          "check": "dismiss",
+          "parameters": {
+            "scroll_offset_pt": 400,
+            "gesture_origin": "content"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "scroll_handoff@scroll_offset_pt=400,gesture_origin=content",
+          "check": "scroll_handoff",
+          "parameters": {
+            "scroll_offset_pt": 400,
+            "gesture_origin": "content"
+          },
+          "window": {
+            "start_event": "check.scroll_handoff.started",
+            "start_occurrence": 0,
+            "end_event": "check.scroll_handoff.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@scroll_offset_pt=400,gesture_origin=interactive_child",
+          "check": "present",
+          "parameters": {
+            "scroll_offset_pt": 400,
+            "gesture_origin": "interactive_child"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@scroll_offset_pt=400,gesture_origin=interactive_child",
+          "check": "dismiss",
+          "parameters": {
+            "scroll_offset_pt": 400,
+            "gesture_origin": "interactive_child"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "scroll_handoff@scroll_offset_pt=400,gesture_origin=interactive_child",
+          "check": "scroll_handoff",
+          "parameters": {
+            "scroll_offset_pt": 400,
+            "gesture_origin": "interactive_child"
+          },
+          "window": {
+            "start_event": "check.scroll_handoff.started",
+            "start_occurrence": 0,
+            "end_event": "check.scroll_handoff.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "content_first",
+      "scenario_id": "scroll.content_first",
+      "role": "training",
+      "detents": "medium_large",
+      "interaction": "scroll_handoff",
+      "modal": "modal",
+      "content": "long_scroll",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "scroll_handoff"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "scroll_handoff",
+          "check": "scroll_handoff",
+          "parameters": {},
+          "window": {
+            "start_event": "check.scroll_handoff.started",
+            "start_occurrence": 0,
+            "end_event": "check.scroll_handoff.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "pager",
+      "scenario_id": "pager.diagonal",
+      "role": "training",
+      "detents": "medium_large",
+      "interaction": "slow_drag",
+      "modal": "modal",
+      "content": "horizontal_pager",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "slow_drag"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "slow_drag",
+          "check": "slow_drag",
+          "parameters": {},
+          "window": {
+            "start_event": "check.slow_drag.started",
+            "start_occurrence": 0,
+            "end_event": "check.slow_drag.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "keyboard",
+      "scenario_id": "keyboard.medium",
+      "role": "training",
+      "detents": "medium_large",
+      "interaction": "slow_drag",
+      "modal": "modal",
+      "content": "text_field",
+      "checks": [
+        "focus_before",
+        "focus_after",
+        "interactive_close",
+        "drag_open",
+        "change_detent"
+      ],
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "slow_drag",
+        "focus_before",
+        "focus_after",
+        "interactive_close",
+        "drag_open",
+        "change_detent"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "slow_drag",
+          "check": "slow_drag",
+          "parameters": {},
+          "window": {
+            "start_event": "check.slow_drag.started",
+            "start_occurrence": 0,
+            "end_event": "check.slow_drag.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "focus_before",
+          "check": "focus_before",
+          "parameters": {},
+          "window": {
+            "start_event": "check.focus_before.started",
+            "start_occurrence": 0,
+            "end_event": "check.focus_before.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "focus_after",
+          "check": "focus_after",
+          "parameters": {},
+          "window": {
+            "start_event": "check.focus_after.started",
+            "start_occurrence": 0,
+            "end_event": "check.focus_after.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "interactive_close",
+          "check": "interactive_close",
+          "parameters": {},
+          "window": {
+            "start_event": "check.interactive_close.started",
+            "start_occurrence": 0,
+            "end_event": "check.interactive_close.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "drag_open",
+          "check": "drag_open",
+          "parameters": {},
+          "window": {
+            "start_event": "check.drag_open.started",
+            "start_occurrence": 0,
+            "end_event": "check.drag_open.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "change_detent",
+          "check": "change_detent",
+          "parameters": {},
+          "window": {
+            "start_event": "check.change_detent.started",
+            "start_occurrence": 0,
+            "end_event": "check.change_detent.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "dynamic",
+      "scenario_id": "content.dynamic",
+      "role": "training",
+      "detents": "custom_large",
+      "interaction": "present",
+      "modal": "modal",
+      "content": "dynamic_height",
+      "phases": [
+        "idle",
+        "drag",
+        "animation",
+        "keyboard"
+      ],
+      "coverage_dimensions": {
+        "resize_phase": [
+          "idle",
+          "drag",
+          "animation",
+          "keyboard"
+        ]
+      },
+      "required_check_names": [
+        "present",
+        "dismiss"
+      ],
+      "required_checks": [
+        {
+          "id": "present@resize_phase=idle",
+          "check": "present",
+          "parameters": {
+            "resize_phase": "idle"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@resize_phase=idle",
+          "check": "dismiss",
+          "parameters": {
+            "resize_phase": "idle"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@resize_phase=drag",
+          "check": "present",
+          "parameters": {
+            "resize_phase": "drag"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@resize_phase=drag",
+          "check": "dismiss",
+          "parameters": {
+            "resize_phase": "drag"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@resize_phase=animation",
+          "check": "present",
+          "parameters": {
+            "resize_phase": "animation"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@resize_phase=animation",
+          "check": "dismiss",
+          "parameters": {
+            "resize_phase": "animation"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@resize_phase=keyboard",
+          "check": "present",
+          "parameters": {
+            "resize_phase": "keyboard"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@resize_phase=keyboard",
+          "check": "dismiss",
+          "parameters": {
+            "resize_phase": "keyboard"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "stack",
+      "scenario_id": "stack.two",
+      "role": "training",
+      "detents": "medium_large",
+      "interaction": "cancel",
+      "modal": "modal",
+      "content": "fixed",
+      "configurations": [
+        "full_full",
+        "medium_full",
+        "custom_medium",
+        "three"
+      ],
+      "coverage_dimensions": {
+        "stack_configuration": [
+          "full_full",
+          "medium_full",
+          "custom_medium",
+          "three"
+        ]
+      },
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "cancel"
+      ],
+      "required_checks": [
+        {
+          "id": "present@stack_configuration=full_full",
+          "check": "present",
+          "parameters": {
+            "stack_configuration": "full_full"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@stack_configuration=full_full",
+          "check": "dismiss",
+          "parameters": {
+            "stack_configuration": "full_full"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "cancel@stack_configuration=full_full",
+          "check": "cancel",
+          "parameters": {
+            "stack_configuration": "full_full"
+          },
+          "window": {
+            "start_event": "check.cancel.started",
+            "start_occurrence": 0,
+            "end_event": "check.cancel.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@stack_configuration=medium_full",
+          "check": "present",
+          "parameters": {
+            "stack_configuration": "medium_full"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@stack_configuration=medium_full",
+          "check": "dismiss",
+          "parameters": {
+            "stack_configuration": "medium_full"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "cancel@stack_configuration=medium_full",
+          "check": "cancel",
+          "parameters": {
+            "stack_configuration": "medium_full"
+          },
+          "window": {
+            "start_event": "check.cancel.started",
+            "start_occurrence": 0,
+            "end_event": "check.cancel.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@stack_configuration=custom_medium",
+          "check": "present",
+          "parameters": {
+            "stack_configuration": "custom_medium"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@stack_configuration=custom_medium",
+          "check": "dismiss",
+          "parameters": {
+            "stack_configuration": "custom_medium"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "cancel@stack_configuration=custom_medium",
+          "check": "cancel",
+          "parameters": {
+            "stack_configuration": "custom_medium"
+          },
+          "window": {
+            "start_event": "check.cancel.started",
+            "start_occurrence": 0,
+            "end_event": "check.cancel.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "present@stack_configuration=three",
+          "check": "present",
+          "parameters": {
+            "stack_configuration": "three"
+          },
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss@stack_configuration=three",
+          "check": "dismiss",
+          "parameters": {
+            "stack_configuration": "three"
+          },
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "cancel@stack_configuration=three",
+          "check": "cancel",
+          "parameters": {
+            "stack_configuration": "three"
+          },
+          "window": {
+            "start_event": "check.cancel.started",
+            "start_occurrence": 0,
+            "end_event": "check.cancel.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "form",
+      "scenario_id": "form.sizing",
+      "role": "training",
+      "detents": "custom_large",
+      "interaction": "present",
+      "modal": "modal",
+      "content": "fixed",
+      "checks": [
+        "page",
+        "form",
+        "preferred_width",
+        "edge_attached",
+        "content_sized",
+        "placement"
+      ],
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "page",
+        "form",
+        "preferred_width",
+        "edge_attached",
+        "content_sized",
+        "placement"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "page",
+          "check": "page",
+          "parameters": {},
+          "window": {
+            "start_event": "check.page.started",
+            "start_occurrence": 0,
+            "end_event": "check.page.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "form",
+          "check": "form",
+          "parameters": {},
+          "window": {
+            "start_event": "check.form.started",
+            "start_occurrence": 0,
+            "end_event": "check.form.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "preferred_width",
+          "check": "preferred_width",
+          "parameters": {},
+          "window": {
+            "start_event": "check.preferred_width.started",
+            "start_occurrence": 0,
+            "end_event": "check.preferred_width.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "edge_attached",
+          "check": "edge_attached",
+          "parameters": {},
+          "window": {
+            "start_event": "check.edge_attached.started",
+            "start_occurrence": 0,
+            "end_event": "check.edge_attached.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "content_sized",
+          "check": "content_sized",
+          "parameters": {},
+          "window": {
+            "start_event": "check.content_sized.started",
+            "start_occurrence": 0,
+            "end_event": "check.content_sized.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "placement",
+          "check": "placement",
+          "parameters": {},
+          "window": {
+            "start_event": "check.placement.started",
+            "start_occurrence": 0,
+            "end_event": "check.placement.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "interrupt",
+      "scenario_id": "motion.interrupt",
+      "role": "training",
+      "detents": "medium_large",
+      "interaction": "fast_drag",
+      "modal": "modal",
+      "content": "fixed",
+      "checks": [
+        "grab_open",
+        "reverse",
+        "grab_settle",
+        "retarget",
+        "cancel_dismiss"
+      ],
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "fast_drag",
+        "grab_open",
+        "reverse",
+        "grab_settle",
+        "retarget",
+        "cancel_dismiss"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "fast_drag",
+          "check": "fast_drag",
+          "parameters": {},
+          "window": {
+            "start_event": "check.fast_drag.started",
+            "start_occurrence": 0,
+            "end_event": "check.fast_drag.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "grab_open",
+          "check": "grab_open",
+          "parameters": {},
+          "window": {
+            "start_event": "check.grab_open.started",
+            "start_occurrence": 0,
+            "end_event": "check.grab_open.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "reverse",
+          "check": "reverse",
+          "parameters": {},
+          "window": {
+            "start_event": "check.reverse.started",
+            "start_occurrence": 0,
+            "end_event": "check.reverse.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "grab_settle",
+          "check": "grab_settle",
+          "parameters": {},
+          "window": {
+            "start_event": "check.grab_settle.started",
+            "start_occurrence": 0,
+            "end_event": "check.grab_settle.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "retarget",
+          "check": "retarget",
+          "parameters": {},
+          "window": {
+            "start_event": "check.retarget.started",
+            "start_occurrence": 0,
+            "end_event": "check.retarget.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "cancel_dismiss",
+          "check": "cancel_dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "check.cancel_dismiss.started",
+            "start_occurrence": 0,
+            "end_event": "check.cancel_dismiss.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "accessibility",
+      "scenario_id": "accessibility.settings",
+      "role": "training",
+      "detents": "medium_large",
+      "interaction": "dismiss",
+      "modal": "modal",
+      "content": "fixed",
+      "checks": [
+        "reduce_motion",
+        "larger_text",
+        "voiceover_dismiss"
+      ],
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "reduce_motion",
+        "larger_text",
+        "voiceover_dismiss"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "reduce_motion",
+          "check": "reduce_motion",
+          "parameters": {},
+          "window": {
+            "start_event": "check.reduce_motion.started",
+            "start_occurrence": 0,
+            "end_event": "check.reduce_motion.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "larger_text",
+          "check": "larger_text",
+          "parameters": {},
+          "window": {
+            "start_event": "check.larger_text.started",
+            "start_occurrence": 0,
+            "end_event": "check.larger_text.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "voiceover_dismiss",
+          "check": "voiceover_dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "check.voiceover_dismiss.started",
+            "start_occurrence": 0,
+            "end_event": "check.voiceover_dismiss.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "holdout_reverse",
+      "scenario_id": "holdout.reverse_settle",
+      "role": "holdout",
+      "detents": "medium_large",
+      "interaction": "fast_drag",
+      "modal": "modal",
+      "content": "fixed",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "fast_drag"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "fast_drag",
+          "check": "fast_drag",
+          "parameters": {},
+          "window": {
+            "start_event": "check.fast_drag.started",
+            "start_occurrence": 0,
+            "end_event": "check.fast_drag.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "holdout_near_detents",
+      "scenario_id": "holdout.close_detents",
+      "role": "holdout",
+      "detents": "three_custom",
+      "interaction": "slow_drag",
+      "modal": "modal",
+      "content": "fixed",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "slow_drag"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "slow_drag",
+          "check": "slow_drag",
+          "parameters": {},
+          "window": {
+            "start_event": "check.slow_drag.started",
+            "start_occurrence": 0,
+            "end_event": "check.slow_drag.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "holdout_scroll_one",
+      "scenario_id": "holdout.scroll_one_point",
+      "role": "holdout",
+      "detents": "medium_large",
+      "interaction": "scroll_handoff",
+      "modal": "modal",
+      "content": "long_scroll",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "scroll_handoff"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "scroll_handoff",
+          "check": "scroll_handoff",
+          "parameters": {},
+          "window": {
+            "start_event": "check.scroll_handoff.started",
+            "start_occurrence": 0,
+            "end_event": "check.scroll_handoff.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "holdout_keyboard",
+      "scenario_id": "holdout.keyboard_retarget",
+      "role": "holdout",
+      "detents": "medium_large",
+      "interaction": "fast_drag",
+      "modal": "modal",
+      "content": "text_field",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "fast_drag"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "fast_drag",
+          "check": "fast_drag",
+          "parameters": {},
+          "window": {
+            "start_event": "check.fast_drag.started",
+            "start_occurrence": 0,
+            "end_event": "check.fast_drag.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "holdout_nonmodal",
+      "scenario_id": "holdout.nonmodal_threshold",
+      "role": "holdout",
+      "detents": "medium_large",
+      "interaction": "background_touch",
+      "modal": "nonmodal",
+      "content": "fixed",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "background_touch"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "background_touch",
+          "check": "background_touch",
+          "parameters": {},
+          "window": {
+            "start_event": "check.background_touch.started",
+            "start_occurrence": 0,
+            "end_event": "check.background_touch.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "holdout_stack",
+      "scenario_id": "holdout.stack_cancel",
+      "role": "holdout",
+      "detents": "custom_large",
+      "interaction": "cancel",
+      "modal": "modal",
+      "content": "fixed",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "cancel"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "cancel",
+          "check": "cancel",
+          "parameters": {},
+          "window": {
+            "start_event": "check.cancel.started",
+            "start_occurrence": 0,
+            "end_event": "check.cancel.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "holdout_diagonal",
+      "scenario_id": "holdout.pager_diagonal",
+      "role": "holdout",
+      "detents": "medium_large",
+      "interaction": "fast_drag",
+      "modal": "modal",
+      "content": "horizontal_pager",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "fast_drag"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "fast_drag",
+          "check": "fast_drag",
+          "parameters": {},
+          "window": {
+            "start_event": "check.fast_drag.started",
+            "start_occurrence": 0,
+            "end_event": "check.fast_drag.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "holdout_disabled",
+      "scenario_id": "holdout.disabled_high_velocity",
+      "role": "holdout",
+      "detents": "medium_large",
+      "interaction": "overdrag",
+      "modal": "interactive_dismiss_disabled",
+      "content": "long_scroll",
+      "coverage_dimensions": {},
+      "required_check_names": [
+        "present",
+        "dismiss",
+        "overdrag"
+      ],
+      "required_checks": [
+        {
+          "id": "present",
+          "check": "present",
+          "parameters": {},
+          "window": {
+            "start_event": "present.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.requested",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "dismiss",
+          "check": "dismiss",
+          "parameters": {},
+          "window": {
+            "start_event": "dismiss.requested",
+            "start_occurrence": 0,
+            "end_event": "dismiss.completed",
+            "end_occurrence": 0
+          }
+        },
+        {
+          "id": "overdrag",
+          "check": "overdrag",
+          "parameters": {},
+          "window": {
+            "start_event": "check.overdrag.started",
+            "start_occurrence": 0,
+            "end_event": "check.overdrag.completed",
+            "end_occurrence": 0
+          }
+        }
+      ]
+    }
+  ],
+  "additional_reference": {
+    "ipad": "required when supported runtime is available",
+    "resizable_environment": "required when available",
+    "runtime_layers": [
+      "simulator",
+      "virtual_device",
+      "physical_device"
+    ],
+    "performance": [
+      "frame_intervals",
+      "first_input_frame_latency",
+      "live_presenter",
+      "snapshot_presenter"
+    ]
+  },
+  "coverage_contract": "Every required check and Cartesian subcondition must pass within each independent trial; phase-only results stay PARTIAL. Check windows are pinned by this matrix. Record measurement_parameters in both session configuration and frozen recipe preconditions."
+}

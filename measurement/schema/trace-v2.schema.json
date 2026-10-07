@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/notKleja/simple-stupid-ios-sheet/measurement/trace-v2",
+  "title": "Sheet trace conditions v2 (schema1 JSONL envelope)",
+  "$comment": "Additive conditions contract; historical v1 records use trace.schema.json. Applicability is declared, not an acceptance exemption.",
+  "type": "object",
+  "required": ["schema_version", "type", "run_id", "seq", "t_ns"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "type": {"enum": ["session", "event", "frame"]},
+    "run_id": {"type": "string", "minLength": 1},
+    "seq": {"type": "integer", "minimum": 0},
+    "t_ns": {"type": "integer", "minimum": 0},
+    "unavailable": {"type": "object", "additionalProperties": {"type": "string"}}
+  },
+  "allOf": [
+    {"if": {"properties": {"type": {"const": "session"}}}, "then": {
+      "required": ["scenario_id", "implementation", "evidence_kind", "os", "device", "environment", "configuration", "conditions"],
+      "properties": {
+        "scenario_id": {"type": "string", "minLength": 1},
+        "implementation": {"enum": ["native", "flutter"]},
+        "evidence_kind": {"enum": ["runtime", "synthetic"]},
+        "os": {"type": "object", "required": ["version", "build"], "properties": {"version": {"type": "string"}, "build": {"type": ["string", "null"]}}},
+        "device": {"type": "object", "required": ["model", "logical_size", "physical_size", "scale", "refresh_hz", "runtime_kind"], "properties": {
+          "model": {"type": "string", "minLength": 1}, "runtime_kind": {"enum": ["simulator", "virtual_device", "physical_device", "synthetic"]},
+          "logical_size": {"$ref": "#/$defs/size"}, "physical_size": {"$ref": "#/$defs/size"},
+          "scale": {"type": "number", "exclusiveMinimum": 0}, "refresh_hz": {"type": ["number", "null"], "exclusiveMinimum": 0}
+        }},
+        "environment": {"type": "object", "required": ["orientation", "safe_area", "size_classes", "status_bar", "keyboard"], "properties": {
+          "orientation": {"enum": ["portrait", "landscape", "portrait_upside_down", "unknown"]},
+          "safe_area": {"type": "object", "required": ["top", "left", "bottom", "right"], "additionalProperties": {"type": "number", "minimum": 0}},
+          "size_classes": {"type": "object", "required": ["horizontal", "vertical"], "additionalProperties": {"enum": ["compact", "regular", "unspecified"]}},
+          "status_bar": {"type": ["object", "null"], "properties": {"hidden": {"type": "boolean"}, "visible": {"type": "boolean"}}},
+          "keyboard": {"type": "object", "required": ["visible", "frame"], "properties": {"visible": {"type": "boolean"}, "frame": {"$ref": "#/$defs/nullableRect"}}}
+        }},
+        "configuration": {"$ref": "#/$defs/configuration"},
+        "conditions": {"$ref": "#/$defs/conditions"}
+      }
+    }},
+    {"if": {"properties": {"type": {"const": "event"}}}, "then": {"required": ["name", "data"], "properties": {"name": {"type": "string", "minLength": 1}, "data": {"type": "object"}}}},
+    {"if": {"properties": {"type": {"const": "frame"}}}, "then": {"required": ["metrics", "state"], "properties": {"metrics": {"type": "object", "additionalProperties": {"type": ["number", "null"]}}, "state": {"type": "object"}}}},
+    {"if": {"properties": {"type": {"const": "session"}, "evidence_kind": {"const": "runtime"}}}, "then": {"properties": {"device": {"properties": {"runtime_kind": {"enum": ["simulator", "virtual_device", "physical_device"]}}}}}}
+  ],
+  "$defs": {
+    "size": {"type": "object", "required": ["width", "height"], "properties": {"width": {"type": "number", "exclusiveMinimum": 0}, "height": {"type": "number", "exclusiveMinimum": 0}}},
+    "nullableRect": {"type": ["object", "null"], "required": ["x", "y", "width", "height"], "properties": {"x": {"type": "number"}, "y": {"type": "number"}, "width": {"type": "number", "minimum": 0}, "height": {"type": "number", "minimum": 0}}},
+
+    "configuration": {
+      "type": "object", "additionalProperties": false,
+      "required": ["trial", "detents", "surface", "grabber", "page_sizing", "modal_in_presentation", "largest_undimmed", "presentation_style", "preferred_content_size", "placement", "edge_attached_in_compact_height", "width_follows_preferred_content_size", "scroll_expansion"],
+      "properties": {
+        "trial": {"type": "integer", "minimum": 1},
+        "detents": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "surface": {"type": "string", "minLength": 1},
+        "grabber": {"type": "boolean"}, "page_sizing": {"type": "boolean"}, "modal_in_presentation": {"type": "boolean"},
+        "largest_undimmed": {"type": ["string", "null"], "minLength": 1},
+        "presentation_style": {"enum": ["page_sheet", "form_sheet"]},
+        "preferred_content_size": {"type": "object", "required": ["width", "height"], "additionalProperties": false, "properties": {"width": {"type": "number", "minimum": 0}, "height": {"type": "number", "minimum": 0}}},
+        "placement": {"enum": ["automatic", "leading", "trailing"]},
+        "edge_attached_in_compact_height": {"type": "boolean"},
+        "width_follows_preferred_content_size": {"type": "boolean"}, "scroll_expansion": {"type": "boolean"}
+      }
+    },
+    "conditions": {
+      "type": "object", "additionalProperties": false,
+      "required": ["recipe_id", "recipe_revision", "parameters", "input_source", "accessibility", "applicability"],
+      "properties": {
+        "recipe_id": {"type": "string", "minLength": 1},
+        "recipe_revision": {"type": "integer", "minimum": 1},
+        "parameters": {"type": "object", "additionalProperties": {"type": ["string", "number", "boolean"]}},
+        "input_source": {"type": "string", "minLength": 1},
+        "accessibility": {"type": "object", "required": ["reduce_motion", "voice_over", "content_size_category"], "additionalProperties": false, "properties": {"reduce_motion": {"type": "boolean"}, "voice_over": {"type": "boolean"}, "content_size_category": {"type": "string", "minLength": 1}}},
+        "applicability": {"type": "object", "minProperties": 1, "additionalProperties": false, "properties": {
+          "present": {"$ref": "#/$defs/applicabilityPhase"}, "dismiss": {"$ref": "#/$defs/applicabilityPhase"},
+          "detent": {"$ref": "#/$defs/applicabilityPhase"}, "geometry": {"$ref": "#/$defs/applicabilityPhase"},
+          "presenter": {"$ref": "#/$defs/applicabilityPhase"}, "gesture": {"$ref": "#/$defs/applicabilityPhase"},
+          "snap": {"$ref": "#/$defs/applicabilityPhase"}, "scroll": {"$ref": "#/$defs/applicabilityPhase"},
+          "hit_testing": {"$ref": "#/$defs/applicabilityPhase"}, "barrier": {"$ref": "#/$defs/applicabilityPhase"},
+          "keyboard": {"$ref": "#/$defs/applicabilityPhase"}, "content": {"$ref": "#/$defs/applicabilityPhase"},
+          "stack": {"$ref": "#/$defs/applicabilityPhase"}, "contour": {"$ref": "#/$defs/applicabilityPhase"},
+          "performance": {"$ref": "#/$defs/applicabilityPhase"}, "accessibility": {"$ref": "#/$defs/applicabilityPhase"},
+          "adaptivity": {"$ref": "#/$defs/applicabilityPhase"}, "grabber": {"$ref": "#/$defs/applicabilityPhase"},
+          "interrupt": {"$ref": "#/$defs/applicabilityPhase"}, "api": {"$ref": "#/$defs/applicabilityPhase"},
+          "rtl": {"$ref": "#/$defs/applicabilityPhase"}, "resizable": {"$ref": "#/$defs/applicabilityPhase"},
+          "idle": {"$ref": "#/$defs/applicabilityPhase"}
+        }}
+      }
+    },
+    "applicabilityPhase": {
+      "type": "object", "additionalProperties": false,
+      "required": ["target_detent", "scroll", "hit_testing", "keyboard", "stack_layers", "contour", "performance"],
+      "properties": {
+        "target_detent": {"$ref": "#/$defs/applicabilityStatus"}, "scroll": {"$ref": "#/$defs/applicabilityStatus"},
+        "hit_testing": {"$ref": "#/$defs/applicabilityStatus"}, "keyboard": {"$ref": "#/$defs/applicabilityStatus"},
+        "stack_layers": {"$ref": "#/$defs/applicabilityStatus"}, "contour": {"$ref": "#/$defs/applicabilityStatus"},
+        "performance": {"$ref": "#/$defs/applicabilityStatus"}
+      }
+    },
+    "applicabilityStatus": {"enum": ["required", "not_applicable", "unavailable"]}
+  }
+}
