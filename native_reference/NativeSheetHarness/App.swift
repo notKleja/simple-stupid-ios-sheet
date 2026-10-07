@@ -202,6 +202,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
             interaction = InteractionProbe(self); interaction?.installPresenter()
             probe.touchObserver = { [weak self] touch, point in self?.interaction?.observe(touch, point: point) }
         }
+        interaction?.invalidateDynamics()
         trace = nil; running = true; trial = trialOffset; next()
     }
     func after(_ seconds: Double, from origin: DispatchTime? = nil, _ work: @escaping () -> Void) {
@@ -226,10 +227,11 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
     }
     func next() {
         guard trial < trials + trialOffset else {
+            interaction?.invalidateDynamics()
             running = false; trace?.event("batch.completed", ["trials": trials]); return
         }
         trial += 1
-        guard trace?.invalidated != true else { running = false; return }
+        guard trace?.invalidated != true else { interaction?.invalidateDynamics(); running = false; return }
         let t = Trace(scenario: scenario, clock: CACurrentMediaTime); trace = t; probe.trace = t
         let vc = UIViewController(); vc.view = CalibrationView(title: "\(scenario)\nTrial \(trial)/\(trials)")
         vc.modalPresentationStyle = definition.style == "form_sheet" ? .formSheet : .pageSheet
@@ -332,6 +334,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         after(definition.dismissAfter, from: replayOrigin) {
             self.phase = "dismiss"; self.target = nil; t.event("dismiss.requested")
             vc.dismiss(animated: true) {
+                self.interaction?.invalidateDynamics()
                 t.event("dismiss.completed", terminal: true); self.link?.invalidate(); self.sheet = nil
                 self.after(0.4) { self.next() }
             }
@@ -347,6 +350,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         guard let sheet, let trace else { return }
         phase = "dismiss"; target = nil; trace.event("dismiss.requested")
         sheet.dismiss(animated: true) {
+            self.interaction?.invalidateDynamics()
             trace.event("dismiss.completed", terminal: true)
             self.link?.invalidate(); self.sheet = nil; self.running = false
             self.interaction?.status.text = "Experiment complete"
@@ -358,6 +362,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         trace?.record("event", ["name": "detent.changed", "data": ["selected": canonicalDetentID(raw) as Any? ?? NSNull()], "raw_uikit_identifier": raw as Any? ?? NSNull()])
     }
     func presentationControllerDidDismiss(_ controller: UIPresentationController) {
+        interaction?.invalidateDynamics()
         trace?.event("dismiss.interactive_completed"); link?.invalidate(); sheet = nil; running = false
     }
     func layerInfo(_ view: UIView, in window: UIWindow, samples: [ObjectIdentifier: CALayer]) -> [String: Any] {
@@ -390,6 +395,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
     }
     @objc func sample(_ display: CADisplayLink) {
         guard let trace, let sheet else { return }
+        defer { if trace.invalidated { interaction?.invalidateDynamics() } }
         let container = sheet.presentationController?.presentedView ?? sheet.view!
         let l = container.layer.presentation() ?? container.layer
         let windowLayer = probe.layer.presentation() ?? probe.layer
