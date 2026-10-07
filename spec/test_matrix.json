@@ -8,7 +8,8 @@
     ],
     "device_geometry": [
       "iphone_a",
-      "iphone_b"
+      "iphone_b",
+      "ipad"
     ],
     "orientation": [
       "portrait",
@@ -2585,6 +2586,121 @@
           }
         }
       ]
+    },
+    {
+      "id": "contour", "scenario_id": "geometry.contour", "role": "training", "checks": ["contour"],
+      "coverage_dimensions": {}, "required_check_names": ["contour"],
+      "required_checks": [{"id":"contour","check":"contour","parameters":{},"phase":"contour","applicability_policy_id":"contour.v1","window":{"start_event":"contour.sample.started","start_occurrence":0,"end_event":"contour.sample.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "grabber", "scenario_id": "interaction.grabber", "role": "training", "checks": ["grabber"],
+      "coverage_dimensions": {}, "required_check_names": ["grabber"],
+      "required_checks": [{"id":"grabber","check":"grabber","parameters":{},"phase":"gesture","applicability_policy_id":"drag.v1","window":{"start_event":"gesture.grabber.started","start_occurrence":0,"end_event":"gesture.grabber.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "snap_grid", "scenario_id": "interaction.snap_grid", "role": "training", "checks": ["snap"],
+      "coverage_dimensions": {"release_position":[0.45,0.55],"release_velocity":[-500,500]}, "required_check_names": ["snap"],
+      "required_checks": [
+        {"id":"snap@release_position=0.45,release_velocity=-500","check":"snap","parameters":{"release_position":0.45,"release_velocity":-500},"phase":"gesture","applicability_policy_id":"drag.v1","window":{"start_event":"gesture.snap.started","start_occurrence":0,"end_event":"gesture.snap.completed","end_occurrence":0}},
+        {"id":"snap@release_position=0.45,release_velocity=500","check":"snap","parameters":{"release_position":0.45,"release_velocity":500},"phase":"gesture","applicability_policy_id":"drag.v1","window":{"start_event":"gesture.snap.started","start_occurrence":0,"end_event":"gesture.snap.completed","end_occurrence":0}},
+        {"id":"snap@release_position=0.55,release_velocity=-500","check":"snap","parameters":{"release_position":0.55,"release_velocity":-500},"phase":"gesture","applicability_policy_id":"drag.v1","window":{"start_event":"gesture.snap.started","start_occurrence":0,"end_event":"gesture.snap.completed","end_occurrence":0}},
+        {"id":"snap@release_position=0.55,release_velocity=500","check":"snap","parameters":{"release_position":0.55,"release_velocity":500},"phase":"gesture","applicability_policy_id":"drag.v1","window":{"start_event":"gesture.snap.started","start_occurrence":0,"end_event":"gesture.snap.completed","end_occurrence":0}}
+      ]
+    },
+    {
+      "id": "finger_transfer", "scenario_id": "interaction.finger_transfer", "role": "training", "checks": ["finger_transfer"],
+      "coverage_dimensions": {}, "required_check_names": ["finger_transfer"],
+      "required_checks": [{"id":"finger_transfer","check":"finger_transfer","parameters":{},"phase":"gesture","applicability_policy_id":"drag.v1","window":{"start_event":"gesture.finger_transfer.started","start_occurrence":0,"end_event":"gesture.finger_transfer.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "presenter_interactive", "scenario_id": "presentation.presenter_interactive", "role": "training", "checks": ["presenter_interactive"],
+      "coverage_dimensions": {}, "required_check_names": ["presenter_interactive"],
+      "required_checks": [{"id":"presenter_interactive","check":"presenter_interactive","parameters":{},"phase":"gesture","applicability_policy_id":"drag.v1","window":{"start_event":"gesture.presenter.started","start_occurrence":0,"end_event":"gesture.presenter.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "barrier_curve", "scenario_id": "presentation.barrier_curve", "role": "training", "checks": ["barrier_curve"],
+      "coverage_dimensions": {}, "required_check_names": ["barrier_curve"],
+      "required_checks": [{"id":"barrier_curve","check":"barrier_curve","parameters":{},"phase":"hit_testing","applicability_policy_id":"hit_testing.v1","window":{"start_event":"hit_testing.barrier.started","start_occurrence":0,"end_event":"hit_testing.barrier.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "nested_scroll", "scenario_id": "scroll.nested", "role": "training", "checks": ["nested_scroll"],
+      "coverage_dimensions": {}, "required_check_names": ["nested_scroll"],
+      "required_checks": [{"id":"nested_scroll","check":"nested_scroll","parameters":{},"phase":"scroll","applicability_policy_id":"scroll.v1","window":{"start_event":"scroll.nested.started","start_occurrence":0,"end_event":"scroll.nested.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "scroll_momentum", "scenario_id": "scroll.momentum", "role": "training", "checks": ["scroll_momentum"],
+      "coverage_dimensions": {}, "required_check_names": ["scroll_momentum"],
+      "required_checks": [{"id":"scroll_momentum","check":"scroll_momentum","parameters":{},"phase":"scroll","applicability_policy_id":"scroll.v1","window":{"start_event":"scroll.momentum.started","start_occurrence":0,"end_event":"scroll.momentum.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "dismiss_routes", "scenario_id": "dismiss.routes", "role": "training", "checks": ["dismiss_routes"],
+      "coverage_dimensions": {}, "required_check_names": ["dismiss_routes"],
+      "required_checks": [{"id":"dismiss_routes","check":"dismiss_routes","parameters":{},"phase":"dismiss","applicability_policy_id":"dismiss.v1","window":{"start_event":"dismiss.requested","start_occurrence":0,"end_event":"dismiss.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "non_draggable", "scenario_id": "interaction.non_draggable", "role": "training", "checks": ["non_draggable"],
+      "coverage_dimensions": {}, "required_check_names": ["non_draggable"],
+      "required_checks": [{"id":"non_draggable","check":"non_draggable","parameters":{},"phase":"gesture","applicability_policy_id":"drag.v1","window":{"start_event":"gesture.non_draggable.started","start_occurrence":0,"end_event":"gesture.non_draggable.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "navigation", "scenario_id": "presentation.navigation", "role": "training", "checks": ["navigation"],
+      "coverage_dimensions": {}, "required_check_names": ["navigation"],
+      "required_checks": [{"id":"navigation","check":"navigation","parameters":{},"phase":"present","applicability_policy_id":"present.v1","window":{"start_event":"present.navigation.started","start_occurrence":0,"end_event":"present.navigation.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "keyboard_large", "scenario_id": "keyboard.large", "role": "training", "checks": ["keyboard_large"],
+      "coverage_dimensions": {}, "required_check_names": ["keyboard_large"],
+      "required_checks": [{"id":"keyboard_large","check":"keyboard_large","parameters":{},"phase":"keyboard","applicability_policy_id":"keyboard.v1","window":{"start_event":"keyboard.large.started","start_occurrence":0,"end_event":"keyboard.large.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "hardware_keyboard", "scenario_id": "keyboard.hardware", "role": "training", "checks": ["hardware_keyboard"],
+      "coverage_dimensions": {}, "required_check_names": ["hardware_keyboard"],
+      "required_checks": [{"id":"hardware_keyboard","check":"hardware_keyboard","parameters":{},"phase":"keyboard","applicability_policy_id":"keyboard.v1","window":{"start_event":"keyboard.hardware.started","start_occurrence":0,"end_event":"keyboard.hardware.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "dynamic_medium_large", "scenario_id": "detent.dynamic_medium_large", "role": "training", "checks": ["dynamic_medium_large"],
+      "coverage_dimensions": {}, "required_check_names": ["dynamic_medium_large"],
+      "required_checks": [{"id":"dynamic_medium_large","check":"dynamic_medium_large","parameters":{},"phase":"detent","applicability_policy_id":"detent.v1","window":{"start_event":"detent.dynamic.started","start_occurrence":0,"end_event":"detent.dynamic.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "stack_layers", "scenario_id": "stack.layers", "role": "training", "checks": ["stack_layers"],
+      "coverage_dimensions": {}, "required_check_names": ["stack_layers"],
+      "required_checks": [{"id":"stack_layers","check":"stack_layers","parameters":{},"phase":"stack","applicability_policy_id":"stack.v1","window":{"start_event":"stack.layers.started","start_occurrence":0,"end_event":"stack.layers.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "rapid_reverse", "scenario_id": "interrupt.rapid_reverse", "role": "training", "checks": ["rapid_reverse"],
+      "coverage_dimensions": {}, "required_check_names": ["rapid_reverse"],
+      "required_checks": [{"id":"rapid_reverse","check":"rapid_reverse","parameters":{},"phase":"interrupt","applicability_policy_id":"interruption.v1","window":{"start_event":"interrupt.rapid_reverse.started","start_occurrence":0,"end_event":"interrupt.rapid_reverse.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "content_fraction_detents", "scenario_id": "detent.content_fraction", "role": "training", "checks": ["content_fraction_detents"],
+      "coverage_dimensions": {}, "required_check_names": ["content_fraction_detents"],
+      "required_checks": [{"id":"content_fraction_detents","check":"content_fraction_detents","parameters":{},"phase":"detent","applicability_policy_id":"detent.v1","window":{"start_event":"detent.content_fraction.started","start_occurrence":0,"end_event":"detent.content_fraction.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "source_view", "scenario_id": "presentation.source_view", "role": "training", "checks": ["source_view"],
+      "coverage_dimensions": {}, "required_check_names": ["source_view"],
+      "required_checks": [{"id":"source_view","check":"source_view","parameters":{},"phase":"present","applicability_policy_id":"present.v1","window":{"start_event":"present.source_view.started","start_occurrence":0,"end_event":"present.source_view.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "resizable", "scenario_id": "detent.resizable", "role": "training", "checks": ["resizable"],
+      "coverage_dimensions": {}, "required_check_names": ["resizable"],
+      "required_checks": [{"id":"resizable","check":"resizable","parameters":{},"phase":"detent","applicability_policy_id":"detent.v1","window":{"start_event":"detent.resizable.started","start_occurrence":0,"end_event":"detent.resizable.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "performance", "scenario_id": "performance.frame_pacing", "role": "training", "checks": ["performance"],
+      "coverage_dimensions": {}, "required_check_names": ["performance"],
+      "required_checks": [{"id":"performance","check":"performance","parameters":{},"phase":"performance","applicability_policy_id":"performance.v1","window":{"start_event":"performance.sample.started","start_occurrence":0,"end_event":"performance.sample.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "rtl", "scenario_id": "presentation.rtl", "role": "training", "checks": ["rtl"],
+      "coverage_dimensions": {}, "required_check_names": ["rtl"],
+      "required_checks": [{"id":"rtl","check":"rtl","parameters":{},"phase":"present","applicability_policy_id":"present.v1","window":{"start_event":"present.rtl.started","start_occurrence":0,"end_event":"present.rtl.completed","end_occurrence":0}}]
+    },
+    {
+      "id": "swiftui_equivalence", "scenario_id": "presentation.swiftui_equivalence", "role": "training", "checks": ["swiftui_equivalence"],
+      "coverage_dimensions": {}, "required_check_names": ["swiftui_equivalence"],
+      "required_checks": [{"id":"swiftui_equivalence","check":"swiftui_equivalence","parameters":{},"phase":"present","applicability_policy_id":"present.v1","window":{"start_event":"present.swiftui.started","start_occurrence":0,"end_event":"present.swiftui.completed","end_occurrence":0}}]
     },
     {
       "id": "holdout_reverse",
