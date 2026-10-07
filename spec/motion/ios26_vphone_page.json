@@ -1,0 +1,480 @@
+{
+  "binaries": {
+    "QuartzCore": {
+      "runtime_path": "/System/Library/Frameworks/QuartzCore.framework/QuartzCore",
+      "sha256": "0c4e3dacb205fe1755db40502b4efa8afda2582ee69512caa3181706d3b41304",
+      "uuid": "8F1E0B3F-ADD6-3710-A790-009333597AB4",
+      "vm_base": "0x183ed3000"
+    },
+    "UIKitCore": {
+      "runtime_path": "/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore",
+      "sha256": "6c93b6072b4033166bd6025f2a068961f687710a61f73db3ecfa6e40b49a9f4e",
+      "uuid": "0D94422F-FE7C-302E-B896-3BC5873C0CFC",
+      "vm_base": "0x189128000"
+    }
+  },
+  "function_evidence": {
+    "QuartzCore.0x183edcbe8": {
+      "address": "0x183edcbe8",
+      "file_offset": 39912,
+      "image": "QuartzCore",
+      "image_offset": 39912,
+      "length": 376,
+      "name": "__ZNK2CA6Render9Animation8map_timeERdPiPbS4_",
+      "sha256": "a95bcbcb16a39d4da57eb0ca168de13bd290495dcc180148cf98008eef14cb57"
+    },
+    "QuartzCore.0x183edd108": {
+      "address": "0x183edd108",
+      "file_offset": 41224,
+      "image": "QuartzCore",
+      "image_offset": 41224,
+      "length": 40,
+      "name": "__ZNK2CA6Render9Animation19check_should_removeEddf",
+      "sha256": "d895081e754de74eaae368cd10b83e25d324325f8554cd1312ffb98aa5c22359"
+    },
+    "QuartzCore.0x183edd488": {
+      "address": "0x183edd488",
+      "file_offset": 42120,
+      "image": "QuartzCore",
+      "image_offset": 42120,
+      "length": 196,
+      "name": "__ZNK2CA6Render6Timing20map_parent_to_activeERdPb",
+      "sha256": "1e083161ec25fe6282ee4ea6ba8c96397d5937bbf64724fa9075766049225d62"
+    },
+    "QuartzCore.0x183edd54c": {
+      "address": "0x183edd54c",
+      "file_offset": 42316,
+      "image": "QuartzCore",
+      "image_offset": 42316,
+      "length": 144,
+      "name": "__ZNK2CA6Render6Timing19map_active_to_localERdPj",
+      "sha256": "f62b5b79af121af146473231db383e1ffbd8fbd0d69bc926b6a958da3dc3e9c6"
+    },
+    "QuartzCore.0x183ee53a8": {
+      "address": "0x183ee53a8",
+      "file_offset": 74664,
+      "image": "QuartzCore",
+      "image_offset": 74664,
+      "length": 68,
+      "name": "__ZNK2CA6Render17PropertyAnimation18interpolate_vectorEmPdPKdS4_S4_S4_RKNS0_17ValueInterpolatorE",
+      "sha256": "23ac38ebaf4cf3a8c6f341fb327443bc5b62277b50ec72d836301ce3dc73c9b3"
+    },
+    "QuartzCore.0x183ee53ec": {
+      "address": "0x183ee53ec",
+      "file_offset": 74732,
+      "image": "QuartzCore",
+      "image_offset": 74732,
+      "length": 1724,
+      "name": "__ZNK2CA6Render15BasicAnimation05applyERNS0_18AnimationEvaluatorEdib",
+      "sha256": "adaab8c4667b87fa142f7ebc039da2cf017c4932312bbfd810c2b2e5b2127004"
+    },
+    "QuartzCore.0x183ee5b40": {
+      "address": "0x183ee5b40",
+      "file_offset": 76608,
+      "image": "QuartzCore",
+      "image_offset": 76608,
+      "length": 188,
+      "name": "__ZNK2CA6Render15BasicAnimation018interpolate_vectorEmPdPKdS4_S4_S4_RKNS0_17ValueInterpolatorE",
+      "sha256": "28ab06f30f8d20c949c277f35fae71496b76daca2b47a637c90594c716caf7c0"
+    },
+    "QuartzCore.0x183f68bd0": {
+      "address": "0x183f68bd0",
+      "file_offset": 613328,
+      "image": "QuartzCore",
+      "image_offset": 613328,
+      "length": 1140,
+      "name": "__ZN2CA5Layer13add_animationEP11CAAnimationPK10__CFString",
+      "sha256": "99dfa06b9554d1943bb9ed09b9c368c84034662e3013d0c28e5904a2fbc6048d"
+    },
+    "QuartzCore.0x183f6c58c": {
+      "address": "0x183f6c58c",
+      "file_offset": 628108,
+      "image": "QuartzCore",
+      "image_offset": 628108,
+      "length": 228,
+      "name": "__ZNK2CA6Render15SpringAnimation5State4evalEd",
+      "sha256": "4f4b5a7aad0f44829e90137b0ed3ae93dc1361b2459a42f63405ebfded1e1ed7"
+    },
+    "QuartzCore.0x183f72a5c": {
+      "address": "0x183f72a5c",
+      "file_offset": 653916,
+      "image": "QuartzCore",
+      "image_offset": 653916,
+      "length": 36,
+      "name": "__ZNK2CA6Render15SpringAnimation13time_functionEd",
+      "sha256": "83d1276818ae2713c4c9949fef4ac25ed5df099d8015864588cea137013deb10"
+    },
+    "QuartzCore.0x183f7d100": {
+      "address": "0x183f7d100",
+      "file_offset": 696576,
+      "image": "QuartzCore",
+      "image_offset": 696576,
+      "length": 508,
+      "name": "-[CASpringAnimation(CAAnimationPrivate) durationForEpsilon:]",
+      "sha256": "e12901203c7b47936a0a6b3947cea3b14fcea31014ee474df7a16059c0821052"
+    },
+    "QuartzCore.0x183f7d484": {
+      "address": "0x183f7d484",
+      "file_offset": 697476,
+      "image": "QuartzCore",
+      "image_offset": 697476,
+      "length": 164,
+      "name": "__ZN2CA6Render15SpringAnimation5State6updateEddddb",
+      "sha256": "ec25c69704a4e6262c9fb91b9837e2f55506e76169f9039bb5046ccf9cdd359b"
+    },
+    "QuartzCore.0x183fa846c": {
+      "address": "0x183fa846c",
+      "file_offset": 873580,
+      "image": "QuartzCore",
+      "image_offset": 873580,
+      "length": 1412,
+      "name": "__ZN2CA5Layer17commit_animationsEPNS_11TransactionEPFdPS0_dPvEPFvS3_PNS_6Render9AnimationES4_EPFvS3_PK10__CFStringS4_EPFPNS7_10TimingListES3_S4_ES4_",
+      "sha256": "f430fdb096155c83d8bb98e016de66586b6952b6912d10e5e8d434e5c1b3b2f6"
+    },
+    "QuartzCore.0x18401d6f8": {
+      "address": "0x18401d6f8",
+      "file_offset": 1353464,
+      "image": "QuartzCore",
+      "image_offset": 1353464,
+      "length": 288,
+      "name": "__ZNK2CA6Render15SpringAnimation5State15eval_derivativeEd",
+      "sha256": "eeb1906e1ea34a8be413cf22943092ad42f5aadd77826981c3a8428227291460"
+    },
+    "UIKitCore.0x1891bd06c": {
+      "address": "0x1891bd06c",
+      "file_offset": 610412,
+      "image": "UIKitCore",
+      "image_offset": 610412,
+      "length": 832,
+      "name": "-[UIViewAnimationState animationForLayer:forKey:forView:]",
+      "sha256": "38b4b3a1bf1b37aac1c41fa8b4e62726150590eea7e47e561bc017f05e407e72"
+    },
+    "UIKitCore.0x18926ca6c": {
+      "address": "0x18926ca6c",
+      "file_offset": 1329772,
+      "image": "UIKitCore",
+      "image_offset": 1329772,
+      "length": 36,
+      "name": "+[UITransitionView defaultDurationForTransition:]",
+      "sha256": "6f416d72891ace2ade1d4416e6e45ae44a4140046535ea954f24855f73942a90"
+    },
+    "UIKitCore.0x1894026f4": {
+      "address": "0x1894026f4",
+      "file_offset": 2991860,
+      "image": "UIKitCore",
+      "image_offset": 2991860,
+      "length": 400,
+      "name": "__durationOfSpringAnimation",
+      "sha256": "4ad224a81f1e662d7bbd36432573ee8e091ce37cb2db07f8f16fa0c74a7afea2"
+    },
+    "UIKitCore.0x18955e47c": {
+      "address": "0x18955e47c",
+      "file_offset": 4416636,
+      "image": "UIKitCore",
+      "image_offset": 4416636,
+      "length": 60,
+      "name": "+[UISpringTimingParameters _convertDampingRatio:response:toMass:stiffness:damping:]",
+      "sha256": "849c9b2bfee9ab9e40e933af1b5003e139390bd00931cb7c7c9809b400f459b4"
+    },
+    "UIKitCore.0x1895f369c": {
+      "address": "0x1895f369c",
+      "file_offset": 5027484,
+      "image": "UIKitCore",
+      "image_offset": 5027484,
+      "length": 332,
+      "name": "-[UIViewSpringAnimationState animationForLayer:forKey:forView:]",
+      "sha256": "2c2b937d2d79fa1755494c3c37607dc374096a2ab1a635bd825b9e18bc5b01aa"
+    },
+    "UIKitCore.0x1895f37e8": {
+      "address": "0x1895f37e8",
+      "file_offset": 5027816,
+      "image": "UIKitCore",
+      "image_offset": 5027816,
+      "length": 152,
+      "name": "-[UIViewSpringAnimationState _defaultAnimationForKey:]",
+      "sha256": "e786a882ca2c3175af3a18f7e60aebf4435153bb11d31f2c237677fe12f32f07"
+    },
+    "UIKitCore.0x1895f3880": {
+      "address": "0x1895f3880",
+      "file_offset": 5027968,
+      "image": "UIKitCore",
+      "image_offset": 5027968,
+      "length": 232,
+      "name": "+[UIViewSpringAnimationState defaultSpringAnimationForKey:mass:stiffness:damping:velocity:allowsOverdamping:]",
+      "sha256": "8d3d3361cab252831caa9c3423d47038c14249ffad65432a7427f1578b280de3"
+    },
+    "UIKitCore.0x1898109cc": {
+      "address": "0x1898109cc",
+      "file_offset": 7244236,
+      "image": "UIKitCore",
+      "image_offset": 7244236,
+      "length": 8,
+      "name": "+[UIViewSpringAnimationState defaultSpringAnimationForKey:mass:stiffness:damping:velocity:]",
+      "sha256": "10724ff74d3833c075a63216f7f6f73d64b5179d31cc0385dc99081fdbd54ca5"
+    },
+    "UIKitCore.0x189d8af38": {
+      "address": "0x189d8af38",
+      "file_offset": 12988216,
+      "image": "UIKitCore",
+      "image_offset": 12988216,
+      "length": 312,
+      "name": "-[UIViewPropertyAnimator _springAnimationForXComponent:forYComponent:]",
+      "sha256": "c835ea5e9414b0ddb7f4faae276f6d1003bc6dbfa136c3c62245ff61876437fc"
+    },
+    "UIKitCore.0x189fc4aa4": {
+      "address": "0x189fc4aa4",
+      "file_offset": 15321764,
+      "image": "UIKitCore",
+      "image_offset": 15321764,
+      "length": 68,
+      "name": "__UISheetTransitionDuration",
+      "sha256": "c44a91836120e0accb3b7868ac08b275f3d1ccfaef60b39365f19d2466917117"
+    },
+    "UIKitCore.0x189fc4ae8": {
+      "address": "0x189fc4ae8",
+      "file_offset": 15321832,
+      "image": "UIKitCore",
+      "image_offset": 15321832,
+      "length": 92,
+      "name": "__UISheetTransitionSpringParametersHighSpeed",
+      "sha256": "3d2a400aeec296ec1c0e452ec0a8bdd2b079d6dfae935385d42c95d6be76f6ff"
+    },
+    "UIKitCore.0x189fc4b44": {
+      "address": "0x189fc4b44",
+      "file_offset": 15321924,
+      "image": "UIKitCore",
+      "image_offset": 15321924,
+      "length": 100,
+      "name": "__UISheetTransitionTimingCurve",
+      "sha256": "88d801e670d874c81e6bc556011596c3233e829381a767d032450acbdb88a50c"
+    },
+    "UIKitCore.0x189fc4ba8": {
+      "address": "0x189fc4ba8",
+      "file_offset": 15322024,
+      "image": "UIKitCore",
+      "image_offset": 15322024,
+      "length": 128,
+      "name": "____UISheetTransitionTimingCurve_block_invoke",
+      "sha256": "e865a53ca5665924146884c9f9da2a3ffc69639140c03c1ca406ca618cd4229a"
+    },
+    "UIKitCore.0x189fc4c30": {
+      "address": "0x189fc4c30",
+      "file_offset": 15322160,
+      "image": "UIKitCore",
+      "image_offset": 15322160,
+      "length": 208,
+      "name": "__UISheetAnimateWithCompletion",
+      "sha256": "3f9707a9f29b6fe00ad445e88f9fffe7578f6d940b2f8ad589256299b83773bf"
+    },
+    "UIKitCore.0x18a1d7694": {
+      "address": "0x18a1d7694",
+      "file_offset": 17495700,
+      "image": "UIKitCore",
+      "image_offset": 17495700,
+      "length": 1624,
+      "name": "-[_UISheetAnimationController interruptibleAnimatorForTransition:]",
+      "sha256": "459b94302f993dd52426d3fdbef277688b48d95e77beb7832413b57b9a50bf12"
+    },
+    "UIKitCore.0x18a70cfc8": {
+      "address": "0x18a70cfc8",
+      "file_offset": 22958024,
+      "image": "UIKitCore",
+      "image_offset": 22958024,
+      "length": 16,
+      "name": "-[_UISheetPresentationMetrics transitionDuration]",
+      "sha256": "b563a5a5e9e0ae91088b37f102079efe5902e332ccb5413f0efcae5e3daaff17"
+    },
+    "UIKitCore.0x18a70cfd8": {
+      "address": "0x18a70cfd8",
+      "file_offset": 22958040,
+      "image": "UIKitCore",
+      "image_offset": 22958040,
+      "length": 124,
+      "name": "-[_UISheetPresentationMetrics transitionSpringParametersHighSpeed:]",
+      "sha256": "c67ccf6179e6570fccab40cbd37b3f5574c906b666a4845e999ae7a1bd79f3fb"
+    },
+    "UIKitCore.0x18a70d054": {
+      "address": "0x18a70d054",
+      "file_offset": 22958164,
+      "image": "UIKitCore",
+      "image_offset": 22958164,
+      "length": 288,
+      "name": "___67-[_UISheetPresentationMetrics transitionSpringParametersHighSpeed:]_block_invoke",
+      "sha256": "abc590ff6af4bc59f93c5bc7feb6e4c4e8f59be8bdf8da853f14d2eff5dab069"
+    },
+    "UIKitCore.0x18a96e38c": {
+      "address": "0x18a96e38c",
+      "file_offset": 25453452,
+      "image": "UIKitCore",
+      "image_offset": 25453452,
+      "length": 160,
+      "name": "-[UISheetPresentationController _animateChanges:completion:]",
+      "sha256": "823f958b6a35720002e9f532ace7ea1b2f9c8091ba834b5c249abf1464ddea4c"
+    },
+    "UIKitCore.0x18a96e42c": {
+      "address": "0x18a96e42c",
+      "file_offset": 25453612,
+      "image": "UIKitCore",
+      "image_offset": 25453612,
+      "length": 240,
+      "name": "___60-[UISheetPresentationController _animateChanges:completion:]_block_invoke",
+      "sha256": "a5a48d95f507d4f302c43bc07b35dbfae005c9feffcebd2028958969fab005fa"
+    }
+  },
+  "id": "ios26_23G90_vphone_page",
+  "profiles": [],
+  "schema_version": 1,
+  "scope": {
+    "configuration": {
+      "detents": [
+        "fixed320",
+        "medium",
+        "large"
+      ],
+      "edge_attached_in_compact_height": false,
+      "grabber": true,
+      "largest_undimmed": null,
+      "modal_in_presentation": false,
+      "page_sizing": true,
+      "placement": "automatic",
+      "preferred_content_size": {
+        "height": 320,
+        "width": 320
+      },
+      "presentation_style": "page_sheet",
+      "scroll_expansion": true,
+      "surface": "opaque.white",
+      "width_follows_preferred_content_size": false
+    },
+    "device": {
+      "model": "iPhone99,11",
+      "runtime_kind": "virtual_device"
+    },
+    "device_geometry": {
+      "logical_size": {
+        "height": 932,
+        "width": 430
+      },
+      "model": "iPhone99,11",
+      "physical_size": {
+        "height": 2796,
+        "width": 1290
+      },
+      "refresh_hz": 60,
+      "refresh_hz_source": "UIScreen.maximumFramesPerSecond; measured cadence is per-frame",
+      "runtime_kind": "virtual_device",
+      "scale": 3
+    },
+    "environment": {
+      "keyboard": {
+        "frame": {
+          "height": 0,
+          "width": 0,
+          "x": 0,
+          "y": 0
+        },
+        "visible": false
+      },
+      "orientation": "portrait",
+      "safe_area": {
+        "bottom": 34,
+        "left": 0,
+        "right": 0,
+        "top": 59
+      },
+      "size_classes": {
+        "horizontal": "compact",
+        "vertical": "regular"
+      },
+      "status_bar": {
+        "hidden": false
+      },
+      "system_settings": {
+        "content_size_category": "UICTContentSizeCategoryL",
+        "reduce_motion": false,
+        "voice_over": false
+      }
+    },
+    "os": {
+      "build": "23G90",
+      "version": "26.6.2"
+    },
+    "resolved_detents": {
+      "fixed": 320,
+      "large": 839,
+      "maximum": 839,
+      "medium": 469.84000000000003
+    },
+    "scenario_id": "native.geometry.smoke"
+  },
+  "source_hashes": {
+    "analysis_source": "c37ea18b511f07627a63d0311537e758ab62e628477bfbb8b2a669be67855a65",
+    "object_archive": "68789a0c5803bf8d6c776399c08a10c710bff2c87ab5ee5b9658699882c17e29",
+    "object_manifest": "a35d2e28df8dc9bb7ae6640144170acdf0c7ad11f587a827bec425da1b789513",
+    "object_raw": "8caaed563c14f39bd5e812c1596cc1bf1a7730017e6d0df522579739c3d74dcd",
+    "research/os_motion/ios26_function_evidence.json": "df7cac4df3338ef2edf2ee0c96fc135619ca1f23df68897658741fa110b78b0a",
+    "research/os_motion/ios26_quartzcore_disassembly.txt": "f365a8023fe6cb5ac04a4ac5cfbfc1e385965eea64b3c849963211786dd94b3a",
+    "research/os_motion/ios26_uikit_disassembly.txt": "ea71ef641e756211041da9b2e3e9d0b1f2864243effd6f5089dfe33e72378fea"
+  },
+  "source_kind": "authenticated_os_equation_recovery",
+  "status": "unresolved",
+  "unresolved_phases": {
+    "dismissal": {
+      "reasons": [
+        "commit_time_begin_epoch_missing_at_install",
+        "coherent_post_transaction_model_state_missing",
+        "additive_CATransform3D_interpolation_and_composition_unresolved",
+        "UIKit_explicit_cleanup_and_retained_fill_terminal_unresolved",
+        "target_layer_to_presented_sheet_view_ownership_not_captured"
+      ],
+      "status": "unresolved"
+    },
+    "fixed320_to_medium": {
+      "reasons": [
+        "commit_time_begin_epoch_missing_at_install",
+        "coherent_post_transaction_model_state_missing",
+        "additive_CATransform3D_interpolation_and_composition_unresolved",
+        "UIKit_explicit_cleanup_and_retained_fill_terminal_unresolved",
+        "target_layer_to_presented_sheet_view_ownership_not_captured"
+      ],
+      "status": "unresolved"
+    },
+    "large_to_medium": {
+      "reasons": [
+        "commit_time_begin_epoch_missing_at_install",
+        "coherent_post_transaction_model_state_missing",
+        "additive_CATransform3D_interpolation_and_composition_unresolved",
+        "UIKit_explicit_cleanup_and_retained_fill_terminal_unresolved",
+        "target_layer_to_presented_sheet_view_ownership_not_captured"
+      ],
+      "status": "unresolved"
+    },
+    "medium_to_large": {
+      "reasons": [
+        "commit_time_begin_epoch_missing_at_install",
+        "coherent_post_transaction_model_state_missing",
+        "additive_CATransform3D_interpolation_and_composition_unresolved",
+        "UIKit_explicit_cleanup_and_retained_fill_terminal_unresolved",
+        "target_layer_to_presented_sheet_view_ownership_not_captured"
+      ],
+      "status": "unresolved"
+    },
+    "presentation": {
+      "reasons": [
+        "commit_time_begin_epoch_missing_at_install",
+        "coherent_post_transaction_model_state_missing",
+        "additive_CATransform3D_interpolation_and_composition_unresolved",
+        "UIKit_explicit_cleanup_and_retained_fill_terminal_unresolved",
+        "target_layer_to_presented_sheet_view_ownership_not_captured"
+      ],
+      "status": "unresolved"
+    }
+  },
+  "unsupported": [
+    "interruption",
+    "drag_release",
+    "keyboard_rebase",
+    "arbitrary_custom_detents",
+    "other_runtime_or_configuration"
+  ]
+}

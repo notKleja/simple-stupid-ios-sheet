@@ -7,6 +7,7 @@ and source files named by the manifest must be available and match their hashes.
 from __future__ import annotations
 
 import base64
+import bisect
 from dataclasses import dataclass
 import gzip
 import hashlib
@@ -647,3 +648,336 @@ def load_animation_objects(path: str | Path) -> list[AnimationInstall]:
         if isinstance(error, EvidenceError):
             raise
         raise EvidenceError('malformed animation evidence: ' + str(error)) from error
+
+
+# The recovery bundle is pinned independently of any caller-supplied profile.
+# Altering a coefficient, instruction range, or evidence source cannot produce
+# a new accepted profile. A new build requires a new independently audited bundle.
+_RECOVERY_ROOT = Path(__file__).resolve().parents[1]
+_RECOVERY_FILES = {
+    'research/os_motion/ios26_function_evidence.json': 'df7cac4df3338ef2edf2ee0c96fc135619ca1f23df68897658741fa110b78b0a',
+    'research/os_motion/ios26_uikit_disassembly.txt': 'ea71ef641e756211041da9b2e3e9d0b1f2864243effd6f5089dfe33e72378fea',
+    'research/os_motion/ios26_quartzcore_disassembly.txt': 'f365a8023fe6cb5ac04a4ac5cfbfc1e385965eea64b3c849963211786dd94b3a',
+}
+_OBJECT_ARCHIVE_SHA = '68789a0c5803bf8d6c776399c08a10c710bff2c87ab5ee5b9658699882c17e29'
+
+
+def _plain(value: Any) -> Any:
+    if isinstance(value, Mapping):
+        return {key: _plain(child) for key, child in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_plain(child) for child in value]
+    return value
+
+
+def _canonical(value: Any) -> bytes:
+    return (json.dumps(_plain(value), sort_keys=True, indent=2, allow_nan=False) + '\n').encode()
+
+
+@dataclass(frozen=True)
+class OsMotionReport:
+    """Immutable OS recovery; an equation is not a promoted window-y profile."""
+    data: Mapping[str, Any]
+
+    def to_dict(self) -> dict:
+        return _plain(self.data)
+
+    def profile_bytes(self) -> bytes:
+        return _canonical(self.data['production_profile'])
+
+    def report_bytes(self) -> bytes:
+        return _canonical(self.data)
+
+
+def _finite(*values: Any) -> None:
+    _require(all(type(v) in (int, float) and math.isfinite(v) for v in values), 'nonfinite or untyped solver field')
+
+
+def spring_response(t: float, *, mass: float, stiffness: float, damping: float,
+                    initial_velocity: float = 0, allows_overdamping: bool = False) -> tuple[float, float, float]:
+    """q, dq/dt, d2q/dt2 from the literal 23G90 State update/eval path.
+
+    This evaluates a spring at solver-local seconds, without media timing,
+    target clamping, completion heuristics, or a window-coordinate claim.
+    The allowed-overdamping branch follows the binary's coefficient ordering,
+    not the conventional second-order solution; it has no runtime promotion.
+    Host libm arithmetic does not claim bit identity with the guest libm/FMA.
+    """
+    _finite(t, mass, stiffness, damping, initial_velocity)
+    _require(t >= 0 and mass > 0 and stiffness > 0 and damping >= 0
+             and type(allows_overdamping) is bool, 'invalid spring solver fields')
+    omega = math.sqrt(stiffness / mass)
+    zeta = damping / (2 * math.sqrt(stiffness * mass))
+    if zeta < 1:
+        beta = zeta * omega
+        wd = omega * math.sqrt(1 - zeta*zeta)
+        b = (beta - initial_velocity) / wd
+        cosine, sine = math.cos(wd*t), math.sin(wd*t)
+        h = cosine + b*sine
+        hp = wd*(-sine + b*cosine)
+        envelope = math.exp(-beta*t)
+        q = 1 - envelope*h
+        v = envelope*(beta*h - hp)
+        a = envelope*((wd*wd-beta*beta)*h + 2*beta*hp)
+    elif zeta > 1 and allows_overdamping:
+        beta = zeta * omega
+        gamma = omega * math.sqrt(zeta*zeta - 1)
+        # State::update +112..+156; State::eval +116..+168.
+        fast = (beta + initial_velocity + gamma) / (2*gamma)
+        slow = (gamma - beta - initial_velocity) / (2*gamma)
+        rfast, rslow = -beta-gamma, gamma-beta
+        ef, es = math.exp(rfast*t), math.exp(rslow*t)
+        q = 1 - (fast*ef + slow*es)
+        v = -(fast*rfast*ef + slow*rslow*es)
+        a = -(fast*rfast*rfast*ef + slow*rslow*rslow*es)
+    else:
+        b = omega - initial_velocity
+        envelope = math.exp(-omega*t)
+        h = 1 + b*t
+        q = 1 - h*envelope
+        v = (omega*h-b)*envelope
+        a = (2*omega*b-omega*omega*h)*envelope
+    if t == 0:
+        q = 0.0
+    return q, v, a
+
+
+def uikit_critical_duration(omega: float, initial_velocity: float = 0) -> float:
+    """Transcribe _durationOfSpringAnimation's critical approximation.
+
+    Constants are verified from their exact __TEXT constant bytes during
+    recovery. This is not a numerical root fit or a tolerance termination.
+    """
+    _finite(omega, initial_velocity)
+    b = omega - initial_velocity
+    _require(omega > 0 and b > 0, 'unsupported UIKit duration branch')
+    logarithm = math.log(abs(omega * math.exp(-omega/b) * .001 / b))
+    u = -1 - logarithm
+    _require(u >= 0, 'unsupported UIKit duration approximation domain')
+    p = math.sqrt(.5*u) * .3361
+    denominator = 1 + (u * -.0042) * math.exp(math.sqrt(u) * -.0201)
+    correction = (1 - 1/(1 + p/denominator)) * -5.950609937518595
+    return -(b * (logarithm + correction) + omega) / (omega*b)
+
+
+def animation_local_time(parent_time: float, *, begin_time: float, speed: float, time_offset: float) -> float:
+    """Interior active-time mapping with an already resolved parent epoch.
+
+    Zero installation beginTime is the commit sentinel in this cohort. Fill,
+    repeat, autoreverse, endpoint handling and ancestor timing are separate
+    operations; this helper does not resolve those or fabricate a begin time.
+    """
+    _finite(parent_time, begin_time, speed, time_offset)
+    _require(begin_time != 0, 'unresolved commit-time epoch')
+    try:
+        stored_speed = struct.unpack('<f',struct.pack('<f',speed))[0]
+    except OverflowError as error:
+        raise EvidenceError('invalid float32 animation speed') from error
+    _finite(stored_speed)
+    return (parent_time - begin_time) * stored_speed + time_offset
+
+
+def interpolate_scalar(from_value: float, to_value: float, progress: float, *, additive_base: float = 0) -> float:
+    """Scalar interpolation and addition; never apply this to CATransform3D."""
+    _finite(from_value, to_value, progress, additive_base)
+    return additive_base + from_value + (to_value - from_value)*progress
+
+
+def _segments(data: bytes) -> list[tuple[int, int, int, int]]:
+    _require(data[:4] == b'\xcf\xfa\xed\xfe', 'unresolved recovery binary Mach-O')
+    result = []; offset = 32
+    for _ in range(struct.unpack_from('<I', data, 16)[0]):
+        command, size = struct.unpack_from('<II', data, offset)
+        if command == 0x19:
+            result.append(struct.unpack_from('<4Q', data, offset+24))
+        offset += size
+    return result
+
+
+def _binary_range(data: bytes, address: int, length: int) -> tuple[int, bytes]:
+    for vm, _, offset, filesize in _segments(data):
+        if vm <= address and address + length <= vm + filesize:
+            start = offset + address - vm
+            raw = data[start:start+length]
+            _require(len(raw) == length, 'incomplete binary function range')
+            return start, raw
+    raise EvidenceError('unmapped binary function range')
+
+
+def _function_symbols(data: bytes) -> tuple[list[int], dict[int, str]]:
+    """Read actual executable-section nlist symbols, never infer from strings."""
+    offset = 32; sections = set(); section_index = 0; symtab = None
+    for _ in range(struct.unpack_from('<I', data, 16)[0]):
+        command, size = struct.unpack_from('<II', data, offset)
+        if command == 2:
+            symtab = struct.unpack_from('<4I', data, offset+8)
+        if command == 0x19:
+            for i in range(struct.unpack_from('<I', data, offset+64)[0]):
+                section_index += 1
+                flags = struct.unpack_from('<I', data, offset+72+i*80+64)[0]
+                if flags & 0x80000400:
+                    sections.add(section_index)
+        offset += size
+    _require(symtab is not None, 'unresolved binary function symbols')
+    symoff, count, stroff, strsize = symtab; strings = data[stroff:stroff+strsize]; names = {}
+    for index in range(count):
+        string_index, kind, section, _, address = struct.unpack_from('<IBBHQ', data, symoff+index*16)
+        if section in sections and kind & 0xe == 0xe and string_index < strsize:
+            end = strings.find(b'\0', string_index)
+            _require(end >= 0, 'invalid binary function symbol')
+            names[address] = strings[string_index:end].decode('utf8')
+    _require(bool(names), 'missing binary executable symbols')
+    return sorted(names), names
+
+
+def _decode_struct(value: Mapping) -> dict:
+    _require(isinstance(value, Mapping) and set(value) == {'encoding', 'bytes_base64'}, 'unresolved property endpoint')
+    scalars = re.sub(r'\{[^={}]*=', '', value['encoding']).replace('}', '')
+    _require(scalars and all(c == 'd' for c in scalars), 'unresolved property coordinate encoding')
+    values = struct.unpack('<'+scalars, base64.b64decode(value['bytes_base64'], validate=True))
+    _finite(*values)
+    return {'encoding': value['encoding'], 'values': list(values), 'bytes_base64': value['bytes_base64']}
+
+
+def recover_os_motion(animation_records: list[AnimationInstall], binaries: Mapping[str, str | Path]) -> OsMotionReport:
+    """Recover only the pinned Task 1/23G90 bundle; no y-trace argument exists.
+
+    Install objects cannot prove coherent post-commit geometry or completion.
+    The report therefore preserves unresolved production phases even though
+    the scalar spring and its construction path are independently recovered.
+    """
+    _require(isinstance(binaries, Mapping) and set(binaries) == {'UIKitCore', 'QuartzCore'}, 'missing exact OS binary set')
+    for relative, digest in _RECOVERY_FILES.items():
+        _require(_sha(_read(_RECOVERY_ROOT/relative)) == digest, 'recovery evidence hash mismatch: '+relative)
+    static = _json(_read(_RECOVERY_ROOT/'research/os_motion/ios26_function_evidence.json'))
+    binary_data = {}; symbols = {}
+    for name, declared in static['images'].items():
+        raw = _read(Path(binaries[name]))
+        _require(_sha(raw) == declared['sha256'] and declared['uuid'] in _binary_uuids(raw), 'exact guest binary identity mismatch: '+name)
+        binary_data[name] = raw; symbols[name] = _function_symbols(raw)
+    for function in static['functions'].values():
+        name = function['image']; address = int(function['address'],16)
+        offset, raw = _binary_range(binary_data[name], address, function['length'])
+        _require(offset == function['file_offset'] and _sha(raw) == function['sha256'], 'binary function hash/range mismatch')
+        _require(symbols[name][1].get(address) == function['name'], 'binary function symbol mismatch')
+    constants = {}
+    for label, item in static['constants'].items():
+        offset, raw = _binary_range(binary_data['UIKitCore'], int(item['address'],16), 8)
+        _require(offset == item['file_offset'] and raw.hex() == item['bits_hex'], 'binary constant mismatch')
+        constants[label] = struct.unpack('<d',raw)[0]
+    evidence = _RECOVERY_ROOT/'artifacts/native/os_motion_ios26_vphone/animation-objects.jsonl.gz'
+    _require(_sha(_read(evidence)) == _OBJECT_ARCHIVE_SHA, 'wrong authenticated object cohort archive')
+    trusted = load_animation_objects(evidence)
+    _require(type(animation_records) in (list, tuple) and len(animation_records) == len(trusted)
+             and all(type(got) is AnimationInstall and got == expected for got, expected in zip(animation_records,trusted)),
+             'input is not the authenticated complete object cohort')
+    manifest = _json(_read(evidence.parent/'manifest.json'))
+    omega = constants['two_pi'] / constants['response']
+    stiffness = omega*omega; damping = 2*math.sqrt(stiffness)
+    duration = uikit_critical_duration(omega)
+    _require((omega,stiffness,damping,duration) == (18.257418582058744,333.3333332805039,36.51483716411749,.5058237871186482),
+             'recovered binary conversion/duration mismatch')
+    # Symbolicate every captured UIKit/Quartz return address from exact nlists.
+    frame_map = {}
+    for record in trusted:
+        for frame in record.record['backtrace']:
+            name = Path(frame['image']).name
+            if name not in symbols:
+                continue
+            address = int(static['images'][name]['vm_base'],16) + frame['image_offset']
+            starts,names = symbols[name]; index = bisect.bisect_right(starts,address)-1
+            key = name+':'+hex(frame['image_offset'])
+            if key in frame_map:
+                continue
+            if index < 0 or index+1 >= len(starts):
+                frame_map[key] = {'status':'unresolved','image_offset':frame['image_offset']}
+                continue
+            start,end = starts[index:index+2]
+            _,raw = _binary_range(binary_data[name],start,end-start)
+            frame_map[key] = {'status':'resolved_executable_symbol','name':names[start],
+                              'address':hex(address),'function_address':hex(start),
+                              'function_length':end-start,'function_sha256':_sha(raw)}
+    roots = [r for r in trusted if r.layer['class']=='_UIMultiLayer' and r.animation['key_path'] in ('position','bounds.size','transform')]
+    _require(roots and all(r.eligible_for_math_candidate for r in roots), 'unresolved root animation fields')
+    solver_fields = ('mass','stiffness','damping','initial_velocity','allows_overdamping','settling_duration')
+    timing_fields = ('duration','begin_time','time_offset','speed','timing_function','repeat_count','repeat_duration',
+                     'autoreverses','fill_mode','additive','cumulative','removed_on_completion')
+    detent = next(r for r in roots if r.phase=='medium_to_large' and r.animation['key_path']=='position')
+    transition = next(r for r in roots if r.phase=='dismissal' and r.animation['key_path']=='position')
+    def family(record):
+        result = {key:record.animation['spring'][key] for key in solver_fields}
+        result.update({key:record.animation[key] for key in timing_fields})
+        w = math.sqrt(result['stiffness']/result['mass'])
+        result.update(omega=w, nominal_zeta=result['damping']/(2*math.sqrt(result['stiffness']*result['mass'])),
+                      solver_branch='critical', equation='q(t)=1-(1+omega*t)*exp(-omega*t)',
+                      initial_velocity_policy='zero_only', status='recovered_scalar_not_promoted',
+                      time_domain='resolved animation-local seconds', terminal_policy='unresolved_retained_fill_and_UIKit_cleanup')
+        return _plain(result)
+    detent_family, transition_family = family(detent), family(transition)
+    _require(tuple(detent.animation['spring'][k] for k in ('mass','stiffness','damping','initial_velocity','allows_overdamping'))
+             == (1,stiffness,damping,0,False) and detent.animation['duration']==duration, 'binary/object detent spring mismatch')
+    # Compare all flags exactly, not averages and not trajectory similarity.
+    reuse = {}
+    for phase in ('fixed320_to_medium','medium_to_large','large_to_medium'):
+        selected = [r for r in roots if r.phase==phase]
+        expected = {key:detent.animation[key] for key in timing_fields}
+        _require(all(dict(r.animation['spring'])==dict(detent.animation['spring'])
+                     and all(r.animation[k]==v for k,v in expected.items()) for r in selected), 'detent solver configuration reuse mismatch')
+        reuse[phase] = {'root_install_count':len(selected),'solver_and_timing_identical':True,
+                        'coordinate_properties':sorted({r.animation['key_path'] for r in selected}),
+                        'distance_scaling_promoted':False}
+    reason = ['commit_time_begin_epoch_missing_at_install', 'coherent_post_transaction_model_state_missing',
+              'additive_CATransform3D_interpolation_and_composition_unresolved', 'UIKit_explicit_cleanup_and_retained_fill_terminal_unresolved',
+              'target_layer_to_presented_sheet_view_ownership_not_captured']
+    phases = {}
+    for phase in PHASES:
+        selected = [r for r in roots if r.phase==phase]
+        phases[phase] = {'status':'unresolved','reasons':reason,
+                         'solver_family':'detent' if phase in reuse else 'presentation_dismissal_observed',
+                         'representative_trial':1,
+                         'installation_references':[{'run_id':r.run_id,'trial':r.trial,'sequence':r.record['seq'],
+                                                     'layer_id':r.layer['id'],'key_path':r.animation['key_path']} for r in selected],
+                         'objects':[{'run_id':r.run_id,'trial':r.trial,'sequence':r.record['seq'],'layer_id':r.layer['id'],
+                                     'key_path':r.animation['key_path'], 'key':r.record['key'],
+                                     'from_value':_decode_struct(r.animation['from_value']), 'to_value':_decode_struct(r.animation['to_value']),
+                                     'layer_state_at_install':_plain(r.layer['model_state']),
+                                     'ancestry_ids':[n['id'] for n in r.layer['ancestry']],
+                                     'owner_frames':[name+':'+hex(f['image_offset']) for f in r.record['backtrace']
+                                                     if (name:=Path(f['image']).name) in symbols]}
+                                    for r in selected if r.trial==1]}
+    hashes = dict(_RECOVERY_FILES)
+    hashes.update(object_archive=_OBJECT_ARCHIVE_SHA,object_raw=manifest['raw_sha256'],
+                  object_manifest=_sha(_read(evidence.parent/'manifest.json')),analysis_source=_sha(_read(Path(__file__))))
+    scope = {key:manifest[key] for key in ('os','device','device_geometry','environment','configuration','scenario_id','resolved_detents')}
+    images = {name:{key:value for key,value in item.items() if key!='path'} for name,item in static['images'].items()}
+    profile = {'schema_version':1,'source_kind':'authenticated_os_equation_recovery','id':'ios26_23G90_vphone_page',
+               'status':'unresolved','scope':scope,'profiles':[],
+               'unresolved_phases':{phase:{'status':'unresolved','reasons':reason} for phase in PHASES},
+               'unsupported':['interruption','drag_release','keyboard_rebase','arbitrary_custom_detents','other_runtime_or_configuration'],
+               'source_hashes':hashes,'binaries':images,'function_evidence':static['functions']}
+    data = {'schema_version':1,'source_kind':'authenticated_os_binary_and_install_objects','install_count':len(trusted),
+            'status':'recovered_equations_with_unresolved_window_y_profiles','scope':scope,
+            'source_hashes':hashes,'binaries':images,'function_evidence':static['functions'],'binary_constants':static['constants'],
+            'uikit_construction':{'detent_owner':'-[UISheetPresentationController _animateChanges:completion:]',
+                                 'animator':'_UISheetAnimateWithCompletion','high_speed':False,'damping_ratio':1,
+                                 'response':constants['response'],'nominal_ui_duration':constants['ui_duration'],
+                                 'exact_ca_duration':duration,'timing_fields_source':'complete_install_object'},
+            'solver_families':{'detent':detent_family,'presentation_dismissal_observed':transition_family},
+            'solver_semantics':{'branch_selector':'zeta<1 under; zeta>1 and allowsOverdamping true over; otherwise critical',
+                                'critical':'q=1-(1+(omega-v0)*t)*exp(-omega*t)',
+                                'critical_zero_velocity_derivatives':['omega^2*t*exp(-omega*t)','omega^2*(1-omega*t)*exp(-omega*t)'],
+                                'underdamped':'beta=zeta*omega; wd=omega*sqrt(1-zeta^2); q=1-exp(-beta*t)*(cos(wd*t)+(beta-v0)/wd*sin(wd*t))',
+                                'allowed_overdamped_static':'gamma=omega*sqrt(zeta^2-1); A=(beta+v0+gamma)/(2*gamma); B=(gamma-beta-v0)/(2*gamma); q=1-A*exp(-(beta+gamma)*t)-B*exp((gamma-beta)*t)',
+                                'allowed_overdamped_status':'static_instruction_transcription_only_no_runtime_candidate',
+                                'local_time':'active=(parent-begin)*float32(speed)+timeOffset; then repeat/autoreverse; normalized=local/duration; spring eval uses normalized*duration',
+                                'coordinate_scalar':'base+from+(to-from)*q; CATransform3D is unresolved',
+                                'duration_is_not_settling_duration':True,'target_clamp_proven':False,
+                                'numeric_identity':'host_libm_mathematical_conformance_only_guest_FMA_and_transcendentals_unverified'},
+            'backtrace_resolution':frame_map,'detent_configuration_reuse':reuse,'phases':phases,'production_profile':profile}
+    return OsMotionReport(_freeze(data))
+
+
+def validate_motion_manifest(path: str | Path, animation_records: list[AnimationInstall], binaries: Mapping[str, str | Path]) -> None:
+    """Reject all edits, omissions, extra sources or scope changes by regeneration."""
+    expected = recover_os_motion(animation_records,binaries).profile_bytes()
+    _require(_read(Path(path)) == expected, 'motion manifest is not canonical OS recovery')

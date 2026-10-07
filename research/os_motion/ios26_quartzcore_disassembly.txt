@@ -1,0 +1,1659 @@
+(lldb) target create "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/Frameworks/QuartzCore.framework/QuartzCore"
+Current executable set to '/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/Frameworks/QuartzCore.framework/QuartzCore' (arm64e).
+(lldb) disassemble -s 0x183f7d484 -e 0x183f7d528
+QuartzCore`CA::Render::SpringAnimation::State::update:
+QuartzCore[0x183f7d484] <+0>:   fdiv   d4, d1, d0
+QuartzCore[0x183f7d488] <+4>:   fsqrt  d4, d4
+QuartzCore[0x183f7d48c] <+8>:   fmul   d0, d1, d0
+QuartzCore[0x183f7d490] <+12>:  fsqrt  d0, d0
+QuartzCore[0x183f7d494] <+16>:  fadd   d0, d0, d0
+QuartzCore[0x183f7d498] <+20>:  fdiv   d0, d2, d0
+QuartzCore[0x183f7d49c] <+24>:  stp    d4, d0, [x0]
+QuartzCore[0x183f7d4a0] <+28>:  strb   w1, [x0, #0x28]
+QuartzCore[0x183f7d4a4] <+32>:  fmov   d1, #1.00000000
+QuartzCore[0x183f7d4a8] <+36>:  fcmp   d0, d1
+QuartzCore[0x183f7d4ac] <+40>:  b.pl   0x183f7d4d8               ; <+84>
+QuartzCore[0x183f7d4b0] <+44>:  fmov   d1, #-1.00000000
+QuartzCore[0x183f7d4b4] <+48>:  fnmadd d1, d0, d0, d1
+QuartzCore[0x183f7d4b8] <+52>:  fsqrt  d1, d1
+QuartzCore[0x183f7d4bc] <+56>:  fmul   d1, d1, d4
+QuartzCore[0x183f7d4c0] <+60>:  str    d1, [x0, #0x10]
+QuartzCore[0x183f7d4c4] <+64>:  mov    x8, #0x3ff0000000000000   ; =4607182418800017408 
+QuartzCore[0x183f7d4c8] <+68>:  str    x8, [x0, #0x18]
+QuartzCore[0x183f7d4cc] <+72>:  fnmsub d0, d0, d4, d3
+QuartzCore[0x183f7d4d0] <+76>:  fdiv   d0, d0, d1
+QuartzCore[0x183f7d4d4] <+80>:  b      0x183f7d520               ; <+156>
+QuartzCore[0x183f7d4d8] <+84>:  cbz    w1, 0x183f7d514           ; <+144>
+QuartzCore[0x183f7d4dc] <+88>:  fcmp   d0, d1
+QuartzCore[0x183f7d4e0] <+92>:  b.le   0x183f7d514               ; <+144>
+QuartzCore[0x183f7d4e4] <+96>:  fmov   d1, #-1.00000000
+QuartzCore[0x183f7d4e8] <+100>: fmadd  d1, d0, d0, d1
+QuartzCore[0x183f7d4ec] <+104>: fsqrt  d1, d1
+QuartzCore[0x183f7d4f0] <+108>: fmul   d1, d1, d4
+QuartzCore[0x183f7d4f4] <+112>: fmadd  d0, d0, d4, d3
+QuartzCore[0x183f7d4f8] <+116>: fadd   d2, d0, d1
+QuartzCore[0x183f7d4fc] <+120>: fadd   d3, d1, d1
+QuartzCore[0x183f7d500] <+124>: fdiv   d2, d2, d3
+QuartzCore[0x183f7d504] <+128>: stp    d1, d2, [x0, #0x10]
+QuartzCore[0x183f7d508] <+132>: fsub   d0, d1, d0
+QuartzCore[0x183f7d50c] <+136>: fdiv   d0, d0, d3
+QuartzCore[0x183f7d510] <+140>: b      0x183f7d520               ; <+156>
+QuartzCore[0x183f7d514] <+144>: mov    x8, #0x3ff0000000000000   ; =4607182418800017408 
+QuartzCore[0x183f7d518] <+148>: str    x8, [x0, #0x18]
+QuartzCore[0x183f7d51c] <+152>: fsub   d0, d4, d3
+QuartzCore[0x183f7d520] <+156>: str    d0, [x0, #0x20]
+QuartzCore[0x183f7d524] <+160>: ret    
+(lldb) disassemble -s 0x183f6c58c -e 0x183f6c670
+QuartzCore`CA::Render::SpringAnimation::State::eval:
+QuartzCore[0x183f6c58c] <+0>:   pacibsp 
+QuartzCore[0x183f6c590] <+4>:   stp    d13, d12, [sp, #-0x50]!
+QuartzCore[0x183f6c594] <+8>:   stp    d11, d10, [sp, #0x10]
+QuartzCore[0x183f6c598] <+12>:  stp    d9, d8, [sp, #0x20]
+QuartzCore[0x183f6c59c] <+16>:  stp    x20, x19, [sp, #0x30]
+QuartzCore[0x183f6c5a0] <+20>:  stp    x29, x30, [sp, #0x40]
+QuartzCore[0x183f6c5a4] <+24>:  add    x29, sp, #0x40
+QuartzCore[0x183f6c5a8] <+28>:  mov.16b v8, v0
+QuartzCore[0x183f6c5ac] <+32>:  mov    x19, x0
+QuartzCore[0x183f6c5b0] <+36>:  ldr    d0, [x0, #0x8]
+QuartzCore[0x183f6c5b4] <+40>:  fmov   d1, #1.00000000
+QuartzCore[0x183f6c5b8] <+44>:  fcmp   d0, d1
+QuartzCore[0x183f6c5bc] <+48>:  b.pl   0x183f6c5f0               ; <+100>
+QuartzCore[0x183f6c5c0] <+52>:  fnmul  d0, d8, d0
+QuartzCore[0x183f6c5c4] <+56>:  ldr    d1, [x19]
+QuartzCore[0x183f6c5c8] <+60>:  fmul   d0, d0, d1
+QuartzCore[0x183f6c5cc] <+64>:  bl     0x186beb570
+QuartzCore[0x183f6c5d0] <+68>:  mov.16b v9, v0
+QuartzCore[0x183f6c5d4] <+72>:  ldp    d0, d10, [x19, #0x10]
+QuartzCore[0x183f6c5d8] <+76>:  fmul   d0, d0, d8
+QuartzCore[0x183f6c5dc] <+80>:  bl     0x186beaf70
+QuartzCore[0x183f6c5e0] <+84>:  ldr    d2, [x19, #0x20]
+QuartzCore[0x183f6c5e4] <+88>:  fmul   d0, d0, d2
+QuartzCore[0x183f6c5e8] <+92>:  fmadd  d0, d1, d10, d0
+QuartzCore[0x183f6c5ec] <+96>:  b      0x183f6c64c               ; <+192>
+QuartzCore[0x183f6c5f0] <+100>: b.le   0x183f6c638               ; <+172>
+QuartzCore[0x183f6c5f4] <+104>: ldrb   w8, [x19, #0x28]
+QuartzCore[0x183f6c5f8] <+108>: cmp    w8, #0x1
+QuartzCore[0x183f6c5fc] <+112>: b.ne   0x183f6c638               ; <+172>
+QuartzCore[0x183f6c600] <+116>: ldp    d11, d10, [x19, #0x10]
+QuartzCore[0x183f6c604] <+120>: ldr    d1, [x19]
+QuartzCore[0x183f6c608] <+124>: fmul   d12, d1, d0
+QuartzCore[0x183f6c60c] <+128>: fadd   d0, d12, d11
+QuartzCore[0x183f6c610] <+132>: fnmul  d0, d8, d0
+QuartzCore[0x183f6c614] <+136>: bl     0x186beb570
+QuartzCore[0x183f6c618] <+140>: mov.16b v9, v0
+QuartzCore[0x183f6c61c] <+144>: ldr    d13, [x19, #0x20]
+QuartzCore[0x183f6c620] <+148>: fsub   d0, d11, d12
+QuartzCore[0x183f6c624] <+152>: fmul   d0, d0, d8
+QuartzCore[0x183f6c628] <+156>: bl     0x186beb570
+QuartzCore[0x183f6c62c] <+160>: fmul   d0, d0, d13
+QuartzCore[0x183f6c630] <+164>: fmadd  d0, d9, d10, d0
+QuartzCore[0x183f6c634] <+168>: b      0x183f6c650               ; <+196>
+QuartzCore[0x183f6c638] <+172>: ldp    d0, d1, [x19, #0x18]
+QuartzCore[0x183f6c63c] <+176>: fmadd  d9, d1, d8, d0
+QuartzCore[0x183f6c640] <+180>: ldr    d0, [x19]
+QuartzCore[0x183f6c644] <+184>: fnmul  d0, d8, d0
+QuartzCore[0x183f6c648] <+188>: bl     0x186beb570
+QuartzCore[0x183f6c64c] <+192>: fmul   d0, d0, d9
+QuartzCore[0x183f6c650] <+196>: fmov   d1, #1.00000000
+QuartzCore[0x183f6c654] <+200>: fsub   d0, d1, d0
+QuartzCore[0x183f6c658] <+204>: ldp    x29, x30, [sp, #0x40]
+QuartzCore[0x183f6c65c] <+208>: ldp    x20, x19, [sp, #0x30]
+QuartzCore[0x183f6c660] <+212>: ldp    d9, d8, [sp, #0x20]
+QuartzCore[0x183f6c664] <+216>: ldp    d11, d10, [sp, #0x10]
+QuartzCore[0x183f6c668] <+220>: ldp    d13, d12, [sp], #0x50
+QuartzCore[0x183f6c66c] <+224>: retab  
+(lldb) disassemble -s 0x18401d6f8 -e 0x18401d818
+QuartzCore`CA::Render::SpringAnimation::State::eval_derivative:
+QuartzCore[0x18401d6f8] <+0>:   pacibsp 
+QuartzCore[0x18401d6fc] <+4>:   sub    sp, sp, #0x70
+QuartzCore[0x18401d700] <+8>:   stp    d15, d14, [sp, #0x10]
+QuartzCore[0x18401d704] <+12>:  stp    d13, d12, [sp, #0x20]
+QuartzCore[0x18401d708] <+16>:  stp    d11, d10, [sp, #0x30]
+QuartzCore[0x18401d70c] <+20>:  stp    d9, d8, [sp, #0x40]
+QuartzCore[0x18401d710] <+24>:  stp    x20, x19, [sp, #0x50]
+QuartzCore[0x18401d714] <+28>:  stp    x29, x30, [sp, #0x60]
+QuartzCore[0x18401d718] <+32>:  add    x29, sp, #0x60
+QuartzCore[0x18401d71c] <+36>:  mov.16b v8, v0
+QuartzCore[0x18401d720] <+40>:  mov    x19, x0
+QuartzCore[0x18401d724] <+44>:  ldr    d10, [x0, #0x8]
+QuartzCore[0x18401d728] <+48>:  fmov   d0, #1.00000000
+QuartzCore[0x18401d72c] <+52>:  fcmp   d10, d0
+QuartzCore[0x18401d730] <+56>:  b.pl   0x18401d77c               ; <+132>
+QuartzCore[0x18401d734] <+60>:  fnmul  d0, d8, d10
+QuartzCore[0x18401d738] <+64>:  ldr    d11, [x19]
+QuartzCore[0x18401d73c] <+68>:  fmul   d0, d0, d11
+QuartzCore[0x18401d740] <+72>:  bl     0x186beb570
+QuartzCore[0x18401d744] <+76>:  mov.16b v9, v0
+QuartzCore[0x18401d748] <+80>:  ldp    d13, d12, [x19, #0x10]
+QuartzCore[0x18401d74c] <+84>:  fmul   d0, d13, d12
+QuartzCore[0x18401d750] <+88>:  ldr    d14, [x19, #0x20]
+QuartzCore[0x18401d754] <+92>:  fmul   d10, d11, d10
+QuartzCore[0x18401d758] <+96>:  fmadd  d11, d10, d14, d0
+QuartzCore[0x18401d75c] <+100>: fmul   d0, d13, d8
+QuartzCore[0x18401d760] <+104>: bl     0x186beaf70
+QuartzCore[0x18401d764] <+108>: fmul   d2, d14, d13
+QuartzCore[0x18401d768] <+112>: fnmsub d2, d10, d12, d2
+QuartzCore[0x18401d76c] <+116>: fmul   d1, d2, d1
+QuartzCore[0x18401d770] <+120>: fmadd  d0, d11, d0, d1
+QuartzCore[0x18401d774] <+124>: fmul   d0, d0, d9
+QuartzCore[0x18401d778] <+128>: b      0x18401d7f8               ; <+256>
+QuartzCore[0x18401d77c] <+132>: b.le   0x18401d7c8               ; <+208>
+QuartzCore[0x18401d780] <+136>: ldrb   w8, [x19, #0x28]
+QuartzCore[0x18401d784] <+140>: cmp    w8, #0x1
+QuartzCore[0x18401d788] <+144>: b.ne   0x18401d7c8               ; <+208>
+QuartzCore[0x18401d78c] <+148>: ldp    d9, d0, [x19, #0x10]
+QuartzCore[0x18401d790] <+152>: ldr    d1, [x19]
+QuartzCore[0x18401d794] <+156>: fmul   d10, d1, d10
+QuartzCore[0x18401d798] <+160>: fadd   d1, d10, d9
+QuartzCore[0x18401d79c] <+164>: fmul   d11, d0, d1
+QuartzCore[0x18401d7a0] <+168>: fnmul  d0, d1, d8
+QuartzCore[0x18401d7a4] <+172>: bl     0x186beb570
+QuartzCore[0x18401d7a8] <+176>: fmul   d11, d11, d0
+QuartzCore[0x18401d7ac] <+180>: ldr    d0, [x19, #0x20]
+QuartzCore[0x18401d7b0] <+184>: fsub   d1, d9, d10
+QuartzCore[0x18401d7b4] <+188>: fmul   d9, d1, d0
+QuartzCore[0x18401d7b8] <+192>: fmul   d0, d1, d8
+QuartzCore[0x18401d7bc] <+196>: bl     0x186beb570
+QuartzCore[0x18401d7c0] <+200>: fnmsub d0, d9, d0, d11
+QuartzCore[0x18401d7c4] <+204>: b      0x18401d7f8               ; <+256>
+QuartzCore[0x18401d7c8] <+208>: ldr    d0, [x19]
+QuartzCore[0x18401d7cc] <+212>: str    q0, [sp]
+QuartzCore[0x18401d7d0] <+216>: fnmul  d0, d8, d0
+QuartzCore[0x18401d7d4] <+220>: bl     0x186beb570
+QuartzCore[0x18401d7d8] <+224>: fmov   d1, #-1.00000000
+QuartzCore[0x18401d7dc] <+228>: ldr    q3, [sp]
+QuartzCore[0x18401d7e0] <+232>: fmadd  d1, d3, d8, d1
+QuartzCore[0x18401d7e4] <+236>: ldur   q2, [x19, #0x18]
+QuartzCore[0x18401d7e8] <+240>: mov.d  v3[1], v1[0]
+QuartzCore[0x18401d7ec] <+244>: fmul.2d v1, v2, v3
+QuartzCore[0x18401d7f0] <+248>: faddp.2d d1, v1
+QuartzCore[0x18401d7f4] <+252>: fmul   d0, d1, d0
+QuartzCore[0x18401d7f8] <+256>: ldp    x29, x30, [sp, #0x60]
+QuartzCore[0x18401d7fc] <+260>: ldp    x20, x19, [sp, #0x50]
+QuartzCore[0x18401d800] <+264>: ldp    d9, d8, [sp, #0x40]
+QuartzCore[0x18401d804] <+268>: ldp    d11, d10, [sp, #0x30]
+QuartzCore[0x18401d808] <+272>: ldp    d13, d12, [sp, #0x20]
+QuartzCore[0x18401d80c] <+276>: ldp    d15, d14, [sp, #0x10]
+QuartzCore[0x18401d810] <+280>: add    sp, sp, #0x70
+QuartzCore[0x18401d814] <+284>: retab  
+(lldb) disassemble -s 0x183f72a5c -e 0x183f72a80
+QuartzCore`CA::Render::SpringAnimation::time_function:
+QuartzCore[0x183f72a5c] <+0>:  ldr    x8, [x0, #0x28]
+QuartzCore[0x183f72a60] <+4>:  cbz    x8, 0x183f72a6c           ; <+16>
+QuartzCore[0x183f72a64] <+8>:  ldr    d1, [x8, #0x20]
+QuartzCore[0x183f72a68] <+12>: b      0x183f72a74               ; <+24>
+QuartzCore[0x183f72a6c] <+16>: mov    x8, #0x7ff0000000000000   ; =9218868437227405312 
+QuartzCore[0x183f72a70] <+20>: fmov   d1, x8
+QuartzCore[0x183f72a74] <+24>: fmul   d0, d1, d0
+QuartzCore[0x183f72a78] <+28>: add    x0, x0, #0xc0
+QuartzCore[0x183f72a7c] <+32>: b      0x183f6c58c               ; CA::Render::SpringAnimation::State::eval(double) const
+(lldb) disassemble -s 0x183edd488 -e 0x183edd54c
+QuartzCore`CA::Render::Timing::map_parent_to_active:
+QuartzCore[0x183edd488] <+0>:   pacibsp 
+QuartzCore[0x183edd48c] <+4>:   stp    d9, d8, [sp, #-0x40]!
+QuartzCore[0x183edd490] <+8>:   stp    x22, x21, [sp, #0x10]
+QuartzCore[0x183edd494] <+12>:  stp    x20, x19, [sp, #0x20]
+QuartzCore[0x183edd498] <+16>:  stp    x29, x30, [sp, #0x30]
+QuartzCore[0x183edd49c] <+20>:  add    x29, sp, #0x30
+QuartzCore[0x183edd4a0] <+24>:  mov    x19, x2
+QuartzCore[0x183edd4a4] <+28>:  mov    x20, x1
+QuartzCore[0x183edd4a8] <+32>:  mov    x21, x0
+QuartzCore[0x183edd4ac] <+36>:  ldr    w22, [x0, #0xc]
+QuartzCore[0x183edd4b0] <+40>:  ldr    d9, [x1]
+QuartzCore[0x183edd4b4] <+44>:  ldr    d8, [x0, #0x28]
+QuartzCore[0x183edd4b8] <+48>:  bl     0x183edcb5c               ; CA::Render::Timing::end_time() const
+QuartzCore[0x183edd4bc] <+52>:  tbnz   w22, #0xa, 0x183edd4c8    ; <+64>
+QuartzCore[0x183edd4c0] <+56>:  fcmp   d9, d8
+QuartzCore[0x183edd4c4] <+60>:  b.mi   0x183edd520               ; <+152>
+QuartzCore[0x183edd4c8] <+64>:  tbnz   w22, #0x9, 0x183edd4d4    ; <+76>
+QuartzCore[0x183edd4cc] <+68>:  fcmp   d9, d0
+QuartzCore[0x183edd4d0] <+72>:  b.gt   0x183edd520               ; <+152>
+QuartzCore[0x183edd4d4] <+76>:  fcmp   d9, d8
+QuartzCore[0x183edd4d8] <+80>:  fcsel  d1, d8, d9, mi
+QuartzCore[0x183edd4dc] <+84>:  adrp   x8, 869
+QuartzCore[0x183edd4e0] <+88>:  ldr    d2, [x8, #0xe08]
+QuartzCore[0x183edd4e4] <+92>:  fadd   d0, d0, d2
+QuartzCore[0x183edd4e8] <+96>:  fcmp   d1, d0
+QuartzCore[0x183edd4ec] <+100>: fcsel  d0, d0, d1, gt
+QuartzCore[0x183edd4f0] <+104>: fcmp   d0, d9
+QuartzCore[0x183edd4f4] <+108>: cset   w8, ne
+QuartzCore[0x183edd4f8] <+112>: fsub   d0, d0, d8
+QuartzCore[0x183edd4fc] <+116>: ldr    s1, [x21, #0x10]
+QuartzCore[0x183edd500] <+120>: fcvt   d1, s1
+QuartzCore[0x183edd504] <+124>: ldr    d2, [x21, #0x30]
+QuartzCore[0x183edd508] <+128>: fmadd  d0, d0, d1, d2
+QuartzCore[0x183edd50c] <+132>: fmov   x9, d0
+QuartzCore[0x183edd510] <+136>: and    x9, x9, #0x7fffffffffffffff
+QuartzCore[0x183edd514] <+140>: mov    x10, #0x7fefffffffffffff  ; =9218868437227405311 
+QuartzCore[0x183edd518] <+144>: cmp    x9, x10
+QuartzCore[0x183edd51c] <+148>: b.le   0x183edd538               ; <+176>
+QuartzCore[0x183edd520] <+152>: mov    w0, #0x0                  ; =0 
+QuartzCore[0x183edd524] <+156>: ldp    x29, x30, [sp, #0x30]
+QuartzCore[0x183edd528] <+160>: ldp    x20, x19, [sp, #0x20]
+QuartzCore[0x183edd52c] <+164>: ldp    x22, x21, [sp, #0x10]
+QuartzCore[0x183edd530] <+168>: ldp    d9, d8, [sp], #0x40
+QuartzCore[0x183edd534] <+172>: retab  
+QuartzCore[0x183edd538] <+176>: str    d0, [x20]
+QuartzCore[0x183edd53c] <+180>: cbz    x19, 0x183edd544          ; <+188>
+QuartzCore[0x183edd540] <+184>: strb   w8, [x19]
+QuartzCore[0x183edd544] <+188>: mov    w0, #0x1                  ; =1 
+QuartzCore[0x183edd548] <+192>: b      0x183edd524               ; <+156>
+(lldb) disassemble -s 0x183edd54c -e 0x183edd5dc
+QuartzCore`CA::Render::Timing::map_active_to_local:
+QuartzCore[0x183edd54c] <+0>:   ldr    d0, [x1]
+QuartzCore[0x183edd550] <+4>:   ldr    d2, [x0, #0x20]
+QuartzCore[0x183edd554] <+8>:   fmov   x8, d2
+QuartzCore[0x183edd558] <+12>:  and    x9, x8, #0x7fffffffffffffff
+QuartzCore[0x183edd55c] <+16>:  movi.2d v1, #0000000000000000
+QuartzCore[0x183edd560] <+20>:  mov    x8, #0x7fefffffffffffff   ; =9218868437227405311 
+QuartzCore[0x183edd564] <+24>:  cmp    x9, x8
+QuartzCore[0x183edd568] <+28>:  b.gt   0x183edd5ac               ; <+96>
+QuartzCore[0x183edd56c] <+32>:  fcmp   d0, #0.0
+QuartzCore[0x183edd570] <+36>:  fccmp  d0, d2, #0x0, pl
+QuartzCore[0x183edd574] <+40>:  b.mi   0x183edd5ac               ; <+96>
+QuartzCore[0x183edd578] <+44>:  fdiv   d1, d0, d2
+QuartzCore[0x183edd57c] <+48>:  frintm d1, d1
+QuartzCore[0x183edd580] <+52>:  fmsub  d0, d1, d2, d0
+QuartzCore[0x183edd584] <+56>:  ldrb   w9, [x0, #0xd]
+QuartzCore[0x183edd588] <+60>:  tbz    w9, #0x0, 0x183edd5ac     ; <+96>
+QuartzCore[0x183edd58c] <+64>:  fcvtzs w9, d1
+QuartzCore[0x183edd590] <+68>:  tbz    w9, #0x0, 0x183edd5ac     ; <+96>
+QuartzCore[0x183edd594] <+72>:  fsub   d0, d2, d0
+QuartzCore[0x183edd598] <+76>:  adrp   x9, 869
+QuartzCore[0x183edd59c] <+80>:  ldr    d3, [x9, #0xe08]
+QuartzCore[0x183edd5a0] <+84>:  fadd   d2, d2, d3
+QuartzCore[0x183edd5a4] <+88>:  fcmp   d0, d2
+QuartzCore[0x183edd5a8] <+92>:  fcsel  d0, d0, d2, mi
+QuartzCore[0x183edd5ac] <+96>:  fmov   x9, d0
+QuartzCore[0x183edd5b0] <+100>: and    x9, x9, #0x7fffffffffffffff
+QuartzCore[0x183edd5b4] <+104>: cmp    x9, x8
+QuartzCore[0x183edd5b8] <+108>: b.le   0x183edd5c8               ; <+124>
+QuartzCore[0x183edd5bc] <+112>: mov    w8, #0x0                  ; =0 
+QuartzCore[0x183edd5c0] <+116>: cbnz   x2, 0x183edd5d4           ; <+136>
+QuartzCore[0x183edd5c4] <+120>: b      0x183edd5d8               ; <+140>
+QuartzCore[0x183edd5c8] <+124>: str    d0, [x1]
+QuartzCore[0x183edd5cc] <+128>: fcvtzs w8, d1
+QuartzCore[0x183edd5d0] <+132>: cbz    x2, 0x183edd5d8           ; <+140>
+QuartzCore[0x183edd5d4] <+136>: str    w8, [x2]
+QuartzCore[0x183edd5d8] <+140>: ret    
+(lldb) disassemble -s 0x183edcbe8 -e 0x183edcd60
+QuartzCore`CA::Render::Animation::map_time:
+QuartzCore[0x183edcbe8] <+0>:   pacibsp 
+QuartzCore[0x183edcbec] <+4>:   sub    sp, sp, #0x40
+QuartzCore[0x183edcbf0] <+8>:   stp    x22, x21, [sp, #0x10]
+QuartzCore[0x183edcbf4] <+12>:  stp    x20, x19, [sp, #0x20]
+QuartzCore[0x183edcbf8] <+16>:  stp    x29, x30, [sp, #0x30]
+QuartzCore[0x183edcbfc] <+20>:  add    x29, sp, #0x30
+QuartzCore[0x183edcc00] <+24>:  mov    x22, x2
+QuartzCore[0x183edcc04] <+28>:  mov    x20, x0
+QuartzCore[0x183edcc08] <+32>:  adrp   x8, 401090
+QuartzCore[0x183edcc0c] <+36>:  ldr    x8, [x8, #0xc30]
+QuartzCore[0x183edcc10] <+40>:  ldr    x8, [x8]
+QuartzCore[0x183edcc14] <+44>:  str    x8, [sp, #0x8]
+QuartzCore[0x183edcc18] <+48>:  ldr    x0, [x0, #0x28]
+QuartzCore[0x183edcc1c] <+52>:  cbz    x0, 0x183edcca8           ; <+192>
+QuartzCore[0x183edcc20] <+56>:  mov    x21, x3
+QuartzCore[0x183edcc24] <+60>:  mov    x19, x1
+QuartzCore[0x183edcc28] <+64>:  ldr    s0, [x20, #0x20]
+QuartzCore[0x183edcc2c] <+68>:  fcmp   s0, #0.0
+QuartzCore[0x183edcc30] <+72>:  b.eq   0x183edcc60               ; <+120>
+QuartzCore[0x183edcc34] <+76>:  ldrb   w8, [x20, #0xd]
+QuartzCore[0x183edcc38] <+80>:  tbz    w8, #0x7, 0x183edcc60     ; <+120>
+QuartzCore[0x183edcc3c] <+84>:  fcvt   d0, s0
+QuartzCore[0x183edcc40] <+88>:  ldr    d1, [x0, #0x28]
+QuartzCore[0x183edcc44] <+92>:  ldr    d2, [x19]
+QuartzCore[0x183edcc48] <+96>:  fsub   d2, d2, d1
+QuartzCore[0x183edcc4c] <+100>: fmul   d2, d2, d0
+QuartzCore[0x183edcc50] <+104>: frintm d2, d2
+QuartzCore[0x183edcc54] <+108>: fdiv   d0, d2, d0
+QuartzCore[0x183edcc58] <+112>: fadd   d0, d0, d1
+QuartzCore[0x183edcc5c] <+116>: str    d0, [x19]
+QuartzCore[0x183edcc60] <+120>: mov    x1, x19
+QuartzCore[0x183edcc64] <+124>: mov    x2, x4
+QuartzCore[0x183edcc68] <+128>: bl     0x183edd488               ; CA::Render::Timing::map_parent_to_active(double&, bool*) const
+QuartzCore[0x183edcc6c] <+132>: cbz    w0, 0x183edcd30           ; <+328>
+QuartzCore[0x183edcc70] <+136>: ldr    x0, [x20, #0x28]
+QuartzCore[0x183edcc74] <+140>: cbz    x22, 0x183edccc4          ; <+220>
+QuartzCore[0x183edcc78] <+144>: ldr    d0, [x0, #0x20]
+QuartzCore[0x183edcc7c] <+148>: fadd   d1, d0, d0
+QuartzCore[0x183edcc80] <+152>: ldrb   w8, [x0, #0xd]
+QuartzCore[0x183edcc84] <+156>: tst    w8, #0x1
+QuartzCore[0x183edcc88] <+160>: fcsel  d0, d0, d1, eq
+QuartzCore[0x183edcc8c] <+164>: fmov   x8, d0
+QuartzCore[0x183edcc90] <+168>: and    x8, x8, #0x7fffffffffffffff
+QuartzCore[0x183edcc94] <+172>: mov    x9, #0x7fefffffffffffff   ; =9218868437227405311 
+QuartzCore[0x183edcc98] <+176>: cmp    x8, x9
+QuartzCore[0x183edcc9c] <+180>: b.le   0x183edccb4               ; <+204>
+QuartzCore[0x183edcca0] <+184>: mov    w8, #0x0                  ; =0 
+QuartzCore[0x183edcca4] <+188>: b      0x183edccc0               ; <+216>
+QuartzCore[0x183edcca8] <+192>: cbz    x22, 0x183edcd2c          ; <+324>
+QuartzCore[0x183edccac] <+196>: str    wzr, [x22]
+QuartzCore[0x183edccb0] <+200>: b      0x183edcd2c               ; <+324>
+QuartzCore[0x183edccb4] <+204>: ldr    d1, [x19]
+QuartzCore[0x183edccb8] <+208>: fdiv   d0, d1, d0
+QuartzCore[0x183edccbc] <+212>: fcvtms w8, d0
+QuartzCore[0x183edccc0] <+216>: str    w8, [x22]
+QuartzCore[0x183edccc4] <+220>: str    wzr, [sp, #0x4]
+QuartzCore[0x183edccc8] <+224>: add    x2, sp, #0x4
+QuartzCore[0x183edcccc] <+228>: mov    x1, x19
+QuartzCore[0x183edccd0] <+232>: bl     0x183edd54c               ; CA::Render::Timing::map_active_to_local(double&, unsigned int*) const
+QuartzCore[0x183edccd4] <+236>: ldr    x8, [x20, #0x28]
+QuartzCore[0x183edccd8] <+240>: cbz    x21, 0x183edccf0          ; <+264>
+QuartzCore[0x183edccdc] <+244>: ldrb   w9, [x8, #0xd]
+QuartzCore[0x183edcce0] <+248>: tbz    w9, #0x0, 0x183edccf0     ; <+264>
+QuartzCore[0x183edcce4] <+252>: ldrb   w9, [sp, #0x4]
+QuartzCore[0x183edcce8] <+256>: and    w9, w9, #0x1
+QuartzCore[0x183edccec] <+260>: strb   w9, [x21]
+QuartzCore[0x183edccf0] <+264>: ldr    d1, [x8, #0x20]
+QuartzCore[0x183edccf4] <+268>: ldr    d0, [x19]
+QuartzCore[0x183edccf8] <+272>: fdiv   d0, d0, d1
+QuartzCore[0x183edccfc] <+276>: str    d0, [x19]
+QuartzCore[0x183edcd00] <+280>: ldr    x8, [x20, #0x30]
+QuartzCore[0x183edcd04] <+284>: cbz    x8, 0x183edcd2c           ; <+324>
+QuartzCore[0x183edcd08] <+288>: ldr    w9, [x8, #0x10]
+QuartzCore[0x183edcd0c] <+292>: cmp    w9, #0x4
+QuartzCore[0x183edcd10] <+296>: b.ne   0x183edcd2c               ; <+324>
+QuartzCore[0x183edcd14] <+300>: adrp   x9, 870
+QuartzCore[0x183edcd18] <+304>: ldr    d2, [x9, #0x710]
+QuartzCore[0x183edcd1c] <+308>: fdiv   d1, d2, d1
+QuartzCore[0x183edcd20] <+312>: add    x0, x8, #0x18
+QuartzCore[0x183edcd24] <+316>: bl     0x183f7be94               ; CA::Render::TimingFunction::evaluate(double const*, double, double)
+QuartzCore[0x183edcd28] <+320>: str    d0, [x19]
+QuartzCore[0x183edcd2c] <+324>: mov    w0, #0x1                  ; =1 
+QuartzCore[0x183edcd30] <+328>: ldr    x8, [sp, #0x8]
+QuartzCore[0x183edcd34] <+332>: adrp   x9, 401090
+QuartzCore[0x183edcd38] <+336>: ldr    x9, [x9, #0xc30]
+QuartzCore[0x183edcd3c] <+340>: ldr    x9, [x9]
+QuartzCore[0x183edcd40] <+344>: cmp    x9, x8
+QuartzCore[0x183edcd44] <+348>: b.ne   0x183edcd5c               ; <+372>
+QuartzCore[0x183edcd48] <+352>: ldp    x29, x30, [sp, #0x30]
+QuartzCore[0x183edcd4c] <+356>: ldp    x20, x19, [sp, #0x20]
+QuartzCore[0x183edcd50] <+360>: ldp    x22, x21, [sp, #0x10]
+QuartzCore[0x183edcd54] <+364>: add    sp, sp, #0x40
+QuartzCore[0x183edcd58] <+368>: retab  
+QuartzCore[0x183edcd5c] <+372>: bl     0x186beaf90
+(lldb) disassemble -s 0x183edd108 -e 0x183edd130
+QuartzCore`CA::Render::Animation::check_should_remove:
+QuartzCore[0x183edd108] <+0>:  ldrb   w8, [x0, #0xd]
+QuartzCore[0x183edd10c] <+4>:  fcmp   d0, d1
+QuartzCore[0x183edd110] <+8>:  cset   w9, pl
+QuartzCore[0x183edd114] <+12>: cset   w10, le
+QuartzCore[0x183edd118] <+16>: fcmp   s2, #0.0
+QuartzCore[0x183edd11c] <+20>: csel   w10, wzr, w10, pl
+QuartzCore[0x183edd120] <+24>: csel   w9, w9, w10, gt
+QuartzCore[0x183edd124] <+28>: tst    w8, #0x8
+QuartzCore[0x183edd128] <+32>: csel   w0, wzr, w9, eq
+QuartzCore[0x183edd12c] <+36>: ret    
+(lldb) disassemble -s 0x183ee53a8 -e 0x183ee53ec
+QuartzCore`CA::Render::PropertyAnimation::interpolate_vector:
+QuartzCore[0x183ee53a8] <+0>:  ldrb   w8, [x7, #0x70]
+QuartzCore[0x183ee53ac] <+4>:  cmp    w8, #0x1
+QuartzCore[0x183ee53b0] <+8>:  orr    x8, x3, x6
+QuartzCore[0x183ee53b4] <+12>: ccmp   x8, #0x0, #0x4, eq
+QuartzCore[0x183ee53b8] <+16>: b.ne   0x183ee53e4               ; <+60>
+QuartzCore[0x183ee53bc] <+20>: cbz    x1, 0x183ee53e0           ; <+56>
+QuartzCore[0x183ee53c0] <+24>: ldr    d0, [x4], #0x8
+QuartzCore[0x183ee53c4] <+28>: ldr    d1, [x5], #0x8
+QuartzCore[0x183ee53c8] <+32>: ldr    d2, [x7]
+QuartzCore[0x183ee53cc] <+36>: fsub   d1, d1, d0
+QuartzCore[0x183ee53d0] <+40>: fmadd  d0, d2, d1, d0
+QuartzCore[0x183ee53d4] <+44>: str    d0, [x2], #0x8
+QuartzCore[0x183ee53d8] <+48>: subs   x1, x1, #0x1
+QuartzCore[0x183ee53dc] <+52>: b.ne   0x183ee53c0               ; <+24>
+QuartzCore[0x183ee53e0] <+56>: ret    
+QuartzCore[0x183ee53e4] <+60>: mov    x0, x7
+QuartzCore[0x183ee53e8] <+64>: b      0x1840551cc               ; void CA::Render::ValueInterpolator::mix_n<double>(unsigned long, double*, double const*, double const*, double const*, double const*) const
+(lldb) disassemble -s 0x183ee5b40 -e 0x183ee5bfc
+QuartzCore`CA::Render::BasicAnimation0::interpolate_vector:
+QuartzCore[0x183ee5b40] <+0>:   pacibsp 
+QuartzCore[0x183ee5b44] <+4>:   stp    x22, x21, [sp, #-0x30]!
+QuartzCore[0x183ee5b48] <+8>:   stp    x20, x19, [sp, #0x10]
+QuartzCore[0x183ee5b4c] <+12>:  stp    x29, x30, [sp, #0x20]
+QuartzCore[0x183ee5b50] <+16>:  add    x29, sp, #0x20
+QuartzCore[0x183ee5b54] <+20>:  mov    x19, x4
+QuartzCore[0x183ee5b58] <+24>:  mov    x20, x2
+QuartzCore[0x183ee5b5c] <+28>:  mov    x21, x1
+QuartzCore[0x183ee5b60] <+32>:  mov    x22, x0
+QuartzCore[0x183ee5b64] <+36>:  cmp    x1, #0x2
+QuartzCore[0x183ee5b68] <+40>:  b.ne   0x183ee5b84               ; <+68>
+QuartzCore[0x183ee5b6c] <+44>:  ldp    d3, d4, [x22, #0x88]
+QuartzCore[0x183ee5b70] <+48>:  fcmp   d3, #0.0
+QuartzCore[0x183ee5b74] <+52>:  b.ne   0x183ee5bcc               ; <+140>
+QuartzCore[0x183ee5b78] <+56>:  fcmp   d4, #0.0
+QuartzCore[0x183ee5b7c] <+60>:  b.ne   0x183ee5bcc               ; <+140>
+QuartzCore[0x183ee5b80] <+64>:  mov    w1, #0x2                  ; =2 
+QuartzCore[0x183ee5b84] <+68>:  mov    x2, x20
+QuartzCore[0x183ee5b88] <+72>:  mov    x4, x19
+QuartzCore[0x183ee5b8c] <+76>:  bl     0x183ee53a8               ; CA::Render::PropertyAnimation::interpolate_vector(unsigned long, double*, double const*, double const*, double const*, double const*, CA::Render::ValueInterpolator const&) const
+QuartzCore[0x183ee5b90] <+80>:  ldrb   w8, [x22, #0xf]
+QuartzCore[0x183ee5b94] <+84>:  tbz    w8, #0x1, 0x183ee5bbc     ; <+124>
+QuartzCore[0x183ee5b98] <+88>:  cbz    x21, 0x183ee5bbc          ; <+124>
+QuartzCore[0x183ee5b9c] <+92>:  ldr    d0, [x19], #0x8
+QuartzCore[0x183ee5ba0] <+96>:  ldr    d1, [x20]
+QuartzCore[0x183ee5ba4] <+100>: fsub   d1, d1, d0
+QuartzCore[0x183ee5ba8] <+104>: frinta d1, d1
+QuartzCore[0x183ee5bac] <+108>: fadd   d0, d1, d0
+QuartzCore[0x183ee5bb0] <+112>: str    d0, [x20], #0x8
+QuartzCore[0x183ee5bb4] <+116>: subs   x21, x21, #0x1
+QuartzCore[0x183ee5bb8] <+120>: b.ne   0x183ee5b9c               ; <+92>
+QuartzCore[0x183ee5bbc] <+124>: ldp    x29, x30, [sp, #0x20]
+QuartzCore[0x183ee5bc0] <+128>: ldp    x20, x19, [sp, #0x10]
+QuartzCore[0x183ee5bc4] <+132>: ldp    x22, x21, [sp], #0x30
+QuartzCore[0x183ee5bc8] <+136>: retab  
+QuartzCore[0x183ee5bcc] <+140>: ldr    d2, [x7]
+QuartzCore[0x183ee5bd0] <+144>: ldr    q0, [x19]
+QuartzCore[0x183ee5bd4] <+148>: ldr    q1, [x5]
+QuartzCore[0x183ee5bd8] <+152>: mov    x0, x20
+QuartzCore[0x183ee5bdc] <+156>: ldp    x29, x30, [sp, #0x20]
+QuartzCore[0x183ee5be0] <+160>: ldp    x20, x19, [sp, #0x10]
+QuartzCore[0x183ee5be4] <+164>: ldp    x22, x21, [sp], #0x30
+QuartzCore[0x183ee5be8] <+168>: autibsp 
+QuartzCore[0x183ee5bec] <+172>: eor    x16, x30, x30, lsl #1
+QuartzCore[0x183ee5bf0] <+176>: tbz    x16, #0x3e, 0x183ee5bf8   ; <+184>
+QuartzCore[0x183ee5bf4] <+180>: brk    #0xc471
+QuartzCore[0x183ee5bf8] <+184>: b      0x18415a124               ; CA::Render::point_interpolate(double*, double const*, double const*, double, double, double)
+(lldb) disassemble -s 0x183ee53ec -e 0x183ee5aa8
+QuartzCore`CA::Render::BasicAnimation0::apply:
+QuartzCore[0x183ee53ec] <+0>:    pacibsp 
+QuartzCore[0x183ee53f0] <+4>:    stp    d9, d8, [sp, #-0x70]!
+QuartzCore[0x183ee53f4] <+8>:    stp    x28, x27, [sp, #0x10]
+QuartzCore[0x183ee53f8] <+12>:   stp    x26, x25, [sp, #0x20]
+QuartzCore[0x183ee53fc] <+16>:   stp    x24, x23, [sp, #0x30]
+QuartzCore[0x183ee5400] <+20>:   stp    x22, x21, [sp, #0x40]
+QuartzCore[0x183ee5404] <+24>:   stp    x20, x19, [sp, #0x50]
+QuartzCore[0x183ee5408] <+28>:   stp    x29, x30, [sp, #0x60]
+QuartzCore[0x183ee540c] <+32>:   add    x29, sp, #0x60
+QuartzCore[0x183ee5410] <+36>:   sub    sp, sp, #0x2c0
+QuartzCore[0x183ee5414] <+40>:   mov    x25, x3
+QuartzCore[0x183ee5418] <+44>:   mov    x21, x2
+QuartzCore[0x183ee541c] <+48>:   mov.16b v8, v0
+QuartzCore[0x183ee5420] <+52>:   mov    x19, x1
+QuartzCore[0x183ee5424] <+56>:   mov    x20, x0
+QuartzCore[0x183ee5428] <+60>:   adrp   x8, 401081
+QuartzCore[0x183ee542c] <+64>:   ldr    x8, [x8, #0xc30]
+QuartzCore[0x183ee5430] <+68>:   ldr    x8, [x8]
+QuartzCore[0x183ee5434] <+72>:   stur   x8, [x29, #-0x68]
+QuartzCore[0x183ee5438] <+76>:   ldp    x23, x24, [x0, #0x70]
+QuartzCore[0x183ee543c] <+80>:   ldr    x26, [x0, #0x80]
+QuartzCore[0x183ee5440] <+84>:   bl     0x183ee5aa8               ; CA::Render::PropertyAnimation::apply_velocity_state(CA::Render::AnimationEvaluator&) const
+QuartzCore[0x183ee5444] <+88>:   mov    x22, x0
+QuartzCore[0x183ee5448] <+92>:   mov    x27, x20
+QuartzCore[0x183ee544c] <+96>:   movk   x27, #0x660e, lsl #48
+QuartzCore[0x183ee5450] <+100>:  tbnz   w25, #0x0, 0x183ee548c    ; <+160>
+QuartzCore[0x183ee5454] <+104>:  cbz    x22, 0x183ee548c          ; <+160>
+QuartzCore[0x183ee5458] <+108>:  ldr    x16, [x20]
+QuartzCore[0x183ee545c] <+112>:  mov    x17, x20
+QuartzCore[0x183ee5460] <+116>:  movk   x17, #0x660e, lsl #48
+QuartzCore[0x183ee5464] <+120>:  autda  x16, x17
+QuartzCore[0x183ee5468] <+124>:  ldr    x8, [x16, #0x80]!
+QuartzCore[0x183ee546c] <+128>:  mov    x0, x20
+QuartzCore[0x183ee5470] <+132>:  mov.16b v0, v8
+QuartzCore[0x183ee5474] <+136>:  movk   x16, #0x2391, lsl #48
+QuartzCore[0x183ee5478] <+140>:  blraa  x8, x16
+QuartzCore[0x183ee547c] <+144>:  ldr    s1, [x19, #0x8]
+QuartzCore[0x183ee5480] <+148>:  fcvt   d1, s1
+QuartzCore[0x183ee5484] <+152>:  fmul   d9, d0, d1
+QuartzCore[0x183ee5488] <+156>:  b      0x183ee5490               ; <+164>
+QuartzCore[0x183ee548c] <+160>:  movi.2d v9, #0000000000000000
+QuartzCore[0x183ee5490] <+164>:  mov    x25, x20
+QuartzCore[0x183ee5494] <+168>:  ldr    x16, [x25], #0x60
+QuartzCore[0x183ee5498] <+172>:  autda  x16, x27
+QuartzCore[0x183ee549c] <+176>:  ldr    x8, [x16, #0xa8]!
+QuartzCore[0x183ee54a0] <+180>:  mov    x0, x20
+QuartzCore[0x183ee54a4] <+184>:  mov.16b v0, v8
+QuartzCore[0x183ee54a8] <+188>:  movk   x16, #0x81b2, lsl #48
+QuartzCore[0x183ee54ac] <+192>:  blraa  x8, x16
+QuartzCore[0x183ee54b0] <+196>:  mov.16b v8, v0
+QuartzCore[0x183ee54b4] <+200>:  ldr    x0, [x19, #0x28]
+QuartzCore[0x183ee54b8] <+204>:  mov    x1, x25
+QuartzCore[0x183ee54bc] <+208>:  bl     0x183edd130               ; CA::Render::Layer::keypath_is_object(void* const*) const
+QuartzCore[0x183ee54c0] <+212>:  cbz    w0, 0x183ee5548           ; <+348>
+QuartzCore[0x183ee54c4] <+216>:  cbz    x23, 0x183ee5568          ; <+380>
+QuartzCore[0x183ee54c8] <+220>:  cbz    x24, 0x183ee557c          ; <+400>
+QuartzCore[0x183ee54cc] <+224>:  str    xzr, [sp, #0x260]
+QuartzCore[0x183ee54d0] <+228>:  movi.2d v0, #0000000000000000
+QuartzCore[0x183ee54d4] <+232>:  stp    q0, q0, [sp, #0x240]
+QuartzCore[0x183ee54d8] <+236>:  stp    q0, q0, [sp, #0x220]
+QuartzCore[0x183ee54dc] <+240>:  stp    q0, q0, [sp, #0x200]
+QuartzCore[0x183ee54e0] <+244>:  stp    d8, d9, [sp, #0x1f0]
+QuartzCore[0x183ee54e4] <+248>:  str    xzr, [sp, #0x130]
+QuartzCore[0x183ee54e8] <+252>:  add    x0, sp, #0x130
+QuartzCore[0x183ee54ec] <+256>:  add    x3, sp, #0x1f0
+QuartzCore[0x183ee54f0] <+260>:  mov    x1, x23
+QuartzCore[0x183ee54f4] <+264>:  mov    x2, x24
+QuartzCore[0x183ee54f8] <+268>:  bl     0x18402c288               ; CA::Render::mix_objects(CA::Render::Object*, CA::Render::Object*, CA::Render::ValueInterpolator const&)
+QuartzCore[0x183ee54fc] <+272>:  ldr    x0, [x19, #0x28]
+QuartzCore[0x183ee5500] <+276>:  ldr    x2, [sp, #0x130]
+QuartzCore[0x183ee5504] <+280>:  mov    x1, x25
+QuartzCore[0x183ee5508] <+284>:  bl     0x18402b70c               ; CA::Render::Layer::set_keypath_object(void* const*, CA::Render::Object*)
+QuartzCore[0x183ee550c] <+288>:  ldr    x0, [sp, #0x130]
+QuartzCore[0x183ee5510] <+292>:  cbz    x0, 0x183ee56a8           ; <+700>
+QuartzCore[0x183ee5514] <+296>:  add    x8, x0, #0x8
+QuartzCore[0x183ee5518] <+300>:  mov    w9, #-0x1                 ; =-1 
+QuartzCore[0x183ee551c] <+304>:  ldaddal w9, w8, [x8]
+QuartzCore[0x183ee5520] <+308>:  cmp    w8, #0x1
+QuartzCore[0x183ee5524] <+312>:  b.ne   0x183ee56a8               ; <+700>
+QuartzCore[0x183ee5528] <+316>:  ldr    x16, [x0]
+QuartzCore[0x183ee552c] <+320>:  mov    x17, x0
+QuartzCore[0x183ee5530] <+324>:  movk   x17, #0x660e, lsl #48
+QuartzCore[0x183ee5534] <+328>:  autda  x16, x17
+QuartzCore[0x183ee5538] <+332>:  ldr    x8, [x16, #0x10]!
+QuartzCore[0x183ee553c] <+336>:  movk   x16, #0xb986, lsl #48
+QuartzCore[0x183ee5540] <+340>:  blraa  x8, x16
+QuartzCore[0x183ee5544] <+344>:  b      0x183ee56a8               ; <+700>
+QuartzCore[0x183ee5548] <+348>:  cbz    x26, 0x183ee55b0          ; <+452>
+QuartzCore[0x183ee554c] <+352>:  ldr    x8, [x25]
+QuartzCore[0x183ee5550] <+356>:  cbz    x8, 0x183ee55b0           ; <+452>
+QuartzCore[0x183ee5554] <+360>:  tbnz   w8, #0x0, 0x183ee5590     ; <+420>
+QuartzCore[0x183ee5558] <+364>:  ldr    w9, [x8]
+QuartzCore[0x183ee555c] <+368>:  cbz    w9, 0x183ee55b0           ; <+452>
+QuartzCore[0x183ee5560] <+372>:  ldr    w8, [x8, #0x4]
+QuartzCore[0x183ee5564] <+376>:  b      0x183ee5594               ; <+424>
+QuartzCore[0x183ee5568] <+380>:  ldr    x0, [x19, #0x28]
+QuartzCore[0x183ee556c] <+384>:  mov    x1, x25
+QuartzCore[0x183ee5570] <+388>:  bl     0x184039774               ; CA::Render::Layer::get_keypath_object(void* const*) const
+QuartzCore[0x183ee5574] <+392>:  mov    x23, x0
+QuartzCore[0x183ee5578] <+396>:  cbnz   x24, 0x183ee54cc          ; <+224>
+QuartzCore[0x183ee557c] <+400>:  ldr    x0, [x19, #0x10]
+QuartzCore[0x183ee5580] <+404>:  mov    x1, x25
+QuartzCore[0x183ee5584] <+408>:  bl     0x184039774               ; CA::Render::Layer::get_keypath_object(void* const*) const
+QuartzCore[0x183ee5588] <+412>:  mov    x24, x0
+QuartzCore[0x183ee558c] <+416>:  b      0x183ee54cc               ; <+224>
+QuartzCore[0x183ee5590] <+420>:  lsr    w8, w8, #1
+QuartzCore[0x183ee5594] <+424>:  mov    w27, #0x1                 ; =1 
+QuartzCore[0x183ee5598] <+428>:  cmp    w8, #0x9a
+QuartzCore[0x183ee559c] <+432>:  b.eq   0x183ee55b4               ; <+456>
+QuartzCore[0x183ee55a0] <+436>:  cmp    w8, #0x2b5
+QuartzCore[0x183ee55a4] <+440>:  b.eq   0x183ee55b4               ; <+456>
+QuartzCore[0x183ee55a8] <+444>:  cmp    w8, #0x2cc
+QuartzCore[0x183ee55ac] <+448>:  b.eq   0x183ee55b4               ; <+456>
+QuartzCore[0x183ee55b0] <+452>:  mov    w27, #0x0                 ; =0 
+QuartzCore[0x183ee55b4] <+456>:  movi.2d v0, #0000000000000000
+QuartzCore[0x183ee55b8] <+460>:  stp    q0, q0, [sp, #0x290]
+QuartzCore[0x183ee55bc] <+464>:  stp    q0, q0, [sp, #0x270]
+QuartzCore[0x183ee55c0] <+468>:  stp    q0, q0, [sp, #0x250]
+QuartzCore[0x183ee55c4] <+472>:  stp    q0, q0, [sp, #0x230]
+QuartzCore[0x183ee55c8] <+476>:  stp    q0, q0, [sp, #0x210]
+QuartzCore[0x183ee55cc] <+480>:  stp    q0, q0, [sp, #0x1f0]
+QuartzCore[0x183ee55d0] <+484>:  stp    q0, q0, [sp, #0x1d0]
+QuartzCore[0x183ee55d4] <+488>:  stp    q0, q0, [sp, #0x1b0]
+QuartzCore[0x183ee55d8] <+492>:  stp    q0, q0, [sp, #0x190]
+QuartzCore[0x183ee55dc] <+496>:  stp    q0, q0, [sp, #0x170]
+QuartzCore[0x183ee55e0] <+500>:  stp    q0, q0, [sp, #0x150]
+QuartzCore[0x183ee55e4] <+504>:  stp    q0, q0, [sp, #0x130]
+QuartzCore[0x183ee55e8] <+508>:  add    x8, sp, #0x1f0
+QuartzCore[0x183ee55ec] <+512>:  str    x8, [sp, #0x28]
+QuartzCore[0x183ee55f0] <+516>:  add    x8, sp, #0x130
+QuartzCore[0x183ee55f4] <+520>:  str    x8, [sp, #0x20]
+QuartzCore[0x183ee55f8] <+524>:  cbz    x23, 0x183ee56e4          ; <+760>
+QuartzCore[0x183ee55fc] <+528>:  cbz    x24, 0x183ee56e4          ; <+760>
+QuartzCore[0x183ee5600] <+532>:  add    x1, sp, #0x1f0
+QuartzCore[0x183ee5604] <+536>:  add    x2, sp, #0x28
+QuartzCore[0x183ee5608] <+540>:  mov    x0, x23
+QuartzCore[0x183ee560c] <+544>:  bl     0x183ee5bfc               ; CA::Render::PropertyAnimation::animation_value(CA::Render::Object const*, unsigned long, double*, double**) const
+QuartzCore[0x183ee5610] <+548>:  mov    x23, x0
+QuartzCore[0x183ee5614] <+552>:  add    x1, sp, #0x130
+QuartzCore[0x183ee5618] <+556>:  add    x2, sp, #0x20
+QuartzCore[0x183ee561c] <+560>:  mov    x0, x24
+QuartzCore[0x183ee5620] <+564>:  bl     0x183ee5bfc               ; CA::Render::PropertyAnimation::animation_value(CA::Render::Object const*, unsigned long, double*, double**) const
+QuartzCore[0x183ee5624] <+568>:  mov    x24, x0
+QuartzCore[0x183ee5628] <+572>:  cmp    x24, x23
+QuartzCore[0x183ee562c] <+576>:  csel   x3, x24, x23, lo
+QuartzCore[0x183ee5630] <+580>:  ldr    x5, [sp, #0x28]
+QuartzCore[0x183ee5634] <+584>:  cbz    x3, 0x183ee5680           ; <+660>
+QuartzCore[0x183ee5638] <+588>:  str    xzr, [sp, #0x120]
+QuartzCore[0x183ee563c] <+592>:  movi.2d v0, #0000000000000000
+QuartzCore[0x183ee5640] <+596>:  stp    q0, q0, [sp, #0x100]
+QuartzCore[0x183ee5644] <+600>:  stp    q0, q0, [sp, #0xe0]
+QuartzCore[0x183ee5648] <+604>:  stp    q0, q0, [sp, #0xc0]
+QuartzCore[0x183ee564c] <+608>:  stp    d8, d9, [sp, #0xb0]
+QuartzCore[0x183ee5650] <+612>:  ldr    x1, [x19, #0x28]
+QuartzCore[0x183ee5654] <+616>:  ldr    x6, [sp, #0x20]
+QuartzCore[0x183ee5658] <+620>:  str    w21, [sp, #0x18]
+QuartzCore[0x183ee565c] <+624>:  add    x8, sp, #0xb0
+QuartzCore[0x183ee5660] <+628>:  stp    x6, x8, [sp, #0x8]
+QuartzCore[0x183ee5664] <+632>:  str    x5, [sp]
+QuartzCore[0x183ee5668] <+636>:  mov    x0, x20
+QuartzCore[0x183ee566c] <+640>:  mov    x2, x22
+QuartzCore[0x183ee5670] <+644>:  mov    x4, #0x0                  ; =0 
+QuartzCore[0x183ee5674] <+648>:  mov    x7, #0x0                  ; =0 
+QuartzCore[0x183ee5678] <+652>:  bl     0x183ee4784               ; CA::Render::PropertyAnimation::set(CA::Render::Layer*, CA::Render::VelocityState*, unsigned long, double const*, double const*, double const*, double const*, double const*, double const*, CA::Render::ValueInterpolator const*, int) const
+QuartzCore[0x183ee567c] <+656>:  ldr    x5, [sp, #0x28]
+QuartzCore[0x183ee5680] <+660>:  add    x8, sp, #0x1f0
+QuartzCore[0x183ee5684] <+664>:  cmp    x5, x8
+QuartzCore[0x183ee5688] <+668>:  b.eq   0x183ee5694               ; <+680>
+QuartzCore[0x183ee568c] <+672>:  mov    x0, x5
+QuartzCore[0x183ee5690] <+676>:  bl     0x184235cf0               ; symbol stub for: free
+QuartzCore[0x183ee5694] <+680>:  ldr    x0, [sp, #0x20]
+QuartzCore[0x183ee5698] <+684>:  add    x8, sp, #0x130
+QuartzCore[0x183ee569c] <+688>:  cmp    x0, x8
+QuartzCore[0x183ee56a0] <+692>:  b.eq   0x183ee56a8               ; <+700>
+QuartzCore[0x183ee56a4] <+696>:  bl     0x184235cf0               ; symbol stub for: free
+QuartzCore[0x183ee56a8] <+700>:  ldur   x8, [x29, #-0x68]
+QuartzCore[0x183ee56ac] <+704>:  adrp   x9, 401081
+QuartzCore[0x183ee56b0] <+708>:  ldr    x9, [x9, #0xc30]
+QuartzCore[0x183ee56b4] <+712>:  ldr    x9, [x9]
+QuartzCore[0x183ee56b8] <+716>:  cmp    x9, x8
+QuartzCore[0x183ee56bc] <+720>:  b.ne   0x183ee5aa4               ; <+1720>
+QuartzCore[0x183ee56c0] <+724>:  add    sp, sp, #0x2c0
+QuartzCore[0x183ee56c4] <+728>:  ldp    x29, x30, [sp, #0x60]
+QuartzCore[0x183ee56c8] <+732>:  ldp    x20, x19, [sp, #0x50]
+QuartzCore[0x183ee56cc] <+736>:  ldp    x22, x21, [sp, #0x40]
+QuartzCore[0x183ee56d0] <+740>:  ldp    x24, x23, [sp, #0x30]
+QuartzCore[0x183ee56d4] <+744>:  ldp    x26, x25, [sp, #0x20]
+QuartzCore[0x183ee56d8] <+748>:  ldp    x28, x27, [sp, #0x10]
+QuartzCore[0x183ee56dc] <+752>:  ldp    d9, d8, [sp], #0x70
+QuartzCore[0x183ee56e0] <+756>:  retab  
+QuartzCore[0x183ee56e4] <+760>:  cbz    x23, 0x183ee5780          ; <+916>
+QuartzCore[0x183ee56e8] <+764>:  cbz    x26, 0x183ee5780          ; <+916>
+QuartzCore[0x183ee56ec] <+768>:  add    x1, sp, #0x1f0
+QuartzCore[0x183ee56f0] <+772>:  add    x2, sp, #0x28
+QuartzCore[0x183ee56f4] <+776>:  mov    x0, x23
+QuartzCore[0x183ee56f8] <+780>:  bl     0x183ee5bfc               ; CA::Render::PropertyAnimation::animation_value(CA::Render::Object const*, unsigned long, double*, double**) const
+QuartzCore[0x183ee56fc] <+784>:  mov    x23, x0
+QuartzCore[0x183ee5700] <+788>:  add    x1, sp, #0x130
+QuartzCore[0x183ee5704] <+792>:  add    x2, sp, #0x20
+QuartzCore[0x183ee5708] <+796>:  mov    x0, x26
+QuartzCore[0x183ee570c] <+800>:  bl     0x183ee5bfc               ; CA::Render::PropertyAnimation::animation_value(CA::Render::Object const*, unsigned long, double*, double**) const
+QuartzCore[0x183ee5710] <+804>:  mov    x24, x0
+QuartzCore[0x183ee5714] <+808>:  tbz    w27, #0x0, 0x183ee58c4    ; <+1240>
+QuartzCore[0x183ee5718] <+812>:  ldp    x25, x2, [sp, #0x20]
+QuartzCore[0x183ee571c] <+816>:  cmp    x23, x24
+QuartzCore[0x183ee5720] <+820>:  csel   x8, x23, x24, lo
+QuartzCore[0x183ee5724] <+824>:  cmp    w8, #0x6
+QuartzCore[0x183ee5728] <+828>:  b.eq   0x183ee593c               ; <+1360>
+QuartzCore[0x183ee572c] <+832>:  cmp    w8, #0x10
+QuartzCore[0x183ee5730] <+836>:  b.ne   0x183ee58cc               ; <+1248>
+QuartzCore[0x183ee5734] <+840>:  ldr    q0, [x25, #0x40]
+QuartzCore[0x183ee5738] <+844>:  str    q0, [sp, #0xf0]
+QuartzCore[0x183ee573c] <+848>:  ldr    q0, [x25, #0x50]
+QuartzCore[0x183ee5740] <+852>:  str    q0, [sp, #0x100]
+QuartzCore[0x183ee5744] <+856>:  ldr    q0, [x25, #0x60]
+QuartzCore[0x183ee5748] <+860>:  str    q0, [sp, #0x110]
+QuartzCore[0x183ee574c] <+864>:  ldr    q0, [x25, #0x70]
+QuartzCore[0x183ee5750] <+868>:  str    q0, [sp, #0x120]
+QuartzCore[0x183ee5754] <+872>:  ldr    q0, [x25]
+QuartzCore[0x183ee5758] <+876>:  str    q0, [sp, #0xb0]
+QuartzCore[0x183ee575c] <+880>:  ldr    q0, [x25, #0x10]
+QuartzCore[0x183ee5760] <+884>:  str    q0, [sp, #0xc0]
+QuartzCore[0x183ee5764] <+888>:  ldr    q0, [x25, #0x20]
+QuartzCore[0x183ee5768] <+892>:  str    q0, [sp, #0xd0]
+QuartzCore[0x183ee576c] <+896>:  ldr    q0, [x25, #0x30]
+QuartzCore[0x183ee5770] <+900>:  str    q0, [sp, #0xe0]
+QuartzCore[0x183ee5774] <+904>:  add    x0, sp, #0xb0
+QuartzCore[0x183ee5778] <+908>:  add    x1, sp, #0xb0
+QuartzCore[0x183ee577c] <+912>:  b      0x183ee5848               ; <+1116>
+QuartzCore[0x183ee5780] <+916>:  cbz    x24, 0x183ee5890          ; <+1188>
+QuartzCore[0x183ee5784] <+920>:  cbz    x26, 0x183ee5890          ; <+1188>
+QuartzCore[0x183ee5788] <+924>:  add    x1, sp, #0x1f0
+QuartzCore[0x183ee578c] <+928>:  add    x2, sp, #0x28
+QuartzCore[0x183ee5790] <+932>:  mov    x0, x26
+QuartzCore[0x183ee5794] <+936>:  bl     0x183ee5bfc               ; CA::Render::PropertyAnimation::animation_value(CA::Render::Object const*, unsigned long, double*, double**) const
+QuartzCore[0x183ee5798] <+940>:  mov    x23, x0
+QuartzCore[0x183ee579c] <+944>:  add    x1, sp, #0x130
+QuartzCore[0x183ee57a0] <+948>:  add    x2, sp, #0x20
+QuartzCore[0x183ee57a4] <+952>:  mov    x0, x24
+QuartzCore[0x183ee57a8] <+956>:  bl     0x183ee5bfc               ; CA::Render::PropertyAnimation::animation_value(CA::Render::Object const*, unsigned long, double*, double**) const
+QuartzCore[0x183ee57ac] <+960>:  mov    x24, x0
+QuartzCore[0x183ee57b0] <+964>:  tbz    w27, #0x0, 0x183ee58f0    ; <+1284>
+QuartzCore[0x183ee57b4] <+968>:  ldp    x9, x25, [sp, #0x20]
+QuartzCore[0x183ee57b8] <+972>:  cmp    x23, x24
+QuartzCore[0x183ee57bc] <+976>:  csel   x8, x23, x24, lo
+QuartzCore[0x183ee57c0] <+980>:  cmp    w8, #0x6
+QuartzCore[0x183ee57c4] <+984>:  b.eq   0x183ee5970               ; <+1412>
+QuartzCore[0x183ee57c8] <+988>:  cmp    w8, #0x10
+QuartzCore[0x183ee57cc] <+992>:  b.ne   0x183ee58f8               ; <+1292>
+QuartzCore[0x183ee57d0] <+996>:  ldr    q0, [x9, #0x40]
+QuartzCore[0x183ee57d4] <+1000>: str    q0, [sp, #0xf0]
+QuartzCore[0x183ee57d8] <+1004>: ldr    q0, [x9, #0x50]
+QuartzCore[0x183ee57dc] <+1008>: str    q0, [sp, #0x100]
+QuartzCore[0x183ee57e0] <+1012>: ldr    q0, [x9, #0x60]
+QuartzCore[0x183ee57e4] <+1016>: str    q0, [sp, #0x110]
+QuartzCore[0x183ee57e8] <+1020>: ldr    q0, [x9, #0x70]
+QuartzCore[0x183ee57ec] <+1024>: str    q0, [sp, #0x120]
+QuartzCore[0x183ee57f0] <+1028>: ldr    q0, [x9]
+QuartzCore[0x183ee57f4] <+1032>: str    q0, [sp, #0xb0]
+QuartzCore[0x183ee57f8] <+1036>: ldr    q0, [x9, #0x10]
+QuartzCore[0x183ee57fc] <+1040>: str    q0, [sp, #0xc0]
+QuartzCore[0x183ee5800] <+1044>: ldr    q0, [x9, #0x20]
+QuartzCore[0x183ee5804] <+1048>: str    q0, [sp, #0xd0]
+QuartzCore[0x183ee5808] <+1052>: ldr    q0, [x9, #0x30]
+QuartzCore[0x183ee580c] <+1056>: str    q0, [sp, #0xe0]
+QuartzCore[0x183ee5810] <+1060>: ldp    q0, q1, [x25]
+QuartzCore[0x183ee5814] <+1064>: ldp    q2, q3, [x25, #0x20]
+QuartzCore[0x183ee5818] <+1068>: stp    q2, q3, [sp, #0x50]
+QuartzCore[0x183ee581c] <+1072>: stp    q0, q1, [sp, #0x30]
+QuartzCore[0x183ee5820] <+1076>: ldp    q0, q1, [x25, #0x40]
+QuartzCore[0x183ee5824] <+1080>: ldp    q2, q3, [x25, #0x60]
+QuartzCore[0x183ee5828] <+1084>: stp    q2, q3, [sp, #0x90]
+QuartzCore[0x183ee582c] <+1088>: stp    q0, q1, [sp, #0x70]
+QuartzCore[0x183ee5830] <+1092>: add    x0, sp, #0x30
+QuartzCore[0x183ee5834] <+1096>: add    x1, sp, #0x30
+QuartzCore[0x183ee5838] <+1100>: bl     0x183f46910               ; CA::Mat4Impl::mat4_invert(double*, double const*)
+QuartzCore[0x183ee583c] <+1104>: add    x0, sp, #0xb0
+QuartzCore[0x183ee5840] <+1108>: add    x1, sp, #0xb0
+QuartzCore[0x183ee5844] <+1112>: add    x2, sp, #0x30
+QuartzCore[0x183ee5848] <+1116>: bl     0x183f46f94               ; CA::Mat4Impl::mat4_concat(double*, double const*, double const*)
+QuartzCore[0x183ee584c] <+1120>: ldr    q0, [sp, #0xf0]
+QuartzCore[0x183ee5850] <+1124>: str    q0, [x25, #0x40]
+QuartzCore[0x183ee5854] <+1128>: ldr    q0, [sp, #0x100]
+QuartzCore[0x183ee5858] <+1132>: str    q0, [x25, #0x50]
+QuartzCore[0x183ee585c] <+1136>: ldr    q0, [sp, #0x110]
+QuartzCore[0x183ee5860] <+1140>: str    q0, [x25, #0x60]
+QuartzCore[0x183ee5864] <+1144>: ldr    q0, [sp, #0x120]
+QuartzCore[0x183ee5868] <+1148>: str    q0, [x25, #0x70]
+QuartzCore[0x183ee586c] <+1152>: ldr    q0, [sp, #0xb0]
+QuartzCore[0x183ee5870] <+1156>: str    q0, [x25]
+QuartzCore[0x183ee5874] <+1160>: ldr    q0, [sp, #0xc0]
+QuartzCore[0x183ee5878] <+1164>: str    q0, [x25, #0x10]
+QuartzCore[0x183ee587c] <+1168>: ldr    q0, [sp, #0xd0]
+QuartzCore[0x183ee5880] <+1172>: str    q0, [x25, #0x20]
+QuartzCore[0x183ee5884] <+1176>: ldr    q0, [sp, #0xe0]
+QuartzCore[0x183ee5888] <+1180>: str    q0, [x25, #0x30]
+QuartzCore[0x183ee588c] <+1184>: b      0x183ee5628               ; <+572>
+QuartzCore[0x183ee5890] <+1188>: cbz    x23, 0x183ee591c          ; <+1328>
+QuartzCore[0x183ee5894] <+1192>: add    x1, sp, #0x1f0
+QuartzCore[0x183ee5898] <+1196>: add    x2, sp, #0x28
+QuartzCore[0x183ee589c] <+1200>: mov    x0, x23
+QuartzCore[0x183ee58a0] <+1204>: bl     0x183ee5bfc               ; CA::Render::PropertyAnimation::animation_value(CA::Render::Object const*, unsigned long, double*, double**) const
+QuartzCore[0x183ee58a4] <+1208>: mov    x23, x0
+QuartzCore[0x183ee58a8] <+1212>: ldr    x0, [x19, #0x10]
+QuartzCore[0x183ee58ac] <+1216>: add    x3, sp, #0x130
+QuartzCore[0x183ee58b0] <+1220>: add    x4, sp, #0x20
+QuartzCore[0x183ee58b4] <+1224>: mov    x1, x25
+QuartzCore[0x183ee58b8] <+1228>: mov    w2, #0x18                 ; =24 
+QuartzCore[0x183ee58bc] <+1232>: bl     0x183edd644               ; CA::Render::Layer::get_keypath_value(void* const*, unsigned long, double*, double**) const
+QuartzCore[0x183ee58c0] <+1236>: b      0x183ee5624               ; <+568>
+QuartzCore[0x183ee58c4] <+1240>: cmp    x23, x24
+QuartzCore[0x183ee58c8] <+1244>: csel   x8, x23, x24, lo
+QuartzCore[0x183ee58cc] <+1248>: cbz    x8, 0x183ee5628           ; <+572>
+QuartzCore[0x183ee58d0] <+1252>: ldp    x10, x9, [sp, #0x20]
+QuartzCore[0x183ee58d4] <+1256>: ldr    d0, [x9], #0x8
+QuartzCore[0x183ee58d8] <+1260>: ldr    d1, [x10]
+QuartzCore[0x183ee58dc] <+1264>: fadd   d0, d1, d0
+QuartzCore[0x183ee58e0] <+1268>: str    d0, [x10], #0x8
+QuartzCore[0x183ee58e4] <+1272>: subs   x8, x8, #0x1
+QuartzCore[0x183ee58e8] <+1276>: b.ne   0x183ee58d4               ; <+1256>
+QuartzCore[0x183ee58ec] <+1280>: b      0x183ee5628               ; <+572>
+QuartzCore[0x183ee58f0] <+1284>: cmp    x23, x24
+QuartzCore[0x183ee58f4] <+1288>: csel   x8, x23, x24, lo
+QuartzCore[0x183ee58f8] <+1292>: cbz    x8, 0x183ee5628           ; <+572>
+QuartzCore[0x183ee58fc] <+1296>: ldp    x9, x10, [sp, #0x20]
+QuartzCore[0x183ee5900] <+1300>: ldr    d0, [x9], #0x8
+QuartzCore[0x183ee5904] <+1304>: ldr    d1, [x10]
+QuartzCore[0x183ee5908] <+1308>: fsub   d0, d0, d1
+QuartzCore[0x183ee590c] <+1312>: str    d0, [x10], #0x8
+QuartzCore[0x183ee5910] <+1316>: subs   x8, x8, #0x1
+QuartzCore[0x183ee5914] <+1320>: b.ne   0x183ee5900               ; <+1300>
+QuartzCore[0x183ee5918] <+1324>: b      0x183ee5628               ; <+572>
+QuartzCore[0x183ee591c] <+1328>: cbz    x24, 0x183ee5a10          ; <+1572>
+QuartzCore[0x183ee5920] <+1332>: ldr    x0, [x19, #0x28]
+QuartzCore[0x183ee5924] <+1336>: add    x3, sp, #0x1f0
+QuartzCore[0x183ee5928] <+1340>: add    x4, sp, #0x28
+QuartzCore[0x183ee592c] <+1344>: mov    x1, x25
+QuartzCore[0x183ee5930] <+1348>: mov    w2, #0x18                 ; =24 
+QuartzCore[0x183ee5934] <+1352>: bl     0x183edd644               ; CA::Render::Layer::get_keypath_value(void* const*, unsigned long, double*, double**) const
+QuartzCore[0x183ee5938] <+1356>: b      0x183ee5610               ; <+548>
+QuartzCore[0x183ee593c] <+1360>: ldp    q0, q1, [x25]
+QuartzCore[0x183ee5940] <+1364>: ldr    q2, [x25, #0x20]
+QuartzCore[0x183ee5944] <+1368>: ldp    q3, q4, [x2]
+QuartzCore[0x183ee5948] <+1372>: ldr    q5, [x2, #0x20]
+QuartzCore[0x183ee594c] <+1376>: fmul.2d v6, v3, v0[0]
+QuartzCore[0x183ee5950] <+1380>: fmla.2d v6, v4, v0[1]
+QuartzCore[0x183ee5954] <+1384>: fmul.2d v0, v3, v1[0]
+QuartzCore[0x183ee5958] <+1388>: fmla.2d v0, v4, v1[1]
+QuartzCore[0x183ee595c] <+1392>: fmla.2d v5, v3, v2[0]
+QuartzCore[0x183ee5960] <+1396>: fmla.2d v5, v4, v2[1]
+QuartzCore[0x183ee5964] <+1400>: stp    q6, q0, [x25]
+QuartzCore[0x183ee5968] <+1404>: str    q5, [x25, #0x20]
+QuartzCore[0x183ee596c] <+1408>: b      0x183ee5628               ; <+572>
+QuartzCore[0x183ee5970] <+1412>: add    x8, sp, #0xb0
+QuartzCore[0x183ee5974] <+1416>: ldp    q2, q1, [x9]
+QuartzCore[0x183ee5978] <+1420>: ldr    q0, [x9, #0x20]
+QuartzCore[0x183ee597c] <+1424>: ldp    q4, q5, [x25]
+QuartzCore[0x183ee5980] <+1428>: stp    q4, q5, [sp, #0xb0]
+QuartzCore[0x183ee5984] <+1432>: ldr    q3, [x25, #0x20]
+QuartzCore[0x183ee5988] <+1436>: ldur   q6, [x8, #0x8]
+QuartzCore[0x183ee598c] <+1440>: mov.16b v7, v6
+QuartzCore[0x183ee5990] <+1444>: mov.d  v7[0], v5[1]
+QuartzCore[0x183ee5994] <+1448>: zip1.2d v16, v4, v6
+QuartzCore[0x183ee5998] <+1452>: fmul.2d v7, v7, v16
+QuartzCore[0x183ee599c] <+1456>: dup.2d v16, v7[1]
+QuartzCore[0x183ee59a0] <+1460>: fsub.2d v7, v7, v16
+QuartzCore[0x183ee59a4] <+1464>: fcmp   d7, #0.0
+QuartzCore[0x183ee59a8] <+1468>: b.eq   0x183ee59ec               ; <+1536>
+QuartzCore[0x183ee59ac] <+1472>: fmov   d16, #1.00000000
+QuartzCore[0x183ee59b0] <+1476>: fdiv   d7, d16, d7
+QuartzCore[0x183ee59b4] <+1480>: fmul.2d v6, v6, v7[0]
+QuartzCore[0x183ee59b8] <+1484>: ext.16b v4, v5, v4, #0x8
+QuartzCore[0x183ee59bc] <+1488>: fmul.2d v4, v4, v7[0]
+QuartzCore[0x183ee59c0] <+1492>: str    d4, [sp, #0xb0]
+QuartzCore[0x183ee59c4] <+1496>: fneg.2d v5, v6
+QuartzCore[0x183ee59c8] <+1500>: stur   q5, [x8, #0x8]
+QuartzCore[0x183ee59cc] <+1504>: add    x8, sp, #0xb0
+QuartzCore[0x183ee59d0] <+1508>: add    x8, x8, #0x18
+QuartzCore[0x183ee59d4] <+1512>: st1.d  { v4 }[1], [x8]
+QuartzCore[0x183ee59d8] <+1516>: fmul.2d v5, v3, v6
+QuartzCore[0x183ee59dc] <+1520>: ext.16b v6, v5, v5, #0x8
+QuartzCore[0x183ee59e0] <+1524>: fmls.2d v6, v4, v3
+QuartzCore[0x183ee59e4] <+1528>: ldp    q4, q5, [sp, #0xb0]
+QuartzCore[0x183ee59e8] <+1532>: mov.16b v3, v6
+QuartzCore[0x183ee59ec] <+1536>: fmul.2d v6, v4, v2[0]
+QuartzCore[0x183ee59f0] <+1540>: fmla.2d v6, v5, v2[1]
+QuartzCore[0x183ee59f4] <+1544>: fmul.2d v2, v4, v1[0]
+QuartzCore[0x183ee59f8] <+1548>: fmla.2d v2, v5, v1[1]
+QuartzCore[0x183ee59fc] <+1552>: fmla.2d v3, v4, v0[0]
+QuartzCore[0x183ee5a00] <+1556>: fmla.2d v3, v5, v0[1]
+QuartzCore[0x183ee5a04] <+1560>: stp    q6, q2, [x25]
+QuartzCore[0x183ee5a08] <+1564>: str    q3, [x25, #0x20]
+QuartzCore[0x183ee5a0c] <+1568>: b      0x183ee5628               ; <+572>
+QuartzCore[0x183ee5a10] <+1572>: cbz    x26, 0x183ee5a6c          ; <+1664>
+QuartzCore[0x183ee5a14] <+1576>: ldr    x0, [x19, #0x28]
+QuartzCore[0x183ee5a18] <+1580>: add    x3, sp, #0x1f0
+QuartzCore[0x183ee5a1c] <+1584>: add    x4, sp, #0x28
+QuartzCore[0x183ee5a20] <+1588>: mov    x1, x25
+QuartzCore[0x183ee5a24] <+1592>: mov    w2, #0x18                 ; =24 
+QuartzCore[0x183ee5a28] <+1596>: bl     0x183edd644               ; CA::Render::Layer::get_keypath_value(void* const*, unsigned long, double*, double**) const
+QuartzCore[0x183ee5a2c] <+1600>: mov    x23, x0
+QuartzCore[0x183ee5a30] <+1604>: add    x1, sp, #0x130
+QuartzCore[0x183ee5a34] <+1608>: add    x2, sp, #0x20
+QuartzCore[0x183ee5a38] <+1612>: mov    x0, x26
+QuartzCore[0x183ee5a3c] <+1616>: bl     0x183ee5bfc               ; CA::Render::PropertyAnimation::animation_value(CA::Render::Object const*, unsigned long, double*, double**) const
+QuartzCore[0x183ee5a40] <+1620>: mov    x24, x0
+QuartzCore[0x183ee5a44] <+1624>: tbz    w27, #0x0, 0x183ee5a78    ; <+1676>
+QuartzCore[0x183ee5a48] <+1628>: ldp    x0, x2, [sp, #0x20]
+QuartzCore[0x183ee5a4c] <+1632>: cmp    x23, x24
+QuartzCore[0x183ee5a50] <+1636>: csel   x25, x23, x24, lo
+QuartzCore[0x183ee5a54] <+1640>: mov    x1, x0
+QuartzCore[0x183ee5a58] <+1644>: mov    x3, x25
+QuartzCore[0x183ee5a5c] <+1648>: mov    w4, #0x0                  ; =0 
+QuartzCore[0x183ee5a60] <+1652>: bl     0x1841e7dec               ; CA::Render::(anonymous namespace)::add_transforms(double*, double*, double*, unsigned long, bool)
+QuartzCore[0x183ee5a64] <+1656>: tbnz   w0, #0x0, 0x183ee5628     ; <+572>
+QuartzCore[0x183ee5a68] <+1660>: b      0x183ee5a80               ; <+1684>
+QuartzCore[0x183ee5a6c] <+1664>: mov    x23, #0x0                 ; =0 
+QuartzCore[0x183ee5a70] <+1668>: mov    x24, #0x0                 ; =0 
+QuartzCore[0x183ee5a74] <+1672>: b      0x183ee5628               ; <+572>
+QuartzCore[0x183ee5a78] <+1676>: cmp    x23, x24
+QuartzCore[0x183ee5a7c] <+1680>: csel   x25, x23, x24, lo
+QuartzCore[0x183ee5a80] <+1684>: cbz    x25, 0x183ee5628          ; <+572>
+QuartzCore[0x183ee5a84] <+1688>: ldp    x9, x8, [sp, #0x20]
+QuartzCore[0x183ee5a88] <+1692>: ldr    d0, [x8], #0x8
+QuartzCore[0x183ee5a8c] <+1696>: ldr    d1, [x9]
+QuartzCore[0x183ee5a90] <+1700>: fadd   d0, d1, d0
+QuartzCore[0x183ee5a94] <+1704>: str    d0, [x9], #0x8
+QuartzCore[0x183ee5a98] <+1708>: subs   x25, x25, #0x1
+QuartzCore[0x183ee5a9c] <+1712>: b.ne   0x183ee5a88               ; <+1692>
+QuartzCore[0x183ee5aa0] <+1716>: b      0x183ee5628               ; <+572>
+QuartzCore[0x183ee5aa4] <+1720>: bl     0x186beaf90
+(lldb) disassemble -s 0x183f68bd0 -e 0x183f69044
+QuartzCore`CA::Layer::add_animation:
+QuartzCore[0x183f68bd0] <+0>:    pacibsp 
+QuartzCore[0x183f68bd4] <+4>:    sub    sp, sp, #0x60
+QuartzCore[0x183f68bd8] <+8>:    stp    x26, x25, [sp, #0x10]
+QuartzCore[0x183f68bdc] <+12>:   stp    x24, x23, [sp, #0x20]
+QuartzCore[0x183f68be0] <+16>:   stp    x22, x21, [sp, #0x30]
+QuartzCore[0x183f68be4] <+20>:   stp    x20, x19, [sp, #0x40]
+QuartzCore[0x183f68be8] <+24>:   stp    x29, x30, [sp, #0x50]
+QuartzCore[0x183f68bec] <+28>:   add    x29, sp, #0x50
+QuartzCore[0x183f68bf0] <+32>:   mov    x23, x2
+QuartzCore[0x183f68bf4] <+36>:   mov    x21, x1
+QuartzCore[0x183f68bf8] <+40>:   mov    x20, x0
+QuartzCore[0x183f68bfc] <+44>:   mrs    x8, TPIDRRO_EL0
+QuartzCore[0x183f68c00] <+48>:   ldr    x19, [x8, #0x240]
+QuartzCore[0x183f68c04] <+52>:   cbnz   x19, 0x183f68c10          ; <+64>
+QuartzCore[0x183f68c08] <+56>:   bl     0x183f82c7c               ; CA::Transaction::create()
+QuartzCore[0x183f68c0c] <+60>:   mov    x19, x0
+QuartzCore[0x183f68c10] <+64>:   ldr    w8, [x21, #0x10]
+QuartzCore[0x183f68c14] <+68>:   orr    w8, w8, #0x1
+QuartzCore[0x183f68c18] <+72>:   str    w8, [x21, #0x10]
+QuartzCore[0x183f68c1c] <+76>:   ldr    w8, [x19, #0x74]
+QuartzCore[0x183f68c20] <+80>:   add    w9, w8, #0x1
+QuartzCore[0x183f68c24] <+84>:   str    w9, [x19, #0x74]
+QuartzCore[0x183f68c28] <+88>:   cbnz   w8, 0x183f68c38           ; <+104>
+QuartzCore[0x183f68c2c] <+92>:   adrp   x0, 429613
+QuartzCore[0x183f68c30] <+96>:   add    x0, x0, #0x228            ; CA::Transaction::transaction_lock
+QuartzCore[0x183f68c34] <+100>:  bl     0x186bebf60
+QuartzCore[0x183f68c38] <+104>:  ldr    x22, [x20, #0x118]
+QuartzCore[0x183f68c3c] <+108>:  str    x22, [sp, #0x8]
+QuartzCore[0x183f68c40] <+112>:  mov    x0, x23
+QuartzCore[0x183f68c44] <+116>:  bl     0x1842bb440               ; objc_msgSend$hash
+QuartzCore[0x183f68c48] <+120>:  mov    x24, x0
+QuartzCore[0x183f68c4c] <+124>:  mov    w25, #0x0                 ; =0 
+QuartzCore[0x183f68c50] <+128>:  cbz    x22, 0x183f68cac          ; <+220>
+QuartzCore[0x183f68c54] <+132>:  add    x26, sp, #0x8
+QuartzCore[0x183f68c58] <+136>:  ldr    x8, [x22, #0x18]
+QuartzCore[0x183f68c5c] <+140>:  cmp    x8, x24
+QuartzCore[0x183f68c60] <+144>:  b.ne   0x183f68c9c               ; <+204>
+QuartzCore[0x183f68c64] <+148>:  ldr    x0, [x22, #0x10]
+QuartzCore[0x183f68c68] <+152>:  mov    x2, x23
+QuartzCore[0x183f68c6c] <+156>:  bl     0x1842bc6a0               ; objc_msgSend$isEqualToString:
+QuartzCore[0x183f68c70] <+160>:  cbz    w0, 0x183f68c9c           ; <+204>
+QuartzCore[0x183f68c74] <+164>:  ldrb   w8, [x22, #0x39]
+QuartzCore[0x183f68c78] <+168>:  tbnz   w8, #0x0, 0x183f68c94     ; <+196>
+QuartzCore[0x183f68c7c] <+172>:  ldrb   w8, [x22, #0x43]
+QuartzCore[0x183f68c80] <+176>:  tbnz   w8, #0x0, 0x183f68c94     ; <+196>
+QuartzCore[0x183f68c84] <+180>:  ldrb   w8, [x22, #0x44]
+QuartzCore[0x183f68c88] <+184>:  tbnz   w8, #0x0, 0x183f68c94     ; <+196>
+QuartzCore[0x183f68c8c] <+188>:  ldr    x8, [x22, #0x30]
+QuartzCore[0x183f68c90] <+192>:  cbz    x8, 0x183f68f8c           ; <+956>
+QuartzCore[0x183f68c94] <+196>:  mov    w25, #0x1                 ; =1 
+QuartzCore[0x183f68c98] <+200>:  strb   w25, [x22, #0x3c]
+QuartzCore[0x183f68c9c] <+204>:  ldr    x8, [x22]
+QuartzCore[0x183f68ca0] <+208>:  mov    x26, x22
+QuartzCore[0x183f68ca4] <+212>:  mov    x22, x8
+QuartzCore[0x183f68ca8] <+216>:  cbnz   x8, 0x183f68c58           ; <+136>
+QuartzCore[0x183f68cac] <+220>:  adrp   x8, 429616
+QuartzCore[0x183f68cb0] <+224>:  ldr    x8, [x8, #0xeb8]
+QuartzCore[0x183f68cb4] <+228>:  cmn    x8, #0x1
+QuartzCore[0x183f68cb8] <+232>:  b.ne   0x183f68fb8               ; <+1000>
+QuartzCore[0x183f68cbc] <+236>:  adrp   x8, 429618
+QuartzCore[0x183f68cc0] <+240>:  ldr    x0, [x8, #0x860]
+QuartzCore[0x183f68cc4] <+244>:  mov    w1, #0x50                 ; =80 
+QuartzCore[0x183f68cc8] <+248>:  mov    w2, #0x99fd               ; =39421 
+QuartzCore[0x183f68ccc] <+252>:  movk   w2, #0x1652, lsl #16
+QuartzCore[0x183f68cd0] <+256>:  bl     0x186beb910
+QuartzCore[0x183f68cd4] <+260>:  mov    x22, x0
+QuartzCore[0x183f68cd8] <+264>:  cbz    x0, 0x183f68ce0           ; <+272>
+QuartzCore[0x183f68cdc] <+268>:  str    wzr, [x22, #0x48]
+QuartzCore[0x183f68ce0] <+272>:  mov    x0, x21
+QuartzCore[0x183f68ce4] <+276>:  bl     0x186be78c0
+QuartzCore[0x183f68ce8] <+280>:  str    x0, [x22, #0x8]
+QuartzCore[0x183f68cec] <+284>:  cbz    x23, 0x183f68cfc          ; <+300>
+QuartzCore[0x183f68cf0] <+288>:  mov    x0, x23
+QuartzCore[0x183f68cf4] <+292>:  bl     0x186be78c0
+QuartzCore[0x183f68cf8] <+296>:  b      0x183f68d00               ; <+304>
+QuartzCore[0x183f68cfc] <+300>:  mov    x0, #0x0                  ; =0 
+QuartzCore[0x183f68d00] <+304>:  stp    x0, x24, [x22, #0x10]
+QuartzCore[0x183f68d04] <+308>:  str    xzr, [x22, #0x20]
+QuartzCore[0x183f68d08] <+312>:  adrp   x8, 429616
+QuartzCore[0x183f68d0c] <+316>:  add    x8, x8, #0x6e8            ; CA::Layer::add_animation(CAAnimation*, __CFString const*)::counter
+QuartzCore[0x183f68d10] <+320>:  mov    w23, #0x1                 ; =1 
+QuartzCore[0x183f68d14] <+324>:  ldaddal w23, w8, [x8]
+QuartzCore[0x183f68d18] <+328>:  add    w8, w8, #0x1
+QuartzCore[0x183f68d1c] <+332>:  str    w8, [x22, #0x28]
+QuartzCore[0x183f68d20] <+336>:  mov    x0, x21
+QuartzCore[0x183f68d24] <+340>:  bl     0x1842bc900               ; objc_msgSend$isRemovedOnCompletion
+QuartzCore[0x183f68d28] <+344>:  strb   w0, [x22, #0x38]
+QuartzCore[0x183f68d2c] <+348>:  and    w8, w25, #0x1
+QuartzCore[0x183f68d30] <+352>:  stur   wzr, [x22, #0x39]
+QuartzCore[0x183f68d34] <+356>:  strb   w8, [x22, #0x3d]
+QuartzCore[0x183f68d38] <+360>:  str    w23, [x22, #0x48]
+QuartzCore[0x183f68d3c] <+364>:  mov    w8, #0xcaca               ; =51914 
+QuartzCore[0x183f68d40] <+368>:  movk   w8, #0xcaca, lsl #16
+QuartzCore[0x183f68d44] <+372>:  str    w8, [x22, #0x4c]
+QuartzCore[0x183f68d48] <+376>:  ldr    x0, [x22, #0x8]
+QuartzCore[0x183f68d4c] <+380>:  ldr    x2, [x20, #0x10]
+QuartzCore[0x183f68d50] <+384>:  bl     0x1842b76e0               ; objc_msgSend$_propertyFlagsForLayer:
+QuartzCore[0x183f68d54] <+388>:  and    w8, w0, #0x1
+QuartzCore[0x183f68d58] <+392>:  strb   w8, [x22, #0x3f]
+QuartzCore[0x183f68d5c] <+396>:  ubfx   w8, w0, #1, #1
+QuartzCore[0x183f68d60] <+400>:  strb   w8, [x22, #0x3e]
+QuartzCore[0x183f68d64] <+404>:  ubfx   w8, w0, #2, #1
+QuartzCore[0x183f68d68] <+408>:  strb   w8, [x22, #0x40]
+QuartzCore[0x183f68d6c] <+412>:  ubfx   w8, w0, #3, #1
+QuartzCore[0x183f68d70] <+416>:  strb   w8, [x22, #0x41]
+QuartzCore[0x183f68d74] <+420>:  ubfx   w8, w0, #4, #1
+QuartzCore[0x183f68d78] <+424>:  mov    w9, #0x6                  ; =6 
+QuartzCore[0x183f68d7c] <+428>:  strb   w8, [x22, #0x42]
+QuartzCore[0x183f68d80] <+432>:  bics   wzr, w9, w0
+QuartzCore[0x183f68d84] <+436>:  b.ne   0x183f68dac               ; <+476>
+QuartzCore[0x183f68d88] <+440>:  add    x8, x20, #0x4
+QuartzCore[0x183f68d8c] <+444>:  mov    w9, #0x1000000            ; =16777216 
+QuartzCore[0x183f68d90] <+448>:  ldsetal w9, w8, [x8]
+QuartzCore[0x183f68d94] <+452>:  ldrb   w8, [x22, #0x3e]
+QuartzCore[0x183f68d98] <+456>:  cmp    w8, #0x1
+QuartzCore[0x183f68d9c] <+460>:  b.ne   0x183f68dc4               ; <+500>
+QuartzCore[0x183f68da0] <+464>:  ldrb   w8, [x22, #0x41]
+QuartzCore[0x183f68da4] <+468>:  tbnz   w8, #0x0, 0x183f68db8     ; <+488>
+QuartzCore[0x183f68da8] <+472>:  b      0x183f68dc4               ; <+500>
+QuartzCore[0x183f68dac] <+476>:  tbz    w0, #0x1, 0x183f68dc4     ; <+500>
+QuartzCore[0x183f68db0] <+480>:  ubfx   w8, w0, #3, #5
+QuartzCore[0x183f68db4] <+484>:  tbz    w8, #0x0, 0x183f68dc4     ; <+500>
+QuartzCore[0x183f68db8] <+488>:  add    x8, x20, #0x4
+QuartzCore[0x183f68dbc] <+492>:  mov    w9, #0x800000             ; =8388608 
+QuartzCore[0x183f68dc0] <+496>:  ldsetal w9, w8, [x8]
+QuartzCore[0x183f68dc4] <+500>:  mov    x0, x21
+QuartzCore[0x183f68dc8] <+504>:  bl     0x1842b9d00               ; objc_msgSend$delegate
+QuartzCore[0x183f68dcc] <+508>:  mov    x1, x0
+QuartzCore[0x183f68dd0] <+512>:  cbz    x1, 0x183f68df0           ; <+544>
+QuartzCore[0x183f68dd4] <+516>:  mov    x0, x19
+QuartzCore[0x183f68dd8] <+520>:  bl     0x183f69b90               ; lookup_delegate_methods(CA::Transaction*, objc_object*)
+QuartzCore[0x183f68ddc] <+524>:  ubfx   w8, w0, #6, #1
+QuartzCore[0x183f68de0] <+528>:  strb   w8, [x22, #0x43]
+QuartzCore[0x183f68de4] <+532>:  ubfx   w8, w0, #7, #1
+QuartzCore[0x183f68de8] <+536>:  strb   w8, [x22, #0x44]
+QuartzCore[0x183f68dec] <+540>:  b      0x183f68df4               ; <+548>
+QuartzCore[0x183f68df0] <+544>:  sturh  wzr, [x22, #0x43]
+QuartzCore[0x183f68df4] <+548>:  add    x8, x19, #0x68
+QuartzCore[0x183f68df8] <+552>:  mov    x9, x8
+QuartzCore[0x183f68dfc] <+556>:  ldr    x9, [x9]
+QuartzCore[0x183f68e00] <+560>:  cbz    x9, 0x183f68e2c           ; <+604>
+QuartzCore[0x183f68e04] <+564>:  ldr    x10, [x9, #0x8]
+QuartzCore[0x183f68e08] <+568>:  cbz    x10, 0x183f68dfc          ; <+556>
+QuartzCore[0x183f68e0c] <+572>:  b      0x183f68e18               ; <+584>
+QuartzCore[0x183f68e10] <+576>:  ldr    x9, [x8, #0x8]
+QuartzCore[0x183f68e14] <+580>:  cbnz   x9, 0x183f68e24           ; <+596>
+QuartzCore[0x183f68e18] <+584>:  ldr    x8, [x8]
+QuartzCore[0x183f68e1c] <+588>:  cbnz   x8, 0x183f68e10           ; <+576>
+QuartzCore[0x183f68e20] <+592>:  mov    x9, #0x0                  ; =0 
+QuartzCore[0x183f68e24] <+596>:  mov    w8, #0x1                  ; =1 
+QuartzCore[0x183f68e28] <+600>:  ldaddal w8, w8, [x9]
+QuartzCore[0x183f68e2c] <+604>:  str    x9, [x22, #0x30]
+QuartzCore[0x183f68e30] <+608>:  ldr    x26, [sp, #0x8]
+QuartzCore[0x183f68e34] <+612>:  cbz    x26, 0x183f68eec          ; <+796>
+QuartzCore[0x183f68e38] <+616>:  mov    x0, x21
+QuartzCore[0x183f68e3c] <+620>:  bl     0x183f70f7c               ; CAMediaTimingCopyRenderTiming
+QuartzCore[0x183f68e40] <+624>:  mov    x21, x0
+QuartzCore[0x183f68e44] <+628>:  add    x24, sp, #0x8
+QuartzCore[0x183f68e48] <+632>:  mov    w25, #-0x1                ; =-1 
+QuartzCore[0x183f68e4c] <+636>:  mov    x23, x26
+QuartzCore[0x183f68e50] <+640>:  ldr    x0, [x26, #0x8]
+QuartzCore[0x183f68e54] <+644>:  bl     0x183f70f7c               ; CAMediaTimingCopyRenderTiming
+QuartzCore[0x183f68e58] <+648>:  movi.2d v0, #0000000000000000
+QuartzCore[0x183f68e5c] <+652>:  movi.2d v1, #0000000000000000
+QuartzCore[0x183f68e60] <+656>:  cbz    x21, 0x183f68e68          ; <+664>
+QuartzCore[0x183f68e64] <+660>:  ldr    d1, [x21, #0x28]
+QuartzCore[0x183f68e68] <+664>:  cbz    x0, 0x183f68e70           ; <+672>
+QuartzCore[0x183f68e6c] <+668>:  ldr    d0, [x0, #0x28]
+QuartzCore[0x183f68e70] <+672>:  fcmp   d1, d0
+QuartzCore[0x183f68e74] <+676>:  b.pl   0x183f68e84               ; <+692>
+QuartzCore[0x183f68e78] <+680>:  mov    w26, #0x1                 ; =1 
+QuartzCore[0x183f68e7c] <+684>:  cbnz   x0, 0x183f68ea8           ; <+728>
+QuartzCore[0x183f68e80] <+688>:  b      0x183f68ed4               ; <+772>
+QuartzCore[0x183f68e84] <+692>:  b.le   0x183f68e94               ; <+708>
+QuartzCore[0x183f68e88] <+696>:  mov    w26, #0x0                 ; =0 
+QuartzCore[0x183f68e8c] <+700>:  cbnz   x0, 0x183f68ea8           ; <+728>
+QuartzCore[0x183f68e90] <+704>:  b      0x183f68ed4               ; <+772>
+QuartzCore[0x183f68e94] <+708>:  ldr    w8, [x22, #0x28]
+QuartzCore[0x183f68e98] <+712>:  ldr    w9, [x23, #0x28]
+QuartzCore[0x183f68e9c] <+716>:  cmp    w8, w9
+QuartzCore[0x183f68ea0] <+720>:  cset   w26, lo
+QuartzCore[0x183f68ea4] <+724>:  cbz    x0, 0x183f68ed4           ; <+772>
+QuartzCore[0x183f68ea8] <+728>:  add    x8, x0, #0x8
+QuartzCore[0x183f68eac] <+732>:  ldaddal w25, w8, [x8]
+QuartzCore[0x183f68eb0] <+736>:  cmp    w8, #0x1
+QuartzCore[0x183f68eb4] <+740>:  b.ne   0x183f68ed4               ; <+772>
+QuartzCore[0x183f68eb8] <+744>:  ldr    x16, [x0]
+QuartzCore[0x183f68ebc] <+748>:  mov    x17, x0
+QuartzCore[0x183f68ec0] <+752>:  movk   x17, #0x660e, lsl #48
+QuartzCore[0x183f68ec4] <+756>:  autda  x16, x17
+QuartzCore[0x183f68ec8] <+760>:  ldr    x8, [x16, #0x10]!
+QuartzCore[0x183f68ecc] <+764>:  movk   x16, #0xb986, lsl #48
+QuartzCore[0x183f68ed0] <+768>:  blraa  x8, x16
+QuartzCore[0x183f68ed4] <+772>:  cbnz   w26, 0x183f68ef8          ; <+808>
+QuartzCore[0x183f68ed8] <+776>:  ldr    x26, [x23]
+QuartzCore[0x183f68edc] <+780>:  mov    x24, x23
+QuartzCore[0x183f68ee0] <+784>:  cbnz   x26, 0x183f68e4c          ; <+636>
+QuartzCore[0x183f68ee4] <+788>:  mov    x8, #0x0                  ; =0 
+QuartzCore[0x183f68ee8] <+792>:  b      0x183f68f00               ; <+816>
+QuartzCore[0x183f68eec] <+796>:  str    x22, [sp, #0x8]
+QuartzCore[0x183f68ef0] <+800>:  str    xzr, [x22]
+QuartzCore[0x183f68ef4] <+804>:  b      0x183f68f40               ; <+880>
+QuartzCore[0x183f68ef8] <+808>:  ldr    x8, [x24]
+QuartzCore[0x183f68efc] <+812>:  mov    x23, x24
+QuartzCore[0x183f68f00] <+816>:  str    x8, [x22]
+QuartzCore[0x183f68f04] <+820>:  str    x22, [x23]
+QuartzCore[0x183f68f08] <+824>:  cbz    x21, 0x183f68f40          ; <+880>
+QuartzCore[0x183f68f0c] <+828>:  add    x8, x21, #0x8
+QuartzCore[0x183f68f10] <+832>:  mov    w9, #-0x1                 ; =-1 
+QuartzCore[0x183f68f14] <+836>:  ldaddal w9, w8, [x8]
+QuartzCore[0x183f68f18] <+840>:  cmp    w8, #0x1
+QuartzCore[0x183f68f1c] <+844>:  b.ne   0x183f68f40               ; <+880>
+QuartzCore[0x183f68f20] <+848>:  ldr    x16, [x21]
+QuartzCore[0x183f68f24] <+852>:  mov    x17, x21
+QuartzCore[0x183f68f28] <+856>:  movk   x17, #0x660e, lsl #48
+QuartzCore[0x183f68f2c] <+860>:  autda  x16, x17
+QuartzCore[0x183f68f30] <+864>:  ldr    x8, [x16, #0x10]!
+QuartzCore[0x183f68f34] <+868>:  mov    x0, x21
+QuartzCore[0x183f68f38] <+872>:  movk   x16, #0xb986, lsl #48
+QuartzCore[0x183f68f3c] <+876>:  blraa  x8, x16
+QuartzCore[0x183f68f40] <+880>:  ldr    x1, [sp, #0x8]
+QuartzCore[0x183f68f44] <+884>:  mov    x0, x20
+QuartzCore[0x183f68f48] <+888>:  bl     0x183f690b8               ; CA::Layer::set_animations(LayerAnimation*)
+QuartzCore[0x183f68f4c] <+892>:  mov    x0, x20
+QuartzCore[0x183f68f50] <+896>:  mov    x1, x19
+QuartzCore[0x183f68f54] <+900>:  mov    w2, #0x1                  ; =1 
+QuartzCore[0x183f68f58] <+904>:  bl     0x183f69044               ; CA::Layer::mark_animations(CA::Transaction*, bool)
+QuartzCore[0x183f68f5c] <+908>:  mov    x0, x19
+QuartzCore[0x183f68f60] <+912>:  ldp    x29, x30, [sp, #0x50]
+QuartzCore[0x183f68f64] <+916>:  ldp    x20, x19, [sp, #0x40]
+QuartzCore[0x183f68f68] <+920>:  ldp    x22, x21, [sp, #0x30]
+QuartzCore[0x183f68f6c] <+924>:  ldp    x24, x23, [sp, #0x20]
+QuartzCore[0x183f68f70] <+928>:  ldp    x26, x25, [sp, #0x10]
+QuartzCore[0x183f68f74] <+932>:  add    sp, sp, #0x60
+QuartzCore[0x183f68f78] <+936>:  autibsp 
+QuartzCore[0x183f68f7c] <+940>:  eor    x16, x30, x30, lsl #1
+QuartzCore[0x183f68f80] <+944>:  tbz    x16, #0x3e, 0x183f68f88   ; <+952>
+QuartzCore[0x183f68f84] <+948>:  brk    #0xc471
+QuartzCore[0x183f68f88] <+952>:  b      0x183f5f410               ; CA::Transaction::unlock()
+QuartzCore[0x183f68f8c] <+956>:  ldr    x8, [x22]
+QuartzCore[0x183f68f90] <+960>:  str    x8, [x26]
+QuartzCore[0x183f68f94] <+964>:  adrp   x1, 429612
+QuartzCore[0x183f68f98] <+968>:  add    x1, x1, #0x610            ; animation_state
+QuartzCore[0x183f68f9c] <+972>:  mov    x0, x22
+QuartzCore[0x183f68fa0] <+976>:  bl     0x183f836a4               ; schedule_stop_callback(LayerAnimation*, LayerAnimationState*)
+QuartzCore[0x183f68fa4] <+980>:  str    xzr, [x22]
+QuartzCore[0x183f68fa8] <+984>:  mov    x0, x22
+QuartzCore[0x183f68fac] <+988>:  bl     0x18418f5a8               ; LayerAnimation::unref()
+QuartzCore[0x183f68fb0] <+992>:  mov    w25, #0x1                 ; =1 
+QuartzCore[0x183f68fb4] <+996>:  b      0x183f68cac               ; <+220>
+QuartzCore[0x183f68fb8] <+1000>: adrp   x0, 429616
+QuartzCore[0x183f68fbc] <+1004>: add    x0, x0, #0xeb8            ; x_malloc_get_zone::once
+QuartzCore[0x183f68fc0] <+1008>: adrp   x16, 50
+QuartzCore[0x183f68fc4] <+1012>: add    x16, x16, #0x264          ; malloc_zone_init()
+QuartzCore[0x183f68fc8] <+1016>: paciza x16
+QuartzCore[0x183f68fcc] <+1020>: mov    x2, x16
+QuartzCore[0x183f68fd0] <+1024>: mov    x1, #0x0                  ; =0 
+QuartzCore[0x183f68fd4] <+1028>: bl     0x184235aa0               ; symbol stub for: dispatch_once_f
+QuartzCore[0x183f68fd8] <+1032>: b      0x183f68cbc               ; <+236>
+QuartzCore[0x183f68fdc] <+1036>: b      0x183f68ff0               ; <+1056>
+QuartzCore[0x183f68fe0] <+1040>: b      0x183f68ff0               ; <+1056>
+QuartzCore[0x183f68fe4] <+1044>: b      0x183f68ff0               ; <+1056>
+QuartzCore[0x183f68fe8] <+1048>: b      0x183f68ff0               ; <+1056>
+QuartzCore[0x183f68fec] <+1052>: b      0x183f68ff0               ; <+1056>
+QuartzCore[0x183f68ff0] <+1056>: mov    x20, x0
+QuartzCore[0x183f68ff4] <+1060>: b      0x183f69034               ; <+1124>
+QuartzCore[0x183f68ff8] <+1064>: mov    x20, x0
+QuartzCore[0x183f68ffc] <+1068>: cbz    x21, 0x183f69034          ; <+1124>
+QuartzCore[0x183f69000] <+1072>: add    x8, x21, #0x8
+QuartzCore[0x183f69004] <+1076>: mov    w9, #-0x1                 ; =-1 
+QuartzCore[0x183f69008] <+1080>: ldaddal w9, w8, [x8]
+QuartzCore[0x183f6900c] <+1084>: cmp    w8, #0x1
+QuartzCore[0x183f69010] <+1088>: b.ne   0x183f69034               ; <+1124>
+QuartzCore[0x183f69014] <+1092>: ldr    x16, [x21]
+QuartzCore[0x183f69018] <+1096>: mov    x17, x21
+QuartzCore[0x183f6901c] <+1100>: movk   x17, #0x660e, lsl #48
+QuartzCore[0x183f69020] <+1104>: autda  x16, x17
+QuartzCore[0x183f69024] <+1108>: ldr    x8, [x16, #0x10]!
+QuartzCore[0x183f69028] <+1112>: mov    x0, x21
+QuartzCore[0x183f6902c] <+1116>: movk   x16, #0xb986, lsl #48
+QuartzCore[0x183f69030] <+1120>: blraa  x8, x16
+QuartzCore[0x183f69034] <+1124>: mov    x0, x19
+QuartzCore[0x183f69038] <+1128>: bl     0x183f5f410               ; CA::Transaction::unlock()
+QuartzCore[0x183f6903c] <+1132>: mov    x0, x20
+QuartzCore[0x183f69040] <+1136>: bl     0x186beabd0
+(lldb) disassemble -s 0x183fa846c -e 0x183fa89f0
+QuartzCore`CA::Layer::commit_animations:
+QuartzCore[0x183fa846c] <+0>:    pacibsp 
+QuartzCore[0x183fa8470] <+4>:    sub    sp, sp, #0x90
+QuartzCore[0x183fa8474] <+8>:    stp    d9, d8, [sp, #0x20]
+QuartzCore[0x183fa8478] <+12>:   stp    x28, x27, [sp, #0x30]
+QuartzCore[0x183fa847c] <+16>:   stp    x26, x25, [sp, #0x40]
+QuartzCore[0x183fa8480] <+20>:   stp    x24, x23, [sp, #0x50]
+QuartzCore[0x183fa8484] <+24>:   stp    x22, x21, [sp, #0x60]
+QuartzCore[0x183fa8488] <+28>:   stp    x20, x19, [sp, #0x70]
+QuartzCore[0x183fa848c] <+32>:   stp    x29, x30, [sp, #0x80]
+QuartzCore[0x183fa8490] <+36>:   add    x29, sp, #0x80
+QuartzCore[0x183fa8494] <+40>:   mov    x20, x2
+QuartzCore[0x183fa8498] <+44>:   mov    x22, x1
+QuartzCore[0x183fa849c] <+48>:   mov    x19, x0
+QuartzCore[0x183fa84a0] <+52>:   adrp   x8, 400886
+QuartzCore[0x183fa84a4] <+56>:   ldr    x8, [x8, #0xc30]
+QuartzCore[0x183fa84a8] <+60>:   ldr    x8, [x8]
+QuartzCore[0x183fa84ac] <+64>:   str    x8, [sp, #0x18]
+QuartzCore[0x183fa84b0] <+68>:   ldr    x0, [x2, #0x20]
+QuartzCore[0x183fa84b4] <+72>:   cbz    x0, 0x183fa84dc           ; <+112>
+QuartzCore[0x183fa84b8] <+76>:   ldr    x16, [x0]
+QuartzCore[0x183fa84bc] <+80>:   mov    x17, x0
+QuartzCore[0x183fa84c0] <+84>:   movk   x17, #0x7be8, lsl #48
+QuartzCore[0x183fa84c4] <+88>:   autda  x16, x17
+QuartzCore[0x183fa84c8] <+92>:   ldr    x8, [x16, #0x18]!
+QuartzCore[0x183fa84cc] <+96>:   movk   x16, #0xecdb, lsl #48
+QuartzCore[0x183fa84d0] <+100>:  blraa  x8, x16
+QuartzCore[0x183fa84d4] <+104>:  mov    x21, x0
+QuartzCore[0x183fa84d8] <+108>:  b      0x183fa84e0               ; <+116>
+QuartzCore[0x183fa84dc] <+112>:  mov    w21, #0x0                 ; =0 
+QuartzCore[0x183fa84e0] <+116>:  ldr    x28, [x19, #0x118]
+QuartzCore[0x183fa84e4] <+120>:  str    x28, [sp, #0x8]
+QuartzCore[0x183fa84e8] <+124>:  cbz    x28, 0x183fa8968          ; <+1276>
+QuartzCore[0x183fa84ec] <+128>:  ldr    x8, [x22, #0x28]
+QuartzCore[0x183fa84f0] <+132>:  mov    w23, #0x1                 ; =1 
+QuartzCore[0x183fa84f4] <+136>:  ldr    w22, [x8, #0x8]
+QuartzCore[0x183fa84f8] <+140>:  adrp   x24, 436734
+QuartzCore[0x183fa84fc] <+144>:  add    x24, x24, #0xa60          ; @0x0020000004278aa3
+QuartzCore[0x183fa8500] <+148>:  mov    x25, x28
+QuartzCore[0x183fa8504] <+152>:  ldrb   w8, [x25, #0x3c]
+QuartzCore[0x183fa8508] <+156>:  tbz    w8, #0x0, 0x183fa8528     ; <+188>
+QuartzCore[0x183fa850c] <+160>:  ldrb   w8, [x19, #0x37]
+QuartzCore[0x183fa8510] <+164>:  tbnz   w8, #0x4, 0x183fa8860     ; <+1012>
+QuartzCore[0x183fa8514] <+168>:  ldrb   w8, [x25, #0x38]
+QuartzCore[0x183fa8518] <+172>:  cmp    w8, #0x1
+QuartzCore[0x183fa851c] <+176>:  b.ne   0x183fa8860               ; <+1012>
+QuartzCore[0x183fa8520] <+180>:  strb   w23, [x25, #0x3a]
+QuartzCore[0x183fa8524] <+184>:  b      0x183fa8860               ; <+1012>
+QuartzCore[0x183fa8528] <+188>:  ldrb   w8, [x25, #0x39]
+QuartzCore[0x183fa852c] <+192>:  cmp    w8, #0x1
+QuartzCore[0x183fa8530] <+196>:  b.ne   0x183fa8584               ; <+280>
+QuartzCore[0x183fa8534] <+200>:  ldr    w8, [x25, #0x2c]
+QuartzCore[0x183fa8538] <+204>:  cmp    w8, w22
+QuartzCore[0x183fa853c] <+208>:  b.eq   0x183fa850c               ; <+160>
+QuartzCore[0x183fa8540] <+212>:  str    w22, [x25, #0x2c]
+QuartzCore[0x183fa8544] <+216>:  ldr    x0, [x25, #0x20]
+QuartzCore[0x183fa8548] <+220>:  cbz    x0, 0x183fa857c           ; <+272>
+QuartzCore[0x183fa854c] <+224>:  add    x8, x0, #0x8
+QuartzCore[0x183fa8550] <+228>:  mov    w9, #-0x1                 ; =-1 
+QuartzCore[0x183fa8554] <+232>:  ldaddal w9, w8, [x8]
+QuartzCore[0x183fa8558] <+236>:  cmp    w8, #0x1
+QuartzCore[0x183fa855c] <+240>:  b.ne   0x183fa857c               ; <+272>
+QuartzCore[0x183fa8560] <+244>:  ldr    x16, [x0]
+QuartzCore[0x183fa8564] <+248>:  mov    x17, x0
+QuartzCore[0x183fa8568] <+252>:  movk   x17, #0x660e, lsl #48
+QuartzCore[0x183fa856c] <+256>:  autda  x16, x17
+QuartzCore[0x183fa8570] <+260>:  ldr    x8, [x16, #0x10]!
+QuartzCore[0x183fa8574] <+264>:  movk   x16, #0xb986, lsl #48
+QuartzCore[0x183fa8578] <+268>:  blraa  x8, x16
+QuartzCore[0x183fa857c] <+272>:  str    xzr, [x25, #0x20]
+QuartzCore[0x183fa8580] <+276>:  b      0x183fa8748               ; <+732>
+QuartzCore[0x183fa8584] <+280>:  str    w22, [x25, #0x2c]
+QuartzCore[0x183fa8588] <+284>:  ldr    x26, [x25, #0x8]
+QuartzCore[0x183fa858c] <+288>:  movi.2d v8, #0000000000000000
+QuartzCore[0x183fa8590] <+292>:  ldrb   w8, [x26, #0x10]
+QuartzCore[0x183fa8594] <+296>:  tbnz   w8, #0x2, 0x183fa8604     ; <+408>
+QuartzCore[0x183fa8598] <+300>:  mov    x0, x26
+QuartzCore[0x183fa859c] <+304>:  bl     0x1842b8960               ; objc_msgSend$beginTimeMode
+QuartzCore[0x183fa85a0] <+308>:  mov    x27, x0
+QuartzCore[0x183fa85a4] <+312>:  adrp   x8, 436734
+QuartzCore[0x183fa85a8] <+316>:  add    x8, x8, #0xa40            ; @0x0020000004278a9a
+QuartzCore[0x183fa85ac] <+320>:  cmp    x0, x8
+QuartzCore[0x183fa85b0] <+324>:  b.eq   0x183fa85d0               ; <+356>
+QuartzCore[0x183fa85b4] <+328>:  adrp   x8, 436734
+QuartzCore[0x183fa85b8] <+332>:  add    x8, x8, #0xa80            ; @0x0020000004278aac
+QuartzCore[0x183fa85bc] <+336>:  cmp    x27, x8
+QuartzCore[0x183fa85c0] <+340>:  b.eq   0x183fa86f0               ; <+644>
+QuartzCore[0x183fa85c4] <+344>:  cmp    x27, x24
+QuartzCore[0x183fa85c8] <+348>:  b.ne   0x183fa85e0               ; <+372>
+QuartzCore[0x183fa85cc] <+352>:  b      0x183fa8744               ; <+728>
+QuartzCore[0x183fa85d0] <+356>:  mov    x0, x26
+QuartzCore[0x183fa85d4] <+360>:  bl     0x1842b8940               ; objc_msgSend$beginTime
+QuartzCore[0x183fa85d8] <+364>:  fcmp   d0, #0.0
+QuartzCore[0x183fa85dc] <+368>:  b.eq   0x183fa8604               ; <+408>
+QuartzCore[0x183fa85e0] <+372>:  mov    x0, x27
+QuartzCore[0x183fa85e4] <+376>:  adrp   x2, 436734
+QuartzCore[0x183fa85e8] <+380>:  add    x2, x2, #0xa40            ; @0x0020000004278a9a
+QuartzCore[0x183fa85ec] <+384>:  bl     0x1842bc6a0               ; objc_msgSend$isEqualToString:
+QuartzCore[0x183fa85f0] <+388>:  cbz    w0, 0x183fa86dc           ; <+624>
+QuartzCore[0x183fa85f4] <+392>:  mov    x0, x26
+QuartzCore[0x183fa85f8] <+396>:  bl     0x1842b8940               ; objc_msgSend$beginTime
+QuartzCore[0x183fa85fc] <+400>:  fcmp   d0, #0.0
+QuartzCore[0x183fa8600] <+404>:  b.ne   0x183fa86dc               ; <+624>
+QuartzCore[0x183fa8604] <+408>:  cbz    w21, 0x183fa8700          ; <+660>
+QuartzCore[0x183fa8608] <+412>:  ldr    x27, [x25, #0x8]
+QuartzCore[0x183fa860c] <+416>:  ldr    x0, [x19, #0x10]
+QuartzCore[0x183fa8610] <+420>:  ldr    x1, [x20]
+QuartzCore[0x183fa8614] <+424>:  bl     0x1840303b4               ; CA::Context::copy_timings(CA::Layer*, void*)
+QuartzCore[0x183fa8618] <+428>:  mov    x26, x0
+QuartzCore[0x183fa861c] <+432>:  ldr    x0, [x20, #0x20]
+QuartzCore[0x183fa8620] <+436>:  ldr    x16, [x0]
+QuartzCore[0x183fa8624] <+440>:  mov    x17, x0
+QuartzCore[0x183fa8628] <+444>:  movk   x17, #0x7be8, lsl #48
+QuartzCore[0x183fa862c] <+448>:  autda  x16, x17
+QuartzCore[0x183fa8630] <+452>:  ldr    x8, [x16, #0x30]!
+QuartzCore[0x183fa8634] <+456>:  mov    x1, x27
+QuartzCore[0x183fa8638] <+460>:  mov    x2, x25
+QuartzCore[0x183fa863c] <+464>:  mov    x3, x26
+QuartzCore[0x183fa8640] <+468>:  mov.16b v0, v8
+QuartzCore[0x183fa8644] <+472>:  movk   x16, #0xe766, lsl #48
+QuartzCore[0x183fa8648] <+476>:  blraa  x8, x16
+QuartzCore[0x183fa864c] <+480>:  ldr    d0, [x20, #0x10]
+QuartzCore[0x183fa8650] <+484>:  fadd   d0, d0, d8
+QuartzCore[0x183fa8654] <+488>:  mov    x0, x26
+QuartzCore[0x183fa8658] <+492>:  bl     0x184030aa8               ; CA::Render::TimingList::map_time(double) const
+QuartzCore[0x183fa865c] <+496>:  ldr    x0, [x25, #0x8]
+QuartzCore[0x183fa8660] <+500>:  ldr    w8, [x0, #0x10]
+QuartzCore[0x183fa8664] <+504>:  mov    w9, #-0x6                 ; =-6 
+QuartzCore[0x183fa8668] <+508>:  and    w8, w8, w9
+QuartzCore[0x183fa866c] <+512>:  str    w8, [x0, #0x10]
+QuartzCore[0x183fa8670] <+516>:  bl     0x1842bfa80               ; objc_msgSend$setBeginTime:
+QuartzCore[0x183fa8674] <+520>:  ldr    x0, [x25, #0x8]
+QuartzCore[0x183fa8678] <+524>:  mov    x2, x24
+QuartzCore[0x183fa867c] <+528>:  bl     0x1842bfaa0               ; objc_msgSend$setBeginTimeMode:
+QuartzCore[0x183fa8680] <+532>:  ldr    x8, [x25, #0x8]
+QuartzCore[0x183fa8684] <+536>:  ldr    w9, [x8, #0x10]
+QuartzCore[0x183fa8688] <+540>:  orr    w9, w9, #0x1
+QuartzCore[0x183fa868c] <+544>:  str    w9, [x8, #0x10]
+QuartzCore[0x183fa8690] <+548>:  adrp   x8, 429553
+QuartzCore[0x183fa8694] <+552>:  ldrb   w8, [x8, #0x529]
+QuartzCore[0x183fa8698] <+556>:  eor    w8, w8, #0x1
+QuartzCore[0x183fa869c] <+560>:  strb   w8, [x25, #0x3b]
+QuartzCore[0x183fa86a0] <+564>:  cbz    x26, 0x183fa8744          ; <+728>
+QuartzCore[0x183fa86a4] <+568>:  add    x8, x26, #0x8
+QuartzCore[0x183fa86a8] <+572>:  mov    w9, #-0x1                 ; =-1 
+QuartzCore[0x183fa86ac] <+576>:  ldaddal w9, w8, [x8]
+QuartzCore[0x183fa86b0] <+580>:  cmp    w8, #0x1
+QuartzCore[0x183fa86b4] <+584>:  b.ne   0x183fa8744               ; <+728>
+QuartzCore[0x183fa86b8] <+588>:  ldr    x16, [x26]
+QuartzCore[0x183fa86bc] <+592>:  mov    x17, x26
+QuartzCore[0x183fa86c0] <+596>:  movk   x17, #0x660e, lsl #48
+QuartzCore[0x183fa86c4] <+600>:  autda  x16, x17
+QuartzCore[0x183fa86c8] <+604>:  ldr    x8, [x16, #0x10]!
+QuartzCore[0x183fa86cc] <+608>:  mov    x0, x26
+QuartzCore[0x183fa86d0] <+612>:  movk   x16, #0xb986, lsl #48
+QuartzCore[0x183fa86d4] <+616>:  blraa  x8, x16
+QuartzCore[0x183fa86d8] <+620>:  b      0x183fa8744               ; <+728>
+QuartzCore[0x183fa86dc] <+624>:  mov    x0, x27
+QuartzCore[0x183fa86e0] <+628>:  adrp   x2, 436734
+QuartzCore[0x183fa86e4] <+632>:  add    x2, x2, #0xa80            ; @0x0020000004278aac
+QuartzCore[0x183fa86e8] <+636>:  bl     0x1842bc6a0               ; objc_msgSend$isEqualToString:
+QuartzCore[0x183fa86ec] <+640>:  cbz    w0, 0x183fa8744           ; <+728>
+QuartzCore[0x183fa86f0] <+644>:  mov    x0, x26
+QuartzCore[0x183fa86f4] <+648>:  bl     0x1842b8940               ; objc_msgSend$beginTime
+QuartzCore[0x183fa86f8] <+652>:  mov.16b v8, v0
+QuartzCore[0x183fa86fc] <+656>:  cbnz   w21, 0x183fa8608          ; <+412>
+QuartzCore[0x183fa8700] <+660>:  mov    x0, x19
+QuartzCore[0x183fa8704] <+664>:  mov.16b v0, v8
+QuartzCore[0x183fa8708] <+668>:  mov    x1, x20
+QuartzCore[0x183fa870c] <+672>:  bl     0x183fad478               ; CA::Context::commit_layer_time(CA::Layer*, double, void*)
+QuartzCore[0x183fa8710] <+676>:  ldr    x0, [x25, #0x8]
+QuartzCore[0x183fa8714] <+680>:  ldr    w8, [x0, #0x10]
+QuartzCore[0x183fa8718] <+684>:  mov    w9, #-0x6                 ; =-6 
+QuartzCore[0x183fa871c] <+688>:  and    w8, w8, w9
+QuartzCore[0x183fa8720] <+692>:  str    w8, [x0, #0x10]
+QuartzCore[0x183fa8724] <+696>:  bl     0x1842bfa80               ; objc_msgSend$setBeginTime:
+QuartzCore[0x183fa8728] <+700>:  ldr    x0, [x25, #0x8]
+QuartzCore[0x183fa872c] <+704>:  mov    x2, x24
+QuartzCore[0x183fa8730] <+708>:  bl     0x1842bfaa0               ; objc_msgSend$setBeginTimeMode:
+QuartzCore[0x183fa8734] <+712>:  ldr    x8, [x25, #0x8]
+QuartzCore[0x183fa8738] <+716>:  ldr    w9, [x8, #0x10]
+QuartzCore[0x183fa873c] <+720>:  orr    w9, w9, #0x1
+QuartzCore[0x183fa8740] <+724>:  str    w9, [x8, #0x10]
+QuartzCore[0x183fa8744] <+728>:  strb   w23, [x25, #0x39]
+QuartzCore[0x183fa8748] <+732>:  ldrb   w8, [x25, #0x3f]
+QuartzCore[0x183fa874c] <+736>:  cmp    w8, #0x1
+QuartzCore[0x183fa8750] <+740>:  b.ne   0x183fa884c               ; <+992>
+QuartzCore[0x183fa8754] <+744>:  ldr    x0, [x25, #0x8]
+QuartzCore[0x183fa8758] <+748>:  ldr    x2, [x19, #0x10]
+QuartzCore[0x183fa875c] <+752>:  bl     0x1842b7080               ; objc_msgSend$_copyRenderAnimationForLayer:
+QuartzCore[0x183fa8760] <+756>:  cbz    x0, 0x183fa884c           ; <+992>
+QuartzCore[0x183fa8764] <+760>:  mov    x26, x0
+QuartzCore[0x183fa8768] <+764>:  ldr    x1, [x25, #0x10]
+QuartzCore[0x183fa876c] <+768>:  cbz    x1, 0x183fa8784           ; <+792>
+QuartzCore[0x183fa8770] <+772>:  mov    x0, #0x0                  ; =0 
+QuartzCore[0x183fa8774] <+776>:  bl     0x186be7ad0
+QuartzCore[0x183fa8778] <+780>:  mov    x27, x0
+QuartzCore[0x183fa877c] <+784>:  bl     0x186be7750
+QuartzCore[0x183fa8780] <+788>:  b      0x183fa878c               ; <+800>
+QuartzCore[0x183fa8784] <+792>:  mov    x0, #0x0                  ; =0 
+QuartzCore[0x183fa8788] <+796>:  mov    x27, #0x0                 ; =0 
+QuartzCore[0x183fa878c] <+800>:  str    x0, [x26, #0x40]
+QuartzCore[0x183fa8790] <+804>:  ldr    x0, [x26, #0x38]
+QuartzCore[0x183fa8794] <+808>:  cbz    x0, 0x183fa879c           ; <+816>
+QuartzCore[0x183fa8798] <+812>:  bl     0x186be78b0
+QuartzCore[0x183fa879c] <+816>:  str    x27, [x26, #0x38]
+QuartzCore[0x183fa87a0] <+820>:  ldr    w8, [x25, #0x28]
+QuartzCore[0x183fa87a4] <+824>:  str    w8, [x26, #0x48]
+QuartzCore[0x183fa87a8] <+828>:  ldr    x0, [x25, #0x8]
+QuartzCore[0x183fa87ac] <+832>:  adrp   x8, 429553
+QuartzCore[0x183fa87b0] <+836>:  ldr    x1, [x8, #0xc0]
+QuartzCore[0x183fa87b4] <+840>:  bl     0x186bebc60
+QuartzCore[0x183fa87b8] <+844>:  tbz    w0, #0x0, 0x183fa87f0     ; <+900>
+QuartzCore[0x183fa87bc] <+848>:  str    xzr, [sp, #0x10]
+QuartzCore[0x183fa87c0] <+852>:  ldr    x8, [x26, #0x60]
+QuartzCore[0x183fa87c4] <+856>:  cbz    x8, 0x183fa87d4           ; <+872>
+QuartzCore[0x183fa87c8] <+860>:  tbnz   w8, #0x0, 0x183fa87f0     ; <+900>
+QuartzCore[0x183fa87cc] <+864>:  ldr    w8, [x8]
+QuartzCore[0x183fa87d0] <+868>:  cbnz   w8, 0x183fa87f0           ; <+900>
+QuartzCore[0x183fa87d4] <+872>:  ldr    x1, [x25, #0x10]
+QuartzCore[0x183fa87d8] <+876>:  add    x0, sp, #0x10
+QuartzCore[0x183fa87dc] <+880>:  bl     0x183f8f088               ; CA::Render::key_path_set(void**, __CFString const*)
+QuartzCore[0x183fa87e0] <+884>:  ldr    x27, [sp, #0x10]
+QuartzCore[0x183fa87e4] <+888>:  ldr    x0, [x26, #0x60]
+QuartzCore[0x183fa87e8] <+892>:  bl     0x183f8f288               ; CA::Render::key_path_free(void**)
+QuartzCore[0x183fa87ec] <+896>:  str    x27, [x26, #0x60]
+QuartzCore[0x183fa87f0] <+900>:  mov    x0, x19
+QuartzCore[0x183fa87f4] <+904>:  mov    x1, x26
+QuartzCore[0x183fa87f8] <+908>:  mov    x2, x20
+QuartzCore[0x183fa87fc] <+912>:  bl     0x183fae974               ; CA::Context::commit_animation(CA::Layer*, CA::Render::Animation*, void*)
+QuartzCore[0x183fa8800] <+916>:  ldr    x8, [x26, #0x28]
+QuartzCore[0x183fa8804] <+920>:  cbz    x8, 0x183fa8814           ; <+936>
+QuartzCore[0x183fa8808] <+924>:  add    x9, x8, #0x8
+QuartzCore[0x183fa880c] <+928>:  ldaddal w23, w10, [x9]
+QuartzCore[0x183fa8810] <+932>:  cbz    w10, 0x183fa886c          ; <+1024>
+QuartzCore[0x183fa8814] <+936>:  str    x8, [x25, #0x20]
+QuartzCore[0x183fa8818] <+940>:  add    x8, x26, #0x8
+QuartzCore[0x183fa881c] <+944>:  mov    w9, #-0x1                 ; =-1 
+QuartzCore[0x183fa8820] <+948>:  ldaddal w9, w8, [x8]
+QuartzCore[0x183fa8824] <+952>:  cmp    w8, #0x1
+QuartzCore[0x183fa8828] <+956>:  b.ne   0x183fa884c               ; <+992>
+QuartzCore[0x183fa882c] <+960>:  ldr    x16, [x26]
+QuartzCore[0x183fa8830] <+964>:  mov    x17, x26
+QuartzCore[0x183fa8834] <+968>:  movk   x17, #0x660e, lsl #48
+QuartzCore[0x183fa8838] <+972>:  autda  x16, x17
+QuartzCore[0x183fa883c] <+976>:  ldr    x8, [x16, #0x10]!
+QuartzCore[0x183fa8840] <+980>:  mov    x0, x26
+QuartzCore[0x183fa8844] <+984>:  movk   x16, #0xb986, lsl #48
+QuartzCore[0x183fa8848] <+988>:  blraa  x8, x16
+QuartzCore[0x183fa884c] <+992>:  ldr    x8, [x25, #0x20]
+QuartzCore[0x183fa8850] <+996>:  cbnz   x8, 0x183fa8860           ; <+1012>
+QuartzCore[0x183fa8854] <+1000>: ldr    x0, [x25, #0x8]
+QuartzCore[0x183fa8858] <+1004>: bl     0x183f70f7c               ; CAMediaTimingCopyRenderTiming
+QuartzCore[0x183fa885c] <+1008>: str    x0, [x25, #0x20]
+QuartzCore[0x183fa8860] <+1012>: ldr    x25, [x25]
+QuartzCore[0x183fa8864] <+1016>: cbnz   x25, 0x183fa8504          ; <+152>
+QuartzCore[0x183fa8868] <+1020>: b      0x183fa887c               ; <+1040>
+QuartzCore[0x183fa886c] <+1024>: mov    x8, #0x0                  ; =0 
+QuartzCore[0x183fa8870] <+1028>: mov    w10, #-0x1                ; =-1 
+QuartzCore[0x183fa8874] <+1032>: ldaddal w10, w9, [x9]
+QuartzCore[0x183fa8878] <+1036>: b      0x183fa8814               ; <+936>
+QuartzCore[0x183fa887c] <+1040>: add    x22, sp, #0x8
+QuartzCore[0x183fa8880] <+1044>: adrp   x21, 429548
+QuartzCore[0x183fa8884] <+1048>: add    x21, x21, #0x610          ; animation_state
+QuartzCore[0x183fa8888] <+1052>: mov    x23, x22
+QuartzCore[0x183fa888c] <+1056>: mov    x22, x28
+QuartzCore[0x183fa8890] <+1060>: ldrb   w8, [x22, #0x3a]
+QuartzCore[0x183fa8894] <+1064>: tbz    w8, #0x0, 0x183fa88c8     ; <+1116>
+QuartzCore[0x183fa8898] <+1068>: ldr    x8, [x22]
+QuartzCore[0x183fa889c] <+1072>: str    x8, [x23]
+QuartzCore[0x183fa88a0] <+1076>: ldrb   w8, [x22, #0x3f]
+QuartzCore[0x183fa88a4] <+1080>: cmp    w8, #0x1
+QuartzCore[0x183fa88a8] <+1084>: b.ne   0x183fa88d8               ; <+1132>
+QuartzCore[0x183fa88ac] <+1088>: ldrb   w8, [x22, #0x3c]
+QuartzCore[0x183fa88b0] <+1092>: tbnz   w8, #0x0, 0x183fa88d8     ; <+1132>
+QuartzCore[0x183fa88b4] <+1096>: ldr    x1, [x22, #0x10]
+QuartzCore[0x183fa88b8] <+1100>: mov    x0, x19
+QuartzCore[0x183fa88bc] <+1104>: mov    x2, x20
+QuartzCore[0x183fa88c0] <+1108>: bl     0x183fd5b3c               ; CA::Context::remove_animation(CA::Layer*, __CFString const*, void*)
+QuartzCore[0x183fa88c4] <+1112>: b      0x183fa88d8               ; <+1132>
+QuartzCore[0x183fa88c8] <+1116>: ldrb   w8, [x22, #0x3c]
+QuartzCore[0x183fa88cc] <+1120>: tbz    w8, #0x0, 0x183fa88fc     ; <+1168>
+QuartzCore[0x183fa88d0] <+1124>: ldr    x8, [x22]
+QuartzCore[0x183fa88d4] <+1128>: str    x8, [x23]
+QuartzCore[0x183fa88d8] <+1132>: mov    x0, x22
+QuartzCore[0x183fa88dc] <+1136>: mov    x1, x21
+QuartzCore[0x183fa88e0] <+1140>: bl     0x183f836a4               ; schedule_stop_callback(LayerAnimation*, LayerAnimationState*)
+QuartzCore[0x183fa88e4] <+1144>: ldr    x8, [x21, #0x10]
+QuartzCore[0x183fa88e8] <+1148>: str    x8, [x22]
+QuartzCore[0x183fa88ec] <+1152>: str    x22, [x21, #0x10]
+QuartzCore[0x183fa88f0] <+1156>: ldr    x22, [x23]
+QuartzCore[0x183fa88f4] <+1160>: cbnz   x22, 0x183fa8890          ; <+1060>
+QuartzCore[0x183fa88f8] <+1164>: b      0x183fa8914               ; <+1192>
+QuartzCore[0x183fa88fc] <+1168>: ldrb   w8, [x22, #0x3d]
+QuartzCore[0x183fa8900] <+1172>: cmp    w8, #0x1
+QuartzCore[0x183fa8904] <+1176>: b.ne   0x183fa890c               ; <+1184>
+QuartzCore[0x183fa8908] <+1180>: strb   wzr, [x22, #0x3d]
+QuartzCore[0x183fa890c] <+1184>: ldr    x28, [x22]
+QuartzCore[0x183fa8910] <+1188>: cbnz   x28, 0x183fa8888          ; <+1052>
+QuartzCore[0x183fa8914] <+1192>: ldr    x1, [sp, #0x8]
+QuartzCore[0x183fa8918] <+1196>: ldr    x8, [sp, #0x18]
+QuartzCore[0x183fa891c] <+1200>: adrp   x9, 400886
+QuartzCore[0x183fa8920] <+1204>: ldr    x9, [x9, #0xc30]
+QuartzCore[0x183fa8924] <+1208>: ldr    x9, [x9]
+QuartzCore[0x183fa8928] <+1212>: cmp    x9, x8
+QuartzCore[0x183fa892c] <+1216>: b.ne   0x183fa89a4               ; <+1336>
+QuartzCore[0x183fa8930] <+1220>: mov    x0, x19
+QuartzCore[0x183fa8934] <+1224>: ldp    x29, x30, [sp, #0x80]
+QuartzCore[0x183fa8938] <+1228>: ldp    x20, x19, [sp, #0x70]
+QuartzCore[0x183fa893c] <+1232>: ldp    x22, x21, [sp, #0x60]
+QuartzCore[0x183fa8940] <+1236>: ldp    x24, x23, [sp, #0x50]
+QuartzCore[0x183fa8944] <+1240>: ldp    x26, x25, [sp, #0x40]
+QuartzCore[0x183fa8948] <+1244>: ldp    x28, x27, [sp, #0x30]
+QuartzCore[0x183fa894c] <+1248>: ldp    d9, d8, [sp, #0x20]
+QuartzCore[0x183fa8950] <+1252>: add    sp, sp, #0x90
+QuartzCore[0x183fa8954] <+1256>: autibsp 
+QuartzCore[0x183fa8958] <+1260>: eor    x16, x30, x30, lsl #1
+QuartzCore[0x183fa895c] <+1264>: tbz    x16, #0x3e, 0x183fa8964   ; <+1272>
+QuartzCore[0x183fa8960] <+1268>: brk    #0xc471
+QuartzCore[0x183fa8964] <+1272>: b      0x183f690b8               ; CA::Layer::set_animations(LayerAnimation*)
+QuartzCore[0x183fa8968] <+1276>: ldr    x8, [sp, #0x18]
+QuartzCore[0x183fa896c] <+1280>: adrp   x9, 400886
+QuartzCore[0x183fa8970] <+1284>: ldr    x9, [x9, #0xc30]
+QuartzCore[0x183fa8974] <+1288>: ldr    x9, [x9]
+QuartzCore[0x183fa8978] <+1292>: cmp    x9, x8
+QuartzCore[0x183fa897c] <+1296>: b.ne   0x183fa89a4               ; <+1336>
+QuartzCore[0x183fa8980] <+1300>: ldp    x29, x30, [sp, #0x80]
+QuartzCore[0x183fa8984] <+1304>: ldp    x20, x19, [sp, #0x70]
+QuartzCore[0x183fa8988] <+1308>: ldp    x22, x21, [sp, #0x60]
+QuartzCore[0x183fa898c] <+1312>: ldp    x24, x23, [sp, #0x50]
+QuartzCore[0x183fa8990] <+1316>: ldp    x26, x25, [sp, #0x40]
+QuartzCore[0x183fa8994] <+1320>: ldp    x28, x27, [sp, #0x30]
+QuartzCore[0x183fa8998] <+1324>: ldp    d9, d8, [sp, #0x20]
+QuartzCore[0x183fa899c] <+1328>: add    sp, sp, #0x90
+QuartzCore[0x183fa89a0] <+1332>: retab  
+QuartzCore[0x183fa89a4] <+1336>: bl     0x186beaf90
+QuartzCore[0x183fa89a8] <+1340>: b      0x183fa89ac               ; <+1344>
+QuartzCore[0x183fa89ac] <+1344>: mov    x19, x0
+QuartzCore[0x183fa89b0] <+1348>: cbz    x26, 0x183fa89e8          ; <+1404>
+QuartzCore[0x183fa89b4] <+1352>: add    x8, x26, #0x8
+QuartzCore[0x183fa89b8] <+1356>: mov    w9, #-0x1                 ; =-1 
+QuartzCore[0x183fa89bc] <+1360>: ldaddal w9, w8, [x8]
+QuartzCore[0x183fa89c0] <+1364>: cmp    w8, #0x1
+QuartzCore[0x183fa89c4] <+1368>: b.ne   0x183fa89e8               ; <+1404>
+QuartzCore[0x183fa89c8] <+1372>: ldr    x16, [x26]
+QuartzCore[0x183fa89cc] <+1376>: mov    x17, x26
+QuartzCore[0x183fa89d0] <+1380>: movk   x17, #0x660e, lsl #48
+QuartzCore[0x183fa89d4] <+1384>: autda  x16, x17
+QuartzCore[0x183fa89d8] <+1388>: ldr    x8, [x16, #0x10]!
+QuartzCore[0x183fa89dc] <+1392>: mov    x0, x26
+QuartzCore[0x183fa89e0] <+1396>: movk   x16, #0xb986, lsl #48
+QuartzCore[0x183fa89e4] <+1400>: blraa  x8, x16
+QuartzCore[0x183fa89e8] <+1404>: mov    x0, x19
+QuartzCore[0x183fa89ec] <+1408>: bl     0x186beabd0
+(lldb) disassemble -s 0x183f7d100 -e 0x183f7d2fc
+QuartzCore`-[CASpringAnimation(CAAnimationPrivate) durationForEpsilon:]:
+QuartzCore[0x183f7d100] <+0>:   pacibsp 
+QuartzCore[0x183f7d104] <+4>:   sub    sp, sp, #0x90
+QuartzCore[0x183f7d108] <+8>:   stp    d13, d12, [sp, #0x40]
+QuartzCore[0x183f7d10c] <+12>:  stp    d11, d10, [sp, #0x50]
+QuartzCore[0x183f7d110] <+16>:  stp    d9, d8, [sp, #0x60]
+QuartzCore[0x183f7d114] <+20>:  stp    x20, x19, [sp, #0x70]
+QuartzCore[0x183f7d118] <+24>:  stp    x29, x30, [sp, #0x80]
+QuartzCore[0x183f7d11c] <+28>:  add    x29, sp, #0x80
+QuartzCore[0x183f7d120] <+32>:  mov.16b v8, v0
+QuartzCore[0x183f7d124] <+36>:  mov    x19, x0
+QuartzCore[0x183f7d128] <+40>:  adrp   x8, 400929
+QuartzCore[0x183f7d12c] <+44>:  ldr    x8, [x8, #0xc30]
+QuartzCore[0x183f7d130] <+48>:  ldr    x8, [x8]
+QuartzCore[0x183f7d134] <+52>:  str    x8, [sp, #0x38]
+QuartzCore[0x183f7d138] <+56>:  movi.2d v0, #0000000000000000
+QuartzCore[0x183f7d13c] <+60>:  stur   q0, [sp, #0x28]
+QuartzCore[0x183f7d140] <+64>:  stur   q0, [sp, #0x18]
+QuartzCore[0x183f7d144] <+68>:  bl     0x1842bd320               ; objc_msgSend$mass
+QuartzCore[0x183f7d148] <+72>:  mov.16b v9, v0
+QuartzCore[0x183f7d14c] <+76>:  mov    x0, x19
+QuartzCore[0x183f7d150] <+80>:  bl     0x1842c28a0               ; objc_msgSend$stiffness
+QuartzCore[0x183f7d154] <+84>:  mov.16b v10, v0
+QuartzCore[0x183f7d158] <+88>:  mov    x0, x19
+QuartzCore[0x183f7d15c] <+92>:  bl     0x1842b9a40               ; objc_msgSend$damping
+QuartzCore[0x183f7d160] <+96>:  mov.16b v11, v0
+QuartzCore[0x183f7d164] <+100>: mov    x0, x19
+QuartzCore[0x183f7d168] <+104>: bl     0x1842c3a80               ; objc_msgSend$velocity
+QuartzCore[0x183f7d16c] <+108>: mov.16b v12, v0
+QuartzCore[0x183f7d170] <+112>: mov    x0, x19
+QuartzCore[0x183f7d174] <+116>: bl     0x1842b81c0               ; objc_msgSend$allowsOverdamping
+QuartzCore[0x183f7d178] <+120>: mov    x1, x0
+QuartzCore[0x183f7d17c] <+124>: add    x0, sp, #0x8
+QuartzCore[0x183f7d180] <+128>: mov.16b v0, v9
+QuartzCore[0x183f7d184] <+132>: mov.16b v1, v10
+QuartzCore[0x183f7d188] <+136>: mov.16b v2, v11
+QuartzCore[0x183f7d18c] <+140>: mov.16b v3, v12
+QuartzCore[0x183f7d190] <+144>: bl     0x183f7d484               ; CA::Render::SpringAnimation::State::update(double, double, double, double, bool)
+QuartzCore[0x183f7d194] <+148>: ldr    d9, [sp, #0x10]
+QuartzCore[0x183f7d198] <+152>: fcmp   d9, #0.0
+QuartzCore[0x183f7d19c] <+156>: b.ne   0x183f7d1ac               ; <+172>
+QuartzCore[0x183f7d1a0] <+160>: mov    x8, #0x7ff0000000000000   ; =9218868437227405312 
+QuartzCore[0x183f7d1a4] <+164>: fmov   d9, x8
+QuartzCore[0x183f7d1a8] <+168>: b      0x183f7d278               ; <+376>
+QuartzCore[0x183f7d1ac] <+172>: adrp   x8, 709
+QuartzCore[0x183f7d1b0] <+176>: ldr    d0, [x8, #0x6d8]
+QuartzCore[0x183f7d1b4] <+180>: fmaxnm d10, d8, d0
+QuartzCore[0x183f7d1b8] <+184>: fmov   d11, #1.00000000
+QuartzCore[0x183f7d1bc] <+188>: fcmp   d9, d11
+QuartzCore[0x183f7d1c0] <+192>: b.pl   0x183f7d1f4               ; <+244>
+QuartzCore[0x183f7d1c4] <+196>: ldur   q0, [sp, #0x20]
+QuartzCore[0x183f7d1c8] <+200>: fabs.2d v0, v0
+QuartzCore[0x183f7d1cc] <+204>: faddp.2d d0, v0
+QuartzCore[0x183f7d1d0] <+208>: fdiv   d0, d10, d0
+QuartzCore[0x183f7d1d4] <+212>: bl     0x186beb6e0
+QuartzCore[0x183f7d1d8] <+216>: fneg   d0, d0
+QuartzCore[0x183f7d1dc] <+220>: ldr    d1, [sp, #0x8]
+QuartzCore[0x183f7d1e0] <+224>: fmul   d1, d1, d9
+QuartzCore[0x183f7d1e4] <+228>: fdiv   d0, d0, d1
+QuartzCore[0x183f7d1e8] <+232>: movi.2d v1, #0000000000000000
+QuartzCore[0x183f7d1ec] <+236>: fmaxnm d9, d0, d1
+QuartzCore[0x183f7d1f0] <+240>: b      0x183f7d278               ; <+376>
+QuartzCore[0x183f7d1f4] <+244>: fmov   d9, #-1.00000000
+QuartzCore[0x183f7d1f8] <+248>: mov    x8, #0x7ff0000000000000   ; =9218868437227405312 
+QuartzCore[0x183f7d1fc] <+252>: fmov   d12, x8
+QuartzCore[0x183f7d200] <+256>: mov    x20, #0x7fefffffffffffff  ; =9218868437227405311 
+QuartzCore[0x183f7d204] <+260>: adrp   x8, 709
+QuartzCore[0x183f7d208] <+264>: ldr    d13, [x8, #0x7b8]
+QuartzCore[0x183f7d20c] <+268>: movi.2d v8, #0000000000000000
+QuartzCore[0x183f7d210] <+272>: add    x0, sp, #0x8
+QuartzCore[0x183f7d214] <+276>: mov.16b v0, v8
+QuartzCore[0x183f7d218] <+280>: bl     0x183f6c58c               ; CA::Render::SpringAnimation::State::eval(double) const
+QuartzCore[0x183f7d21c] <+284>: fsub   d1, d11, d0
+QuartzCore[0x183f7d220] <+288>: fmov   x8, d1
+QuartzCore[0x183f7d224] <+292>: and    x8, x8, #0x7fffffffffffffff
+QuartzCore[0x183f7d228] <+296>: cmp    x8, x20
+QuartzCore[0x183f7d22c] <+300>: b.gt   0x183f7d274               ; <+372>
+QuartzCore[0x183f7d230] <+304>: fabd   d0, d11, d0
+QuartzCore[0x183f7d234] <+308>: fcmp   d12, d10
+QuartzCore[0x183f7d238] <+312>: b.pl   0x183f7d254               ; <+340>
+QuartzCore[0x183f7d23c] <+316>: fcmp   d0, d10
+QuartzCore[0x183f7d240] <+320>: b.pl   0x183f7d264               ; <+356>
+QuartzCore[0x183f7d244] <+324>: fsub   d0, d8, d9
+QuartzCore[0x183f7d248] <+328>: fcmp   d0, d11
+QuartzCore[0x183f7d24c] <+332>: b.gt   0x183f7d278               ; <+376>
+QuartzCore[0x183f7d250] <+336>: b      0x183f7d26c               ; <+364>
+QuartzCore[0x183f7d254] <+340>: fcmp   d0, d12
+QuartzCore[0x183f7d258] <+344>: fcsel  d9, d9, d8, pl
+QuartzCore[0x183f7d25c] <+348>: fcsel  d12, d12, d0, pl
+QuartzCore[0x183f7d260] <+352>: b      0x183f7d26c               ; <+364>
+QuartzCore[0x183f7d264] <+356>: mov    x8, #0x7ff0000000000000   ; =9218868437227405312 
+QuartzCore[0x183f7d268] <+360>: fmov   d12, x8
+QuartzCore[0x183f7d26c] <+364>: fadd   d8, d8, d13
+QuartzCore[0x183f7d270] <+368>: b      0x183f7d210               ; <+272>
+QuartzCore[0x183f7d274] <+372>: movi.2d v9, #0000000000000000
+QuartzCore[0x183f7d278] <+376>: mov    x0, x19
+QuartzCore[0x183f7d27c] <+380>: bl     0x1842c2660               ; objc_msgSend$speed
+QuartzCore[0x183f7d280] <+384>: fcmp   s0, #0.0
+QuartzCore[0x183f7d284] <+388>: b.eq   0x183f7d2bc               ; <+444>
+QuartzCore[0x183f7d288] <+392>: ldr    x8, [sp, #0x38]
+QuartzCore[0x183f7d28c] <+396>: adrp   x9, 400929
+QuartzCore[0x183f7d290] <+400>: ldr    x9, [x9, #0xc30]
+QuartzCore[0x183f7d294] <+404>: ldr    x9, [x9]
+QuartzCore[0x183f7d298] <+408>: cmp    x9, x8
+QuartzCore[0x183f7d29c] <+412>: b.ne   0x183f7d2f8               ; <+504>
+QuartzCore[0x183f7d2a0] <+416>: fcvt   d0, s0
+QuartzCore[0x183f7d2a4] <+420>: fdiv   d0, d9, d0
+QuartzCore[0x183f7d2a8] <+424>: fabs   d0, d0
+QuartzCore[0x183f7d2ac] <+428>: adrp   x8, 710
+QuartzCore[0x183f7d2b0] <+432>: ldr    d1, [x8, #0x3c8]
+QuartzCore[0x183f7d2b4] <+436>: fminnm d0, d0, d1
+QuartzCore[0x183f7d2b8] <+440>: b      0x183f7d2dc               ; <+476>
+QuartzCore[0x183f7d2bc] <+444>: ldr    x8, [sp, #0x38]
+QuartzCore[0x183f7d2c0] <+448>: adrp   x9, 400929
+QuartzCore[0x183f7d2c4] <+452>: ldr    x9, [x9, #0xc30]
+QuartzCore[0x183f7d2c8] <+456>: ldr    x9, [x9]
+QuartzCore[0x183f7d2cc] <+460>: cmp    x9, x8
+QuartzCore[0x183f7d2d0] <+464>: b.ne   0x183f7d2f8               ; <+504>
+QuartzCore[0x183f7d2d4] <+468>: adrp   x8, 710
+QuartzCore[0x183f7d2d8] <+472>: ldr    d0, [x8, #0x3c8]
+QuartzCore[0x183f7d2dc] <+476>: ldp    x29, x30, [sp, #0x80]
+QuartzCore[0x183f7d2e0] <+480>: ldp    x20, x19, [sp, #0x70]
+QuartzCore[0x183f7d2e4] <+484>: ldp    d9, d8, [sp, #0x60]
+QuartzCore[0x183f7d2e8] <+488>: ldp    d11, d10, [sp, #0x50]
+QuartzCore[0x183f7d2ec] <+492>: ldp    d13, d12, [sp, #0x40]
+QuartzCore[0x183f7d2f0] <+496>: add    sp, sp, #0x90
+QuartzCore[0x183f7d2f4] <+500>: retab  
+QuartzCore[0x183f7d2f8] <+504>: bl     0x186beaf90
+(lldb) quit

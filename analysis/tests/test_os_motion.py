@@ -4,6 +4,7 @@ import copy
 import gzip
 import hashlib
 import json
+import math
 from pathlib import Path
 import struct
 import tempfile
@@ -11,6 +12,7 @@ import unittest
 import uuid
 
 from analysis.os_motion import EvidenceError, load_animation_objects
+from analysis import os_motion
 
 
 class OSMotionTests(unittest.TestCase):
@@ -487,6 +489,207 @@ class OSMotionTests(unittest.TestCase):
                 for row in self.install_rows:
                     row['animation'][section][field] = None
                 self.reject('metadata type')
+
+
+class OSEquationTests(unittest.TestCase):
+    """Kill branch, velocity sign, time-origin and fabricated-cutoff mutations."""
+
+    def spring(self, t, mass=1, stiffness=4, damping=4, velocity=0, overdamping=False):
+        self.assertTrue(hasattr(os_motion, 'spring_response'), 'OS solver is missing')
+        return os_motion.spring_response(t, mass=mass, stiffness=stiffness, damping=damping,
+                                         initial_velocity=velocity, allows_overdamping=overdamping)
+
+    def test_critical_hand_derived_position_velocity_acceleration(self):
+        # omega=2, t=.5; e^-1 times (2, 2, 0).
+        q, v, a = self.spring(.5)
+        self.assertAlmostEqual(q, .26424111765711533, places=15)
+        self.assertAlmostEqual(v, .7357588823428847, places=15)
+        self.assertEqual(a, 0)
+
+    def test_underdamped_independent_quarter_period_fixture(self):
+        # zeta=0, omega=2, t=pi/4 gives cos(pi/2)=0.
+        q, v, a = self.spring(math.pi/4, damping=0)
+        self.assertAlmostEqual(q, 1, places=15)
+        self.assertAlmostEqual(v, 2, places=15)
+        self.assertAlmostEqual(a, 0, places=14)
+
+    def test_allowed_overdamped_independent_root_fixture(self):
+        # Literal 23G90 update/eval stores fast coefficient +2, slow -1.
+        # This statically recovered branch differs from the conventional law.
+        q, v, a = self.spring(math.log(2), stiffness=2, damping=3, overdamping=True)
+        self.assertAlmostEqual(q, 1, places=15)
+        self.assertAlmostEqual(v, .5, places=15)
+        self.assertAlmostEqual(a, -1.5, places=14)
+
+    def test_disallowed_overdamping_uses_critical_omega_not_nominal_damping(self):
+        self.assertEqual(self.spring(.5, damping=500), self.spring(.5))
+
+    def test_critical_and_under_initial_velocity_sign(self):
+        for damping in (0, 2, 4):
+            with self.subTest(damping=damping):
+                q, v, a = self.spring(0, damping=damping, velocity=3)
+                self.assertEqual(q, 0)
+                self.assertAlmostEqual(v, 3, places=14)
+                self.assertAlmostEqual(a, 4 - damping*3, places=13)
+
+    def test_signed_scalar_additive_composition(self):
+        self.assertTrue(hasattr(os_motion, 'interpolate_scalar'), 'OS interpolation is missing')
+        q = self.spring(.5)[0]
+        self.assertAlmostEqual(os_motion.interpolate_scalar(10, -10, q), 4.715177646857694, places=14)
+        self.assertAlmostEqual(os_motion.interpolate_scalar(75, 0, q, additive_base=680), 735.1819161757164, places=12)
+
+    def test_explicit_parent_time_mapping_and_unresolved_zero_begin(self):
+        self.assertTrue(hasattr(os_motion, 'animation_local_time'), 'OS time mapping is missing')
+        self.assertEqual(os_motion.animation_local_time(11, begin_time=10, speed=.5, time_offset=.1), .6)
+        with self.assertRaisesRegex(EvidenceError, 'commit.*epoch'):
+            os_motion.animation_local_time(11, begin_time=0, speed=1, time_offset=0)
+
+    def test_media_speed_is_stored_as_float32_before_double_evaluation(self):
+        self.assertEqual(os_motion.animation_local_time(11,begin_time=10,speed=.1,time_offset=.1),
+                         .20000000149011612)
+
+    def test_invalid_solver_fields_fail_closed(self):
+        for kwargs in ({'mass':0}, {'stiffness':-1}, {'damping':-1}, {'velocity':float('nan')}, {'overdamping':1}):
+            with self.subTest(kwargs=kwargs), self.assertRaises(EvidenceError):
+                self.spring(.1, **kwargs)
+
+    def test_retained_fill_does_not_invent_exact_target_at_duration(self):
+        # The actual objects say removed_on_completion=false and fill=both.
+        q, v, _ = self.spring(.5058237871186482, stiffness=333.3333332805039,
+                              damping=36.51483716411749)
+        self.assertAlmostEqual(q, .9990014634632299, places=15)
+        self.assertGreater(v, 0)
+
+    def test_uikit_critical_duration_reproduces_binary_approximation(self):
+        self.assertTrue(hasattr(os_motion, 'uikit_critical_duration'), 'UIKit duration is missing')
+        self.assertEqual(os_motion.uikit_critical_duration(18.257418582058744), .5058237871186482)
+        self.assertNotEqual(os_motion.uikit_critical_duration(18.257418582058744), .4)
+        self.assertNotEqual(os_motion.uikit_critical_duration(18.257418582058744), .6)
+
+
+class OSRecoveryTests(unittest.TestCase):
+    """Authenticated 23G90 integration: no trajectory inputs or scope borrowing."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.root = Path(__file__).resolve().parents[2]
+        cls.evidence = cls.root / 'artifacts/native/os_motion_ios26_vphone/animation-objects.jsonl.gz'
+        cls.records = load_animation_objects(cls.evidence)
+        manifest = json.loads((cls.evidence.parent / 'manifest.json').read_text())
+        cls.binaries = {Path(image['runtime_path']).name: Path(image['path'])
+                        for image in manifest['images'] if Path(image['runtime_path']).name in ('UIKitCore', 'QuartzCore')}
+
+    def recover(self, records=None, binaries=None):
+        self.assertTrue(hasattr(os_motion, 'recover_os_motion'), 'OS recovery is missing')
+        return os_motion.recover_os_motion(self.records if records is None else records,
+                                           self.binaries if binaries is None else binaries)
+
+    def test_exact_binary_recovery_preserves_actual_object_flags(self):
+        report = self.recover().to_dict()
+        self.assertEqual(report['install_count'], 1350)
+        family = report['solver_families']['detent']
+        self.assertEqual(family['omega'], 18.257418582058744)
+        self.assertEqual(family['mass'], 1)
+        self.assertEqual(family['stiffness'], 333.3333332805039)
+        self.assertEqual(family['damping'], 36.51483716411749)
+        self.assertEqual(family['duration'], .5058237871186482)
+        self.assertEqual(family['timing_function']['name'], 'linear')
+        self.assertFalse(family['removed_on_completion'])
+        self.assertEqual(family['fill_mode'], 'both')
+        self.assertTrue(family['additive'])
+        self.assertTrue(all(v['status']=='unresolved' for v in report['phases'].values()))
+        self.assertEqual(report['production_profile']['profiles'], [])
+        self.assertEqual(set(report['phases']), {'presentation','fixed320_to_medium','medium_to_large','large_to_medium','dismissal'})
+
+    def test_report_is_immutable_and_round_trips_without_mutating_objects(self):
+        report = self.recover()
+        with self.assertRaises(TypeError):
+            report.data['phases']['presentation']['status'] = 'accepted'
+        original = report.to_dict()
+        changed = report.to_dict(); changed['solver_families']['detent']['mass'] = 99
+        self.assertEqual(report.to_dict(), original)
+
+    def test_missing_or_substituted_binary_cannot_recover(self):
+        for replacements in ({}, {'UIKitCore':self.binaries['QuartzCore'], 'QuartzCore':self.binaries['QuartzCore']}):
+            with self.subTest(replacements=replacements), self.assertRaisesRegex(EvidenceError, 'binary'):
+                self.recover(binaries=replacements)
+
+    def test_untrusted_or_incomplete_install_cohort_cannot_recover(self):
+        with self.assertRaisesRegex(EvidenceError, 'authenticated.*cohort'):
+            self.recover(records=self.records[:-1])
+
+    def test_manifest_recomputed_canonically_and_rejects_manual_edit(self):
+        self.assertTrue(hasattr(os_motion, 'validate_motion_manifest'), 'Manifest validator is missing')
+        report = self.recover()
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp)/'profile.json'; path.write_bytes(report.profile_bytes())
+            os_motion.validate_motion_manifest(path, self.records, self.binaries)
+            changed=json.loads(path.read_text()); changed['profiles']=[{'mass':1}]
+            path.write_text(json.dumps(changed))
+            with self.assertRaisesRegex(EvidenceError, 'canonical'):
+                os_motion.validate_motion_manifest(path, self.records, self.binaries)
+
+    def test_manifest_rejects_fit_and_trace_fields(self):
+        self.assertTrue(hasattr(os_motion, 'validate_motion_manifest'), 'Manifest validator is missing')
+        report = self.recover()
+        with tempfile.TemporaryDirectory() as temp:
+            path=Path(temp)/'profile.json'
+            for field in ('fit_report_hash','samples','residual','delay_correction'):
+                data=json.loads(report.profile_bytes()); data[field]=[123]
+                path.write_text(json.dumps(data))
+                with self.subTest(field=field), self.assertRaisesRegex(EvidenceError, 'canonical'):
+                    os_motion.validate_motion_manifest(path, self.records, self.binaries)
+
+    def test_saved_artifacts_are_byte_identical_to_authenticated_recovery(self):
+        report = self.recover()
+        profile = self.root/'spec/motion/ios26_vphone_page.json'
+        analysis = self.root/'artifacts/analysis/os_motion_ios26_vphone.json'
+        self.assertTrue(profile.exists(), 'Canonical production profile is missing')
+        self.assertTrue(analysis.exists(), 'Canonical OS report is missing')
+        self.assertEqual(profile.read_bytes(), report.profile_bytes())
+        self.assertEqual(analysis.read_bytes(), report.report_bytes())
+
+    def test_detent_coordinates_are_object_offsets_not_a_window_y_fit(self):
+        report=self.recover().to_dict()
+        phase=report['phases']['medium_to_large']
+        position=next(item for item in phase['objects'] if item['key_path']=='position')
+        self.assertEqual(position['from_value']['values'], [0,184.5])
+        self.assertEqual(position['to_value']['values'], [0,0])
+        self.assertEqual(position['layer_state_at_install']['bounds'][3],504)
+        self.assertIn('UIKitCore:0x184640c',position['owner_frames'])
+        self.assertIn('UIKitCore:0xe9ccd0',position['owner_frames'])
+        self.assertFalse(report['detent_configuration_reuse']['medium_to_large']['distance_scaling_promoted'])
+        self.assertEqual(report['backtrace_resolution']['UIKitCore:0x184640c']['name'],
+                         '-[UISheetPresentationController _animateChanges:completion:]')
+
+    def test_modified_authenticated_record_is_not_trusted_by_python_type(self):
+        from dataclasses import replace
+        broken=list(self.records)
+        broken[0]=replace(broken[0],phase='medium_to_large')
+        with self.assertRaisesRegex(EvidenceError,'authenticated.*cohort'):
+            self.recover(records=broken)
+
+    def test_binary_instruction_byte_mutation_cannot_recover(self):
+        from unittest.mock import patch
+        original=Path.read_bytes
+        def corrupt(path):
+            raw=original(path)
+            if path==self.binaries['QuartzCore']:
+                raw=raw[:697476]+bytes([raw[697476]^1])+raw[697477:]
+            return raw
+        with patch.object(Path,'read_bytes',corrupt), self.assertRaisesRegex(EvidenceError,'binary identity'):
+            self.recover()
+
+    def test_equation_recovery_opens_only_authenticated_object_and_binary_inputs(self):
+        from unittest.mock import patch
+        original = Path.read_bytes
+        opened=[]
+        def observe(path):
+            opened.append(str(path)); return original(path)
+        with patch.object(Path, 'read_bytes', observe):
+            self.recover()
+        self.assertTrue(opened)
+        self.assertFalse(any('/timing/' in p or 'trace' in Path(p).name or p.endswith(('.mp4','.png')) for p in opened))
 
 
 if __name__ == '__main__':
