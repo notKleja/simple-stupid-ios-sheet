@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Manifest-hashed canonical v2 pairing; never edits traces or analyzer gates."""
 import argparse
+import copy
 from collections import Counter
 import hashlib
 import gzip
@@ -11,7 +12,7 @@ import re
 import sys
 import importlib.util
 
-from compare import TraceError, compare, read_jsonl, require, schema_equal, validate, indexed_events
+from compare import TraceError, compare, read_jsonl, require, schema_equal, validate, validate_schema, indexed_events
 from regression import cells, normalize_window
 
 SPLITS = ("diagnostic", "training", "holdout")
@@ -21,6 +22,7 @@ CONFIG_KEYS = {"trial", "detents", "surface", "grabber", "page_sizing", "modal_i
 PROGRAMMATIC_EVENTS = ["present.requested", "present.first_visible", "present.completed", "detent.requested", "detent.requested",
                        "dismiss.requested", "dismiss.completed"]
 ROOT = Path(__file__).resolve().parents[1]
+CONDITION_IDENTITY = ("recipe_id", "recipe_revision", "parameters", "input_source", "accessibility")
 
 
 def sha(path):
@@ -45,6 +47,76 @@ def read_ref(ref, base):
     return json.loads(path.read_text()), path
 
 
+def read_contract_ref(ref, base, legacy):
+    """Only exact historical contract path/hash pairs may use the immutable snapshot."""
+    path = reference(ref, base)
+    pins = {
+        ROOT / "spec/test_matrix.json": ("test_matrix.json", "6d12d9b534451dc13b184a4f1ffd3e24821aabfc9887b90dce872ff64d93a933"),
+        ROOT / "measurement/profiles/full.json": ("full.json", "ebcd96dc8ff8e90aaeb52267062d2b8baa6a785498acb312a55a3663f275259d"),
+    }
+    if legacy and path in pins and ref["sha256"] == pins[path][1]:
+        name, digest = pins[path]
+        return read_ref({"path": str(ROOT / "measurement/runtime/contracts/v1" / name), "sha256": digest}, base)
+    return read_ref(ref, base)
+
+
+def load_scenario_map(ref, base):
+    mapping, _ = read_ref(ref, base)
+    schema = json.loads((ROOT / "measurement/schema/scenario.schema.json").read_text())
+    validate_schema(mapping, schema)
+    require(isinstance(mapping["entries"], list) and mapping["entries"], "nonempty explicit scenario map required")
+    seen = set()
+    for entry in mapping["entries"]:
+        validate_schema(entry, schema["properties"]["entries"]["items"], root=schema)
+        for role in ("matrix", "native", "flutter"):
+            if entry[role] is not None:
+                key = (role, entry[role], entry["revision"])
+                require(key not in seen, "scenario map must have unique matrix/source aliases per revision")
+                seen.add(key)
+    return mapping
+
+
+def resolve_scenario(mapping, scenario, revision):
+    require(type(revision) is int and revision > 0, "explicit positive scenario revision required")
+    matches = [entry for entry in mapping["entries"] if entry["matrix"] == scenario and entry["revision"] == revision]
+    require(len(matches) == 1, "scenario/revision must resolve through one unique explicit scenario map entry")
+    return matches[0]
+
+
+def validate_conditions(conditions):
+    schema = json.loads((ROOT / "measurement/schema/trace-v2.schema.json").read_text())
+    validate_schema(conditions, schema["$defs"]["conditions"], root=schema)
+    require(bool(conditions["applicability"]), "nonempty phase applicability declarations required")
+    return {key: conditions[key] for key in CONDITION_IDENTITY}
+
+
+def validate_recipe(recipe, cell, revision):
+    require(recipe.get("scenario_id") == cell["scenario_id"] and recipe.get("role") == cell["role"], "frozen recipe scenario/role mismatch")
+    require(type(recipe.get("scenario_revision")) is int and recipe["scenario_revision"] == revision, "frozen recipe scenario revision mismatch")
+    declared = validate_conditions(recipe.get("conditions"))
+    require(declared["recipe_id"] == recipe.get("id"), "condition recipe_id must identify the actual frozen recipe")
+    return declared
+
+
+def mapped_pair(n, c, entry, recipe_conditions):
+    for record, role in ((n, "native"), (c, "flutter")):
+        header = record["header"]
+        require(entry[role] is not None and header["scenario_id"] == entry[role], "source scenario is not registered for this matrix/revision")
+        require(type(header.get("scenario_revision")) is int and header["scenario_revision"] == entry["revision"], "source scenario revision mismatch")
+        observed = validate_conditions(header.get("conditions"))
+        require(schema_equal(observed, recipe_conditions), "trace conditions incompatible with frozen recipe")
+        require(schema_equal(header["environment"].get("system_settings"), observed["accessibility"]), "conditions accessibility does not match observed environment")
+    # This projection changes only identity used by comparison, never source bytes,
+    # timestamps, observations or semantic configuration. Pair reports retain aliases.
+    views = []
+    for record in (n, c):
+        views.append([{**record["rows"][0], "scenario_id": entry["matrix"]}, *record["rows"][1:]])
+    for view, record, role in zip(views, (n, c), ("native", "flutter")):
+        validate_v2(view, role, record["artifact"])
+    require(schema_equal(identity(views[0][0]), identity(views[1][0])), "incompatible canonical metadata/configuration/conditions")
+    return views
+
+
 def relocate(ref, old_base, new_base):
     path = reference(ref, old_base)
     return {"path": os.path.relpath(path, new_base), "sha256": ref["sha256"]}
@@ -65,10 +137,14 @@ def write_immutable(path, value):
 def freeze(plan_path, output):
     plan_path, output = Path(plan_path).resolve(), Path(output).resolve()
     plan = json.loads(plan_path.read_text())
-    require(plan.get("schema_version") == 1 and isinstance(plan.get("batch_id"), str) and plan["batch_id"], "versioned batch ID required")
-    matrix, _ = read_ref(plan["matrix"], plan_path.parent)
+    require(type(plan.get("schema_version")) is int and plan["schema_version"] in (1, 2) and isinstance(plan.get("batch_id"), str) and plan["batch_id"], "versioned batch ID required")
+    legacy = plan["schema_version"] == 1
+    require(not legacy or "scenario_map" not in plan, "v2 scenario map requires a v2 plan")
+    require(legacy or "scenario_map" in plan, "v2 plan requires an explicit scenario map reference")
+    mapping = None if legacy else load_scenario_map(plan["scenario_map"], plan_path.parent)
+    matrix, _ = read_contract_ref(plan["matrix"], plan_path.parent, legacy)
     expected = cells(matrix)
-    read_ref(plan["profile"], plan_path.parent)
+    read_contract_ref(plan["profile"], plan_path.parent, legacy)
     assignments = {split: [] for split in SPLITS}
     occupied = set()
     for assignment in plan.get("assignments", []):
@@ -80,14 +156,21 @@ def freeze(plan_path, output):
         require(split == "diagnostic" or role == ("holdout" if split == "holdout" else "training"), "holdout/training cell role mismatch")
         trials = assignment.get("expected_trials", list(range(1, matrix.get("minimum_trials", 10) + 1)))
         require(isinstance(trials, list) and trials and all(type(t) is int and t > 0 for t in trials) and len(set(trials)) == len(trials), "unique positive expected trial IDs required")
-        read_ref(assignment["recipe"], plan_path.parent)
+        recipe, _ = read_ref(assignment["recipe"], plan_path.parent)
+        if legacy:
+            require("conditions" not in recipe, "v2 recipe conditions require a v2 plan")
+        else:
+            resolved = resolve_scenario(mapping, expected[cell_id]["scenario_id"], assignment.get("scenario_revision"))
+            validate_recipe(recipe, expected[cell_id], resolved["revision"])
         entry = {**assignment, "expected_trials": sorted(trials)}
         for key in ("native", "candidate", "recipe"):
             entry[key] = relocate(assignment[key], plan_path.parent, output)
         assignments[split].append(entry)
-    index = {"schema_version": 1, "batch_id": plan["batch_id"], "plan_sha256": sha(plan_path),
+    index = {"schema_version": plan["schema_version"], "batch_id": plan["batch_id"], "plan_sha256": sha(plan_path),
              "matrix": relocate(plan["matrix"], plan_path.parent, output),
              "profile": relocate(plan["profile"], plan_path.parent, output), "splits": []}
+    if not legacy:
+        index["scenario_map"] = relocate(plan["scenario_map"], plan_path.parent, output)
     if any(cell["role"] == "holdout" for cell in expected.values()) or "holdout_definitions" in plan:
         require("holdout_definitions" in plan, "holdout definitions must be frozen before new batch assignment")
         read_ref(plan["holdout_definitions"], plan_path.parent)
@@ -102,8 +185,12 @@ def freeze(plan_path, output):
 
 
 def identity(header):
-    return {key: header[key] for key in ("scenario_id", "os", "device", "environment")} | {
+    result = {key: header[key] for key in ("scenario_id", "os", "device", "environment")} | {
         "configuration": {key: value for key, value in header["configuration"].items() if key != "trial"}}
+    for key in ("conditions", "scenario_revision"):
+        if key in header:
+            result[key] = header[key]
+    return result
 
 
 def import_cohort(source_manifest, source_root, adapter, role, split, cohort_id, output, artifact_directory, attempt=1):
@@ -182,6 +269,12 @@ def validate_v2(rows, role, artifact):
     header, frames, events = validate(rows, role)
     require(header.get("native_contract_version") == 2 and header["evidence_kind"] == "runtime", "fresh canonical v2 runtime evidence required")
     require(set(header["configuration"]) == CONFIG_KEYS, "canonical v2 requires exactly 13 effective configuration keys")
+    if "conditions" in header:
+        schema = json.loads((ROOT / "measurement/schema/trace-v2.schema.json").read_text())
+        validate_schema(header, schema)
+        validate_conditions(header["conditions"])
+        detents = header["configuration"]["detents"]
+        require(bool(detents) and all(isinstance(value, str) and value for value in detents), "nonempty semantic detent IDs required")
     require(type(header["configuration"]["trial"]) is int and header["configuration"]["trial"] > 0, "positive observed trial ID required")
     require(header["run_id"] == artifact["run_id"] and header["configuration"]["trial"] == artifact["trial"], "manifest run/trial identity does not match hashed header")
     require(all(row["seq"] == i for i, row in enumerate(rows)), "partial/lost record sequence")
@@ -276,14 +369,20 @@ def run(index_path, split_filter=None):
     try:
         index_path = Path(index_path).resolve()
         index = json.loads(index_path.read_text())
-        require(index.get("schema_version") == 1 and {ref["split"] for ref in index["splits"]} == set(SPLITS), "all frozen split files required")
-        matrix, _ = read_ref(index["matrix"], index_path.parent)
+        require(type(index.get("schema_version")) is int and index["schema_version"] in (1, 2) and {ref["split"] for ref in index["splits"]} == set(SPLITS), "all frozen split files required")
+        legacy = index["schema_version"] == 1
+        require(not legacy or "scenario_map" not in index, "v2 scenario map cannot be ignored by a v1 index")
+        require(legacy or "scenario_map" in index, "v2 index requires a scenario map reference")
+        mapping = None if legacy else load_scenario_map(index["scenario_map"], index_path.parent)
+        if not legacy:
+            result["scenario_map_sha256"] = index["scenario_map"]["sha256"]
+        matrix, _ = read_contract_ref(index["matrix"], index_path.parent, legacy)
         expected = cells(matrix)
         result["required_cells"] = len(expected)
         result["required_checks"] = sum(len(cell["check_contracts"]) for cell in expected.values())
         result["coverage"] = {cell_id: {"status": "UNRESOLVED", "complete_trials": [], "required_trials": matrix.get("minimum_trials", 10)} for cell_id in expected}
         result["coverage_counts"]["UNRESOLVED"] = len(expected)
-        profile, _ = read_ref(index["profile"], index_path.parent)
+        profile, _ = read_contract_ref(index["profile"], index_path.parent, legacy)
         if "holdout_definitions" in index:
             read_ref(index["holdout_definitions"], index_path.parent)
             result["holdout_definitions_sha256"] = index["holdout_definitions"]["sha256"]
@@ -321,16 +420,25 @@ def run(index_path, split_filter=None):
             require(cell_id in expected, "unknown frozen cell")
             cell = expected[cell_id]
             recipe, _ = read_ref(assignment["recipe"], index_path.parent)
+            entry = None if legacy else resolve_scenario(mapping, cell["scenario_id"], assignment.get("scenario_revision"))
+            recipe_conditions = None if legacy else validate_recipe(recipe, cell, entry["revision"])
             for trial in assignment["expected_trials"]:
                 n, c = native.get(trial), candidate.get(trial)
                 if n is None or c is None:
                     result["pair_counts"]["unresolved"] += 1
                     continue
-                if not schema_equal(identity(n["header"]), identity(c["header"])):
+                views = (n["rows"], c["rows"])
+                try:
+                    if legacy:
+                        require(not any("conditions" in record["header"] or "scenario_revision" in record["header"] for record in (n, c)), "v2 trace conditions require an explicit v2 scenario map")
+                        require(schema_equal(identity(n["header"]), identity(c["header"])), "incompatible canonical metadata/configuration")
+                        require(n["header"]["scenario_id"] == cell["scenario_id"], "source scenario does not match frozen case")
+                    else:
+                        views = mapped_pair(n, c, entry, recipe_conditions)
+                except TraceError as error:
                     result["pair_counts"]["unresolved"] += 1
-                    result["issues"].append(f"{cell_id}/trial{trial}: incompatible canonical metadata/configuration")
+                    result["issues"].append(f"{cell_id}/trial{trial}: {error}")
                     continue
-                require(n["header"]["scenario_id"] == cell["scenario_id"], "source scenario does not match frozen case")
                 require(int(n["header"]["os"]["version"].split(".")[0]) == cell["ios_major"] and n["header"]["environment"]["orientation"] == cell["orientation"], "source environment does not match frozen cell")
                 size = n["header"]["device"]["logical_size"]
                 size_key = tuple(sorted((size["width"], size["height"])))
@@ -344,13 +452,16 @@ def run(index_path, split_filter=None):
                 pair = {"cell_id": cell_id, "split": split, "trial": trial,
                         "native": {key: n["artifact"][key] for key in ("run_id", "trial", "attempt", "path", "sha256")},
                         "candidate": {key: c["artifact"][key] for key in ("run_id", "trial", "attempt", "path", "sha256")}}
+                if not legacy:
+                    pair["scenario_mapping"] = copy.deepcopy(entry)
+                    pair["comparison_view"] = "scenario_id-only projection; original source bytes unchanged"
                 result["pairs"].append(pair)
                 result["pair_counts"]["paired"] += 1
                 for check_id, contract in cell["check_contracts"].items():
                     cfg = {**profile, "window": contract["window"], "alignment": {"event": contract["window"]["start_event"], "occurrence": contract["window"]["start_occurrence"]}}
                     # Approved exclusions are explicit; all other analyzer gates remain intact.
                     cfg["auxiliary_events"] = ["detent.resolved", "batch.completed"]
-                    report = compare({"native": n["rows"], "candidate": c["rows"], "config": cfg})
+                    report = compare({"native": views[0], "candidate": views[1], "config": cfg})
                     status = outcome(report)
                     reasons = []
                     action_failed = False
@@ -365,10 +476,10 @@ def run(index_path, split_filter=None):
                     if recipe.get("scenario_id") != cell["scenario_id"] or recipe.get("role") != cell["role"]:
                         reasons.append("frozen recipe scenario/role mismatch")
                     for header in (n["header"], c["header"]):
-                        params = header["configuration"].get("measurement_parameters", {})
+                        params = header["configuration"].get("measurement_parameters", {}) if legacy else header["conditions"]["parameters"]
                         if not all(key in params and schema_equal(params[key], value) for key, value in contract["parameters"].items()):
                             reasons.append("required subcondition unobserved in canonical configuration")
-                    params = recipe.get("preconditions", {}).get("measurement_parameters", {})
+                    params = recipe.get("preconditions", {}).get("measurement_parameters", {}) if legacy else recipe["conditions"]["parameters"]
                     if not all(key in params and schema_equal(params[key], value) for key, value in contract["parameters"].items()):
                         reasons.append("frozen recipe does not pin subcondition")
                     if status == "PASS" and reasons:

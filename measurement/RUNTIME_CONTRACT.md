@@ -69,3 +69,36 @@ and provides no acceptance credit. New batches require the full freeze contract.
 Tests use explicitly synthetic fixtures, including simulated runtime provenance
 markers needed to exercise gates. They do not establish native parity. The
 current real v2 pair is an immutable diagnostic baseline with no acceptance claim.
+
+## Explicit mapping plans v2
+
+Opt in with `schema_version:2` on the plan/index (the JSONL envelope stays1).
+The plan must pin a `scenario_map` path and SHA256; its bytes are checked both
+before freezing and before any run, including single-split runs. Entries declare
+exact `matrix`, `native`, `flutter`, and positive integer `revision` values.
+Matrix/source aliases are unique within each revision. Null counterparts are
+unimplemented and cannot form a pair. `scenario-map-v2.json` lists the current
+programmatic registration plus four native-only interaction registrations; the
+downward case remains outside the live matrix until the later matrix task.
+
+Each frozen assignment, recipe, and observed trace session declares a positive
+integer `scenario_revision` matching the chosen entry. This is independent of
+`conditions.recipe_revision`. The recipe's `conditions.recipe_id` must equal its
+actual `id`. Both sessions must match the frozen recipe's condition identity:
+recipe_id, recipe_revision, parameters, input_source, accessibility. Accessibility
+must additionally match the observed environment.system_settings. Complete
+conditions validate against the additive v2 schema; parameters never enter the
+exact13-key semantic configuration. A v1 index cannot silently ignore v2 markers.
+
+An explicit match permits only a scenario_id-only in-memory comparison view.
+It changes no source bytes, metrics, states, timestamps or events. Original IDs
+and the entry/revision remain visible in pair reports. The view is revalidated
+against canonical scenario event gates before the unchanged comparator runs.
+Configured equality alone provides no outcome or numerical acceptance credit.
+Applicability declarations are not exemptions in this stage.
+
+Historical v1 indexes retain their old counts and comparisons. Only the exact
+known profile/matrix path+hash pairs use the byte-identical v1 snapshots; other
+hash mismatches still reject. Raw traces, frozen assignments and saved reports
+are never rewritten. A new orchestrator run truthfully records its new source
+hash rather than pretending to be the historical executable.
