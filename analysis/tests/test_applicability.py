@@ -1,7 +1,11 @@
 """Synthetic real-file applicability controls, never native parity evidence."""
 import copy
+from pathlib import Path
+import sys
 import unittest
 import test_conditions_v2 as fixtures
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from runtime_batch import phase_policy, scope_phase
 
 
 GROUPS = ("target_detent", "scroll", "hit_testing", "keyboard", "stack_layers", "contour", "performance")
@@ -125,6 +129,40 @@ class ApplicabilityTests(unittest.TestCase):
         result = self.execute()
         self.assertEqual(result.get("coverage_counts", {}).get("PASS", 0), 0)
         self.assertTrue(result["issues"])
+
+    def test_non_dismiss_phase_label_requires_matching_start_boundary(self):
+        self.contract["window"] = {
+            "start_event": "detent.requested",
+            "start_occurrence": 0,
+            "end_event": "detent.requested",
+            "end_occurrence": 1,
+        }
+        result = self.execute()
+        self.assertEqual(result.get("coverage_counts", {}).get("PASS", 0), 0)
+        self.assertIn("boundary", str(result["issues"]).lower())
+
+    def test_exempt_phase_scoping_does_not_mutate_shared_profile_metrics(self):
+        profile = copy.deepcopy(self.profile)
+        profile["metrics"]["scroll.offset"] = {"max": 0}
+        rules = {group: "not_applicable" for group in GROUPS}
+        profile["applicability_policies"] = {
+            "SYNTHETIC-dismiss": {"phase": "dismiss", "observables": rules}
+        }
+        contract = copy.deepcopy(self.contract)
+        contract.update(
+            phase="dismiss",
+            applicability_policy_id="SYNTHETIC-dismiss",
+            window={
+                "start_event": "dismiss.requested",
+                "start_occurrence": 0,
+                "end_event": "dismiss.completed",
+                "end_occurrence": 0,
+            },
+        )
+        rows = [fixtures.fixtures.rows("native"), fixtures.fixtures.rows("flutter")]
+        scoped, _ = scope_phase(profile, contract, rows, phase_policy(profile, contract))
+        self.assertNotIn("scroll.offset", scoped["metrics"])
+        self.assertIn("scroll.offset", profile["metrics"])
 
     def test_required_structured_diagnostics_do_not_become_comparison_acceptance(self):
         result = self.execute()

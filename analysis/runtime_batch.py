@@ -31,6 +31,19 @@ OBSERVABLE_FIELDS = {
     "keyboard": ("observations.keyboard",), "stack_layers": ("observations.stack_layers",),
     "contour": ("observations.contour",), "performance": ("observations.performance",),
 }
+PHASE_START_FAMILIES = {
+    "present": ("present.", "check.present."),
+    "detent": ("detent.", "check.detent.", "check.change_detent."),
+    "gesture": ("gesture.", "input.touch", "check.drag", "check.slow_drag", "check.fast_drag", "check.overdrag", "check.grab"),
+    "interrupt": ("interrupt.", "check.interrupt", "check.retarget", "check.reverse"),
+    "keyboard": ("keyboard.", "check.keyboard", "check.focus", "check.interactive_close"),
+    "stack": ("stack.", "check.stack"),
+    "dismiss": ("dismiss.", "check.dismiss", "check.cancel_dismiss", "check.voiceover_dismiss"),
+    "scroll": ("scroll.", "check.scroll"),
+    "hit_testing": ("background.", "hit_testing.", "check.background", "check.control", "check.threshold", "check.tap"),
+    "contour": ("contour.", "check.contour"),
+    "performance": ("performance.", "check.performance"),
+}
 
 
 def sha(path):
@@ -123,6 +136,10 @@ def phase_policy(profile, contract):
     require(isinstance(rules, dict) and set(rules) == set(OBSERVABLE_FIELDS), "phase policy must govern all seven observables")
     require(all(value in ("required", "not_applicable", "unavailable") for value in rules.values()), "unknown applicability status")
     require(rules["target_detent"] != "not_applicable" or policy["phase"] == "dismiss", "target detent exemption requires explicit dismissal phase policy")
+    start_event = contract["window"]["start_event"]
+    families = PHASE_START_FAMILIES.get(policy["phase"])
+    require(families and any(start_event.startswith(prefix) for prefix in families),
+            "applicability phase boundary does not match approved event family")
     if policy["phase"] == "dismiss":
         require(contract["window"]["start_event"] == "dismiss.requested" and
                 contract["window"]["end_event"] == "dismiss.completed", "dismissal policy requires observed dismissal boundaries")
@@ -140,7 +157,8 @@ def agree_phase_policy(profile, contract, headers):
 
 def scope_phase(profile, contract, rows, policy_info):
     identifier, policy = policy_info
-    cfg = {**profile, "states": list(profile.get("states", []))}
+    cfg = {**profile, "metrics": copy.deepcopy(profile.get("metrics", {})),
+           "states": list(profile.get("states", []))}
     audit = {"policy_id": identifier, "phase": policy["phase"], "approved_exemptions": [],
              "unresolved_observables": [], "missing_observables": [], "reason_failures": []}
     for group, status in policy["observables"].items():
