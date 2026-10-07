@@ -22,12 +22,16 @@ struct NativeScenario {
     var compactEdge = false
     var preferredWidth = false
     var minimumMajor = 26
+    var programmaticRequests: [(after:Double,target:String)] {
+        id == "native.geometry.smoke" ? [(1.5,"medium"),(3,"large"),(4.5,"medium")] : [(1.5,"large"),(3,"medium")]
+    }
+    var dismissAfter: Double { id == "native.geometry.smoke" ? 6 : 4.5 }
 
     static let definitions: [String: NativeScenario] = {
         var result: [String: NativeScenario] = [:]
         func add(_ scenario: NativeScenario) { result[scenario.id] = scenario }
         add(NativeScenario(id: "native.medium_large.programmatic"))
-        add(NativeScenario(id: "native.geometry.smoke"))
+        add(NativeScenario(id: "native.geometry.smoke", initial:"fixed320"))
         add(NativeScenario(id: "native.medium.basic", manual: true))
         add(NativeScenario(id: "native.large.basic", initial: "large", manual: true))
         add(NativeScenario(id: "native.custom.320", initial: "fixed320", manual: true))

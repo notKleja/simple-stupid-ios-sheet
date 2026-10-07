@@ -306,6 +306,11 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
                 "native_source_revision": replayRequest["source_revision"] as? String ?? ProcessInfo.processInfo.environment["NATIVE_SOURCE_REVISION"] ?? "working_tree_uncommitted"]]
         if scenario == "native.geometry.smoke" {
             session["geometry_probe"] = ["schema_version":1,"accepted":false,"scope":"public_geometry_diagnostic_not_contour"]
+            if let json=ProcessInfo.processInfo.environment["NATIVE_GEOMETRY_SOURCE_HASHES"],
+               let data=json.data(using:.utf8), let hashes=try? JSONSerialization.jsonObject(with:data) as? [String:String] {
+                var provenance=session["provenance"] as! [String:Any]
+                provenance["source_hashes"]=hashes;session["provenance"]=provenance
+            }
         }
         t.record("session", session)
         link?.invalidate(); link = CADisplayLink(target: self, selector: #selector(sample(_:))); link!.add(to: .main, forMode: .common)
@@ -317,17 +322,14 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         }
         // Manual gesture scenarios intentionally stay open for external input replay.
         guard !definition.manual else { return }
-        after(1.5, from: replayOrigin) {
-            self.target = "large"; self.phase = "detent"
-            t.event("detent.requested", ["target": "large"])
-            config.animateChanges { config.selectedDetentIdentifier = .large }
+        for request in definition.programmaticRequests {
+            after(request.after, from: replayOrigin) {
+                self.target=request.target;self.phase="detent"
+                t.event("detent.requested",["target":request.target])
+                config.animateChanges { config.selectedDetentIdentifier=request.target == "large" ? .large : .medium }
+            }
         }
-        after(3, from: replayOrigin) {
-            self.target = "medium"; self.phase = "detent"
-            t.event("detent.requested", ["target": "medium"])
-            config.animateChanges { config.selectedDetentIdentifier = .medium }
-        }
-        after(4.5, from: replayOrigin) {
+        after(definition.dismissAfter, from: replayOrigin) {
             self.phase = "dismiss"; self.target = nil; t.event("dismiss.requested")
             vc.dismiss(animated: true) {
                 t.event("dismiss.completed", terminal: true); self.link?.invalidate(); self.sheet = nil
