@@ -141,6 +141,11 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
     var strictTimers: [UUID: DispatchSourceTimer] = [:]
     var priorScrollMotion: (Double, Double)?
     var replayRequest: [String: Any] = [:]
+    var animationProbe: AnimationProbe?
+    var animationObjectsOnly: Bool {
+        replayRequest["capture_mode"] as? String == "animation_objects" ||
+        ProcessInfo.processInfo.environment["NATIVE_CAPTURE_MODE"] == "animation_objects"
+    }
     override func loadView() { view = CalibrationView(title: "Native Sheet Reference\nOpaque calibration surface") }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -226,6 +231,7 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         } else { DispatchQueue.main.asyncAfter(deadline: .now()+seconds, execute: callback) }
     }
     func next() {
+        animationProbe?.stop(); animationProbe = nil
         guard trial < trials + trialOffset else {
             interaction?.invalidateDynamics()
             running = false; trace?.event("batch.completed", ["trials": trials]); return
@@ -314,8 +320,18 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
                 provenance["source_hashes"]=hashes;session["provenance"]=provenance
             }
         }
+        if animationObjectsOnly { session["capture_mode"] = "animation_objects" }
         t.record("session", session)
-        link?.invalidate(); link = CADisplayLink(target: self, selector: #selector(sample(_:))); link!.add(to: .main, forMode: .common)
+        link?.invalidate(); link = nil
+        if animationObjectsOnly {
+            let observer = AnimationProbe(runID: t.id, trial: trial) { row in
+                if row["type"] as? String == "animation_probe.error" { t.fail("animation_probe_failed", row) }
+                else { t.record("animation_install", row, time: row["transaction_time"] as? Double) }
+            }
+            animationProbe = observer; observer.start(phase: "presentation")
+        } else {
+            link = CADisplayLink(target: self, selector: #selector(sample(_:))); link!.add(to: .main, forMode: .common)
+        }
         let replayOrigin = DispatchTime.now()
         t.event("present.requested")
         present(vc, animated: true) {
@@ -326,16 +342,19 @@ func coherentLayerSamples(_ window: CALayer) -> [ObjectIdentifier: CALayer] {
         guard !definition.manual else { return }
         for request in definition.programmaticRequests {
             after(request.after, from: replayOrigin) {
+                self.animationProbe?.setPhase("\(self.target ?? "unknown")_to_\(request.target)")
                 self.target=request.target;self.phase="detent"
                 t.event("detent.requested",["target":request.target])
                 config.animateChanges { config.selectedDetentIdentifier=request.target == "large" ? .large : .medium }
             }
         }
         after(definition.dismissAfter, from: replayOrigin) {
+            self.animationProbe?.setPhase("dismissal")
             self.phase = "dismiss"; self.target = nil; t.event("dismiss.requested")
             vc.dismiss(animated: true) {
                 self.interaction?.invalidateDynamics()
                 t.event("dismiss.completed", terminal: true); self.link?.invalidate(); self.sheet = nil
+                self.animationProbe?.stop()
                 self.after(0.4) { self.next() }
             }
         }
