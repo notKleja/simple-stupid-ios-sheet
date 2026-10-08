@@ -1,0 +1,93 @@
+{
+  "functions": {
+    "QuartzCore.0x183f708ec": {
+      "address": "0x183f708ec",
+      "file_offset": 645356,
+      "image": "QuartzCore",
+      "image_offset": 645356,
+      "length": 404,
+      "name": "-[CALayer removeAnimationForKey:]",
+      "sha256": "fe8377eb032b8484af7a13c0e1764cf66233ae8907df9b9895d32d1e5a4f812a"
+    },
+    "QuartzCore.0x183f71354": {
+      "address": "0x183f71354",
+      "file_offset": 648020,
+      "image": "QuartzCore",
+      "image_offset": 648020,
+      "length": 96,
+      "name": "-[CAAnimation beginTime]",
+      "sha256": "d43539a7157f2a090cf680b64a29692287b925a82e891efbdac1b3fe3960e3e4"
+    },
+    "QuartzCore.0x183f79b6c": {
+      "address": "0x183f79b6c",
+      "file_offset": 682860,
+      "image": "QuartzCore",
+      "image_offset": 682860,
+      "length": 264,
+      "name": "-[CALayer animationForKey:]",
+      "sha256": "afe01cd56bd3cefcc7efaadc3b597e322eff68ef4fed79c59724dbeb948fc95b"
+    },
+    "QuartzCore.0x183f7ab80": {
+      "address": "0x183f7ab80",
+      "file_offset": 686976,
+      "image": "QuartzCore",
+      "image_offset": 686976,
+      "length": 332,
+      "name": "-[CALayer removeAllAnimations]",
+      "sha256": "56c7312e64ca1935346e15c252e082fda3808bd9ab10f6033764370c4309c30c"
+    },
+    "QuartzCore.0x183fad528": {
+      "address": "0x183fad528",
+      "file_offset": 894248,
+      "image": "QuartzCore",
+      "image_offset": 894248,
+      "length": 92,
+      "name": "-[CAAnimation setBeginTime:]",
+      "sha256": "c642e31f4f9bd2b55bb05cf9624ba964fcf37fbd4e7e1c5c5b79ffe6058dd468"
+    },
+    "QuartzCore.0x183fd5b3c": {
+      "address": "0x183fd5b3c",
+      "file_offset": 1059644,
+      "image": "QuartzCore",
+      "image_offset": 1059644,
+      "length": 216,
+      "name": "__ZN2CA7Context16remove_animationEPNS_5LayerEPK10__CFStringPv",
+      "sha256": "38472a27933e3febbaf0227d491adbba452169f5124089d8d81d32faafc98675"
+    },
+    "UIKitCore.0x18916b050": {
+      "address": "0x18916b050",
+      "file_offset": 274512,
+      "image": "UIKitCore",
+      "image_offset": 274512,
+      "length": 460,
+      "name": "-[UIView(Animation) _removeAllAnimations:]",
+      "sha256": "8ec41f49ee01dfab85a014d0f3078b0a715819aa6aea43307758875dcd50029f"
+    },
+    "UIKitCore.0x18923b654": {
+      "address": "0x18923b654",
+      "file_offset": 1128020,
+      "image": "UIKitCore",
+      "image_offset": 1128020,
+      "length": 12,
+      "name": "-[UIViewAnimationState _animationDidStopWithNilAnimationFinished:]",
+      "sha256": "2045694e011d115cbada0d907afa690ea04542d760f5c0cce50d0bbd167d7ffe"
+    }
+  },
+  "images": {
+    "QuartzCore": {
+      "path": "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/Frameworks/QuartzCore.framework/QuartzCore",
+      "runtime_path": "/System/Library/Frameworks/QuartzCore.framework/QuartzCore",
+      "sha256": "0c4e3dacb205fe1755db40502b4efa8afda2582ee69512caa3181706d3b41304",
+      "uuid": "8F1E0B3F-ADD6-3710-A790-009333597AB4",
+      "vm_base": "0x183ed3000"
+    },
+    "UIKitCore": {
+      "path": "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore",
+      "runtime_path": "/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore",
+      "sha256": "6c93b6072b4033166bd6025f2a068961f687710a61f73db3ecfa6e40b49a9f4e",
+      "uuid": "0D94422F-FE7C-302E-B896-3BC5873C0CFC",
+      "vm_base": "0x189128000"
+    }
+  },
+  "schema_version": 1
+}

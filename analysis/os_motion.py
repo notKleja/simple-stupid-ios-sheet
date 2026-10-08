@@ -655,6 +655,8 @@ def load_animation_objects(path: str | Path) -> list[AnimationInstall]:
 # a new accepted profile. A new build requires a new independently audited bundle.
 _RECOVERY_ROOT = Path(__file__).resolve().parents[1]
 _RECOVERY_FILES = {
+    'research/os_motion/ios26_commit_function_evidence.json': '9f76ea98e22720102c3dc55393fded7f67cdcf768f9bbf3a13c9a8d06554cf4e',
+    'research/os_motion/ios26_commit_disassembly.txt': '4c55ccbed4c1d63db4d1934a023abf2c92eb780562db2847fad4104df12c497f',
     'research/os_motion/ios26_function_evidence.json': '50a3fdc13b2dd8c2d5ebdb37253d1bd4ce6b4f5549103dcf7b67a14cba2d7410',
     'research/os_motion/ios26_uikit_attributes_disassembly.txt': 'c7b5995eb72e9ec60161f147b85e0b50bf38bb2adef3df638949b9d88f570a6f',
     'research/os_motion/ios26_uikit_disassembly.txt': 'ea71ef641e756211041da9b2e3e9d0b1f2864243effd6f5089dfe33e72378fea',
@@ -851,6 +853,11 @@ def recover_os_motion(animation_records: list[AnimationInstall], binaries: Mappi
     for relative, digest in _RECOVERY_FILES.items():
         _require(_sha(_read(_RECOVERY_ROOT/relative)) == digest, 'recovery evidence hash mismatch: '+relative)
     static = _json(_read(_RECOVERY_ROOT/'research/os_motion/ios26_function_evidence.json'))
+    commit_static = _json(_read(_RECOVERY_ROOT/'research/os_motion/ios26_commit_function_evidence.json'))
+    _schema(commit_static, ('schema_version','images','functions'), context='commit function bundle')
+    _require(commit_static['schema_version'] == 1 and commit_static['images'] == static['images'], 'commit function image identity mismatch')
+    _require(not (set(commit_static['functions']) & set(static['functions'])), 'duplicate commit function evidence')
+    static['functions'].update(commit_static['functions'])
     binary_data = {}; symbols = {}
     for name, declared in static['images'].items():
         raw = _read(Path(binaries[name]))
@@ -961,11 +968,19 @@ def recover_os_motion(animation_records: list[AnimationInstall], binaries: Mappi
                   object_manifest=_sha(_read(evidence.parent/'manifest.json')),analysis_source=_sha(_read(Path(__file__))))
     scope = {key:manifest[key] for key in ('os','device','device_geometry','environment','configuration','scenario_id','resolved_detents')}
     images = {name:{key:value for key,value in item.items() if key!='path'} for name,item in static['images'].items()}
+    commit_composition = {'status':'blocked_unsealed_runtime_cohort_excluded', 'runtime_object_cohort_included':False,
+                          'promoted_phases':[], 'available_static_functions':sorted(commit_static['functions']),
+                          'remaining_jobs':['private_additive_CATransform3D_interpolation_and_order',
+                                            'exact_sheet_view_and_controller_ownership',
+                                            'guaranteed_coherent_post_transaction_model_boundary'],
+                          'follow_on':'implement_Dart_only_after_OS_recovery_then_run_post_freeze_tests',
+                          'no_fitted_or_visual_curves':True}
     profile = {'schema_version':1,'source_kind':'authenticated_os_equation_recovery','id':'ios26_23G90_vphone_page',
                'status':'unresolved','scope':scope,'profiles':[],
                'unresolved_phases':{phase:{'status':'unresolved','reasons':reason} for phase in PHASES},
                'unsupported':['interruption','drag_release','keyboard_rebase','arbitrary_custom_detents','other_runtime_or_configuration'],
-               'source_hashes':hashes,'binaries':images,'function_evidence':static['functions']}
+               'source_hashes':hashes,'binaries':images,'function_evidence':static['functions'],
+               'commit_composition':commit_composition}
     data = {'schema_version':1,'source_kind':'authenticated_os_binary_and_install_objects','install_count':len(trusted),
             'status':'recovered_equations_with_unresolved_window_y_profiles','scope':scope,
             'source_hashes':hashes,'binaries':images,'function_evidence':static['functions'],'binary_constants':static['constants'],
@@ -984,7 +999,8 @@ def recover_os_motion(animation_records: list[AnimationInstall], binaries: Mappi
                                 'coordinate_scalar':'base+from+(to-from)*q; CATransform3D is unresolved',
                                 'duration_is_not_settling_duration':True,'target_clamp_proven':False,
                                 'numeric_identity':'host_libm_mathematical_conformance_only_guest_FMA_and_transcendentals_unverified'},
-            'backtrace_resolution':frame_map,'detent_configuration_reuse':reuse,'phases':phases,'production_profile':profile}
+            'backtrace_resolution':frame_map,'detent_configuration_reuse':reuse,'phases':phases,
+            'commit_composition':commit_composition,'production_profile':profile}
     return OsMotionReport(_freeze(data))
 
 
@@ -992,3 +1008,248 @@ def validate_motion_manifest(path: str | Path, animation_records: list[Animation
     """Reject all edits, omissions, extra sources or scope changes by regeneration."""
     expected = recover_os_motion(animation_records,binaries).profile_bytes()
     _require(_read(Path(path)) == expected, 'motion manifest is not canonical OS recovery')
+
+
+@dataclass(frozen=True)
+class AnimationCommit:
+    run_id: str
+    install_id: str
+    pre_forward: Mapping
+    post_forward: Mapping
+    next_runloop: Mapping
+    cleanup: tuple[Mapping, ...]
+
+
+_COMMIT_FIELDS = COMMON_FIELDS | set(('trial phase transaction_time layer key animation transaction backtrace '
+    'install_id stage installed_animation owner_backtrace commit_epoch_status installation_status observation_boundary').split())
+
+
+def pair_commit_objects(rows: list[dict]) -> tuple[AnimationCommit, ...]:
+    """Pair discrete snapshots. This structural helper confers no provenance."""
+    grouped = {}; identities = {}; addresses = {}; previous = {}
+    for row in rows:
+        _schema(row, _COMMIT_FIELDS, context='commit snapshot')
+        _metadata_types(row, strings=('type', 'run_id', 'phase', 'install_id', 'stage', 'commit_epoch_status',
+                                      'installation_status', 'observation_boundary'), nullable_strings=('key',),
+                        integers=('schema_version', 'seq', 't_ns', 'trial'), numbers=('transaction_time',), context='commit snapshot')
+        _require(row['schema_version'] == 1 and row['type'] in ('animation_commit', 'animation_cleanup'), 'wrong commit snapshot type')
+        run = row['run_id']; stage = row['stage']
+        _require(row['seq'] > previous.get(run, -1), 'duplicate or unordered commit sequence'); previous[run] = row['seq']
+        _require(row['phase'] in PHASES, 'unknown commit phase')
+        _require(row['installation_status'] in ('current', 'superseded', 'unresolved_nil_key'), 'unknown installation state')
+        _require(row['commit_epoch_status'] == 'unresolved_next_runloop_is_not_commit', 'unauthenticated commit epoch assertion')
+        _require(row['observation_boundary'] == ('main_queue_async_no_flush' if stage == 'next_runloop' else 'synchronous_call_boundary'), 'unknown observation boundary')
+        layer = row['layer']
+        _schema(layer, ('id', 'address', 'class', 'parent_id', 'model_state', 'presentation_state', 'ancestry', 'timing', 'delegate'), context='commit layer')
+        _metadata_types(layer, strings=('id', 'address', 'class'), nullable_strings=('parent_id',), context='commit layer')
+        ancestry = layer['ancestry']
+        _require(type(ancestry) is list and layer['parent_id'] == (ancestry[0]['id'] if ancestry else None), 'missing ordered ancestor')
+        chain = [layer] + ancestry
+        _require(len({node['id'] for node in chain}) == len(chain), 'duplicate ancestor identity')
+        for node in chain:
+            if node is not layer:
+                _schema(node, ('id', 'address', 'class', 'model_state', 'presentation_state', 'timing'), context='commit ancestor')
+            _metadata_types(node, strings=('id', 'address', 'class'), context='commit identity')
+            _require(bool(re.fullmatch('0x[0-9a-f]+', node['address'])), 'invalid commit layer address')
+            identity = (run, node['id']); stable = (node['address'], node['class']); address = (run, node['address'])
+            _require(identity not in identities or identities[identity] == stable, 'commit layer identity changed')
+            _require(address not in addresses or addresses[address] == node['id'], 'commit layer address alias')
+            identities[identity] = stable; addresses[address] = node['id']
+            _layer_state(node['model_state'])
+            _require(node['presentation_state'] is None, 'forbidden presentation polling')
+            _schema(node['timing'], ('begin_time', 'speed', 'time_offset', 'local_media_time'), context='layer timing')
+            _metadata_types(node['timing'], numbers=('begin_time', 'speed', 'time_offset', 'local_media_time'), context='layer timing')
+        if layer['delegate'] is not None:
+            _schema(layer['delegate'], ('class', 'address'), context='layer delegate')
+            _metadata_types(layer['delegate'], strings=('class', 'address'), context='layer delegate')
+        key = (run, row['install_id']); grouped.setdefault(key, []).append(row)
+    result = []
+    for (run, identity), snapshots in grouped.items():
+        stages = {}; cleanup = []
+        reference = snapshots[0]
+        for row in snapshots:
+            _require(all(row[k] == reference[k] for k in ('trial', 'phase', 'key', 'animation', 'owner_backtrace')), 'commit pair configuration mismatch')
+            _require(all(row['layer'][k] == reference['layer'][k] for k in ('id', 'address', 'class')), 'commit pair layer mismatch')
+            if row['type'] == 'animation_commit':
+                _require(row['stage'] in ('pre_forward', 'post_forward', 'next_runloop') and row['stage'] not in stages, 'duplicate commit boundary')
+                stages[row['stage']] = row
+            else:
+                _require(row['stage'] in ('pre_remove', 'post_remove', 'pre_remove_all', 'post_remove_all') or
+                         row['stage'] in ('checkpoint.present_completed', 'checkpoint.before_detent_request',
+                                          'checkpoint.before_dismiss_request', 'checkpoint.dismiss_completed', 'checkpoint.terminal'), 'unknown cleanup boundary')
+                cleanup.append(row)
+        _require(set(stages) == {'pre_forward', 'post_forward', 'next_runloop'}, 'missing commit boundary')
+        ordered = [stages[s] for s in ('pre_forward', 'post_forward', 'next_runloop')]
+        _require(ordered[0]['seq'] < ordered[1]['seq'] < ordered[2]['seq'], 'unordered commit boundary')
+        _require(all(a['t_ns'] <= b['t_ns'] for a,b in zip(ordered, ordered[1:])), 'nonmonotonic commit time')
+        for snapshot in ordered[1:]:
+            installed = snapshot['installed_animation']
+            if installed is not None and snapshot['installation_status'] == 'current':
+                # Core Animation assigns beginTime and model property state can
+                # change between observations. Construction fields must not.
+                ignored = {'begin_time', 'model_value', 'current_value'}
+                _require({k:_plain(v) for k,v in installed.items() if k not in ignored} ==
+                         {k:_plain(v) for k,v in reference['animation'].items() if k not in ignored}, 'installed copy construction mismatch')
+        pending = None
+        for row in cleanup:
+            if row['stage'] in ('pre_remove', 'pre_remove_all'):
+                _require(pending is None, 'duplicate removal pre-boundary'); pending = row['stage']
+            elif row['stage'] in ('post_remove', 'post_remove_all'):
+                _require(pending == row['stage'].replace('post_', 'pre_') and row['installed_animation'] is None, 'unresolved or incoherent removal boundary')
+                pending = None
+        _require(pending is None, 'missing removal post-boundary')
+        result.append(AnimationCommit(run, identity, *(_freeze(s) for s in ordered), tuple(_freeze(s) for s in cleanup)))
+    _require(bool(result), 'missing commit pairs')
+    return tuple(result)
+
+
+def committed_animation_local_time(pair: AnimationCommit, media_time: float) -> float:
+    """Use the assigned object's epoch, never the observation timestamp.
+
+    Layer::commit_animations +516/+696 in the authenticated 23G90 function
+    writes setBeginTime after mapping commit-layer timing. Zero remains
+    unresolved. A main-queue observation is not itself the commit epoch.
+    """
+    row = pair.next_runloop; a = row['installed_animation']
+    _require(a is not None and row['installation_status'] == 'current' and
+             type(a['begin_time']) in (int,float) and a['begin_time'] != 0, 'unresolved installed commit epoch')
+    _finite(media_time)
+    time = media_time
+    for node in reversed([row['layer']] + list(row['layer']['ancestry'])):
+        timing = node['timing']; _finite(timing['begin_time'],timing['speed'],timing['time_offset'])
+        speed = struct.unpack('<f',struct.pack('<f',timing['speed']))[0]
+        time = (time-timing['begin_time'])*speed+timing['time_offset']
+    return animation_local_time(time,begin_time=a['begin_time'],speed=a['speed'],time_offset=a['time_offset'])
+
+
+def commit_scalar_endpoints(pair: AnimationCommit) -> tuple[float,float,float]:
+    """Explicit scalar endpoints with final model fallback; unknown starts reject."""
+    a = pair.next_runloop['installed_animation']
+    _require(a is not None and pair.next_runloop['installation_status'] == 'current', 'unresolved endpoint installed copy')
+    start = a['from_value']; target = a['to_value']; model = a['model_value']
+    _require(a['by_value'] is None and start is not None, 'unresolved scalar endpoint construction')
+    if target is None: target = model
+    _require(all(type(v) in (int,float) and math.isfinite(v) for v in (start,target,model)), 'nonfinite or nonscalar endpoint')
+    _require(type(a['additive']) is bool, 'unresolved endpoint additive flag')
+    return start,target,model if a['additive'] else 0
+
+
+def commit_cleanup_state(pair: AnimationCommit) -> str:
+    if any(row['stage'] in ('post_remove', 'post_remove_all') for row in pair.cleanup):
+        return 'explicit_removal_observed'
+    if pair.cleanup and pair.cleanup[-1]['installed_animation'] is not None:
+        return 'installed_copy_persists_at_last_checkpoint'
+    return 'unresolved_automatic_or_unobserved_cleanup'
+
+
+def _affine_matrix(matrix) -> tuple[float, float, float, float, float, float]:
+    _require(len(matrix) == 16, 'incomplete affine matrix'); _finite(*matrix)
+    _require(all(matrix[i] == expected for i,expected in {2:0,3:0,6:0,7:0,8:0,9:0,10:1,11:0,14:0,15:1}.items()), 'nonaffine or unresolved 3D path')
+    return matrix[0],matrix[1],matrix[4],matrix[5],matrix[12],matrix[13]
+
+
+def affine_point_to_root(point, layer_path: list[Mapping]) -> tuple[tuple[float,float], tuple[tuple[float,float],tuple[float,float]]]:
+    """Checked mathematical affine composition, not a promoted UIKit mapping.
+
+    Path order is target to root. Coordinates are each layer's bounds space.
+    Private additive CATransform3D interpolation and controller identity are
+    intentionally outside this utility and remain recovery prerequisites.
+    """
+    _require(bool(layer_path) and len({n['id'] for n in layer_path}) == len(layer_path), 'missing or duplicate ancestor path')
+    _require(layer_path[-1]['parent_id'] is None, 'missing root ancestor')
+    for i,node in enumerate(layer_path):
+        _require(node['parent_id'] == (layer_path[i+1]['id'] if i+1<len(layer_path) else None), 'ancestor order mismatch')
+        _layer_state(_plain(node['model_state'])); state = node['model_state']
+        _require(not state['geometry_flipped'] and state['anchor_point_z'] == 0 and state['z_position'] == 0, 'unresolved flipped or 3D ancestor')
+        _finite(*state['position'],*state['bounds'],*state['anchor_point'])
+        _affine_matrix(state['transform']); _affine_matrix(state['sublayer_transform'])
+    _finite(*point); x,y = point; j = ((1.,0.),(0.,1.))
+    def apply(matrix, px, py, jac):
+        a,b,c,d,tx,ty = _affine_matrix(matrix)
+        return a*px+c*py+tx,b*px+d*py+ty,((a*jac[0][0]+c*jac[1][0],a*jac[0][1]+c*jac[1][1]),
+                                                        (b*jac[0][0]+d*jac[1][0],b*jac[0][1]+d*jac[1][1]))
+    def anchor(state):
+        b = state['bounds']; a = state['anchor_point']; return b[0]+a[0]*b[2],b[1]+a[1]*b[3]
+    for child,parent in zip(layer_path,layer_path[1:]):
+        state = child['model_state']; ax,ay = anchor(state)
+        x,y,j = apply(state['transform'],x-ax,y-ay,j)
+        x += state['position'][0]; y += state['position'][1]
+        ps = parent['model_state']; ax,ay = anchor(ps)
+        x,y,j = apply(ps['sublayer_transform'],x-ax,y-ay,j)
+        x += ax; y += ay
+    return (x,y),j
+
+
+def load_commit_objects(path: str | Path) -> tuple[AnimationCommit, ...]:
+    """Authenticate complete object-only run provenance before pairing."""
+    path = Path(path); root = path.parent
+    try:
+        manifest = _json(_read(root/'manifest.json')); _manifest_schema(manifest); _walk(manifest)
+        _require(manifest['evidence_kind'] == 'runtime_animation_commit' and manifest['capture_mode'] == 'animation_commit_objects', 'wrong commit evidence kind')
+        _require(manifest['os'] == OS and manifest['device'] == DEVICE and manifest['trial_count'] == 10
+                 and manifest['scenario_id'] == 'native.geometry.smoke' and manifest['records_file'] == path.name, 'wrong commit cohort scope')
+        packed = _read(path); _require(_sha(packed) == manifest['compressed_sha256'], 'commit compressed hash mismatch')
+        raw = gzip.decompress(packed); _require(_sha(raw) == manifest['raw_sha256'], 'commit raw hash mismatch')
+        images = _authenticate_files(root,manifest)
+        lines = raw.splitlines(keepends=True); rows = [_json(line) for line in lines]
+        declarations = {r['run_id']:r for r in manifest['runs']}
+        _require(len(declarations) == len(manifest['runs']) == 10 and {r['trial'] for r in declarations.values()} == set(range(1,11)), 'missing commit trials')
+        runs = {}; previous = {}; times = {}; raw_runs = {}; phase = {}; indices = {}; completed = set(); snapshots = []
+        for line,row in zip(lines,rows):
+            _walk(row); run = row['run_id']; kind = row['type']
+            _require(run in declarations and row['seq'] == previous.get(run,0), 'invalid commit run sequence')
+            previous[run] = row['seq']+1; raw_runs.setdefault(run,[]).append(line)
+            _require(type(row['t_ns']) is int and row['t_ns'] >= times.get(run,0), 'nonmonotonic commit run time'); times[run] = row['t_ns']
+            if kind in ('session','event'):
+                _record_schema(row)
+            if kind == 'session':
+                _require(run not in runs and row['capture_mode'] == manifest['capture_mode'] and row['scenario_id'] == manifest['scenario_id'] and row['os'] == OS, 'wrong commit session')
+                request = manifest['capture_request']
+                _require(row['provenance'] == {'attempt_id':request['attempt_id'],'role':request['role'],'native_source_revision':manifest['native_source_revision']}, 'commit source provenance mismatch')
+                _require(row['device'] == manifest['device_geometry'] and row['environment'] == manifest['environment'], 'commit geometry/environment mismatch')
+                _require({k:v for k,v in row['configuration'].items() if k!='trial'} == manifest['configuration'] and row['configuration']['trial'] == declarations[run]['trial'], 'commit configuration mismatch')
+                runs[run] = row['configuration']['trial']; indices[run] = 0; phase[run] = None
+            elif kind == 'event':
+                _require(run in runs, 'event before commit session')
+                name = row['name']
+                if name == 'detent.resolved':
+                    _require(run not in completed and indices[run] > 0 and row['data'] == manifest['resolved_detents'], 'commit detent metadata mismatch')
+                elif name == 'batch.completed':
+                    _require(run in completed and runs[run] == 10 and row['data'] == {'trials':10}, 'invalid commit batch boundary')
+                else:
+                    i = indices[run]; _require(i < len(SCENARIO_EVENTS) and (name,row['data']) == SCENARIO_EVENTS[i], 'commit scenario boundary mismatch')
+                    indices[run] += 1
+                    if i in (0,2,3,4,5): phase[run] = {0:'presentation',2:'fixed320_to_medium',3:'medium_to_large',4:'large_to_medium',5:'dismissal'}[i]
+                    if name == 'dismiss.completed': completed.add(run)
+            elif kind in ('animation_commit','animation_cleanup'):
+                _require(run in runs and run not in completed and row['trial'] == runs[run], 'snapshot outside commit run lifetime')
+                if kind == 'animation_commit' and row['stage'] == 'pre_forward': _require(row['phase'] == phase[run], 'commit phase/event mismatch')
+                _animation(row['animation'])
+                if row['installed_animation'] is not None: _animation(row['installed_animation'])
+                _schema(row['transaction'], ('duration','disable_actions','timing_function'), context='commit transaction')
+                _require(_number(row['transaction']['duration']) and type(row['transaction']['disable_actions']) is bool, 'invalid commit transaction')
+                _timing_schema(row['transaction']['timing_function'])
+                for frames in (row['backtrace'],row['owner_backtrace']):
+                    _require(type(frames) is list and bool(frames), 'missing commit backtrace')
+                    for frame in frames:
+                        _schema(frame, ('address','image','image_uuid','image_base','image_offset','symbol','symbol_address'), context='commit backtrace')
+                        _metadata_types(frame,strings=('address','image','image_uuid','image_base'),nullable_strings=('symbol','symbol_address'),integers=('image_offset',),context='commit backtrace')
+                        identity = (frame['image'],frame['image_uuid']); _require(identity in images, 'unresolved commit backtrace image')
+                        offset = frame['image_offset']; ranges = images[identity]['executable_ranges']
+                        _require(offset >= 0 and int(frame['address'],16)-int(frame['image_base'],16) == offset and any(a<=offset<b for a,b in ranges), 'commit backtrace outside executable mapping')
+                        if frame['symbol_address'] is not None:
+                            symbol = int(frame['symbol_address'],16)-int(frame['image_base'],16)
+                            _require(any(a<=symbol<b for a,b in ranges), 'commit symbol outside executable mapping')
+                snapshots.append(row)
+            else: raise EvidenceError('forbidden commit record type')
+        _require(set(runs) == completed == set(declarations) and all(i == len(SCENARIO_EVENTS) for i in indices.values()), 'incomplete commit trial completion')
+        pairs = pair_commit_objects(snapshots)
+        _require(len(pairs) == manifest['record_count'], 'commit pair count mismatch')
+        for run,declared in declarations.items():
+            _require(_sha(b''.join(raw_runs[run])) == declared['raw_sha256'], 'commit run hash mismatch')
+            selected = [p for p in pairs if p.run_id == run]
+            _require(len(selected) == declared['install_count'] and {p.pre_forward['phase'] for p in selected} == set(PHASES), 'commit run pair/phase count mismatch')
+        return pairs
+    except (KeyError,TypeError,ValueError,IndexError,OSError,EOFError) as error:
+        if isinstance(error,EvidenceError): raise
+        raise EvidenceError('malformed commit evidence: '+str(error)) from error

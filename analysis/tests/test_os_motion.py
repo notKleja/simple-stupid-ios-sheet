@@ -15,6 +15,185 @@ from analysis.os_motion import EvidenceError, load_animation_objects
 from analysis import os_motion
 
 
+class OSCommitCompositionTests(unittest.TestCase):
+    def fixture(self):
+        state = {'position': [10, 20], 'bounds': [0, 0, 100, 80], 'anchor_point': [.5, .5], 'anchor_point_z': 0,
+                 'transform': [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+                 'sublayer_transform': [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+                 'opacity': 1, 'z_position': 0, 'geometry_flipped': False}
+        timing = {'begin_time': 0, 'speed': 1, 'time_offset': 0, 'local_media_time': 10}
+        base = {'schema_version': 1, 'type': 'animation_commit', 'run_id': 'literal', 'trial': 1,
+                'phase': 'presentation', 'install_id': 'install.1', 'key': 'position',
+                'layer': {'id': 'layer.1', 'address': '0x100', 'class': 'CALayer', 'parent_id': None,
+                          'model_state': state, 'presentation_state': None, 'ancestry': [], 'timing': timing, 'delegate': None},
+                'animation': {'begin_time': 0}, 'installed_animation': {'begin_time': 0},
+                'transaction_time': 10, 't_ns': 10000000000, 'transaction': {}, 'backtrace': [], 'owner_backtrace': [],
+                'commit_epoch_status': 'unresolved_next_runloop_is_not_commit', 'installation_status': 'current',
+                'observation_boundary': 'synchronous_call_boundary'}
+        rows = []
+        for index, stage in enumerate(('pre_forward', 'post_forward', 'next_runloop')):
+            row = copy.deepcopy(base); row['stage'] = stage; row['seq'] = index
+            row['t_ns'] += index; row['transaction_time'] += index / 1e9
+            if stage == 'pre_forward': row['installed_animation'] = None
+            if stage == 'next_runloop': row['observation_boundary'] = 'main_queue_async_no_flush'
+            rows.append(row)
+        return rows
+
+    def test_pairing_preserves_three_discrete_boundaries_and_freezes_them(self):
+        rows = self.fixture(); pairs = os_motion.pair_commit_objects(rows)
+        self.assertEqual(len(pairs), 1)
+        self.assertEqual(pairs[0].install_id, 'install.1')
+        rows[2]['layer']['model_state']['position'][1] = 999
+        self.assertEqual(pairs[0].next_runloop['layer']['model_state']['position'][1], 20)
+
+    def test_missing_duplicate_or_wrong_layer_boundary_rejected(self):
+        for mutation in ('missing', 'duplicate', 'layer', 'order'):
+            rows = self.fixture()
+            if mutation == 'missing': rows.pop()
+            if mutation == 'duplicate': rows.append(copy.deepcopy(rows[1]))
+            if mutation == 'layer': rows[2]['layer']['id'] = 'layer.2'
+            if mutation == 'order': rows[2]['seq'] = 0
+            with self.subTest(mutation=mutation), self.assertRaises(EvidenceError): os_motion.pair_commit_objects(rows)
+
+    def test_next_runloop_never_supplies_unproven_commit_epoch(self):
+        pair = os_motion.pair_commit_objects(self.fixture())[0]
+        with self.assertRaisesRegex(EvidenceError, 'commit.*epoch'): os_motion.committed_animation_local_time(pair, 11)
+
+    def test_assigned_installed_epoch_is_used_instead_of_observation_timestamp(self):
+        rows = self.fixture()
+        for r in rows:
+            r['animation'].update(duration=2, speed=.5, time_offset=.25)
+            if r['installed_animation'] is not None:
+                r['installed_animation'].update(duration=2, speed=.5, time_offset=.25)
+        rows[2]['installed_animation']['begin_time'] = 9
+        pair = os_motion.pair_commit_objects(rows)[0]
+        self.assertEqual(os_motion.committed_animation_local_time(pair, 11), 1.25)
+
+    def test_installed_copy_must_preserve_construction_fields(self):
+        rows = self.fixture()
+        for r in rows:
+            r['animation']['duration'] = 2
+            if r['installed_animation'] is not None: r['installed_animation']['duration'] = 2
+        rows[2]['installed_animation']['duration'] = 3
+        with self.assertRaisesRegex(EvidenceError, 'installed.*copy'): os_motion.pair_commit_objects(rows)
+
+    def test_model_endpoint_fallback_uses_final_model_not_pre_forward_value(self):
+        rows = self.fixture()
+        for r in rows:
+            r['animation'].update(key_path='opacity', from_value=None, to_value=None, by_value=None, model_value=.2, additive=False)
+            if r['installed_animation'] is not None:
+                r['installed_animation'].update(r['animation'])
+        rows[2]['installed_animation']['model_value'] = .8
+        pair = os_motion.pair_commit_objects(rows)[0]
+        with self.assertRaisesRegex(EvidenceError, 'endpoint'): os_motion.commit_scalar_endpoints(pair)
+        for r in rows:
+            r['animation']['from_value'] = .1
+            if r['installed_animation'] is not None: r['installed_animation']['from_value'] = .1
+        pair = os_motion.pair_commit_objects(rows)[0]
+        self.assertEqual(os_motion.commit_scalar_endpoints(pair), (.1, .8, 0))
+
+    def test_cleanup_removal_and_retained_copy_are_distinct(self):
+        rows = self.fixture()
+        for i, stage in enumerate(('pre_remove', 'post_remove'), 3):
+            row = copy.deepcopy(rows[-1]); row.update(type='animation_cleanup', stage=stage, seq=i)
+            row['observation_boundary'] = 'synchronous_call_boundary'
+            row['t_ns'] += i; row['transaction_time'] += i / 1e9
+            if stage == 'post_remove': row['installed_animation'] = None
+            rows.append(row)
+        pair = os_motion.pair_commit_objects(rows)[0]
+        self.assertEqual(os_motion.commit_cleanup_state(pair), 'explicit_removal_observed')
+        rows[-1]['installed_animation'] = {'begin_time': 0}
+        with self.assertRaisesRegex(EvidenceError, 'removal'): os_motion.pair_commit_objects(rows)
+
+    def test_affine_order_and_point_jacobian_use_anchor_and_parent_sublayer(self):
+        target = self.fixture()[0]['layer']
+        root = copy.deepcopy(target); root.update(id='root', address='0x200', parent_id=None, ancestry=[])
+        target = copy.deepcopy(target); target.update(parent_id='root')
+        target['model_state']['transform'][0] = 2
+        target['model_state']['transform'][5] = 3
+        root['model_state']['sublayer_transform'][5] = 2
+        # (50, 41) - anchor(50,40) -> (0,3) + position(10,20)
+        # parent's sublayer scale about (50,40) -> (10,6).
+        point, jacobian = os_motion.affine_point_to_root((50, 41), [target, root])
+        self.assertEqual(point, (10, 6))
+        self.assertEqual(jacobian, ((2, 0), (0, 6)))
+
+    def test_affine_path_rejects_missing_ancestor_nonaffine_and_flipping(self):
+        layer = self.fixture()[0]['layer']
+        for mutation in ('missing', 'perspective', 'flipped', 'nonfinite'):
+            row = copy.deepcopy(layer)
+            if mutation == 'missing': row['parent_id'] = 'absent'
+            if mutation == 'perspective': row['model_state']['transform'][3] = .1
+            if mutation == 'flipped': row['model_state']['geometry_flipped'] = True
+            if mutation == 'nonfinite': row['model_state']['position'][1] = float('nan')
+            with self.subTest(mutation=mutation), self.assertRaises(EvidenceError): os_motion.affine_point_to_root((1, 2), [row])
+
+    def test_missing_commit_provenance_and_extra_position_payload_rejected(self):
+        rows = self.fixture(); rows[1]['sheet.y'] = 10
+        with self.assertRaises(EvidenceError): os_motion.pair_commit_objects(rows)
+        with self.assertRaises(EvidenceError): os_motion.load_commit_objects(Path('/does/not/exist/commit-objects.jsonl.gz'))
+
+
+class OSCommitLoaderTests(unittest.TestCase):
+    def setUp(self):
+        fixture = OSMotionTests(); fixture.setUp(); self.addCleanup(fixture.doCleanups)
+        self.root = fixture.root; self.manifest = copy.deepcopy(fixture.manifest)
+        self.manifest.update(evidence_kind='runtime_animation_commit', capture_mode='animation_commit_objects')
+        self.manifest['capture_request']['capture_mode'] = 'animation_commit_objects'
+        rows = []
+        for row in fixture.rows:
+            if row['type'] == 'session':
+                row = copy.deepcopy(row); row['capture_mode'] = 'animation_commit_objects'; rows.append(row)
+            elif row['type'] == 'animation_install':
+                for stage in ('pre_forward','post_forward','next_runloop'):
+                    r = copy.deepcopy(row); r.update(type='animation_commit', stage=stage, install_id='install.'+str(row['seq']),
+                        owner_backtrace=copy.deepcopy(row['backtrace']), commit_epoch_status='unresolved_next_runloop_is_not_commit',
+                        installation_status='current', observation_boundary='main_queue_async_no_flush' if stage=='next_runloop' else 'synchronous_call_boundary',
+                        installed_animation=None if stage=='pre_forward' else copy.deepcopy(row['animation']))
+                    r['animation']['current_value'] = None
+                    if r['installed_animation'] is not None: r['installed_animation']['current_value'] = None
+                    r['layer'].update(timing={'begin_time':0,'speed':1,'time_offset':0,'local_media_time':10}, delegate=None)
+                    rows.append(r)
+            else: rows.append(copy.deepcopy(row))
+        seqs = {}
+        for r in rows:
+            run = r['run_id']; r['seq'] = seqs.get(run,0); seqs[run] = r['seq']+1
+            r['t_ns'] = int(run.split('-')[1])*1000000000+r['seq']
+        self.rows = rows; self.path = self.root/self.manifest['records_file']; self.seal()
+
+    def seal(self):
+        raw = b''.join(json.dumps(r,sort_keys=True).encode()+b'\n' for r in self.rows)
+        packed = gzip.compress(raw,mtime=0); self.path.write_bytes(packed)
+        self.manifest.update(compressed_sha256=hashlib.sha256(packed).hexdigest(),raw_sha256=hashlib.sha256(raw).hexdigest())
+        for declared in self.manifest['runs']:
+            declared['raw_sha256'] = hashlib.sha256(b''.join(l for l,r in zip(raw.splitlines(keepends=True),self.rows) if r['run_id']==declared['run_id'])).hexdigest()
+        (self.root/'manifest.json').write_text(json.dumps(self.manifest))
+
+    def test_full_authenticated_commit_cohort_loads(self):
+        self.assertEqual(len(os_motion.load_commit_objects(self.path)),50)
+
+    def test_provenance_event_model_and_epoch_mutations_fail_closed(self):
+        original_rows = copy.deepcopy(self.rows); original_manifest = copy.deepcopy(self.manifest)
+        mutations = ('source','raw_hash','request','session','event','extra','presentation','layer_alias','installed_copy','epoch_assertion','incomplete')
+        for mutation in mutations:
+            self.rows = copy.deepcopy(original_rows); self.manifest = copy.deepcopy(original_manifest)
+            commit = next(r for r in self.rows if r['type']=='animation_commit' and r['stage']=='next_runloop')
+            if mutation=='source': self.manifest['source_files'][0]['sha256']='0'*64
+            if mutation=='request': self.manifest['capture_request']['source_revision']='b'*40
+            if mutation=='session': self.rows[0]['provenance']['attempt_id']='wrong'
+            if mutation=='event': next(r for r in self.rows if r.get('name')=='detent.requested')['data']['target']='wrong'
+            if mutation=='extra': commit['sheet.y']=10
+            if mutation=='presentation': commit['layer']['presentation_state']=copy.deepcopy(commit['layer']['model_state'])
+            if mutation=='layer_alias': commit['layer']['address']='0x9999'
+            if mutation=='installed_copy': commit['installed_animation']['duration']=99
+            if mutation=='epoch_assertion': commit['commit_epoch_status']='committed'
+            if mutation=='incomplete': self.rows.remove(commit)
+            self.seal()
+            if mutation=='raw_hash':
+                self.manifest['raw_sha256']='0'*64; (self.root/'manifest.json').write_text(json.dumps(self.manifest))
+            with self.subTest(mutation=mutation),self.assertRaises(EvidenceError): os_motion.load_commit_objects(self.path)
+
+
 class OSMotionTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -622,6 +801,28 @@ class OSRecoveryTests(unittest.TestCase):
         self.assertTrue(hasattr(os_motion, 'recover_os_motion'), 'OS recovery is missing')
         return os_motion.recover_os_motion(self.records if records is None else records,
                                            self.binaries if binaries is None else binaries)
+
+    def test_commit_composition_is_bound_and_no_phase_is_promoted(self):
+        data = self.recover().to_dict()
+        self.assertIn('commit_composition', data)
+        commit = data['commit_composition']
+        self.assertEqual(commit['status'], 'blocked_unsealed_runtime_cohort_excluded')
+        self.assertFalse(commit['runtime_object_cohort_included'])
+        self.assertEqual(commit['promoted_phases'], [])
+        self.assertEqual(data['production_profile']['profiles'], [])
+        self.assertIn('research/os_motion/ios26_commit_function_evidence.json', data['source_hashes'])
+        self.assertNotIn('commit_object_archive', data['source_hashes'])
+        self.assertEqual(len(commit['remaining_jobs']), 3)
+        self.assertIn('QuartzCore.0x183f79b6c', data['function_evidence'])
+
+    def test_changed_commit_function_artifact_blocks_recovery(self):
+        from unittest.mock import patch
+        original = os_motion._read
+        target = self.root/'research/os_motion/ios26_commit_function_evidence.json'
+        def changed(path):
+            raw = original(path)
+            return raw+b' ' if Path(path)==target else raw
+        with patch.object(os_motion,'_read',side_effect=changed),self.assertRaises(EvidenceError): self.recover()
 
     def test_exact_binary_recovery_preserves_actual_object_flags(self):
         report = self.recover().to_dict()

@@ -13,6 +13,28 @@
       "vm_base": "0x189128000"
     }
   },
+  "commit_composition": {
+    "available_static_functions": [
+      "QuartzCore.0x183f708ec",
+      "QuartzCore.0x183f71354",
+      "QuartzCore.0x183f79b6c",
+      "QuartzCore.0x183f7ab80",
+      "QuartzCore.0x183fad528",
+      "QuartzCore.0x183fd5b3c",
+      "UIKitCore.0x18916b050",
+      "UIKitCore.0x18923b654"
+    ],
+    "follow_on": "implement_Dart_only_after_OS_recovery_then_run_post_freeze_tests",
+    "no_fitted_or_visual_curves": true,
+    "promoted_phases": [],
+    "remaining_jobs": [
+      "private_additive_CATransform3D_interpolation_and_order",
+      "exact_sheet_view_and_controller_ownership",
+      "guaranteed_coherent_post_transaction_model_boundary"
+    ],
+    "runtime_object_cohort_included": false,
+    "status": "blocked_unsealed_runtime_cohort_excluded"
+  },
   "function_evidence": {
     "QuartzCore.0x183edcbe8": {
       "address": "0x183edcbe8",
@@ -95,6 +117,24 @@
       "name": "__ZNK2CA6Render15SpringAnimation5State4evalEd",
       "sha256": "4f4b5a7aad0f44829e90137b0ed3ae93dc1361b2459a42f63405ebfded1e1ed7"
     },
+    "QuartzCore.0x183f708ec": {
+      "address": "0x183f708ec",
+      "file_offset": 645356,
+      "image": "QuartzCore",
+      "image_offset": 645356,
+      "length": 404,
+      "name": "-[CALayer removeAnimationForKey:]",
+      "sha256": "fe8377eb032b8484af7a13c0e1764cf66233ae8907df9b9895d32d1e5a4f812a"
+    },
+    "QuartzCore.0x183f71354": {
+      "address": "0x183f71354",
+      "file_offset": 648020,
+      "image": "QuartzCore",
+      "image_offset": 648020,
+      "length": 96,
+      "name": "-[CAAnimation beginTime]",
+      "sha256": "d43539a7157f2a090cf680b64a29692287b925a82e891efbdac1b3fe3960e3e4"
+    },
     "QuartzCore.0x183f72a5c": {
       "address": "0x183f72a5c",
       "file_offset": 653916,
@@ -103,6 +143,24 @@
       "length": 36,
       "name": "__ZNK2CA6Render15SpringAnimation13time_functionEd",
       "sha256": "83d1276818ae2713c4c9949fef4ac25ed5df099d8015864588cea137013deb10"
+    },
+    "QuartzCore.0x183f79b6c": {
+      "address": "0x183f79b6c",
+      "file_offset": 682860,
+      "image": "QuartzCore",
+      "image_offset": 682860,
+      "length": 264,
+      "name": "-[CALayer animationForKey:]",
+      "sha256": "afe01cd56bd3cefcc7efaadc3b597e322eff68ef4fed79c59724dbeb948fc95b"
+    },
+    "QuartzCore.0x183f7ab80": {
+      "address": "0x183f7ab80",
+      "file_offset": 686976,
+      "image": "QuartzCore",
+      "image_offset": 686976,
+      "length": 332,
+      "name": "-[CALayer removeAllAnimations]",
+      "sha256": "56c7312e64ca1935346e15c252e082fda3808bd9ab10f6033764370c4309c30c"
     },
     "QuartzCore.0x183f7d100": {
       "address": "0x183f7d100",
@@ -131,6 +189,24 @@
       "name": "__ZN2CA5Layer17commit_animationsEPNS_11TransactionEPFdPS0_dPvEPFvS3_PNS_6Render9AnimationES4_EPFvS3_PK10__CFStringS4_EPFPNS7_10TimingListES3_S4_ES4_",
       "sha256": "f430fdb096155c83d8bb98e016de66586b6952b6912d10e5e8d434e5c1b3b2f6"
     },
+    "QuartzCore.0x183fad528": {
+      "address": "0x183fad528",
+      "file_offset": 894248,
+      "image": "QuartzCore",
+      "image_offset": 894248,
+      "length": 92,
+      "name": "-[CAAnimation setBeginTime:]",
+      "sha256": "c642e31f4f9bd2b55bb05cf9624ba964fcf37fbd4e7e1c5c5b79ffe6058dd468"
+    },
+    "QuartzCore.0x183fd5b3c": {
+      "address": "0x183fd5b3c",
+      "file_offset": 1059644,
+      "image": "QuartzCore",
+      "image_offset": 1059644,
+      "length": 216,
+      "name": "__ZN2CA7Context16remove_animationEPNS_5LayerEPK10__CFStringPv",
+      "sha256": "38472a27933e3febbaf0227d491adbba452169f5124089d8d81d32faafc98675"
+    },
     "QuartzCore.0x18401d6f8": {
       "address": "0x18401d6f8",
       "file_offset": 1353464,
@@ -139,6 +215,15 @@
       "length": 288,
       "name": "__ZNK2CA6Render15SpringAnimation5State15eval_derivativeEd",
       "sha256": "eeb1906e1ea34a8be413cf22943092ad42f5aadd77826981c3a8428227291460"
+    },
+    "UIKitCore.0x18916b050": {
+      "address": "0x18916b050",
+      "file_offset": 274512,
+      "image": "UIKitCore",
+      "image_offset": 274512,
+      "length": 460,
+      "name": "-[UIView(Animation) _removeAllAnimations:]",
+      "sha256": "8ec41f49ee01dfab85a014d0f3078b0a715819aa6aea43307758875dcd50029f"
     },
     "UIKitCore.0x1891bd06c": {
       "address": "0x1891bd06c",
@@ -166,6 +251,15 @@
       "length": 848,
       "name": "-[UIViewAnimationState setAnimationAttributes:skipDelegateAssignment:customCurve:]",
       "sha256": "4ce34d5c577fb9345b5695aa02373d82b3dbaedee6b37d569b51b844be1e0c70"
+    },
+    "UIKitCore.0x18923b654": {
+      "address": "0x18923b654",
+      "file_offset": 1128020,
+      "image": "UIKitCore",
+      "image_offset": 1128020,
+      "length": 12,
+      "name": "-[UIViewAnimationState _animationDidStopWithNilAnimationFinished:]",
+      "sha256": "2045694e011d115cbada0d907afa690ea04542d760f5c0cce50d0bbd167d7ffe"
     },
     "UIKitCore.0x18926ca6c": {
       "address": "0x18926ca6c",
@@ -453,10 +547,12 @@
     "scenario_id": "native.geometry.smoke"
   },
   "source_hashes": {
-    "analysis_source": "8cf09c4dac8e4a478046197d65c440a29c6318e2fa7403cc58b690a22f63caf4",
+    "analysis_source": "9331d2650dfc9566cf92335311fe5e4cfecd939f7eeff121c6b50991a08a81d9",
     "object_archive": "68789a0c5803bf8d6c776399c08a10c710bff2c87ab5ee5b9658699882c17e29",
     "object_manifest": "a35d2e28df8dc9bb7ae6640144170acdf0c7ad11f587a827bec425da1b789513",
     "object_raw": "8caaed563c14f39bd5e812c1596cc1bf1a7730017e6d0df522579739c3d74dcd",
+    "research/os_motion/ios26_commit_disassembly.txt": "4c55ccbed4c1d63db4d1934a023abf2c92eb780562db2847fad4104df12c497f",
+    "research/os_motion/ios26_commit_function_evidence.json": "9f76ea98e22720102c3dc55393fded7f67cdcf768f9bbf3a13c9a8d06554cf4e",
     "research/os_motion/ios26_function_evidence.json": "50a3fdc13b2dd8c2d5ebdb37253d1bd4ce6b4f5549103dcf7b67a14cba2d7410",
     "research/os_motion/ios26_quartzcore_disassembly.txt": "f365a8023fe6cb5ac04a4ac5cfbfc1e385965eea64b3c849963211786dd94b3a",
     "research/os_motion/ios26_uikit_attributes_disassembly.txt": "c7b5995eb72e9ec60161f147b85e0b50bf38bb2adef3df638949b9d88f570a6f",
