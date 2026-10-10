@@ -1,8 +1,20 @@
+import 'package:flutter/foundation.dart' show internal;
 import 'package:flutter/widgets.dart';
 import 'package:ios_sheet_engine/ios_sheet_engine.dart';
 
 import 'detents.dart';
 import 'corner_bridge.dart';
+
+/// The supported iOS sheet reference major version.
+const iosSheetReferenceMajorVersion = 26;
+
+/// Major versions supported by the strict sheet reference resolver.
+const supportedIosSheetReferenceMajorVersions = {26};
+
+/// Shares the legacy resolver with other libraries inside this package.
+@internal
+IosSheetProfile legacyIosSheetProfileForMajorVersion(int version) =>
+    IosSheetProfile._profileForMajorVersion(version);
 
 /// Independent OS profiles. Defaults are research fallbacks, not native truth.
 @immutable
@@ -27,17 +39,31 @@ class IosSheetProfile {
     mediumHeight: _fallbackMedium,
     evidence: const {'medium': 'fallback: half maximum; native unmeasured'},
   );
-  static final ios27 = IosSheetProfile(
+  @Deprecated('iOS 27 is an unsupported legacy research fallback. Use ios26.')
+  static final ios27 = _ios27;
+
+  static final _ios27 = IosSheetProfile(
     majorVersion: 27,
     mediumHeight: _fallbackMedium,
     evidence: const {'medium': 'fallback: half maximum; iOS 27 unmeasured'},
   );
 
-  static IosSheetProfile forMajorVersion(int version) => switch (version) {
-    26 => ios26,
-    27 => ios27,
-    _ => throw UnsupportedError('No sheet profile for iOS $version'),
-  };
+  /// Resolves only supported iOS sheet reference versions.
+  static IosSheetProfile forReferenceVersion(int version) {
+    if (version == iosSheetReferenceMajorVersion) return ios26;
+    throw UnsupportedError('Only iOS 26 is a supported sheet reference');
+  }
+
+  @Deprecated('Use forReferenceVersion for the supported iOS 26 reference.')
+  static IosSheetProfile forMajorVersion(int version) =>
+      _profileForMajorVersion(version);
+
+  static IosSheetProfile _profileForMajorVersion(int version) =>
+      switch (version) {
+        26 => ios26,
+        27 => _ios27,
+        _ => throw UnsupportedError('No sheet profile for iOS $version'),
+      };
 
   static double _fallbackMedium(IosSheetEnvironment environment) =>
       environment.maximumDetentHeight / 2;

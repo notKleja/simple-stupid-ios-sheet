@@ -68,9 +68,13 @@ void main() {
   });
 
   test('legacy iOS 27 access remains source compatible', () {
-    // ignore: deprecated_member_use
+    // ignore: deprecated_member_use_from_same_package
     final IosSheetProfile legacyProfile = IosSheetProfile.ios27;
+    // ignore: deprecated_member_use_from_same_package
     final IosSheetProfile selectedProfile = IosSheetProfile.forMajorVersion(27);
+    // ignore: deprecated_member_use_from_same_package
+    final IosSheetProfile Function(int) legacyObserved =
+        observedPage402x874Profile;
     final route = StupidSimpleIosSheetRoute<void>(
       child: const SizedBox.shrink(),
       profile: legacyProfile,
@@ -78,7 +82,20 @@ void main() {
     expect([
       route.profile,
       selectedProfile,
+      legacyObserved(27),
     ], everyElement(isA<IosSheetProfile>()));
+  });
+
+  test('strict iOS 26 reference APIs retain their public signatures', () {
+    const int version = iosSheetReferenceMajorVersion;
+    const Set<int> supported = supportedIosSheetReferenceMajorVersions;
+    final IosSheetProfile Function(int) resolveReference =
+        IosSheetProfile.forReferenceVersion;
+    final IosSheetProfile Function() observedReference =
+        observedIos26Page402x874Profile;
+    expect(supported, {version});
+    expect(resolveReference(version), same(IosSheetProfile.ios26));
+    expect(observedReference().majorVersion, version);
   });
 }
 

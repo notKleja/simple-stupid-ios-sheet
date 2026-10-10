@@ -5,10 +5,17 @@ import 'profile.dart';
 import 'corner_bridge.dart';
 import 'measured_corners.dart';
 
+/// Partial iOS 26 reference profile for the observed 402x874 page geometry.
+///
+/// Retains the scoped evidence and provisional transfer hypotheses of
+/// [observedPage402x874Profile]; full native parity remains unverified.
+IosSheetProfile observedIos26Page402x874Profile() =>
+    _observedPage402x874Profile(iosSheetReferenceMajorVersion);
+
 /// Partial profile qualified by 10 repeated native traces on EACH OS.
 ///
 /// Scope: iPhone simulator 402x874 @3x, safe top62/bottom34, portrait,
-/// keyboard hidden, page sizing, [fixed320, medium, large]. Other geometries
+/// keyboard hidden, page sizing, `fixed320`, `medium`, `large`. Other geometries
 /// fail explicitly. Rendered contour, barrier, timing, gestures, and interruption remain
 /// upstream fallbacks. This is not an OS-wide native-parity profile.
 ///
@@ -16,8 +23,12 @@ import 'measured_corners.dart';
 /// Width/bottom transfer fits are PROVISIONAL: the native animation recorder
 /// was found to mix incoherent ancestry/geometry. Only the resting samples are
 /// usable; these transfer hypotheses must be replaced after fresh collection.
-IosSheetProfile observedPage402x874Profile(int majorVersion) {
-  final fallback = IosSheetProfile.forMajorVersion(majorVersion);
+@Deprecated('Use observedIos26Page402x874Profile for the iOS 26 reference.')
+IosSheetProfile observedPage402x874Profile(int majorVersion) =>
+    _observedPage402x874Profile(majorVersion);
+
+IosSheetProfile _observedPage402x874Profile(int majorVersion) {
+  final fallback = legacyIosSheetProfileForMajorVersion(majorVersion);
   void requireScope(IosSheetEnvironment environment) {
     if (environment.availableSize != const Size(402, 874) ||
         environment.safeArea.top != 62 ||
