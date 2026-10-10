@@ -128,15 +128,16 @@ package tests does not promote native evidence.
 From `flutter_reference`:
 
 ```sh
-flutter pub get
+flutter pub get --no-example
 flutter test --no-pub packages/ios_sheet/example/test
 cd packages/ios_sheet/example
+flutter create --platforms=ios --no-pub .
 flutter run -t lib/main.dart -d <device-id>
 ```
 
-The checked-in example is a minimal Flutter app source. If your target requires
-platform scaffolding, generate it locally with `flutter create --platforms=ios .`
-before running. The example includes no trace recorder, native metadata channel,
+The checked-in example is a minimal Flutter app source. The `flutter create`
+step generates its local iOS platform scaffolding before the first run. The
+example includes no trace recorder, native metadata channel,
 profile selector, or Liquid Glass dependency.
 
 See [troubleshooting](doc/troubleshooting.md), [contributing](CONTRIBUTING.md),

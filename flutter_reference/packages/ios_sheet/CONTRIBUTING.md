@@ -13,25 +13,48 @@ declares `sdk: ^3.12.2`. The wrapper-only manifest's Dart 3.12.0 and Flutter
 workspace requirement by themselves.
 
 ```sh
-flutter pub get
-dart format --output=none --set-exit-if-changed packages/ios_sheet/lib packages/ios_sheet/test packages/ios_sheet/example/lib packages/ios_sheet/example/test
-flutter analyze --fatal-infos packages/ios_sheet_engine/lib packages/ios_sheet_engine/test packages/ios_sheet candidate packages/ios_sheet/example
+flutter pub get --no-example
+bash tool/check_format.sh
+flutter analyze --fatal-infos --no-pub packages/ios_sheet_engine/lib packages/ios_sheet_engine/test packages/ios_sheet candidate packages/ios_sheet/example
 flutter test --no-pub packages/ios_sheet_engine/test
-flutter test --no-pub packages/ios_sheet
+flutter test --no-pub packages/ios_sheet/test
 flutter test --no-pub candidate/test
 flutter test --no-pub packages/ios_sheet/example/test
-dart doc --dry-run packages/ios_sheet
-dart doc --dry-run packages/ios_sheet_engine
 bash tool/verify_path_consumer.sh "$PWD/packages/ios_sheet"
-cd ..
-cmp LICENSE flutter_reference/packages/ios_sheet/LICENSE
+cmp ../LICENSE packages/ios_sheet/LICENSE
 ```
 
 These are host dependency, static, documentation, and Flutter test checks. The
-engine's standalone legacy example has a network Git dependency and is outside
-the workspace test/analysis scope. Pub may still resolve it while traversing
-examples. Do not refresh the public API baseline automatically; review additions
-and compatibility changes against the API gate before accepting a new baseline.
+engine's standalone legacy example has a network Git dependency and is excluded
+by `--no-example`; it is outside the workspace test/analysis scope. The shared
+format check is also used by CI. It checks tracked wrapper/example/tool/test and
+candidate Dart files, preserving engine formatting and exactly four documented
+existing drift exemptions in `tool/check_format.sh`. Analysis and tests still
+cover those files.
+
+Generate the API-check inputs and run the compatibility gate from
+`flutter_reference`:
+
+```sh
+cd packages/ios_sheet
+dart doc --output=build/api_docs .
+cd ../ios_sheet_engine
+dart doc --output=build/api_docs .
+cd ../ios_sheet
+dart tool/check_api_surface.dart \
+  build/api_docs/index.json \
+  ../ios_sheet_engine/build/api_docs/index.json \
+  build/api_docs/simple_stupid_ios_sheet/StupidSimpleIosSheetRoute-class.html \
+  tool/api_surface.json
+cd ../..
+```
+
+Each dartdoc command must exit successfully and report
+`Found 0 warnings and 0 errors.` Fix any documentation warning or error before
+running the API checker; CI enforces the same requirement. The checker must
+report no removals or changes. Additions are reported for review. Baseline
+updates require explicit review of the API diff and compatibility checks;
+do not refresh the baseline automatically to make a failure pass.
 
 Run the public example on an iOS Simulator with `flutter run -t lib/main.dart
 -d <simulator-id>` from `packages/ios_sheet/example` after generating local

@@ -1,3 +1,9 @@
+/// Opaque Flutter sheets with iOS 26 as the sole native-reference scope.
+///
+/// Use [showIos26Sheet] for common presentation and construct
+/// [StupidSimpleIosSheetRoute] directly for advanced profile and research seams.
+/// The default [IosSheetProfile.ios26] is an explicitly unmeasured fallback,
+/// not a claim of complete observed or accepted native parity.
 library;
 
 export 'src/detents.dart';

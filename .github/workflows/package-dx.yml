@@ -17,10 +17,10 @@ jobs:
         working-directory: flutter_reference
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Install pinned Flutter
-        uses: subosito/flutter-action@v2
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
         with:
           flutter-version: '3.44.6'
           channel: stable
@@ -34,28 +34,7 @@ jobs:
         run: flutter pub get --no-example
 
       - name: Check formatting of tracked wrapper and candidate Dart
-        run: |
-          # Preserve the engine's upstream formatting and four existing drift
-          # files. All remain covered by the analysis and host tests below.
-          format_paths=()
-          while IFS= read -r -d '' path; do
-            case "$path" in
-              packages/ios_sheet/lib/src/content_adaptation.dart|\
-              packages/ios_sheet/test/content_adaptation_test.dart|\
-              candidate/lib/synchronized_demo.dart|\
-              candidate/test/synchronized_demo_test.dart)
-                continue
-                ;;
-              *.dart)
-                format_paths+=("$path")
-                ;;
-            esac
-          done < <(git ls-files -z -- \
-            packages/ios_sheet/lib packages/ios_sheet/test \
-            packages/ios_sheet/tool packages/ios_sheet/example \
-            candidate/lib candidate/test)
-          test "${#format_paths[@]}" -gt 0
-          dart format --output=none --set-exit-if-changed "${format_paths[@]}"
+        run: bash tool/check_format.sh
 
       - name: Analyze supported workspace code with fatal infos
         run: >-

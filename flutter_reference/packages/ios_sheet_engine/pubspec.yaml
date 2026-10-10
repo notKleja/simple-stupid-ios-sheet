@@ -3,8 +3,8 @@ description: A simple sheet widget for Flutter.
 version: 1.0.0-dev.4+fork.1
 resolution: workspace
 
-repository: https://github.com/whynotmake-it/rivership/tree/main/packages/stupid_simple_sheet
-homepage: https://whynotmake.it
+repository: https://github.com/notKleja/simple-stupid-ios-sheet/tree/main/flutter_reference/packages/ios_sheet_engine
+homepage: https://github.com/notKleja/simple-stupid-ios-sheet
 
 topics: [animation, motion, physics, spring, curve]
 
