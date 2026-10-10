@@ -9,7 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  stupid_simple_sheet: 1.0.0-dev.4
+  ios_sheet_engine:
+    path: ../ios_sheet_engine
 dev_dependencies:
   flutter_test:
     sdk: flutter

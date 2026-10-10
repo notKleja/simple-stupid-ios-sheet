@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart' show precisionErrorTolerance;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
+import 'package:ios_sheet_engine/ios_sheet_engine.dart';
 
 import 'detents.dart';
 import 'environment.dart';

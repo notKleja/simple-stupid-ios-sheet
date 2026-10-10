@@ -12,7 +12,7 @@ export 'src/route.dart';
 export 'src/trace.dart';
 export 'src/comparison_contract.dart';
 export 'src/observed_profiles.dart';
-export 'package:stupid_simple_sheet/stupid_simple_sheet.dart'
+export 'package:ios_sheet_engine/ios_sheet_engine.dart'
     show
         Motion,
         SpringMotion,
