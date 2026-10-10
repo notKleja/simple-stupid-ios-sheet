@@ -1,0 +1,618 @@
+(lldb) target create "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore"
+Current executable set to '/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore' (arm64e).
+(lldb) disassemble -s 0x1891e04cc -e 0x1891e05b4
+UIKitCore`-[UIViewAnimationState configureAnimation:forLayer:forKey:]:
+UIKitCore[0x1891e04cc] <+0>:   pacibsp 
+UIKitCore[0x1891e04d0] <+4>:   sub    sp, sp, #0x40
+UIKitCore[0x1891e04d4] <+8>:   stp    x22, x21, [sp, #0x10]
+UIKitCore[0x1891e04d8] <+12>:  stp    x20, x19, [sp, #0x20]
+UIKitCore[0x1891e04dc] <+16>:  stp    x29, x30, [sp, #0x30]
+UIKitCore[0x1891e04e0] <+20>:  add    x29, sp, #0x30
+UIKitCore[0x1891e04e4] <+24>:  mov    x20, x4
+UIKitCore[0x1891e04e8] <+28>:  mov    x19, x3
+UIKitCore[0x1891e04ec] <+32>:  str    x2, [sp, #0x8]
+UIKitCore[0x1891e04f0] <+36>:  bl     0x18d81d8e0
+UIKitCore[0x1891e04f4] <+40>:  bl     0x18d81d8d0
+UIKitCore[0x1891e04f8] <+44>:  bl     0x18d81d8f0
+UIKitCore[0x1891e04fc] <+48>:  adrp   x2, 418032
+UIKitCore[0x1891e0500] <+52>:  add    x2, x2, #0x428            ; @0x002000000aeb0888
+UIKitCore[0x1891e0504] <+56>:  mov    x0, x20
+UIKitCore[0x1891e0508] <+60>:  bl     0x18b5a7f00               ; objc_msgSend$isEqualToString:
+UIKitCore[0x1891e050c] <+64>:  cbz    w0, 0x1891e0584           ; <+184>
+UIKitCore[0x1891e0510] <+68>:  adrp   x22, 379729
+UIKitCore[0x1891e0514] <+72>:  ldr    x0, [x22, #0x830]
+UIKitCore[0x1891e0518] <+76>:  bl     0x18d81d6a0
+UIKitCore[0x1891e051c] <+80>:  mov    x1, x0
+UIKitCore[0x1891e0520] <+84>:  ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e0524] <+88>:  bl     0x18d81d6b0
+UIKitCore[0x1891e0528] <+92>:  tbz    w0, #0x0, 0x1891e0584     ; <+184>
+UIKitCore[0x1891e052c] <+96>:  mov    x0, x19
+UIKitCore[0x1891e0530] <+100>: mov    x2, x20
+UIKitCore[0x1891e0534] <+104>: bl     0x18b590de0               ; objc_msgSend$implicitAnimationForKeyPath:
+UIKitCore[0x1891e0538] <+108>: mov    x29, x29
+UIKitCore[0x1891e053c] <+112>: bl     0x18d81d860
+UIKitCore[0x1891e0540] <+116>: mov    x21, x0
+UIKitCore[0x1891e0544] <+120>: ldr    x0, [x22, #0x830]
+UIKitCore[0x1891e0548] <+124>: bl     0x18d81d6a0
+UIKitCore[0x1891e054c] <+128>: mov    x1, x0
+UIKitCore[0x1891e0550] <+132>: mov    x0, x21
+UIKitCore[0x1891e0554] <+136>: bl     0x18d81d6b0
+UIKitCore[0x1891e0558] <+140>: tbz    w0, #0x0, 0x1891e0580     ; <+180>
+UIKitCore[0x1891e055c] <+144>: mov    x0, x21
+UIKitCore[0x1891e0560] <+148>: bl     0x18b583f00               ; objc_msgSend$fromValue
+UIKitCore[0x1891e0564] <+152>: mov    x29, x29
+UIKitCore[0x1891e0568] <+156>: bl     0x18d81d860
+UIKitCore[0x1891e056c] <+160>: mov    x22, x0
+UIKitCore[0x1891e0570] <+164>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e0574] <+168>: mov    x2, x22
+UIKitCore[0x1891e0578] <+172>: bl     0x18b605e40               ; objc_msgSend$setFromValue:
+UIKitCore[0x1891e057c] <+176>: bl     0x18d81d770
+UIKitCore[0x1891e0580] <+180>: bl     0x18d81d760
+UIKitCore[0x1891e0584] <+184>: bl     0x18d81d750
+UIKitCore[0x1891e0588] <+188>: bl     0x18d81d730
+UIKitCore[0x1891e058c] <+192>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e0590] <+196>: ldp    x29, x30, [sp, #0x30]
+UIKitCore[0x1891e0594] <+200>: ldp    x20, x19, [sp, #0x20]
+UIKitCore[0x1891e0598] <+204>: ldp    x22, x21, [sp, #0x10]
+UIKitCore[0x1891e059c] <+208>: add    sp, sp, #0x40
+UIKitCore[0x1891e05a0] <+212>: autibsp 
+UIKitCore[0x1891e05a4] <+216>: eor    x16, x30, x30, lsl #1
+UIKitCore[0x1891e05a8] <+220>: tbz    x16, #0x3e, 0x1891e05b0   ; <+228>
+UIKitCore[0x1891e05ac] <+224>: brk    #0xc471
+UIKitCore[0x1891e05b0] <+228>: b      0x18d81d700
+(lldb) disassemble -n "-[UIViewAnimationState setAnimationAttributes:skipDelegateAssignment:customCurve:]"
+UIKitCore`-[UIViewAnimationState setAnimationAttributes:skipDelegateAssignment:customCurve:]:
+UIKitCore[0x1891e05b4] <+0>:   pacibsp 
+UIKitCore[0x1891e05b8] <+4>:   sub    sp, sp, #0x70
+UIKitCore[0x1891e05bc] <+8>:   stp    d11, d10, [sp, #0x10]
+UIKitCore[0x1891e05c0] <+12>:  stp    d9, d8, [sp, #0x20]
+UIKitCore[0x1891e05c4] <+16>:  stp    x24, x23, [sp, #0x30]
+UIKitCore[0x1891e05c8] <+20>:  stp    x22, x21, [sp, #0x40]
+UIKitCore[0x1891e05cc] <+24>:  stp    x20, x19, [sp, #0x50]
+UIKitCore[0x1891e05d0] <+28>:  stp    x29, x30, [sp, #0x60]
+UIKitCore[0x1891e05d4] <+32>:  add    x29, sp, #0x60
+UIKitCore[0x1891e05d8] <+36>:  mov    x19, x4
+UIKitCore[0x1891e05dc] <+40>:  mov    x21, x3
+UIKitCore[0x1891e05e0] <+44>:  str    x2, [sp, #0x8]
+UIKitCore[0x1891e05e4] <+48>:  mov    x20, x0
+UIKitCore[0x1891e05e8] <+52>:  mov    x0, x2
+UIKitCore[0x1891e05ec] <+56>:  bl     0x18d81d830
+UIKitCore[0x1891e05f0] <+60>:  bl     0x18d81d8d0
+UIKitCore[0x1891e05f4] <+64>:  ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e05f8] <+68>:  cbz    x0, 0x1891e08a4           ; <+752>
+UIKitCore[0x1891e05fc] <+72>:  ldr    d8, [x20, #0x28]
+UIKitCore[0x1891e0600] <+76>:  bl     0x189190504               ; UIAnimationDragCoefficient
+UIKitCore[0x1891e0604] <+80>:  mov.16b v9, v0
+UIKitCore[0x1891e0608] <+84>:  fcvt   d10, s0
+UIKitCore[0x1891e060c] <+88>:  fcmp   d8, #0.0
+UIKitCore[0x1891e0610] <+92>:  adrp   x8, 7286
+UIKitCore[0x1891e0614] <+96>:  ldr    d11, [x8, #0x68]
+UIKitCore[0x1891e0618] <+100>: fcsel  d8, d11, d8, eq
+UIKitCore[0x1891e061c] <+104>: ldr    x24, [x20, #0xc8]
+UIKitCore[0x1891e0620] <+108>: bl     0x18d81d930
+UIKitCore[0x1891e0624] <+112>: ldr    x22, [x20, #0x58]
+UIKitCore[0x1891e0628] <+116>: cmp    x22, #0x7
+UIKitCore[0x1891e062c] <+120>: b.ne   0x1891e066c               ; <+184>
+UIKitCore[0x1891e0630] <+124>: adrp   x8, 379729
+UIKitCore[0x1891e0634] <+128>: ldr    x0, [x8, #0x9b0]
+UIKitCore[0x1891e0638] <+132>: bl     0x18d81d6a0
+UIKitCore[0x1891e063c] <+136>: mov    x1, x0
+UIKitCore[0x1891e0640] <+140>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e0644] <+144>: bl     0x18d81d6b0
+UIKitCore[0x1891e0648] <+148>: tbz    w0, #0x0, 0x1891e066c     ; <+184>
+UIKitCore[0x1891e064c] <+152>: bl     0x18d81d790
+UIKitCore[0x1891e0650] <+156>: bl     0x18d81d730
+UIKitCore[0x1891e0654] <+160>: mov    x24, #0x0                 ; =0 
+UIKitCore[0x1891e0658] <+164>: mov    x19, #0x0                 ; =0 
+UIKitCore[0x1891e065c] <+168>: adrp   x8, 396283
+UIKitCore[0x1891e0660] <+172>: ldr    d8, [x8, #0xd60]
+UIKitCore[0x1891e0664] <+176>: mov    w22, #0x3                 ; =3 
+UIKitCore[0x1891e0668] <+180>: b      0x1891e0734               ; <+384>
+UIKitCore[0x1891e066c] <+184>: fmov   s0, #1.00000000
+UIKitCore[0x1891e0670] <+188>: fcmp   s9, s0
+UIKitCore[0x1891e0674] <+192>: b.eq   0x1891e0734               ; <+384>
+UIKitCore[0x1891e0678] <+196>: fcmp   d8, d11
+UIKitCore[0x1891e067c] <+200>: b.le   0x1891e0734               ; <+384>
+UIKitCore[0x1891e0680] <+204>: adrp   x8, 381718
+UIKitCore[0x1891e0684] <+208>: ldr    x0, [x8, #0x640]
+UIKitCore[0x1891e0688] <+212>: mov    x2, x20
+UIKitCore[0x1891e068c] <+216>: bl     0x18b4be3a0               ; objc_msgSend$_getPropertyAnimationForState:
+UIKitCore[0x1891e0690] <+220>: mov    x29, x29
+UIKitCore[0x1891e0694] <+224>: bl     0x18d81d860
+UIKitCore[0x1891e0698] <+228>: mov    x23, x0
+UIKitCore[0x1891e069c] <+232>: cbz    x0, 0x1891e06bc           ; <+264>
+UIKitCore[0x1891e06a0] <+236>: mov    x0, x23
+UIKitCore[0x1891e06a4] <+240>: bl     0x18b4b1ee0               ; objc_msgSend$_drag
+UIKitCore[0x1891e06a8] <+244>: fmov   d10, #1.00000000
+UIKitCore[0x1891e06ac] <+248>: fdiv   d0, d10, d0
+UIKitCore[0x1891e06b0] <+252>: fcvt   s0, d0
+UIKitCore[0x1891e06b4] <+256>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e06b8] <+260>: bl     0x18b6281a0               ; objc_msgSend$setSpeed:
+UIKitCore[0x1891e06bc] <+264>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e06c0] <+268>: bl     0x18d81d830
+UIKitCore[0x1891e06c4] <+272>: bl     0x189190504               ; UIAnimationDragCoefficient
+UIKitCore[0x1891e06c8] <+276>: fmov   s1, #1.00000000
+UIKitCore[0x1891e06cc] <+280>: fcmp   s0, s1
+UIKitCore[0x1891e06d0] <+284>: b.eq   0x1891e071c               ; <+360>
+UIKitCore[0x1891e06d4] <+288>: fcvt   d9, s0
+UIKitCore[0x1891e06d8] <+292>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e06dc] <+296>: bl     0x18b6408a0               ; objc_msgSend$speed
+UIKitCore[0x1891e06e0] <+300>: fcvt   d0, s0
+UIKitCore[0x1891e06e4] <+304>: fmov   d1, #-1.00000000
+UIKitCore[0x1891e06e8] <+308>: fdiv   d1, d1, d9
+UIKitCore[0x1891e06ec] <+312>: fadd   d0, d0, d1
+UIKitCore[0x1891e06f0] <+316>: fabs   d9, d0
+UIKitCore[0x1891e06f4] <+320>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e06f8] <+324>: bl     0x18d81d700
+UIKitCore[0x1891e06fc] <+328>: fcvt   s0, d8
+UIKitCore[0x1891e0700] <+332>: fcvt   d0, s0
+UIKitCore[0x1891e0704] <+336>: fmul   d0, d10, d0
+UIKitCore[0x1891e0708] <+340>: mov    x8, #0x3e80000000000000   ; =4503599627370496000 
+UIKitCore[0x1891e070c] <+344>: fmov   d1, x8
+UIKitCore[0x1891e0710] <+348>: fcmp   d9, d1
+UIKitCore[0x1891e0714] <+352>: fcsel  d8, d8, d0, mi
+UIKitCore[0x1891e0718] <+356>: b      0x1891e0730               ; <+380>
+UIKitCore[0x1891e071c] <+360>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e0720] <+364>: bl     0x18d81d700
+UIKitCore[0x1891e0724] <+368>: fcvt   s0, d8
+UIKitCore[0x1891e0728] <+372>: fcvt   d0, s0
+UIKitCore[0x1891e072c] <+376>: fmul   d8, d10, d0
+UIKitCore[0x1891e0730] <+380>: bl     0x18d81d780
+UIKitCore[0x1891e0734] <+384>: ldr    d9, [x20, #0x38]
+UIKitCore[0x1891e0738] <+388>: fcmp   d9, #0.0
+UIKitCore[0x1891e073c] <+392>: b.le   0x1891e074c               ; <+408>
+UIKitCore[0x1891e0740] <+396>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e0744] <+400>: mov.16b v0, v9
+UIKitCore[0x1891e0748] <+404>: bl     0x18b605c00               ; objc_msgSend$setFrameInterval:
+UIKitCore[0x1891e074c] <+408>: ldp    s0, s1, [x20, #0x40]
+UIKitCore[0x1891e0750] <+412>: ldr    s2, [x20, #0x48]
+UIKitCore[0x1891e0754] <+416>: adrp   x8, 379729
+UIKitCore[0x1891e0758] <+420>: ldr    x8, [x8, #0x7d0]
+UIKitCore[0x1891e075c] <+424>: ldp    s3, s4, [x8]
+UIKitCore[0x1891e0760] <+428>: ldr    s5, [x8, #0x8]
+UIKitCore[0x1891e0764] <+432>: bl     0x18d8180d0
+UIKitCore[0x1891e0768] <+436>: tbz    w0, #0x0, 0x1891e0798     ; <+484>
+UIKitCore[0x1891e076c] <+440>: fcmp   d9, #0.0
+UIKitCore[0x1891e0770] <+444>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e0774] <+448>: b.gt   0x1891e07b8               ; <+516>
+UIKitCore[0x1891e0778] <+452>: mov    w8, #0x42f00000           ; =1123024896 
+UIKitCore[0x1891e077c] <+456>: fmov   s1, w8
+UIKitCore[0x1891e0780] <+460>: fmov   s0, #30.00000000
+UIKitCore[0x1891e0784] <+464>: mov.16b v2, v1
+UIKitCore[0x1891e0788] <+468>: bl     0x18b61bbe0               ; objc_msgSend$setPreferredFrameRateRange:
+UIKitCore[0x1891e078c] <+472>: mov    w2, #0x21                 ; =33 
+UIKitCore[0x1891e0790] <+476>: movk   w2, #0x10, lsl #16
+UIKitCore[0x1891e0794] <+480>: b      0x1891e07ac               ; <+504>
+UIKitCore[0x1891e0798] <+484>: ldp    s0, s1, [x20, #0x40]
+UIKitCore[0x1891e079c] <+488>: ldr    s2, [x20, #0x48]
+UIKitCore[0x1891e07a0] <+492>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e07a4] <+496>: bl     0x18b61bbe0               ; objc_msgSend$setPreferredFrameRateRange:
+UIKitCore[0x1891e07a8] <+500>: ldr    w2, [x20, #0x4c]
+UIKitCore[0x1891e07ac] <+504>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e07b0] <+508>: bl     0x18b6085e0               ; objc_msgSend$setHighFrameRateReason:
+UIKitCore[0x1891e07b4] <+512>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e07b8] <+516>: mov.16b v0, v8
+UIKitCore[0x1891e07bc] <+520>: bl     0x18b601340               ; objc_msgSend$setDuration:
+UIKitCore[0x1891e07c0] <+524>: mov    x2, x19
+UIKitCore[0x1891e07c4] <+528>: cbnz   x19, 0x1891e07d0          ; <+540>
+UIKitCore[0x1891e07c8] <+532>: mov    x2, x24
+UIKitCore[0x1891e07cc] <+536>: cbz    x24, 0x1891e08dc          ; <+808>
+UIKitCore[0x1891e07d0] <+540>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e07d4] <+544>: bl     0x18b62cc40               ; objc_msgSend$setTimingFunction:
+UIKitCore[0x1891e07d8] <+548>: ldr    d0, [x20, #0x30]
+UIKitCore[0x1891e07dc] <+552>: ldr    d1, [x20, #0x50]
+UIKitCore[0x1891e07e0] <+556>: fcmp   d0, #0.0
+UIKitCore[0x1891e07e4] <+560>: b.le   0x1891e0814               ; <+608>
+UIKitCore[0x1891e07e8] <+564>: fcmp   d1, #0.0
+UIKitCore[0x1891e07ec] <+568>: b.ne   0x1891e0814               ; <+608>
+UIKitCore[0x1891e07f0] <+572>: fmul   d0, d10, d0
+UIKitCore[0x1891e07f4] <+576>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e07f8] <+580>: bl     0x18b5f5260               ; objc_msgSend$setBeginTime:
+UIKitCore[0x1891e07fc] <+584>: adrp   x8, 379729
+UIKitCore[0x1891e0800] <+588>: ldr    x8, [x8, #0xac0]
+UIKitCore[0x1891e0804] <+592>: ldr    x2, [x8]
+UIKitCore[0x1891e0808] <+596>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e080c] <+600>: bl     0x18b5f5280               ; objc_msgSend$setBeginTimeMode:
+UIKitCore[0x1891e0810] <+604>: b      0x1891e0830               ; <+636>
+UIKitCore[0x1891e0814] <+608>: fcmp   d1, #0.0
+UIKitCore[0x1891e0818] <+612>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e081c] <+616>: b.le   0x1891e0834               ; <+640>
+UIKitCore[0x1891e0820] <+620>: fmul   d0, d10, d0
+UIKitCore[0x1891e0824] <+624>: fadd   d0, d0, d1
+UIKitCore[0x1891e0828] <+628>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e082c] <+632>: bl     0x18b5f5260               ; objc_msgSend$setBeginTime:
+UIKitCore[0x1891e0830] <+636>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e0834] <+640>: adrp   x8, 379729
+UIKitCore[0x1891e0838] <+644>: ldr    x8, [x8, #0xce0]
+UIKitCore[0x1891e083c] <+648>: ldr    x2, [x8]
+UIKitCore[0x1891e0840] <+652>: bl     0x18b603e40               ; objc_msgSend$setFillMode:
+UIKitCore[0x1891e0844] <+656>: ldr    s0, [x20, #0x60]
+UIKitCore[0x1891e0848] <+660>: fcmp   s0, #0.0
+UIKitCore[0x1891e084c] <+664>: b.le   0x1891e0858               ; <+676>
+UIKitCore[0x1891e0850] <+668>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e0854] <+672>: bl     0x18b61faa0               ; objc_msgSend$setRepeatCount:
+UIKitCore[0x1891e0858] <+676>: ldrb   w8, [x20, #0xac]
+UIKitCore[0x1891e085c] <+680>: tbz    w8, #0x3, 0x1891e086c     ; <+696>
+UIKitCore[0x1891e0860] <+684>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e0864] <+688>: mov    w2, #0x1                  ; =1 
+UIKitCore[0x1891e0868] <+692>: bl     0x18b5f35c0               ; objc_msgSend$setAutoreverses:
+UIKitCore[0x1891e086c] <+696>: tbnz   w21, #0x0, 0x1891e08a0    ; <+748>
+UIKitCore[0x1891e0870] <+700>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e0874] <+704>: mov    x2, x20
+UIKitCore[0x1891e0878] <+708>: bl     0x18b5fdf20               ; objc_msgSend$setDelegate:
+UIKitCore[0x1891e087c] <+712>: mov    x0, x20
+UIKitCore[0x1891e0880] <+716>: bl     0x18b4c5280               ; objc_msgSend$_incrementDidEndCount
+UIKitCore[0x1891e0884] <+720>: ldr    w8, [x20, #0xa8]
+UIKitCore[0x1891e0888] <+724>: cmp    w8, #0x1
+UIKitCore[0x1891e088c] <+728>: b.ne   0x1891e08a0               ; <+748>
+UIKitCore[0x1891e0890] <+732>: bl     0x18d81d8f0
+UIKitCore[0x1891e0894] <+736>: ldr    x8, [x20, #0x100]
+UIKitCore[0x1891e0898] <+740>: str    x20, [x20, #0x100]
+UIKitCore[0x1891e089c] <+744>: bl     0x18d81d810
+UIKitCore[0x1891e08a0] <+748>: bl     0x18d81d790
+UIKitCore[0x1891e08a4] <+752>: bl     0x18d81d730
+UIKitCore[0x1891e08a8] <+756>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e08ac] <+760>: ldp    x29, x30, [sp, #0x60]
+UIKitCore[0x1891e08b0] <+764>: ldp    x20, x19, [sp, #0x50]
+UIKitCore[0x1891e08b4] <+768>: ldp    x22, x21, [sp, #0x40]
+UIKitCore[0x1891e08b8] <+772>: ldp    x24, x23, [sp, #0x30]
+UIKitCore[0x1891e08bc] <+776>: ldp    d9, d8, [sp, #0x20]
+UIKitCore[0x1891e08c0] <+780>: ldp    d11, d10, [sp, #0x10]
+UIKitCore[0x1891e08c4] <+784>: add    sp, sp, #0x70
+UIKitCore[0x1891e08c8] <+788>: autibsp 
+UIKitCore[0x1891e08cc] <+792>: eor    x16, x30, x30, lsl #1
+UIKitCore[0x1891e08d0] <+796>: tbz    x16, #0x3e, 0x1891e08d8   ; <+804>
+UIKitCore[0x1891e08d4] <+800>: brk    #0xc471
+UIKitCore[0x1891e08d8] <+804>: b      0x18d81d700
+UIKitCore[0x1891e08dc] <+808>: mov    x0, x22
+UIKitCore[0x1891e08e0] <+812>: bl     0x1891e0904               ; _UIGetAnimationCurveSpline
+UIKitCore[0x1891e08e4] <+816>: mov    x29, x29
+UIKitCore[0x1891e08e8] <+820>: bl     0x18d81d860
+UIKitCore[0x1891e08ec] <+824>: mov    x22, x0
+UIKitCore[0x1891e08f0] <+828>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1891e08f4] <+832>: mov    x2, x22
+UIKitCore[0x1891e08f8] <+836>: bl     0x18b62cc40               ; objc_msgSend$setTimingFunction:
+UIKitCore[0x1891e08fc] <+840>: bl     0x18d81d770
+UIKitCore[0x1891e0900] <+844>: b      0x1891e07d8               ; <+548>
+(lldb) disassemble -n "_UILoadDefaultSpringParameters"
+UIKitCore`_UILoadDefaultSpringParameters:
+UIKitCore[0x189402884] <+0>:   pacibsp 
+UIKitCore[0x189402888] <+4>:   sub    sp, sp, #0x40
+UIKitCore[0x18940288c] <+8>:   stp    d9, d8, [sp, #0x10]
+UIKitCore[0x189402890] <+12>:  stp    x20, x19, [sp, #0x20]
+UIKitCore[0x189402894] <+16>:  stp    x29, x30, [sp, #0x30]
+UIKitCore[0x189402898] <+20>:  add    x29, sp, #0x30
+UIKitCore[0x18940289c] <+24>:  adrp   x0, 6807
+UIKitCore[0x1894028a0] <+28>:  add    x0, x0, #0xbd6            ; "com.apple.UIKit"
+UIKitCore[0x1894028a4] <+32>:  bl     0x18d81dc10
+UIKitCore[0x1894028a8] <+36>:  cbnz   w0, 0x1894028c0           ; <+60>
+UIKitCore[0x1894028ac] <+40>:  ldp    x29, x30, [sp, #0x30]
+UIKitCore[0x1894028b0] <+44>:  ldp    x20, x19, [sp, #0x20]
+UIKitCore[0x1894028b4] <+48>:  ldp    d9, d8, [sp, #0x10]
+UIKitCore[0x1894028b8] <+52>:  add    sp, sp, #0x40
+UIKitCore[0x1894028bc] <+56>:  retab  
+UIKitCore[0x1894028c0] <+60>:  adrp   x8, 395792
+UIKitCore[0x1894028c4] <+64>:  ldrb   w8, [x8, #0xca8]
+UIKitCore[0x1894028c8] <+68>:  tbnz   w8, #0x0, 0x1894028ac     ; <+40>
+UIKitCore[0x1894028cc] <+72>:  bl     0x18920da4c               ; _UIKitUserDefaults
+UIKitCore[0x1894028d0] <+76>:  mov    x29, x29
+UIKitCore[0x1894028d4] <+80>:  bl     0x18d81d860
+UIKitCore[0x1894028d8] <+84>:  mov    x19, x0
+UIKitCore[0x1894028dc] <+88>:  adrp   x2, 417632
+UIKitCore[0x1894028e0] <+92>:  add    x2, x2, #0x268            ; @0x002000000af6f845
+UIKitCore[0x1894028e4] <+96>:  bl     0x18b5c4240               ; objc_msgSend$objectForKey:
+UIKitCore[0x1894028e8] <+100>: mov    x29, x29
+UIKitCore[0x1894028ec] <+104>: bl     0x18d81d860
+UIKitCore[0x1894028f0] <+108>: str    x0, [sp, #0x8]
+UIKitCore[0x1894028f4] <+112>: bl     0x18d81d730
+UIKitCore[0x1894028f8] <+116>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1894028fc] <+120>: cbz    x0, 0x1894029f8           ; <+372>
+UIKitCore[0x189402900] <+124>: adrp   x2, 417470
+UIKitCore[0x189402904] <+128>: add    x2, x2, #0xf08            ; @0x002000000ae9fafd
+UIKitCore[0x189402908] <+132>: ldr    x0, [sp, #0x8]
+UIKitCore[0x18940290c] <+136>: bl     0x18b5c4280               ; objc_msgSend$objectForKeyedSubscript:
+UIKitCore[0x189402910] <+140>: mov    x29, x29
+UIKitCore[0x189402914] <+144>: bl     0x18d81d860
+UIKitCore[0x189402918] <+148>: mov    x19, x0
+UIKitCore[0x18940291c] <+152>: bl     0x18b572ce0               ; objc_msgSend$doubleValue
+UIKitCore[0x189402920] <+156>: mov.16b v8, v0
+UIKitCore[0x189402924] <+160>: bl     0x18d81d730
+UIKitCore[0x189402928] <+164>: fcmp   d8, #0.0
+UIKitCore[0x18940292c] <+168>: fmov   d0, #3.00000000
+UIKitCore[0x189402930] <+172>: fcsel  d0, d8, d0, hi
+UIKitCore[0x189402934] <+176>: adrp   x8, 395737
+UIKitCore[0x189402938] <+180>: str    d0, [x8, #0xd48]
+UIKitCore[0x18940293c] <+184>: adrp   x2, 417470
+UIKitCore[0x189402940] <+188>: add    x2, x2, #0xf28            ; @0x002000000ae9fb02
+UIKitCore[0x189402944] <+192>: ldr    x0, [sp, #0x8]
+UIKitCore[0x189402948] <+196>: bl     0x18b5c4280               ; objc_msgSend$objectForKeyedSubscript:
+UIKitCore[0x18940294c] <+200>: mov    x29, x29
+UIKitCore[0x189402950] <+204>: bl     0x18d81d860
+UIKitCore[0x189402954] <+208>: mov    x19, x0
+UIKitCore[0x189402958] <+212>: bl     0x18b572ce0               ; objc_msgSend$doubleValue
+UIKitCore[0x18940295c] <+216>: mov.16b v8, v0
+UIKitCore[0x189402960] <+220>: bl     0x18d81d730
+UIKitCore[0x189402964] <+224>: fcmp   d8, #0.0
+UIKitCore[0x189402968] <+228>: adrp   x8, 6740
+UIKitCore[0x18940296c] <+232>: ldr    d0, [x8, #0x118]
+UIKitCore[0x189402970] <+236>: fcsel  d0, d8, d0, hi
+UIKitCore[0x189402974] <+240>: adrp   x8, 395737
+UIKitCore[0x189402978] <+244>: str    d0, [x8, #0xd50]
+UIKitCore[0x18940297c] <+248>: adrp   x2, 417470
+UIKitCore[0x189402980] <+252>: add    x2, x2, #0xf48            ; @0x002000000ae9fb0c
+UIKitCore[0x189402984] <+256>: ldr    x0, [sp, #0x8]
+UIKitCore[0x189402988] <+260>: bl     0x18b5c4280               ; objc_msgSend$objectForKeyedSubscript:
+UIKitCore[0x18940298c] <+264>: mov    x29, x29
+UIKitCore[0x189402990] <+268>: bl     0x18d81d860
+UIKitCore[0x189402994] <+272>: mov    x19, x0
+UIKitCore[0x189402998] <+276>: bl     0x18b572ce0               ; objc_msgSend$doubleValue
+UIKitCore[0x18940299c] <+280>: mov.16b v8, v0
+UIKitCore[0x1894029a0] <+284>: bl     0x18d81d730
+UIKitCore[0x1894029a4] <+288>: fcmp   d8, #0.0
+UIKitCore[0x1894029a8] <+292>: adrp   x8, 6741
+UIKitCore[0x1894029ac] <+296>: ldr    d0, [x8, #0x390]
+UIKitCore[0x1894029b0] <+300>: fcsel  d0, d8, d0, hi
+UIKitCore[0x1894029b4] <+304>: adrp   x8, 395737
+UIKitCore[0x1894029b8] <+308>: str    d0, [x8, #0xd58]
+UIKitCore[0x1894029bc] <+312>: adrp   x2, 417499
+UIKitCore[0x1894029c0] <+316>: add    x2, x2, #0x128            ; @0x002000000aec8cff
+UIKitCore[0x1894029c4] <+320>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1894029c8] <+324>: bl     0x18b5c4280               ; objc_msgSend$objectForKeyedSubscript:
+UIKitCore[0x1894029cc] <+328>: mov    x29, x29
+UIKitCore[0x1894029d0] <+332>: bl     0x18d81d860
+UIKitCore[0x1894029d4] <+336>: mov    x19, x0
+UIKitCore[0x1894029d8] <+340>: bl     0x18b572ce0               ; objc_msgSend$doubleValue
+UIKitCore[0x1894029dc] <+344>: mov.16b v8, v0
+UIKitCore[0x1894029e0] <+348>: bl     0x18d81d730
+UIKitCore[0x1894029e4] <+352>: fcmp   d8, #0.0
+UIKitCore[0x1894029e8] <+356>: fmov   d0, #0.50000000
+UIKitCore[0x1894029ec] <+360>: fcsel  d0, d8, d0, hi
+UIKitCore[0x1894029f0] <+364>: adrp   x8, 395737
+UIKitCore[0x1894029f4] <+368>: str    d0, [x8, #0xd60]
+UIKitCore[0x1894029f8] <+372>: ldr    x0, [sp, #0x8]
+UIKitCore[0x1894029fc] <+376>: ldp    x29, x30, [sp, #0x30]
+UIKitCore[0x189402a00] <+380>: ldp    x20, x19, [sp, #0x20]
+UIKitCore[0x189402a04] <+384>: ldp    d9, d8, [sp, #0x10]
+UIKitCore[0x189402a08] <+388>: add    sp, sp, #0x40
+UIKitCore[0x189402a0c] <+392>: autibsp 
+UIKitCore[0x189402a10] <+396>: eor    x16, x30, x30, lsl #1
+UIKitCore[0x189402a14] <+400>: tbz    x16, #0x3e, 0x189402a1c   ; <+408>
+UIKitCore[0x189402a18] <+404>: brk    #0xc471
+UIKitCore[0x189402a1c] <+408>: b      0x18d81d700
+(lldb) disassemble -n "-[UISpringTimingParameters settlingDuration]"
+UIKitCore`-[UISpringTimingParameters settlingDuration]:
+UIKitCore[0x189403168] <+0>:   pacibsp 
+UIKitCore[0x18940316c] <+4>:   stp    d13, d12, [sp, #-0x60]!
+UIKitCore[0x189403170] <+8>:   stp    d11, d10, [sp, #0x10]
+UIKitCore[0x189403174] <+12>:  stp    d9, d8, [sp, #0x20]
+UIKitCore[0x189403178] <+16>:  stp    x22, x21, [sp, #0x30]
+UIKitCore[0x18940317c] <+20>:  stp    x20, x19, [sp, #0x40]
+UIKitCore[0x189403180] <+24>:  stp    x29, x30, [sp, #0x50]
+UIKitCore[0x189403184] <+28>:  add    x29, sp, #0x50
+UIKitCore[0x189403188] <+32>:  mov    x19, x0
+UIKitCore[0x18940318c] <+36>:  bl     0x18b590e00               ; objc_msgSend$implicitDuration
+UIKitCore[0x189403190] <+40>:  movi.2d v9, #0000000000000000
+UIKitCore[0x189403194] <+44>:  cbz    w0, 0x189403250           ; <+232>
+UIKitCore[0x189403198] <+48>:  mov    x0, x19
+UIKitCore[0x18940319c] <+52>:  bl     0x18b59fe80               ; objc_msgSend$initialVelocity
+UIKitCore[0x1894031a0] <+56>:  mov.16b v8, v1
+UIKitCore[0x1894031a4] <+60>:  mov    x0, x19
+UIKitCore[0x1894031a8] <+64>:  bl     0x18b59fe80               ; objc_msgSend$initialVelocity
+UIKitCore[0x1894031ac] <+68>:  mov.16b v10, v0
+UIKitCore[0x1894031b0] <+72>:  adrp   x21, 381171
+UIKitCore[0x1894031b4] <+76>:  ldr    x20, [x21, #0x5f8]
+UIKitCore[0x1894031b8] <+80>:  mov    x0, x19
+UIKitCore[0x1894031bc] <+84>:  bl     0x18b5b9f00               ; objc_msgSend$mass
+UIKitCore[0x1894031c0] <+88>:  mov.16b v9, v0
+UIKitCore[0x1894031c4] <+92>:  mov    x0, x19
+UIKitCore[0x1894031c8] <+96>:  bl     0x18b643860               ; objc_msgSend$stiffness
+UIKitCore[0x1894031cc] <+100>: mov.16b v11, v0
+UIKitCore[0x1894031d0] <+104>: mov    x0, x19
+UIKitCore[0x1894031d4] <+108>: bl     0x18b563ba0               ; objc_msgSend$damping
+UIKitCore[0x1894031d8] <+112>: mov.16b v12, v0
+UIKitCore[0x1894031dc] <+116>: mov    x0, x20
+UIKitCore[0x1894031e0] <+120>: bl     0x18d81d6e0
+UIKitCore[0x1894031e4] <+124>: mov.16b v0, v9
+UIKitCore[0x1894031e8] <+128>: mov.16b v1, v11
+UIKitCore[0x1894031ec] <+132>: mov.16b v2, v12
+UIKitCore[0x1894031f0] <+136>: mov.16b v3, v10
+UIKitCore[0x1894031f4] <+140>: bl     0x1894026f4               ; _durationOfSpringAnimation
+UIKitCore[0x1894031f8] <+144>: mov.16b v9, v0
+UIKitCore[0x1894031fc] <+148>: fcmp   d8, d10
+UIKitCore[0x189403200] <+152>: b.eq   0x189403250               ; <+232>
+UIKitCore[0x189403204] <+156>: ldr    x20, [x21, #0x5f8]
+UIKitCore[0x189403208] <+160>: mov    x0, x19
+UIKitCore[0x18940320c] <+164>: bl     0x18b5b9f00               ; objc_msgSend$mass
+UIKitCore[0x189403210] <+168>: mov.16b v10, v0
+UIKitCore[0x189403214] <+172>: mov    x0, x19
+UIKitCore[0x189403218] <+176>: bl     0x18b643860               ; objc_msgSend$stiffness
+UIKitCore[0x18940321c] <+180>: mov.16b v11, v0
+UIKitCore[0x189403220] <+184>: mov    x0, x19
+UIKitCore[0x189403224] <+188>: bl     0x18b563ba0               ; objc_msgSend$damping
+UIKitCore[0x189403228] <+192>: mov.16b v12, v0
+UIKitCore[0x18940322c] <+196>: mov    x0, x20
+UIKitCore[0x189403230] <+200>: bl     0x18d81d6e0
+UIKitCore[0x189403234] <+204>: mov.16b v0, v10
+UIKitCore[0x189403238] <+208>: mov.16b v1, v11
+UIKitCore[0x18940323c] <+212>: mov.16b v2, v12
+UIKitCore[0x189403240] <+216>: mov.16b v3, v8
+UIKitCore[0x189403244] <+220>: bl     0x1894026f4               ; _durationOfSpringAnimation
+UIKitCore[0x189403248] <+224>: fmaxnm d0, d9, d0
+UIKitCore[0x18940324c] <+228>: b      0x189403254               ; <+236>
+UIKitCore[0x189403250] <+232>: mov.16b v0, v9
+UIKitCore[0x189403254] <+236>: ldp    x29, x30, [sp, #0x50]
+UIKitCore[0x189403258] <+240>: ldp    x20, x19, [sp, #0x40]
+UIKitCore[0x18940325c] <+244>: ldp    x22, x21, [sp, #0x30]
+UIKitCore[0x189403260] <+248>: ldp    d9, d8, [sp, #0x20]
+UIKitCore[0x189403264] <+252>: ldp    d11, d10, [sp, #0x10]
+UIKitCore[0x189403268] <+256>: ldp    d13, d12, [sp], #0x60
+UIKitCore[0x18940326c] <+260>: retab  
+(lldb) disassemble -n "-[UIViewPropertyAnimator _basicAnimationForView:withKeyPath:]"
+UIKitCore`-[UIViewPropertyAnimator _basicAnimationForView:withKeyPath:]:
+UIKitCore[0x1896cc414] <+0>:   pacibsp 
+UIKitCore[0x1896cc418] <+4>:   sub    sp, sp, #0x70
+UIKitCore[0x1896cc41c] <+8>:   stp    d11, d10, [sp, #0x10]
+UIKitCore[0x1896cc420] <+12>:  stp    d9, d8, [sp, #0x20]
+UIKitCore[0x1896cc424] <+16>:  stp    x24, x23, [sp, #0x30]
+UIKitCore[0x1896cc428] <+20>:  stp    x22, x21, [sp, #0x40]
+UIKitCore[0x1896cc42c] <+24>:  stp    x20, x19, [sp, #0x50]
+UIKitCore[0x1896cc430] <+28>:  stp    x29, x30, [sp, #0x60]
+UIKitCore[0x1896cc434] <+32>:  add    x29, sp, #0x60
+UIKitCore[0x1896cc438] <+36>:  mov    x23, x3
+UIKitCore[0x1896cc43c] <+40>:  mov    x20, x0
+UIKitCore[0x1896cc440] <+44>:  ldr    x19, [x0, #0xc8]
+UIKitCore[0x1896cc444] <+48>:  bl     0x18d81d920
+UIKitCore[0x1896cc448] <+52>:  mov    x0, x19
+UIKitCore[0x1896cc44c] <+56>:  bl     0x18b641240               ; objc_msgSend$springTimingParameters
+UIKitCore[0x1896cc450] <+60>:  mov    x29, x29
+UIKitCore[0x1896cc454] <+64>:  bl     0x18d81d860
+UIKitCore[0x1896cc458] <+68>:  mov    x19, x0
+UIKitCore[0x1896cc45c] <+72>:  bl     0x18b59fe80               ; objc_msgSend$initialVelocity
+UIKitCore[0x1896cc460] <+76>:  mov.16b v8, v0
+UIKitCore[0x1896cc464] <+80>:  mov    x0, x20
+UIKitCore[0x1896cc468] <+84>:  bl     0x18b5a9840               ; objc_msgSend$isInterruptible
+UIKitCore[0x1896cc46c] <+88>:  tbnz   w0, #0x0, 0x1896cc4b0     ; <+156>
+UIKitCore[0x1896cc470] <+92>:  ldr    x0, [x20, #0xc8]
+UIKitCore[0x1896cc474] <+96>:  bl     0x18b650dc0               ; objc_msgSend$timingCurveType
+UIKitCore[0x1896cc478] <+100>: cmp    x0, #0x3
+UIKitCore[0x1896cc47c] <+104>: b.ne   0x1896cc4b0               ; <+156>
+UIKitCore[0x1896cc480] <+108>: ldr    x0, [x20, #0xc8]
+UIKitCore[0x1896cc484] <+112>: bl     0x18b5612a0               ; objc_msgSend$cubicTimingParameters
+UIKitCore[0x1896cc488] <+116>: mov    x29, x29
+UIKitCore[0x1896cc48c] <+120>: bl     0x18d81d860
+UIKitCore[0x1896cc490] <+124>: mov    x21, x0
+UIKitCore[0x1896cc494] <+128>: bl     0x18d81d760
+UIKitCore[0x1896cc498] <+132>: cbz    x21, 0x1896cc4b0          ; <+156>
+UIKitCore[0x1896cc49c] <+136>: ldr    x0, [x20, #0xc8]
+UIKitCore[0x1896cc4a0] <+140>: bl     0x1896893d0               ; mediaTimingFunctionForTimingProvider
+UIKitCore[0x1896cc4a4] <+144>: mov    x29, x29
+UIKitCore[0x1896cc4a8] <+148>: bl     0x18d81d860
+UIKitCore[0x1896cc4ac] <+152>: b      0x1896cc4d0               ; <+188>
+UIKitCore[0x1896cc4b0] <+156>: adrp   x8, 378469
+UIKitCore[0x1896cc4b4] <+160>: ldr    x0, [x8, #0x8d8]
+UIKitCore[0x1896cc4b8] <+164>: adrp   x8, 378470
+UIKitCore[0x1896cc4bc] <+168>: ldr    x8, [x8, #0x3c0]
+UIKitCore[0x1896cc4c0] <+172>: ldr    x2, [x8]
+UIKitCore[0x1896cc4c4] <+176>: bl     0x18b5843c0               ; objc_msgSend$functionWithName:
+UIKitCore[0x1896cc4c8] <+180>: mov    x29, x29
+UIKitCore[0x1896cc4cc] <+184>: bl     0x18d81d860
+UIKitCore[0x1896cc4d0] <+188>: mov    x21, x0
+UIKitCore[0x1896cc4d4] <+192>: stp    xzr, xzr, [sp]
+UIKitCore[0x1896cc4d8] <+196>: adrp   x8, 378469
+UIKitCore[0x1896cc4dc] <+200>: ldr    x0, [x8, #0x9b0]
+UIKitCore[0x1896cc4e0] <+204>: mov    x2, x23
+UIKitCore[0x1896cc4e4] <+208>: bl     0x18b53f640               ; objc_msgSend$animationWithKeyPath:
+UIKitCore[0x1896cc4e8] <+212>: mov    x29, x29
+UIKitCore[0x1896cc4ec] <+216>: bl     0x18d81d860
+UIKitCore[0x1896cc4f0] <+220>: mov    x22, x0
+UIKitCore[0x1896cc4f4] <+224>: bl     0x18d81d780
+UIKitCore[0x1896cc4f8] <+228>: mov    x0, x20
+UIKitCore[0x1896cc4fc] <+232>: bl     0x18b5a4380               ; objc_msgSend$internalDuration
+UIKitCore[0x1896cc500] <+236>: mov.16b v9, v0
+UIKitCore[0x1896cc504] <+240>: adrp   x8, 380458
+UIKitCore[0x1896cc508] <+244>: ldr    x0, [x8, #0x5f8]
+UIKitCore[0x1896cc50c] <+248>: bl     0x18b4a8fc0               ; objc_msgSend$_currentViewAnimationState
+UIKitCore[0x1896cc510] <+252>: mov    x29, x29
+UIKitCore[0x1896cc514] <+256>: bl     0x18d81d860
+UIKitCore[0x1896cc518] <+260>: mov    x23, x0
+UIKitCore[0x1896cc51c] <+264>: ldr    d0, [x0, #0x30]
+UIKitCore[0x1896cc520] <+268>: fcmp   d0, #0.0
+UIKitCore[0x1896cc524] <+272>: b.le   0x1896cc52c               ; <+280>
+UIKitCore[0x1896cc528] <+276>: ldr    d9, [x23, #0x28]
+UIKitCore[0x1896cc52c] <+280>: mov    x0, x19
+UIKitCore[0x1896cc530] <+284>: bl     0x18b590e00               ; objc_msgSend$implicitDuration
+UIKitCore[0x1896cc534] <+288>: tbz    w0, #0x0, 0x1896cc5ac     ; <+408>
+UIKitCore[0x1896cc538] <+292>: ldr    d0, [x23, #0x30]
+UIKitCore[0x1896cc53c] <+296>: fcmp   d0, #0.0
+UIKitCore[0x1896cc540] <+300>: b.le   0x1896cc588               ; <+372>
+UIKitCore[0x1896cc544] <+304>: adrp   x8, 407137
+UIKitCore[0x1896cc548] <+308>: add    x24, x8, #0x3c8           ; (void *)0x801dab846cd2d328
+UIKitCore[0x1896cc54c] <+312>: mov    x0, x19
+UIKitCore[0x1896cc550] <+316>: bl     0x18b563bc0               ; objc_msgSend$dampingRatio
+UIKitCore[0x1896cc554] <+320>: mov.16b v10, v0
+UIKitCore[0x1896cc558] <+324>: mov    x0, x19
+UIKitCore[0x1896cc55c] <+328>: bl     0x18b5b9f00               ; objc_msgSend$mass
+UIKitCore[0x1896cc560] <+332>: mov.16b v2, v0
+UIKitCore[0x1896cc564] <+336>: adrp   x8, 6026
+UIKitCore[0x1896cc568] <+340>: ldr    d4, [x8, #0x68]
+UIKitCore[0x1896cc56c] <+344>: add    x2, sp, #0x8
+UIKitCore[0x1896cc570] <+348>: mov    x3, sp
+UIKitCore[0x1896cc574] <+352>: mov    x0, x24
+UIKitCore[0x1896cc578] <+356>: mov.16b v0, v9
+UIKitCore[0x1896cc57c] <+360>: mov.16b v1, v10
+UIKitCore[0x1896cc580] <+364>: mov.16b v3, v8
+UIKitCore[0x1896cc584] <+368>: bl     0x18b558f40               ; objc_msgSend$computeDerivedSpringParameters:zeta:mass:velocity:epsilon:stiffness:damping:
+UIKitCore[0x1896cc588] <+372>: mov    x0, x19
+UIKitCore[0x1896cc58c] <+376>: bl     0x18b5b9f00               ; objc_msgSend$mass
+UIKitCore[0x1896cc590] <+380>: mov.16b v10, v0
+UIKitCore[0x1896cc594] <+384>: mov    x0, x19
+UIKitCore[0x1896cc598] <+388>: bl     0x18b643860               ; objc_msgSend$stiffness
+UIKitCore[0x1896cc59c] <+392>: str    d0, [sp, #0x8]
+UIKitCore[0x1896cc5a0] <+396>: mov    x0, x19
+UIKitCore[0x1896cc5a4] <+400>: bl     0x18b563ba0               ; objc_msgSend$damping
+UIKitCore[0x1896cc5a8] <+404>: b      0x1896cc5ec               ; <+472>
+UIKitCore[0x1896cc5ac] <+408>: adrp   x8, 407137
+UIKitCore[0x1896cc5b0] <+412>: add    x24, x8, #0x3c8           ; (void *)0x801dab846cd2d328
+UIKitCore[0x1896cc5b4] <+416>: mov    x0, x19
+UIKitCore[0x1896cc5b8] <+420>: bl     0x18b563bc0               ; objc_msgSend$dampingRatio
+UIKitCore[0x1896cc5bc] <+424>: mov.16b v1, v0
+UIKitCore[0x1896cc5c0] <+428>: adrp   x8, 6026
+UIKitCore[0x1896cc5c4] <+432>: ldr    d4, [x8, #0x68]
+UIKitCore[0x1896cc5c8] <+436>: fmov   d10, #1.00000000
+UIKitCore[0x1896cc5cc] <+440>: fmov   d2, #1.00000000
+UIKitCore[0x1896cc5d0] <+444>: add    x2, sp, #0x8
+UIKitCore[0x1896cc5d4] <+448>: mov    x3, sp
+UIKitCore[0x1896cc5d8] <+452>: mov    x0, x24
+UIKitCore[0x1896cc5dc] <+456>: mov.16b v0, v9
+UIKitCore[0x1896cc5e0] <+460>: mov.16b v3, v8
+UIKitCore[0x1896cc5e4] <+464>: bl     0x18b558f40               ; objc_msgSend$computeDerivedSpringParameters:zeta:mass:velocity:epsilon:stiffness:damping:
+UIKitCore[0x1896cc5e8] <+468>: ldr    d0, [sp]
+UIKitCore[0x1896cc5ec] <+472>: ldr    d1, [sp, #0x8]
+UIKitCore[0x1896cc5f0] <+476>: fabs   d1, d1
+UIKitCore[0x1896cc5f4] <+480>: adrp   x8, 6026
+UIKitCore[0x1896cc5f8] <+484>: ldr    d2, [x8, #0x1d0]
+UIKitCore[0x1896cc5fc] <+488>: fmaxnm d3, d1, d2
+UIKitCore[0x1896cc600] <+492>: fabs   d0, d0
+UIKitCore[0x1896cc604] <+496>: movi.2d v1, #0000000000000000
+UIKitCore[0x1896cc608] <+500>: fmaxnm d0, d0, d1
+UIKitCore[0x1896cc60c] <+504>: stp    d0, d3, [sp]
+UIKitCore[0x1896cc610] <+508>: mov    x0, x22
+UIKitCore[0x1896cc614] <+512>: mov    x2, x21
+UIKitCore[0x1896cc618] <+516>: bl     0x18b62cc40               ; objc_msgSend$setTimingFunction:
+UIKitCore[0x1896cc61c] <+520>: mov    x0, x22
+UIKitCore[0x1896cc620] <+524>: mov.16b v0, v10
+UIKitCore[0x1896cc624] <+528>: bl     0x18b613340               ; objc_msgSend$setMass:
+UIKitCore[0x1896cc628] <+532>: ldr    d0, [sp, #0x8]
+UIKitCore[0x1896cc62c] <+536>: mov    x0, x22
+UIKitCore[0x1896cc630] <+540>: bl     0x18b6291e0               ; objc_msgSend$setStiffness:
+UIKitCore[0x1896cc634] <+544>: ldr    d0, [sp]
+UIKitCore[0x1896cc638] <+548>: mov    x0, x22
+UIKitCore[0x1896cc63c] <+552>: bl     0x18b5fc980               ; objc_msgSend$setDamping:
+UIKitCore[0x1896cc640] <+556>: mov    x0, x22
+UIKitCore[0x1896cc644] <+560>: mov.16b v0, v8
+UIKitCore[0x1896cc648] <+564>: bl     0x18b631740               ; objc_msgSend$setVelocity:
+UIKitCore[0x1896cc64c] <+568>: mov    x0, x22
+UIKitCore[0x1896cc650] <+572>: bl     0x18b6408a0               ; objc_msgSend$speed
+UIKitCore[0x1896cc654] <+576>: fcvt   d0, s0
+UIKitCore[0x1896cc658] <+580>: ldr    d1, [x20, #0x28]
+UIKitCore[0x1896cc65c] <+584>: fdiv   d0, d0, d1
+UIKitCore[0x1896cc660] <+588>: fcvt   s0, d0
+UIKitCore[0x1896cc664] <+592>: mov    x0, x22
+UIKitCore[0x1896cc668] <+596>: bl     0x18b6281a0               ; objc_msgSend$setSpeed:
+UIKitCore[0x1896cc66c] <+600>: bl     0x18d81d780
+UIKitCore[0x1896cc670] <+604>: bl     0x18d81d760
+UIKitCore[0x1896cc674] <+608>: bl     0x18d81d730
+UIKitCore[0x1896cc678] <+612>: mov    x0, x22
+UIKitCore[0x1896cc67c] <+616>: ldp    x29, x30, [sp, #0x60]
+UIKitCore[0x1896cc680] <+620>: ldp    x20, x19, [sp, #0x50]
+UIKitCore[0x1896cc684] <+624>: ldp    x22, x21, [sp, #0x40]
+UIKitCore[0x1896cc688] <+628>: ldp    x24, x23, [sp, #0x30]
+UIKitCore[0x1896cc68c] <+632>: ldp    d9, d8, [sp, #0x20]
+UIKitCore[0x1896cc690] <+636>: ldp    d11, d10, [sp, #0x10]
+UIKitCore[0x1896cc694] <+640>: add    sp, sp, #0x70
+UIKitCore[0x1896cc698] <+644>: autibsp 
+UIKitCore[0x1896cc69c] <+648>: eor    x16, x30, x30, lsl #1
+UIKitCore[0x1896cc6a0] <+652>: tbz    x16, #0x3e, 0x1896cc6a8   ; <+660>
+UIKitCore[0x1896cc6a4] <+656>: brk    #0xc471
+UIKitCore[0x1896cc6a8] <+660>: b      0x18d81d530
+(lldb) quit

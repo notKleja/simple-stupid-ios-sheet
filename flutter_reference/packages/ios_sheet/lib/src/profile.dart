@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 
 import 'detents.dart';
+import 'corner_bridge.dart';
 
 /// Independent OS profiles. Defaults are research fallbacks, not native truth.
 @immutable
@@ -125,11 +126,15 @@ class IosSheetGeometryContext {
     required this.visibleHeight,
     required this.progress,
     this.velocity = 0,
+    this.transitionFraction = 1,
   });
   final IosSheetEnvironment environment;
   final double visibleHeight;
   final double progress;
   final double velocity;
+
+  /// Existing fixed-surface opening/dismissal translation, independent of shape.
+  final double transitionFraction;
 }
 
 /// Per-frame geometry seam. A resolver can express measured continuous or
@@ -142,6 +147,7 @@ class IosSheetGeometry {
     this.cornerRadius = 0,
     this.shape,
     this.scale = 1,
+    this.cornerResolution,
   });
   final double sideInset;
   final double bottomInset;
@@ -150,4 +156,7 @@ class IosSheetGeometry {
 
   /// Supports measured paths when a single scalar radius is insufficient.
   final ShapeBorder? shape;
+
+  /// Native model/configuration radii only; never implies contour acceptance.
+  final IosSheetCornerResolution? cornerResolution;
 }

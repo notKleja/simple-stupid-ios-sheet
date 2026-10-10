@@ -1,0 +1,509 @@
+(lldb) target create "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/Frameworks/QuartzCore.framework/QuartzCore"
+Current executable set to '/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/Frameworks/QuartzCore.framework/QuartzCore' (arm64e).
+(lldb) disassemble -s 0x183f708ec -c 101
+QuartzCore`-[CALayer removeAnimationForKey:]:
+QuartzCore[0x183f708ec] <+0>:   pacibsp
+QuartzCore[0x183f708f0] <+4>:   sub    sp, sp, #0x60
+QuartzCore[0x183f708f4] <+8>:   stp    x26, x25, [sp, #0x10]
+QuartzCore[0x183f708f8] <+12>:  stp    x24, x23, [sp, #0x20]
+QuartzCore[0x183f708fc] <+16>:  stp    x22, x21, [sp, #0x30]
+QuartzCore[0x183f70900] <+20>:  stp    x20, x19, [sp, #0x40]
+QuartzCore[0x183f70904] <+24>:  stp    x29, x30, [sp, #0x50]
+QuartzCore[0x183f70908] <+28>:  add    x29, sp, #0x50
+QuartzCore[0x183f7090c] <+32>:  mov    x21, x2
+QuartzCore[0x183f70910] <+36>:  mov    x20, x0
+QuartzCore[0x183f70914] <+40>:  bl     0x183f5f900               ; CA::Transaction::ensure_compat()
+QuartzCore[0x183f70918] <+44>:  mov    x19, x0
+QuartzCore[0x183f7091c] <+48>:  mov    x0, x20
+QuartzCore[0x183f70920] <+52>:  bl     0x1842bd840               ; objc_msgSend$modelLayer
+QuartzCore[0x183f70924] <+56>:  cbz    x0, 0x183f709f8           ; <+268>
+QuartzCore[0x183f70928] <+60>:  mov    x20, x0
+QuartzCore[0x183f7092c] <+64>:  ldr    x8, [x0, #0x10]
+QuartzCore[0x183f70930] <+68>:  ldr    x8, [x8, #0x118]
+QuartzCore[0x183f70934] <+72>:  cbz    x8, 0x183f709f8           ; <+268>
+QuartzCore[0x183f70938] <+76>:  mov    x0, x21
+QuartzCore[0x183f7093c] <+80>:  bl     0x1842bcde0               ; objc_msgSend$length
+QuartzCore[0x183f70940] <+84>:  cbz    x0, 0x183f709f8           ; <+268>
+QuartzCore[0x183f70944] <+88>:  mov    x0, x21
+QuartzCore[0x183f70948] <+92>:  bl     0x1842bb440               ; objc_msgSend$hash
+QuartzCore[0x183f7094c] <+96>:  mov    x22, x0
+QuartzCore[0x183f70950] <+100>: ldr    w8, [x19, #0x74]
+QuartzCore[0x183f70954] <+104>: add    w9, w8, #0x1
+QuartzCore[0x183f70958] <+108>: str    w9, [x19, #0x74]
+QuartzCore[0x183f7095c] <+112>: cbnz   w8, 0x183f7096c           ; <+128>
+QuartzCore[0x183f70960] <+116>: adrp   x0, 429605
+QuartzCore[0x183f70964] <+120>: add    x0, x0, #0x228            ; CA::Transaction::transaction_lock
+QuartzCore[0x183f70968] <+124>: bl     0x186bebf60
+QuartzCore[0x183f7096c] <+128>: ldr    x0, [x20, #0x10]
+QuartzCore[0x183f70970] <+132>: ldr    x24, [x0, #0x118]
+QuartzCore[0x183f70974] <+136>: str    x24, [sp, #0x8]
+QuartzCore[0x183f70978] <+140>: cbz    x24, 0x183f70a20          ; <+308>
+QuartzCore[0x183f7097c] <+144>: add    x26, sp, #0x8
+QuartzCore[0x183f70980] <+148>: mov    w25, #0x1                 ; =1
+QuartzCore[0x183f70984] <+152>: adrp   x23, 429604
+QuartzCore[0x183f70988] <+156>: add    x23, x23, #0x610          ; animation_state
+QuartzCore[0x183f7098c] <+160>: ldrb   w8, [x24, #0x3a]
+QuartzCore[0x183f70990] <+164>: tbnz   w8, #0x0, 0x183f709c4     ; <+216>
+QuartzCore[0x183f70994] <+168>: ldr    x8, [x24, #0x18]
+QuartzCore[0x183f70998] <+172>: cmp    x8, x22
+QuartzCore[0x183f7099c] <+176>: b.ne   0x183f709c4               ; <+216>
+QuartzCore[0x183f709a0] <+180>: ldr    x0, [x24, #0x10]
+QuartzCore[0x183f709a4] <+184>: mov    x2, x21
+QuartzCore[0x183f709a8] <+188>: bl     0x1842bc6a0               ; objc_msgSend$isEqualToString:
+QuartzCore[0x183f709ac] <+192>: cbz    w0, 0x183f709c4           ; <+216>
+QuartzCore[0x183f709b0] <+196>: ldrb   w8, [x24, #0x39]
+QuartzCore[0x183f709b4] <+200>: tbnz   w8, #0x0, 0x183f709c0     ; <+212>
+QuartzCore[0x183f709b8] <+204>: ldrb   w8, [x24, #0x3d]
+QuartzCore[0x183f709bc] <+208>: tbz    w8, #0x0, 0x183f709d4     ; <+232>
+QuartzCore[0x183f709c0] <+212>: strb   w25, [x24, #0x3a]
+QuartzCore[0x183f709c4] <+216>: mov    x26, x24
+QuartzCore[0x183f709c8] <+220>: ldr    x24, [x26]
+QuartzCore[0x183f709cc] <+224>: cbz    x24, 0x183f70a14          ; <+296>
+QuartzCore[0x183f709d0] <+228>: b      0x183f7098c               ; <+160>
+QuartzCore[0x183f709d4] <+232>: ldr    x8, [x24]
+QuartzCore[0x183f709d8] <+236>: str    x8, [x26]
+QuartzCore[0x183f709dc] <+240>: mov    x0, x24
+QuartzCore[0x183f709e0] <+244>: mov    x1, x23
+QuartzCore[0x183f709e4] <+248>: bl     0x183f836a4               ; schedule_stop_callback(LayerAnimation*, LayerAnimationState*)
+QuartzCore[0x183f709e8] <+252>: str    xzr, [x24]
+QuartzCore[0x183f709ec] <+256>: mov    x0, x24
+QuartzCore[0x183f709f0] <+260>: bl     0x18418f5a8               ; LayerAnimation::unref()
+QuartzCore[0x183f709f4] <+264>: b      0x183f709c8               ; <+220>
+QuartzCore[0x183f709f8] <+268>: ldp    x29, x30, [sp, #0x50]
+QuartzCore[0x183f709fc] <+272>: ldp    x20, x19, [sp, #0x40]
+QuartzCore[0x183f70a00] <+276>: ldp    x22, x21, [sp, #0x30]
+QuartzCore[0x183f70a04] <+280>: ldp    x24, x23, [sp, #0x20]
+QuartzCore[0x183f70a08] <+284>: ldp    x26, x25, [sp, #0x10]
+QuartzCore[0x183f70a0c] <+288>: add    sp, sp, #0x60
+QuartzCore[0x183f70a10] <+292>: retab
+QuartzCore[0x183f70a14] <+296>: ldr    x0, [x20, #0x10]
+QuartzCore[0x183f70a18] <+300>: ldr    x1, [sp, #0x8]
+QuartzCore[0x183f70a1c] <+304>: b      0x183f70a24               ; <+312>
+QuartzCore[0x183f70a20] <+308>: mov    x1, #0x0                  ; =0
+QuartzCore[0x183f70a24] <+312>: bl     0x183f690b8               ; CA::Layer::set_animations(LayerAnimation*)
+QuartzCore[0x183f70a28] <+316>: ldr    x0, [x20, #0x10]
+QuartzCore[0x183f70a2c] <+320>: mov    x1, x19
+QuartzCore[0x183f70a30] <+324>: mov    w2, #0x0                  ; =0
+QuartzCore[0x183f70a34] <+328>: bl     0x183f69044               ; CA::Layer::mark_animations(CA::Transaction*, bool)
+QuartzCore[0x183f70a38] <+332>: mov    x0, x19
+QuartzCore[0x183f70a3c] <+336>: ldp    x29, x30, [sp, #0x50]
+QuartzCore[0x183f70a40] <+340>: ldp    x20, x19, [sp, #0x40]
+QuartzCore[0x183f70a44] <+344>: ldp    x22, x21, [sp, #0x30]
+QuartzCore[0x183f70a48] <+348>: ldp    x24, x23, [sp, #0x20]
+QuartzCore[0x183f70a4c] <+352>: ldp    x26, x25, [sp, #0x10]
+QuartzCore[0x183f70a50] <+356>: add    sp, sp, #0x60
+QuartzCore[0x183f70a54] <+360>: autibsp
+QuartzCore[0x183f70a58] <+364>: eor    x16, x30, x30, lsl #1
+QuartzCore[0x183f70a5c] <+368>: tbz    x16, #0x3e, 0x183f70a64   ; <+376>
+QuartzCore[0x183f70a60] <+372>: brk    #0xc471
+QuartzCore[0x183f70a64] <+376>: b      0x183f5f410               ; CA::Transaction::unlock()
+QuartzCore[0x183f70a68] <+380>: b      0x183f70a6c               ; <+384>
+QuartzCore[0x183f70a6c] <+384>: mov    x20, x0
+QuartzCore[0x183f70a70] <+388>: mov    x0, x19
+QuartzCore[0x183f70a74] <+392>: bl     0x183f5f410               ; CA::Transaction::unlock()
+QuartzCore[0x183f70a78] <+396>: mov    x0, x20
+QuartzCore[0x183f70a7c] <+400>: bl     0x186beabd0
+(lldb) quit
+(lldb) target create "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/Frameworks/QuartzCore.framework/QuartzCore"
+Current executable set to '/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/Frameworks/QuartzCore.framework/QuartzCore' (arm64e).
+(lldb) disassemble -s 0x183f71354 -c 24
+QuartzCore`-[CAAnimation beginTime]:
+QuartzCore[0x183f71354] <+0>:  pacibsp
+QuartzCore[0x183f71358] <+4>:  sub    sp, sp, #0x20
+QuartzCore[0x183f7135c] <+8>:  stp    x29, x30, [sp, #0x10]
+QuartzCore[0x183f71360] <+12>: add    x29, sp, #0x10
+QuartzCore[0x183f71364] <+16>: adrp   x8, 400941
+QuartzCore[0x183f71368] <+20>: ldr    x8, [x8, #0xc30]
+QuartzCore[0x183f7136c] <+24>: ldr    x8, [x8]
+QuartzCore[0x183f71370] <+28>: str    x8, [sp, #0x8]
+QuartzCore[0x183f71374] <+32>: str    xzr, [sp]
+QuartzCore[0x183f71378] <+36>: mov    x3, sp
+QuartzCore[0x183f7137c] <+40>: mov    w1, #0x41                 ; =65
+QuartzCore[0x183f71380] <+44>: mov    w2, #0x12                 ; =18
+QuartzCore[0x183f71384] <+48>: bl     0x183f682d8               ; CAAnimation_getter(CAAnimation*, unsigned int, _CAValueType, void*)
+QuartzCore[0x183f71388] <+52>: ldr    d0, [sp]
+QuartzCore[0x183f7138c] <+56>: ldr    x8, [sp, #0x8]
+QuartzCore[0x183f71390] <+60>: adrp   x9, 400941
+QuartzCore[0x183f71394] <+64>: ldr    x9, [x9, #0xc30]
+QuartzCore[0x183f71398] <+68>: ldr    x9, [x9]
+QuartzCore[0x183f7139c] <+72>: cmp    x9, x8
+QuartzCore[0x183f713a0] <+76>: b.ne   0x183f713b0               ; <+92>
+QuartzCore[0x183f713a4] <+80>: ldp    x29, x30, [sp, #0x10]
+QuartzCore[0x183f713a8] <+84>: add    sp, sp, #0x20
+QuartzCore[0x183f713ac] <+88>: retab
+QuartzCore[0x183f713b0] <+92>: bl     0x186beaf90
+(lldb) quit
+(lldb) target create "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/Frameworks/QuartzCore.framework/QuartzCore"
+Current executable set to '/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/Frameworks/QuartzCore.framework/QuartzCore' (arm64e).
+(lldb) disassemble -s 0x183f79b6c -c 66
+QuartzCore`-[CALayer animationForKey:]:
+QuartzCore[0x183f79b6c] <+0>:   pacibsp
+QuartzCore[0x183f79b70] <+4>:   stp    x22, x21, [sp, #-0x30]!
+QuartzCore[0x183f79b74] <+8>:   stp    x20, x19, [sp, #0x10]
+QuartzCore[0x183f79b78] <+12>:  stp    x29, x30, [sp, #0x20]
+QuartzCore[0x183f79b7c] <+16>:  add    x29, sp, #0x20
+QuartzCore[0x183f79b80] <+20>:  mov    x20, x2
+QuartzCore[0x183f79b84] <+24>:  mov    x21, x0
+QuartzCore[0x183f79b88] <+28>:  bl     0x183f5f900               ; CA::Transaction::ensure_compat()
+QuartzCore[0x183f79b8c] <+32>:  mov    x19, x0
+QuartzCore[0x183f79b90] <+36>:  mov    x0, x21
+QuartzCore[0x183f79b94] <+40>:  bl     0x1842bd840               ; objc_msgSend$modelLayer
+QuartzCore[0x183f79b98] <+44>:  cbz    x0, 0x183f79c30           ; <+196>
+QuartzCore[0x183f79b9c] <+48>:  mov    x21, x0
+QuartzCore[0x183f79ba0] <+52>:  ldr    x8, [x0, #0x10]
+QuartzCore[0x183f79ba4] <+56>:  ldr    x8, [x8, #0x118]
+QuartzCore[0x183f79ba8] <+60>:  cbz    x8, 0x183f79c30           ; <+196>
+QuartzCore[0x183f79bac] <+64>:  mov    x0, x20
+QuartzCore[0x183f79bb0] <+68>:  bl     0x1842bcde0               ; objc_msgSend$length
+QuartzCore[0x183f79bb4] <+72>:  cbz    x0, 0x183f79c30           ; <+196>
+QuartzCore[0x183f79bb8] <+76>:  ldr    w8, [x19, #0x74]
+QuartzCore[0x183f79bbc] <+80>:  add    w9, w8, #0x1
+QuartzCore[0x183f79bc0] <+84>:  str    w9, [x19, #0x74]
+QuartzCore[0x183f79bc4] <+88>:  cbnz   w8, 0x183f79bd4           ; <+104>
+QuartzCore[0x183f79bc8] <+92>:  adrp   x0, 429596
+QuartzCore[0x183f79bcc] <+96>:  add    x0, x0, #0x228            ; CA::Transaction::transaction_lock
+QuartzCore[0x183f79bd0] <+100>: bl     0x186bebf60
+QuartzCore[0x183f79bd4] <+104>: ldr    x8, [x21, #0x10]
+QuartzCore[0x183f79bd8] <+108>: ldr    x22, [x8, #0x118]
+QuartzCore[0x183f79bdc] <+112>: cbz    x22, 0x183f79c20          ; <+180>
+QuartzCore[0x183f79be0] <+116>: mov    x0, x20
+QuartzCore[0x183f79be4] <+120>: bl     0x1842bb440               ; objc_msgSend$hash
+QuartzCore[0x183f79be8] <+124>: mov    x21, x0
+QuartzCore[0x183f79bec] <+128>: ldrb   w8, [x22, #0x3a]
+QuartzCore[0x183f79bf0] <+132>: tbnz   w8, #0x0, 0x183f79c18     ; <+172>
+QuartzCore[0x183f79bf4] <+136>: ldrb   w8, [x22, #0x3c]
+QuartzCore[0x183f79bf8] <+140>: tbnz   w8, #0x0, 0x183f79c18     ; <+172>
+QuartzCore[0x183f79bfc] <+144>: ldr    x8, [x22, #0x18]
+QuartzCore[0x183f79c00] <+148>: cmp    x8, x21
+QuartzCore[0x183f79c04] <+152>: b.ne   0x183f79c18               ; <+172>
+QuartzCore[0x183f79c08] <+156>: ldr    x0, [x22, #0x10]
+QuartzCore[0x183f79c0c] <+160>: mov    x2, x20
+QuartzCore[0x183f79c10] <+164>: bl     0x1842bc6a0               ; objc_msgSend$isEqualToString:
+QuartzCore[0x183f79c14] <+168>: cbnz   w0, 0x183f79c48           ; <+220>
+QuartzCore[0x183f79c18] <+172>: ldr    x22, [x22]
+QuartzCore[0x183f79c1c] <+176>: cbnz   x22, 0x183f79bec          ; <+128>
+QuartzCore[0x183f79c20] <+180>: mov    x20, #0x0                 ; =0
+QuartzCore[0x183f79c24] <+184>: mov    x0, x19
+QuartzCore[0x183f79c28] <+188>: bl     0x183f5f410               ; CA::Transaction::unlock()
+QuartzCore[0x183f79c2c] <+192>: b      0x183f79c34               ; <+200>
+QuartzCore[0x183f79c30] <+196>: mov    x20, #0x0                 ; =0
+QuartzCore[0x183f79c34] <+200>: mov    x0, x20
+QuartzCore[0x183f79c38] <+204>: ldp    x29, x30, [sp, #0x20]
+QuartzCore[0x183f79c3c] <+208>: ldp    x20, x19, [sp, #0x10]
+QuartzCore[0x183f79c40] <+212>: ldp    x22, x21, [sp], #0x30
+QuartzCore[0x183f79c44] <+216>: retab
+QuartzCore[0x183f79c48] <+220>: ldr    x8, [x22, #0x8]
+QuartzCore[0x183f79c4c] <+224>: bl     0x186bebe30
+QuartzCore[0x183f79c50] <+228>: bl     0x186bebb20
+QuartzCore[0x183f79c54] <+232>: mov    x20, x0
+QuartzCore[0x183f79c58] <+236>: b      0x183f79c24               ; <+184>
+QuartzCore[0x183f79c5c] <+240>: b      0x183f79c60               ; <+244>
+QuartzCore[0x183f79c60] <+244>: mov    x20, x0
+QuartzCore[0x183f79c64] <+248>: mov    x0, x19
+QuartzCore[0x183f79c68] <+252>: bl     0x183f5f410               ; CA::Transaction::unlock()
+QuartzCore[0x183f79c6c] <+256>: mov    x0, x20
+QuartzCore[0x183f79c70] <+260>: bl     0x186beabd0
+(lldb) quit
+(lldb) target create "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/Frameworks/QuartzCore.framework/QuartzCore"
+Current executable set to '/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/Frameworks/QuartzCore.framework/QuartzCore' (arm64e).
+(lldb) disassemble -s 0x183f7ab80 -c 83
+QuartzCore`-[CALayer removeAllAnimations]:
+QuartzCore[0x183f7ab80] <+0>:   pacibsp
+QuartzCore[0x183f7ab84] <+4>:   sub    sp, sp, #0x50
+QuartzCore[0x183f7ab88] <+8>:   stp    x24, x23, [sp, #0x10]
+QuartzCore[0x183f7ab8c] <+12>:  stp    x22, x21, [sp, #0x20]
+QuartzCore[0x183f7ab90] <+16>:  stp    x20, x19, [sp, #0x30]
+QuartzCore[0x183f7ab94] <+20>:  stp    x29, x30, [sp, #0x40]
+QuartzCore[0x183f7ab98] <+24>:  add    x29, sp, #0x40
+QuartzCore[0x183f7ab9c] <+28>:  mov    x20, x0
+QuartzCore[0x183f7aba0] <+32>:  bl     0x183f5f900               ; CA::Transaction::ensure_compat()
+QuartzCore[0x183f7aba4] <+36>:  mov    x19, x0
+QuartzCore[0x183f7aba8] <+40>:  mov    x0, x20
+QuartzCore[0x183f7abac] <+44>:  bl     0x1842bd840               ; objc_msgSend$modelLayer
+QuartzCore[0x183f7abb0] <+48>:  cbz    x0, 0x183f7abdc           ; <+92>
+QuartzCore[0x183f7abb4] <+52>:  mov    x20, x0
+QuartzCore[0x183f7abb8] <+56>:  ldr    x8, [x0, #0x10]
+QuartzCore[0x183f7abbc] <+60>:  ldr    x21, [x8, #0x118]
+QuartzCore[0x183f7abc0] <+64>:  cbz    x21, 0x183f7abdc          ; <+92>
+QuartzCore[0x183f7abc4] <+68>:  ldr    w8, [x19, #0x74]
+QuartzCore[0x183f7abc8] <+72>:  add    w9, w8, #0x1
+QuartzCore[0x183f7abcc] <+76>:  str    w9, [x19, #0x74]
+QuartzCore[0x183f7abd0] <+80>:  cbz    w8, 0x183f7abf4           ; <+116>
+QuartzCore[0x183f7abd4] <+84>:  str    x21, [sp, #0x8]
+QuartzCore[0x183f7abd8] <+88>:  b      0x183f7ac10               ; <+144>
+QuartzCore[0x183f7abdc] <+92>:  ldp    x29, x30, [sp, #0x40]
+QuartzCore[0x183f7abe0] <+96>:  ldp    x20, x19, [sp, #0x30]
+QuartzCore[0x183f7abe4] <+100>: ldp    x22, x21, [sp, #0x20]
+QuartzCore[0x183f7abe8] <+104>: ldp    x24, x23, [sp, #0x10]
+QuartzCore[0x183f7abec] <+108>: add    sp, sp, #0x50
+QuartzCore[0x183f7abf0] <+112>: retab
+QuartzCore[0x183f7abf4] <+116>: adrp   x0, 429595
+QuartzCore[0x183f7abf8] <+120>: add    x0, x0, #0x228            ; CA::Transaction::transaction_lock
+QuartzCore[0x183f7abfc] <+124>: bl     0x186bebf60
+QuartzCore[0x183f7ac00] <+128>: ldr    x0, [x20, #0x10]
+QuartzCore[0x183f7ac04] <+132>: ldr    x21, [x0, #0x118]
+QuartzCore[0x183f7ac08] <+136>: str    x21, [sp, #0x8]
+QuartzCore[0x183f7ac0c] <+140>: cbz    x21, 0x183f7acac          ; <+300>
+QuartzCore[0x183f7ac10] <+144>: add    x24, sp, #0x8
+QuartzCore[0x183f7ac14] <+148>: mov    w23, #0x1                 ; =1
+QuartzCore[0x183f7ac18] <+152>: adrp   x22, 429594
+QuartzCore[0x183f7ac1c] <+156>: add    x22, x22, #0x610          ; animation_state
+QuartzCore[0x183f7ac20] <+160>: ldrb   w8, [x21, #0x39]
+QuartzCore[0x183f7ac24] <+164>: tbnz   w8, #0x0, 0x183f7ac30     ; <+176>
+QuartzCore[0x183f7ac28] <+168>: ldrb   w8, [x21, #0x3d]
+QuartzCore[0x183f7ac2c] <+172>: tbz    w8, #0x0, 0x183f7ac3c     ; <+188>
+QuartzCore[0x183f7ac30] <+176>: strb   w23, [x21, #0x3a]
+QuartzCore[0x183f7ac34] <+180>: mov    x24, x21
+QuartzCore[0x183f7ac38] <+184>: b      0x183f7ac5c               ; <+220>
+QuartzCore[0x183f7ac3c] <+188>: ldr    x8, [x21]
+QuartzCore[0x183f7ac40] <+192>: str    x8, [x24]
+QuartzCore[0x183f7ac44] <+196>: mov    x0, x21
+QuartzCore[0x183f7ac48] <+200>: mov    x1, x22
+QuartzCore[0x183f7ac4c] <+204>: bl     0x183f836a4               ; schedule_stop_callback(LayerAnimation*, LayerAnimationState*)
+QuartzCore[0x183f7ac50] <+208>: str    xzr, [x21]
+QuartzCore[0x183f7ac54] <+212>: mov    x0, x21
+QuartzCore[0x183f7ac58] <+216>: bl     0x18418f5a8               ; LayerAnimation::unref()
+QuartzCore[0x183f7ac5c] <+220>: ldr    x21, [x24]
+QuartzCore[0x183f7ac60] <+224>: cbnz   x21, 0x183f7ac20          ; <+160>
+QuartzCore[0x183f7ac64] <+228>: ldr    x0, [x20, #0x10]
+QuartzCore[0x183f7ac68] <+232>: ldr    x1, [sp, #0x8]
+QuartzCore[0x183f7ac6c] <+236>: bl     0x183f690b8               ; CA::Layer::set_animations(LayerAnimation*)
+QuartzCore[0x183f7ac70] <+240>: ldr    x0, [x20, #0x10]
+QuartzCore[0x183f7ac74] <+244>: mov    x1, x19
+QuartzCore[0x183f7ac78] <+248>: mov    w2, #0x0                  ; =0
+QuartzCore[0x183f7ac7c] <+252>: bl     0x183f69044               ; CA::Layer::mark_animations(CA::Transaction*, bool)
+QuartzCore[0x183f7ac80] <+256>: mov    x0, x19
+QuartzCore[0x183f7ac84] <+260>: ldp    x29, x30, [sp, #0x40]
+QuartzCore[0x183f7ac88] <+264>: ldp    x20, x19, [sp, #0x30]
+QuartzCore[0x183f7ac8c] <+268>: ldp    x22, x21, [sp, #0x20]
+QuartzCore[0x183f7ac90] <+272>: ldp    x24, x23, [sp, #0x10]
+QuartzCore[0x183f7ac94] <+276>: add    sp, sp, #0x50
+QuartzCore[0x183f7ac98] <+280>: autibsp
+QuartzCore[0x183f7ac9c] <+284>: eor    x16, x30, x30, lsl #1
+QuartzCore[0x183f7aca0] <+288>: tbz    x16, #0x3e, 0x183f7aca8   ; <+296>
+QuartzCore[0x183f7aca4] <+292>: brk    #0xc471
+QuartzCore[0x183f7aca8] <+296>: b      0x183f5f410               ; CA::Transaction::unlock()
+QuartzCore[0x183f7acac] <+300>: mov    x1, #0x0                  ; =0
+QuartzCore[0x183f7acb0] <+304>: b      0x183f7ac6c               ; <+236>
+QuartzCore[0x183f7acb4] <+308>: b      0x183f7acb8               ; <+312>
+QuartzCore[0x183f7acb8] <+312>: mov    x20, x0
+QuartzCore[0x183f7acbc] <+316>: mov    x0, x19
+QuartzCore[0x183f7acc0] <+320>: bl     0x183f5f410               ; CA::Transaction::unlock()
+QuartzCore[0x183f7acc4] <+324>: mov    x0, x20
+QuartzCore[0x183f7acc8] <+328>: bl     0x186beabd0
+(lldb) quit
+(lldb) target create "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/Frameworks/QuartzCore.framework/QuartzCore"
+Current executable set to '/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/Frameworks/QuartzCore.framework/QuartzCore' (arm64e).
+(lldb) disassemble -s 0x183fad528 -c 23
+QuartzCore`-[CAAnimation setBeginTime:]:
+QuartzCore[0x183fad528] <+0>:  pacibsp
+QuartzCore[0x183fad52c] <+4>:  sub    sp, sp, #0x20
+QuartzCore[0x183fad530] <+8>:  stp    x29, x30, [sp, #0x10]
+QuartzCore[0x183fad534] <+12>: add    x29, sp, #0x10
+QuartzCore[0x183fad538] <+16>: adrp   x8, 400881
+QuartzCore[0x183fad53c] <+20>: ldr    x8, [x8, #0xc30]
+QuartzCore[0x183fad540] <+24>: ldr    x8, [x8]
+QuartzCore[0x183fad544] <+28>: str    x8, [sp, #0x8]
+QuartzCore[0x183fad548] <+32>: str    d0, [sp]
+QuartzCore[0x183fad54c] <+36>: mov    x3, sp
+QuartzCore[0x183fad550] <+40>: mov    w1, #0x41                 ; =65
+QuartzCore[0x183fad554] <+44>: mov    w2, #0x12                 ; =18
+QuartzCore[0x183fad558] <+48>: bl     0x183f683ac               ; CAAnimation_setter(CAAnimation*, unsigned int, _CAValueType, void const*)
+QuartzCore[0x183fad55c] <+52>: ldr    x8, [sp, #0x8]
+QuartzCore[0x183fad560] <+56>: adrp   x9, 400881
+QuartzCore[0x183fad564] <+60>: ldr    x9, [x9, #0xc30]
+QuartzCore[0x183fad568] <+64>: ldr    x9, [x9]
+QuartzCore[0x183fad56c] <+68>: cmp    x9, x8
+QuartzCore[0x183fad570] <+72>: b.ne   0x183fad580               ; <+88>
+QuartzCore[0x183fad574] <+76>: ldp    x29, x30, [sp, #0x10]
+QuartzCore[0x183fad578] <+80>: add    sp, sp, #0x20
+QuartzCore[0x183fad57c] <+84>: retab
+QuartzCore[0x183fad580] <+88>: bl     0x186beaf90
+(lldb) quit
+(lldb) target create "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/Frameworks/QuartzCore.framework/QuartzCore"
+Current executable set to '/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/Frameworks/QuartzCore.framework/QuartzCore' (arm64e).
+(lldb) disassemble -s 0x183fd5b3c -c 54
+QuartzCore`CA::Context::remove_animation:
+QuartzCore[0x183fd5b3c] <+0>:   pacibsp
+QuartzCore[0x183fd5b40] <+4>:   stp    x24, x23, [sp, #-0x40]!
+QuartzCore[0x183fd5b44] <+8>:   stp    x22, x21, [sp, #0x10]
+QuartzCore[0x183fd5b48] <+12>:  stp    x20, x19, [sp, #0x20]
+QuartzCore[0x183fd5b4c] <+16>:  stp    x29, x30, [sp, #0x30]
+QuartzCore[0x183fd5b50] <+20>:  add    x29, sp, #0x30
+QuartzCore[0x183fd5b54] <+24>:  mov    x19, x2
+QuartzCore[0x183fd5b58] <+28>:  mov    x20, x1
+QuartzCore[0x183fd5b5c] <+32>:  mov    x21, x0
+QuartzCore[0x183fd5b60] <+36>:  ldr    x22, [x2, #0x28]
+QuartzCore[0x183fd5b64] <+40>:  adrp   x24, 429507
+QuartzCore[0x183fd5b68] <+44>:  adrp   x23, 429507
+QuartzCore[0x183fd5b6c] <+48>:  cbz    x22, 0x183fd5b98          ; <+92>
+QuartzCore[0x183fd5b70] <+52>:  ldr    x8, [x24, #0xd38]
+QuartzCore[0x183fd5b74] <+56>:  cmn    x8, #0x1
+QuartzCore[0x183fd5b78] <+60>:  b.ne   0x183fd5be4               ; <+168>
+QuartzCore[0x183fd5b7c] <+64>:  ldr    x8, [x23, #0xd40]
+QuartzCore[0x183fd5b80] <+68>:  add    x8, x8, x21
+QuartzCore[0x183fd5b84] <+72>:  cmp    x21, #0x0
+QuartzCore[0x183fd5b88] <+76>:  csel   x1, xzr, x8, eq
+QuartzCore[0x183fd5b8c] <+80>:  mov    x0, x22
+QuartzCore[0x183fd5b90] <+84>:  mov    x2, x20
+QuartzCore[0x183fd5b94] <+88>:  bl     0x183fd5cc4               ; CA::Render::Context::remove_animation(unsigned long, __CFString const*)
+QuartzCore[0x183fd5b98] <+92>:  ldr    x22, [x19, #0x20]
+QuartzCore[0x183fd5b9c] <+96>:  cbz    x22, 0x183fd5bc8          ; <+140>
+QuartzCore[0x183fd5ba0] <+100>: ldr    x8, [x24, #0xd38]
+QuartzCore[0x183fd5ba4] <+104>: cmn    x8, #0x1
+QuartzCore[0x183fd5ba8] <+108>: b.ne   0x183fd5bfc               ; <+192>
+QuartzCore[0x183fd5bac] <+112>: ldr    x8, [x23, #0xd40]
+QuartzCore[0x183fd5bb0] <+116>: add    x8, x8, x21
+QuartzCore[0x183fd5bb4] <+120>: cmp    x21, #0x0
+QuartzCore[0x183fd5bb8] <+124>: csel   x1, xzr, x8, eq
+QuartzCore[0x183fd5bbc] <+128>: mov    x0, x22
+QuartzCore[0x183fd5bc0] <+132>: mov    x2, x20
+QuartzCore[0x183fd5bc4] <+136>: bl     0x183fd5c14               ; CA::Render::encode_remove_animation(CA::Render::Encoder*, unsigned long, __CFString const*)
+QuartzCore[0x183fd5bc8] <+140>: mov    w8, #0x1                  ; =1
+QuartzCore[0x183fd5bcc] <+144>: strb   w8, [x19, #0x38]
+QuartzCore[0x183fd5bd0] <+148>: ldp    x29, x30, [sp, #0x30]
+QuartzCore[0x183fd5bd4] <+152>: ldp    x20, x19, [sp, #0x20]
+QuartzCore[0x183fd5bd8] <+156>: ldp    x22, x21, [sp, #0x10]
+QuartzCore[0x183fd5bdc] <+160>: ldp    x24, x23, [sp], #0x40
+QuartzCore[0x183fd5be0] <+164>: retab
+QuartzCore[0x183fd5be4] <+168>: adrp   x0, 429507
+QuartzCore[0x183fd5be8] <+172>: add    x0, x0, #0xd38            ; CA::Render::Encoder::initialize_render_id_slide()::once
+QuartzCore[0x183fd5bec] <+176>: adrp   x1, 436663
+QuartzCore[0x183fd5bf0] <+180>: add    x1, x1, #0xc70            ; __block_literal_global.14417
+QuartzCore[0x183fd5bf4] <+184>: bl     0x184235a90               ; symbol stub for: dispatch_once
+QuartzCore[0x183fd5bf8] <+188>: b      0x183fd5b7c               ; <+64>
+QuartzCore[0x183fd5bfc] <+192>: adrp   x0, 429507
+QuartzCore[0x183fd5c00] <+196>: add    x0, x0, #0xd38            ; CA::Render::Encoder::initialize_render_id_slide()::once
+QuartzCore[0x183fd5c04] <+200>: adrp   x1, 436663
+QuartzCore[0x183fd5c08] <+204>: add    x1, x1, #0xc70            ; __block_literal_global.14417
+QuartzCore[0x183fd5c0c] <+208>: bl     0x184235a90               ; symbol stub for: dispatch_once
+QuartzCore[0x183fd5c10] <+212>: b      0x183fd5bac               ; <+112>
+(lldb) quit
+(lldb) target create "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore"
+Current executable set to '/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore' (arm64e).
+(lldb) disassemble -s 0x18923b654 -c 3
+UIKitCore`-[UIViewAnimationState _animationDidStopWithNilAnimationFinished:]:
+UIKitCore[0x18923b654] <+0>: mov    x3, x2
+UIKitCore[0x18923b658] <+4>: mov    x2, #0x0                  ; =0
+UIKitCore[0x18923b65c] <+8>: b      0x18b53ef20               ; objc_msgSend$animationDidStop:finished:
+(lldb) quit
+(lldb) target create "/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore"
+Current executable set to '/Users/kleja/Library/Developer/Xcode/iOS DeviceSupport/iPhone99,11 26.6.2 (23G90)/Symbols/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore' (arm64e).
+(lldb) disassemble -s 0x18916b050 -c 115
+UIKitCore`-[UIView(Animation) _removeAllAnimations:]:
+UIKitCore[0x18916b050] <+0>:   pacibsp
+UIKitCore[0x18916b054] <+4>:   sub    sp, sp, #0x130
+UIKitCore[0x18916b058] <+8>:   stp    x28, x27, [sp, #0xd0]
+UIKitCore[0x18916b05c] <+12>:  stp    x26, x25, [sp, #0xe0]
+UIKitCore[0x18916b060] <+16>:  stp    x24, x23, [sp, #0xf0]
+UIKitCore[0x18916b064] <+20>:  stp    x22, x21, [sp, #0x100]
+UIKitCore[0x18916b068] <+24>:  stp    x20, x19, [sp, #0x110]
+UIKitCore[0x18916b06c] <+28>:  stp    x29, x30, [sp, #0x120]
+UIKitCore[0x18916b070] <+32>:  add    x29, sp, #0x120
+UIKitCore[0x18916b074] <+36>:  mov    x20, x2
+UIKitCore[0x18916b078] <+40>:  mov    x19, x0
+UIKitCore[0x18916b07c] <+44>:  adrp   x8, 379955
+UIKitCore[0x18916b080] <+48>:  ldr    x8, [x8, #0xc30]
+UIKitCore[0x18916b084] <+52>:  ldr    x8, [x8]
+UIKitCore[0x18916b088] <+56>:  stur   x8, [x29, #-0x58]
+UIKitCore[0x18916b08c] <+60>:  bl     0x18b4c41e0               ; objc_msgSend$_ignoreRemoveAllAnimations
+UIKitCore[0x18916b090] <+64>:  tbnz   w0, #0x0, 0x18916b1e0     ; <+400>
+UIKitCore[0x18916b094] <+68>:  mov    x0, x19
+UIKitCore[0x18916b098] <+72>:  bl     0x18912d4c8               ; -[UIView _backing_outermostLayer]
+UIKitCore[0x18916b09c] <+76>:  mov    x29, x29
+UIKitCore[0x18916b0a0] <+80>:  bl     0x18d81da80
+UIKitCore[0x18916b0a4] <+84>:  mov    x22, x0
+UIKitCore[0x18916b0a8] <+88>:  adrp   x8, 396354
+UIKitCore[0x18916b0ac] <+92>:  ldrsw  x8, [x8, #0x73c]
+UIKitCore[0x18916b0b0] <+96>:  ldr    x21, [x19, x8]
+UIKitCore[0x18916b0b4] <+100>: bl     0x18b5dc840               ; objc_msgSend$removeAllAnimations
+UIKitCore[0x18916b0b8] <+104>: cmp    x21, x22
+UIKitCore[0x18916b0bc] <+108>: b.eq   0x18916b0c8               ; <+120>
+UIKitCore[0x18916b0c0] <+112>: mov    x0, x21
+UIKitCore[0x18916b0c4] <+116>: bl     0x18b5dc840               ; objc_msgSend$removeAllAnimations
+UIKitCore[0x18916b0c8] <+120>: mov    x0, x19
+UIKitCore[0x18916b0cc] <+124>: mov    w2, #0x0                  ; =0
+UIKitCore[0x18916b0d0] <+128>: bl     0x18b4edbe0               ; objc_msgSend$_removeAllRetargetableAnimations:
+UIKitCore[0x18916b0d4] <+132>: cbz    w20, 0x18916b1e0          ; <+400>
+UIKitCore[0x18916b0d8] <+136>: movi.2d v0, #0000000000000000
+UIKitCore[0x18916b0dc] <+140>: stp    q0, q0, [sp, #0x20]
+UIKitCore[0x18916b0e0] <+144>: stp    q0, q0, [sp]
+UIKitCore[0x18916b0e4] <+148>: mov    x0, x19
+UIKitCore[0x18916b0e8] <+152>: bl     0x18b48fc20               ; objc_msgSend$_allSubviews
+UIKitCore[0x18916b0ec] <+156>: mov    x29, x29
+UIKitCore[0x18916b0f0] <+160>: bl     0x18d81d860
+UIKitCore[0x18916b0f4] <+164>: mov    x20, x0
+UIKitCore[0x18916b0f8] <+168>: mov    x2, sp
+UIKitCore[0x18916b0fc] <+172>: add    x3, sp, #0x48
+UIKitCore[0x18916b100] <+176>: mov    w4, #0x10                 ; =16
+UIKitCore[0x18916b104] <+180>: bl     0x18b5601a0               ; objc_msgSend$countByEnumeratingWithState:objects:count:
+UIKitCore[0x18916b108] <+184>: cbz    x0, 0x18916b1dc           ; <+396>
+UIKitCore[0x18916b10c] <+188>: mov    x22, x0
+UIKitCore[0x18916b110] <+192>: mov    w21, #0x0                 ; =0
+UIKitCore[0x18916b114] <+196>: ldr    x8, [sp, #0x10]
+UIKitCore[0x18916b118] <+200>: ldr    x24, [x8]
+UIKitCore[0x18916b11c] <+204>: adrp   x25, 396455
+UIKitCore[0x18916b120] <+208>: mov    x26, #0x0                 ; =0
+UIKitCore[0x18916b124] <+212>: ldr    x8, [sp, #0x10]
+UIKitCore[0x18916b128] <+216>: ldr    x8, [x8]
+UIKitCore[0x18916b12c] <+220>: cmp    x8, x24
+UIKitCore[0x18916b130] <+224>: b.eq   0x18916b13c               ; <+236>
+UIKitCore[0x18916b134] <+228>: mov    x0, x20
+UIKitCore[0x18916b138] <+232>: bl     0x18d81d5a0
+UIKitCore[0x18916b13c] <+236>: ldr    x8, [sp, #0x8]
+UIKitCore[0x18916b140] <+240>: ldr    x23, [x8, x26, lsl #3]
+UIKitCore[0x18916b144] <+244>: mov    x0, x23
+UIKitCore[0x18916b148] <+248>: mov    w2, #0x1                  ; =1
+UIKitCore[0x18916b14c] <+252>: bl     0x18b4edae0               ; objc_msgSend$_removeAllAnimations:
+UIKitCore[0x18916b150] <+256>: ldrb   w8, [x25, #0xcf8]
+UIKitCore[0x18916b154] <+260>: orn    w9, w21, w8
+UIKitCore[0x18916b158] <+264>: tbz    w9, #0x0, 0x18916b164     ; <+276>
+UIKitCore[0x18916b15c] <+268>: orr    w21, w8, w21
+UIKitCore[0x18916b160] <+272>: b      0x18916b170               ; <+288>
+UIKitCore[0x18916b164] <+276>: mov    x0, x23
+UIKitCore[0x18916b168] <+280>: bl     0x18b530020               ; objc_msgSend$_wantsAnimationRestoration
+UIKitCore[0x18916b16c] <+284>: mov    x21, x0
+UIKitCore[0x18916b170] <+288>: add    x26, x26, #0x1
+UIKitCore[0x18916b174] <+292>: cmp    x22, x26
+UIKitCore[0x18916b178] <+296>: b.ne   0x18916b124               ; <+212>
+UIKitCore[0x18916b17c] <+300>: mov    x2, sp
+UIKitCore[0x18916b180] <+304>: add    x3, sp, #0x48
+UIKitCore[0x18916b184] <+308>: mov    x0, x20
+UIKitCore[0x18916b188] <+312>: mov    w4, #0x10                 ; =16
+UIKitCore[0x18916b18c] <+316>: bl     0x18b5601a0               ; objc_msgSend$countByEnumeratingWithState:objects:count:
+UIKitCore[0x18916b190] <+320>: mov    x22, x0
+UIKitCore[0x18916b194] <+324>: cbnz   x0, 0x18916b120           ; <+208>
+UIKitCore[0x18916b198] <+328>: bl     0x18d81d750
+UIKitCore[0x18916b19c] <+332>: tbz    w21, #0x0, 0x18916b1e0    ; <+400>
+UIKitCore[0x18916b1a0] <+336>: adrp   x20, 396354
+UIKitCore[0x18916b1a4] <+340>: ldrsw  x8, [x20, #0x748]
+UIKitCore[0x18916b1a8] <+344>: add    x9, x19, x8
+UIKitCore[0x18916b1ac] <+348>: ldr    x8, [x9, #0x18]
+UIKitCore[0x18916b1b0] <+352>: tbnz   w8, #0x3, 0x18916b1e0     ; <+400>
+UIKitCore[0x18916b1b4] <+356>: orr    x10, x8, #0x8
+UIKitCore[0x18916b1b8] <+360>: str    x10, [x9, #0x18]
+UIKitCore[0x18916b1bc] <+364>: tbnz   w8, #0x4, 0x18916b1e0     ; <+400>
+UIKitCore[0x18916b1c0] <+368>: mov    x0, x19
+UIKitCore[0x18916b1c4] <+372>: bl     0x18b6463a0               ; objc_msgSend$superview
+UIKitCore[0x18916b1c8] <+376>: mov    x29, x29
+UIKitCore[0x18916b1cc] <+380>: bl     0x18d81da80
+UIKitCore[0x18916b1d0] <+384>: mov    x19, x0
+UIKitCore[0x18916b1d4] <+388>: cbnz   x0, 0x18916b1a4           ; <+340>
+UIKitCore[0x18916b1d8] <+392>: b      0x18916b1e0               ; <+400>
+UIKitCore[0x18916b1dc] <+396>: bl     0x18d81d750
+UIKitCore[0x18916b1e0] <+400>: ldur   x8, [x29, #-0x58]
+UIKitCore[0x18916b1e4] <+404>: adrp   x9, 379955
+UIKitCore[0x18916b1e8] <+408>: ldr    x9, [x9, #0xc30]
+UIKitCore[0x18916b1ec] <+412>: ldr    x9, [x9]
+UIKitCore[0x18916b1f0] <+416>: cmp    x9, x8
+UIKitCore[0x18916b1f4] <+420>: b.ne   0x18916b218               ; <+456>
+UIKitCore[0x18916b1f8] <+424>: ldp    x29, x30, [sp, #0x120]
+UIKitCore[0x18916b1fc] <+428>: ldp    x20, x19, [sp, #0x110]
+UIKitCore[0x18916b200] <+432>: ldp    x22, x21, [sp, #0x100]
+UIKitCore[0x18916b204] <+436>: ldp    x24, x23, [sp, #0xf0]
+UIKitCore[0x18916b208] <+440>: ldp    x26, x25, [sp, #0xe0]
+UIKitCore[0x18916b20c] <+444>: ldp    x28, x27, [sp, #0xd0]
+UIKitCore[0x18916b210] <+448>: add    sp, sp, #0x130
+UIKitCore[0x18916b214] <+452>: retab
+UIKitCore[0x18916b218] <+456>: bl     0x18d81c770
+(lldb) quit

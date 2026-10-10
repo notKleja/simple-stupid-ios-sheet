@@ -2,12 +2,14 @@ import 'package:flutter/widgets.dart';
 
 import 'detents.dart';
 import 'profile.dart';
+import 'corner_bridge.dart';
+import 'measured_corners.dart';
 
 /// Partial profile qualified by 10 repeated native traces on EACH OS.
 ///
 /// Scope: iPhone simulator 402x874 @3x, safe top62/bottom34, portrait,
 /// keyboard hidden, page sizing, [fixed320, medium, large]. Other geometries
-/// fail explicitly. Radius, barrier, timing, gestures, and interruption remain
+/// fail explicitly. Rendered contour, barrier, timing, gestures, and interruption remain
 /// upstream fallbacks. This is not an OS-wide native-parity profile.
 ///
 /// Source: native_reference/measurements.json and SHA-linked native traces.
@@ -66,11 +68,41 @@ IosSheetProfile observedPage402x874Profile(int majorVersion) {
                 ((maximumVisible - mediumVisible) / width) *
                     side *
                     (1 - side / inset);
+      // Acyclic: shape consumes exactly the final scale/bottom/surface transform;
+      // no detent identifier or prior rendered-frame sample selects the model.
+      final surfaceHeight = context.visibleHeight * scale;
+      final transitionOffset =
+          (1 - context.transitionFraction) * (surfaceHeight + bottom);
+      final top =
+          context.environment.availableSize.height -
+          context.environment.keyboardHeight -
+          surfaceHeight -
+          bottom +
+          transitionOffset;
+      final corners = IosSheetPage402x874CornerModel(majorVersion: majorVersion)
+          .resolve(
+            IosSheetCornerRequest(
+              environment: context.environment,
+              frame: Rect.fromLTWH(side, top, width * scale, surfaceHeight),
+            ),
+          );
+      final radii = corners.radii;
       return IosSheetGeometry(
         scale: scale,
         bottomInset: bottom,
         cornerRadius: 24,
-      ); // Explicit unmeasured upstream shape fallback.
+        cornerResolution: corners,
+        shape: radii == null
+            ? null
+            : RoundedSuperellipseBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: radii.topLeft,
+                  topRight: radii.topRight,
+                  bottomRight: radii.bottomRight,
+                  bottomLeft: radii.bottomLeft,
+                ),
+              ),
+      ); // Closest Flutter continuous shape, not accepted native contour.
     },
     fixedSurfaceDuringTransition: true,
     evidence: {
@@ -91,7 +123,9 @@ IosSheetProfile observedPage402x874Profile(int majorVersion) {
       'presentationGeometry':
           'measured: surface height/width stay fixed; '
           'translation trajectory remains upstream motion fallback',
-      'corner': 'fallback: upstream SheetBackground24; no native radius claim',
+      'corner': majorVersion == 26
+          ? IosSheetPage402x874CornerModel(majorVersion: 26).provenance
+          : 'unavailable: iOS27 bottom corners unresolved; visible fallback24',
     },
   );
 }

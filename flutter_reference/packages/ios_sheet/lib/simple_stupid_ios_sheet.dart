@@ -1,6 +1,12 @@
 library;
 
 export 'src/detents.dart';
+export 'src/environment.dart';
+export 'src/state.dart';
+export 'src/presentation.dart';
+export 'src/motion.dart';
+export 'src/corner_bridge.dart';
+export 'src/measured_corners.dart';
 export 'src/profile.dart';
 export 'src/route.dart';
 export 'src/trace.dart';

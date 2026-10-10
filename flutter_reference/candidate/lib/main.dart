@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:simple_stupid_ios_sheet/simple_stupid_ios_sheet.dart';
+import 'replay_timing.dart';
 
 void main() => runApp(const IosSheetCandidateApp());
 
@@ -119,6 +120,9 @@ class _SheetPlaygroundState extends State<SheetPlayground>
         'profile_major': _major,
         'profile_evidence': _profile().evidence,
         'content': 'calibration',
+        'replay_anchor':
+            'actual present.requested; independent absolute deadlines',
+        'sheet_warmup': false,
       },
     );
     _firstVisible = false;
@@ -159,85 +163,96 @@ class _SheetPlaygroundState extends State<SheetPlayground>
     final initial = detents.any((e) => e.identifier == 'medium')
         ? 'medium'
         : detents.first.identifier;
-    _recorder?.event('present.requested');
-    final popped = Navigator.of(context).push(
-      StupidSimpleIosSheetRoute<void>(
-        profile: _profile(),
-        controller: controller,
-        detents: detents,
-        initialDetentIdentifier: initial,
-        largestUndimmedDetentIdentifier: _undimmed ? initial : null,
-        draggable: _draggable,
-        interactiveDismissDisabled: _dismissLocked,
-        contentInteraction: _scrollFirst
-            ? IosSheetContentInteraction.scrolls
-            : IosSheetContentInteraction.resizes,
-        onPresented: () => _recorder?.eventWithProvenance(
-          'present.completed',
-          implementationProvenance: {
-            'detector': 'engine status; not native physical settling',
-          },
-        ),
-        onDismissed: () => _recorder?.event('dismiss.completed'),
-        backgroundColor: Colors.white,
-        child: Stack(
-          children: [
-            _sheetContent(controller),
-            if (_grabber)
-              Positioned(
-                top: 8,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: Container(
-                    width: 36,
-                    height: 5,
-                    decoration: BoxDecoration(
-                      color: Colors.black26,
-                      borderRadius: BorderRadius.circular(2.5),
-                    ),
+    // UIKit prepares its controller/configuration before present.requested.
+    // Keep route/content construction outside the timed command boundary too.
+    final navigator = Navigator.of(context);
+    final route = StupidSimpleIosSheetRoute<void>(
+      profile: _profile(),
+      controller: controller,
+      detents: detents,
+      initialDetentIdentifier: initial,
+      largestUndimmedDetentIdentifier: _undimmed ? initial : null,
+      draggable: _draggable,
+      interactiveDismissDisabled: _dismissLocked,
+      contentInteraction: _scrollFirst
+          ? IosSheetContentInteraction.scrolls
+          : IosSheetContentInteraction.resizes,
+      onPresented: () => _recorder?.eventWithProvenance(
+        'present.completed',
+        implementationProvenance: {
+          'detector': 'engine status; not native physical settling',
+        },
+      ),
+      onDismissed: () => _recorder?.event('dismiss.completed'),
+      backgroundColor: Colors.white,
+      child: Stack(
+        children: [
+          _sheetContent(controller),
+          if (_grabber)
+            Positioned(
+              top: 8,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Container(
+                  width: 36,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: Colors.black26,
+                    borderRadius: BorderRadius.circular(2.5),
                   ),
                 ),
               ),
-            if (_debug)
-              Positioned(
-                top: 30,
-                left: 12,
-                right: 12,
-                child: ListenableBuilder(
-                  listenable: controller,
-                  builder: (_, _) => ColoredBox(
-                    color: Colors.black87,
-                    child: Text(
-                      'selected=${controller.selectedDetentIdentifier}\n'
-                      'target=${controller.targetDetentIdentifier}\n'
-                      'height=${controller.visibleHeight.toStringAsFixed(3)} '
-                      'modal=${controller.isModal}\n${_lastFrame?.metrics ?? {}}',
-                      style: const TextStyle(color: Colors.white, fontSize: 10),
-                    ),
+            ),
+          if (_debug)
+            Positioned(
+              top: 30,
+              left: 12,
+              right: 12,
+              child: ListenableBuilder(
+                listenable: controller,
+                builder: (_, _) => ColoredBox(
+                  color: Colors.black87,
+                  child: Text(
+                    'selected=${controller.selectedDetentIdentifier}\n'
+                    'target=${controller.targetDetentIdentifier}\n'
+                    'height=${controller.visibleHeight.toStringAsFixed(3)} '
+                    'modal=${controller.isModal}\n${_lastFrame?.metrics ?? {}}',
+                    style: const TextStyle(color: Colors.white, fontSize: 10),
                   ),
                 ),
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
+    late Future<void> popped;
+    void requestPresentation() {
+      _recorder?.event('present.requested');
+      popped = navigator.push(route);
+    }
+
     if (replay) {
-      await Future<void>.delayed(const Duration(milliseconds: 1500));
-      if (controller.isAttached) {
-        _recorder?.event('detent.requested', {'target': 'large'});
-        controller.selectDetent('large');
-      }
-      await Future<void>.delayed(const Duration(milliseconds: 1500));
-      if (controller.isAttached) {
-        _recorder?.event('detent.requested', {'target': 'medium'});
-        controller.selectDetent('medium');
-      }
-      await Future<void>.delayed(const Duration(milliseconds: 1500));
-      if (controller.isAttached) {
-        _recorder?.event('dismiss.requested');
-        controller.dismiss();
-      }
+      final clock = Stopwatch()..start();
+      await ProgrammaticReplay(clock: () => clock.elapsed).run(
+        present: requestPresentation,
+        select: (identifier) {
+          if (!controller.isAttached) {
+            throw StateError('Sheet disappeared before replay command');
+          }
+          _recorder?.event('detent.requested', {'target': identifier});
+          controller.selectDetent(identifier);
+        },
+        dismiss: () {
+          if (!controller.isAttached) {
+            throw StateError('Sheet disappeared before dismissal');
+          }
+          _recorder?.event('dismiss.requested');
+          controller.dismiss();
+        },
+      );
+    } else {
+      requestPresentation();
     }
     await popped;
     while (controller.isAttached) {

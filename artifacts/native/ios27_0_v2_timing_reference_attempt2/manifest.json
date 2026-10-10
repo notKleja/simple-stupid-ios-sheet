@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "split": "training",
+  "attempt": 2,
+  "proof_scope": "pre_correction_native_command_timer_baseline",
+  "motion_accepted": false,
+  "quality": {
+    "verdict": "PASS",
+    "scope": "ten-trial integrity and resting geometry only"
+  },
+  "source_revision": "e16fbddd6ac574d85a725e77705c65a4823c2d24",
+  "source_sha256": {
+    "native_reference/NativeSheetHarness/App.swift": "b5efe0c87bfe081d035d7a804f0b7d4fbd9fc641240eccdb469ed63d160404cc",
+    "native_reference/NativeSheetHarness/NativeScenario.swift": "3b3c37327899a8c4aede01a17896eac7f52be9e30500ace50b70cdd39354d8d8",
+    "native_reference/NativeSheetHarness/SwiftUIReference.swift": "6451434717819dfcf79744de2b068beefef430c3b9b31fe34466ddebe8cfd13c",
+    "native_reference/NativeSheetHarness/Trace.swift": "96e363aa60b68870ba25a3d9c638edf30a644922e1d6976fb5b08d8108db10c5"
+  },
+  "executable_sha256": "64f4a6787f79dd580df11fabde134022a732de9c5d8055abed232d053c895159",
+  "artifacts": [
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference_attempt2/native.medium_large.programmatic-0164802C-FAF1-4583-8FE3-28B2F02A0209.jsonl.gz",
+      "sha256": "583aa900458e820bcfe2413829a73a69298af8b7274717a87a3dcdf9344f9865",
+      "trial": 4,
+      "run_id": "0164802C-FAF1-4583-8FE3-28B2F02A0209",
+      "attempt": 2,
+      "split": "training"
+    },
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference_attempt2/native.medium_large.programmatic-0994191C-44D5-4FF4-ADDB-73AEBE688826.jsonl.gz",
+      "sha256": "a1f3ec6342298782f5e688e80449ada9f8d908bdab39d9e75733c791c361cbad",
+      "trial": 6,
+      "run_id": "0994191C-44D5-4FF4-ADDB-73AEBE688826",
+      "attempt": 2,
+      "split": "training"
+    },
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference_attempt2/native.medium_large.programmatic-2B6FF9C4-B0D8-4432-A7D0-62DA6A83B712.jsonl.gz",
+      "sha256": "e259f4fbc7ad1f20c79891b4cad30dc70fb16f2f88c30183993132167b733031",
+      "trial": 9,
+      "run_id": "2B6FF9C4-B0D8-4432-A7D0-62DA6A83B712",
+      "attempt": 2,
+      "split": "training"
+    },
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference_attempt2/native.medium_large.programmatic-521D40F3-83B4-48BF-9D64-5746DCEFBD83.jsonl.gz",
+      "sha256": "f4dc41fdb0c5978f57f99f8214723ded8873b8cb1cb9a42596dae8a0fb790487",
+      "trial": 1,
+      "run_id": "521D40F3-83B4-48BF-9D64-5746DCEFBD83",
+      "attempt": 2,
+      "split": "training"
+    },
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference_attempt2/native.medium_large.programmatic-864DA80C-D3E3-4CCF-A5F8-020261A079D9.jsonl.gz",
+      "sha256": "69ae97c05bed008e48d6aeb560acafe1423815c59516d77e7e76eb36361e3e9e",
+      "trial": 5,
+      "run_id": "864DA80C-D3E3-4CCF-A5F8-020261A079D9",
+      "attempt": 2,
+      "split": "training"
+    },
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference_attempt2/native.medium_large.programmatic-AC5E1A6C-564B-47AA-A2C4-A4633A0EF6AC.jsonl.gz",
+      "sha256": "b49eaf1920c20584e8b6d42797fcf8803af27470071be7dc8e2e7822eefaa649",
+      "trial": 10,
+      "run_id": "AC5E1A6C-564B-47AA-A2C4-A4633A0EF6AC",
+      "attempt": 2,
+      "split": "training"
+    },
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference_attempt2/native.medium_large.programmatic-AD094B7A-AF5E-4498-8E97-185B563DE43D.jsonl.gz",
+      "sha256": "e3f511681394ec7a0f92ef1932a58ed42418b7d75a55c50161c4a3a07c3dcbfe",
+      "trial": 8,
+      "run_id": "AD094B7A-AF5E-4498-8E97-185B563DE43D",
+      "attempt": 2,
+      "split": "training"
+    },
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference_attempt2/native.medium_large.programmatic-CBEC5E2A-58E4-4D10-830C-87B1C15FA0EA.jsonl.gz",
+      "sha256": "afaeec13538adc0860667735529e417fae745fd37d1d1ce53c11d0d73724e6c1",
+      "trial": 7,
+      "run_id": "CBEC5E2A-58E4-4D10-830C-87B1C15FA0EA",
+      "attempt": 2,
+      "split": "training"
+    },
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference_attempt2/native.medium_large.programmatic-CD09F66E-F3D7-4F3F-94A1-18F98C890AC9.jsonl.gz",
+      "sha256": "77ebeb424ac1810192b23889ef3b630f2207d6ab835ea411395aee49357224ee",
+      "trial": 3,
+      "run_id": "CD09F66E-F3D7-4F3F-94A1-18F98C890AC9",
+      "attempt": 2,
+      "split": "training"
+    },
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference_attempt2/native.medium_large.programmatic-E7EDFAA4-0E0C-412D-B199-3D99CA3453FA.jsonl.gz",
+      "sha256": "5964aa81a865c576f7ce253c220c7dd152b317c1d41a28dc0e9336288c74c836",
+      "trial": 2,
+      "run_id": "E7EDFAA4-0E0C-412D-B199-3D99CA3453FA",
+      "attempt": 2,
+      "split": "training"
+    }
+  ]
+}
