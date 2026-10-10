@@ -1,0 +1,575 @@
+{
+  "schema_version": 1,
+  "scenario_id": "native.nonmodal.medium",
+  "status": "failed",
+  "requested_status": "failed",
+  "issues": [],
+  "collection_revision": "cb99612dc2dd626cad9cc91908704018bd945ce3",
+  "entries": [
+    {
+      "run_id": "02D519EB-B2DE-4F1D-A8CB-10833DD0DE81",
+      "trial": 3,
+      "attempt_id": "7F8DD975-2A9B-40E6-AF1E-074EB8B975A4",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-02D519EB-B2DE-4F1D-A8CB-10833DD0DE81.jsonl.gz",
+      "sha256": "fa80c986eab65c63727d3b33ffe07175d6839f1fc5e2f8d628bd9650ebb22d18",
+      "raw_sha256": "fe945f600f47a90b1f51807211ad42dc569339f948c0e27fc23182e4397c2bb3",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "0BE3DC09-ED9B-4BCC-AAEC-21E8BCE2288F",
+      "trial": 8,
+      "attempt_id": "0FB48BBD-3B84-4DAC-8B94-6AE2B53EF44E",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-0BE3DC09-ED9B-4BCC-AAEC-21E8BCE2288F.jsonl.gz",
+      "sha256": "a754d031ba50c6105b7845383b710575f8960b46d8cf62dea98b98bdc5124fd1",
+      "raw_sha256": "db9472afa4a0e6c77b869444d1ace703ebdcc7227fc41040b247647a8fa41975",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "0D466C0C-966B-4032-A708-ACD526EB1F93",
+      "trial": 3,
+      "attempt_id": "22DD6DC6-025B-456F-BA51-92E6ACB85472",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-0D466C0C-966B-4032-A708-ACD526EB1F93.jsonl.gz",
+      "sha256": "7e01475445207f0d0e9d9623e0b6570b91f7d3635bfaae3ccb120492f6909916",
+      "raw_sha256": "70bf88ccf1b6e02264cb57c0ded9de416ed3922bbff5a3d04721511ca885766e",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "10C0663B-5CD0-4485-8CC7-EE3283084B47",
+      "trial": 4,
+      "attempt_id": "F0AFEE0C-5AB6-479B-86B2-37505049BFC1",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-10C0663B-5CD0-4485-8CC7-EE3283084B47.jsonl.gz",
+      "sha256": "61feb7d36ba824f345fedfd5b892016175351dfc6e90b3ea9fdbfb56f71d5b76",
+      "raw_sha256": "e6c296f20fb55029d5a3f2e7a174696f59e7533f7a9fc6a04a0d81131c331d52",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "1C48189E-74AC-4A95-97A4-B76556411DC2",
+      "trial": 1,
+      "attempt_id": "392C6476-0C39-4EC7-BC08-70E4743B1F50",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-1C48189E-74AC-4A95-97A4-B76556411DC2.jsonl.gz",
+      "sha256": "fcdfc627319125506f82ebd613ad0990742a788b6aa8a7c57a03d5e1cbec4ecd",
+      "raw_sha256": "0c478acd6ea6bc4f12b7ad5cea434f251382aea402d92ce2992c0834e54ba10d",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "1D5FB7E8-2DF7-421A-B6F7-484B4C87BF5C",
+      "trial": 10,
+      "attempt_id": "4265FB5E-F951-4DC0-ACA9-1BB23A892E0F",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-1D5FB7E8-2DF7-421A-B6F7-484B4C87BF5C.jsonl.gz",
+      "sha256": "bc8d82a883321ac03fadf16008ad6381d9b20fd5119956c186be90cda649f382",
+      "raw_sha256": "18aa5e6e601c39420801698faae043268481b485603b535e3a0f40c8400cf754",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "39A43A02-D1EC-4D04-A5A8-FF2A595FA39E",
+      "trial": 7,
+      "attempt_id": "D59F6347-EDC0-4DE4-9142-65F8B2457EA6",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-39A43A02-D1EC-4D04-A5A8-FF2A595FA39E.jsonl.gz",
+      "sha256": "52113b90e03e99234292afa7cfcbb642e6aa7c0b3c3fa7934b89b7255ef75ca4",
+      "raw_sha256": "93ec71437c2257475ae87fd7d5c3de44f9b1e3446e9a696183f47b7157b1d924",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "41B6D3DE-B67B-40FF-BB16-2C19F779392F",
+      "trial": 10,
+      "attempt_id": "77455C8D-948E-45BA-8EEA-34637C9C84C6",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-41B6D3DE-B67B-40FF-BB16-2C19F779392F.jsonl.gz",
+      "sha256": "1d6aeeb62a5a635570f283530d2d59dd28aa4ebd877b850105d599ea07a603b7",
+      "raw_sha256": "869f973df21f3e96f117b35b4a1640de44182c0c77cb0d98f39ad8fd552c2c18",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "55C654BC-15F0-4A7C-A3B6-3B8DCA98B602",
+      "trial": 9,
+      "attempt_id": "47DFCF01-21ED-4D4B-A2AD-9369003561F5",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-55C654BC-15F0-4A7C-A3B6-3B8DCA98B602.jsonl.gz",
+      "sha256": "229da00483eaf84e5642d14734da1934390ca19ed8cfaaff9932bf6a112bb392",
+      "raw_sha256": "8e4d8b06a5e050584f7664ab6177b67972ead398040d01e5daa4379270c82e99",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "92E14E39-4633-4BE5-86A4-0020D4C5666B",
+      "trial": 5,
+      "attempt_id": "522A1B0B-D0DE-4D2F-8762-7D07B8F2B6C4",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-92E14E39-4633-4BE5-86A4-0020D4C5666B.jsonl.gz",
+      "sha256": "6dad8ea671bf38351de7041e57a7fd2ab53f0b1553a8f8f919d9e4cb47e34c1c",
+      "raw_sha256": "3ba90d8bb4b48f4fd04e02f94b029b95c17f023eff3421bfad5d7dc7cb05f3ee",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "97EA072F-369D-4581-974D-98CB32E142AD",
+      "trial": 5,
+      "attempt_id": "1DC5CB89-7986-43AA-8BB3-DE665376CCB8",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-97EA072F-369D-4581-974D-98CB32E142AD.jsonl.gz",
+      "sha256": "a0dcb9ec496d5fc81c13514e6f8fc0ad641b53ebf276569f9df20c86b7150592",
+      "raw_sha256": "44455f7495e272246841e04a75f2581263781da9c5fdc4e5e29e6f4700d725bf",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "BA9C6E25-BAFE-4820-83B1-2E98CC95336D",
+      "trial": 4,
+      "attempt_id": "45E809C2-AD1D-4042-BA0D-9BCCA019D151",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-BA9C6E25-BAFE-4820-83B1-2E98CC95336D.jsonl.gz",
+      "sha256": "235c4ca4923ce066e73a23890024ed4fcbae096174c73a499b0081f4a01d56b4",
+      "raw_sha256": "d129bc6924fb874af66a110d83872d87e4b9438bd6f57f0a8bc9f24229611df5",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "BD1812B7-F3CB-4723-A24A-DC0AE1DBBE57",
+      "trial": 2,
+      "attempt_id": "A0BADA3C-18DB-4A27-9C61-87D05902B0DF",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-BD1812B7-F3CB-4723-A24A-DC0AE1DBBE57.jsonl.gz",
+      "sha256": "7c7df4052ce550ec3e3b9b99dfbfe75631c9a062dc2d9531a0aa70b13fd30b8a",
+      "raw_sha256": "f7fcaf7b0aab36c0b2eff55e031352993e29ba39954b6ca45f3b0abffcd2f77c",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "C16B0199-B169-4E0F-A8B8-104EE78EFEC9",
+      "trial": 1,
+      "attempt_id": "9A9CF70F-EBDA-4655-9ABD-94E222A9ADBD",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-C16B0199-B169-4E0F-A8B8-104EE78EFEC9.jsonl.gz",
+      "sha256": "2bf010056ef65db7869527db38d07eb737634d0be9c584e37aecbc3a6a7f023c",
+      "raw_sha256": "ddc2ab98f2faebdd0d9c7125836bc8ee3b558de54aa7910d8602ecc47f34e8bc",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "C59CE6ED-8E7D-4E96-97A7-7CD76E5F8E03",
+      "trial": 9,
+      "attempt_id": "D37D0D7A-288D-4070-BCD1-623828BD53E4",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-C59CE6ED-8E7D-4E96-97A7-7CD76E5F8E03.jsonl.gz",
+      "sha256": "361cc02d6b7b60924f3a5b9e5a9cad17a8c4dc127795b3bbf6c201f5ecd5d210",
+      "raw_sha256": "48fb19e10d394157e320ec9719cecee8788005c76738c7af79e41913de61f2d2",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "D59E49E3-B1F6-41CF-A996-7C45BAA5E96F",
+      "trial": 8,
+      "attempt_id": "0A273620-0261-46AE-B1BE-DE6D1554A8E3",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-D59E49E3-B1F6-41CF-A996-7C45BAA5E96F.jsonl.gz",
+      "sha256": "41ae1809ef4dd068c865f048a3c495c5e097d39593632a57263dd3fee83d49f0",
+      "raw_sha256": "b2c0ecc0d376cc7a4ec70f7e48919bef99213a70824fe0cdebb7577ac0f47181",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "DC0A35A1-3948-40B7-A705-1BC5B9EFB912",
+      "trial": 2,
+      "attempt_id": "C448E7BA-9710-4A8A-8E41-0FC6AE66F4AE",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-DC0A35A1-3948-40B7-A705-1BC5B9EFB912.jsonl.gz",
+      "sha256": "f9c80ab079a39785363cae723cc94c6a5d0513fbddda7951ae434359a7f7735e",
+      "raw_sha256": "d8d8c00b631ebc8db7581da4163e3e8b808361eb6c154922a9c3b75aab2d98b5",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "E832279C-9E6D-45D1-9980-0E12D53B6FDF",
+      "trial": 6,
+      "attempt_id": "763B57AE-27CC-43FA-962C-4FD446E567E8",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-E832279C-9E6D-45D1-9980-0E12D53B6FDF.jsonl.gz",
+      "sha256": "9b67a9d902a2cbd4ae19ab00d918764cee13d44055df61363333479f1bb90782",
+      "raw_sha256": "fe1ffa1017ec3a4875f49ec104057ddae9c0dad222de877e31d609747fca7f2b",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "E8E92967-6F6C-4E41-87B0-7EC5F6528C7E",
+      "trial": 7,
+      "attempt_id": "EFE72A1B-5612-4249-B612-570DCC6D571F",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-E8E92967-6F6C-4E41-87B0-7EC5F6528C7E.jsonl.gz",
+      "sha256": "ce3096fd83c42c74d80e0dcaf9edd93a6ede1a487a3474fff671527779af8e64",
+      "raw_sha256": "6fcfa12460d284a754e7eab313c07319340689c70a5db379ee3458baa0b9bd9b",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "E977CED6-78E5-42A4-8CC4-FF120D7448EC",
+      "trial": 6,
+      "attempt_id": "1E5ADF18-39ED-4D9B-A83A-39B8602A066B",
+      "role": "training",
+      "native_source_revision": "unresolved",
+      "terminal": true,
+      "path": "artifacts/native/interactions/diagnostic_cached26_nonmodal/native.nonmodal.medium-E977CED6-78E5-42A4-8CC4-FF120D7448EC.jsonl.gz",
+      "sha256": "9523834efaa2ca8d2d19f204af37a66857ff02fd1d82a379372326996df316f4",
+      "raw_sha256": "55aaba160ece0f8e959fb86908dea738d1081fa08e85fa8526005678ec51895d",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Acceptance is scoped to actual control/scroll outcomes; no full dynamics or private ownership accepted",
+    "Pilot/source-uncommitted attempts cannot become accepted native timing evidence",
+    "All collected failures and unavailable states retained"
+  ]
+}

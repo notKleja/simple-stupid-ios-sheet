@@ -1,0 +1,413 @@
+{
+  "schema_version": 1,
+  "scenario_id": "native.scroll.content_first",
+  "status": "accepted",
+  "selection": {
+    "source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+    "source_marker": null,
+    "excluded_attempt_manifests": [],
+    "excluded_run_ids": []
+  },
+  "acceptance_scope": "observed_control_and_scroll_outcomes_only",
+  "full_trajectory_acceptance": false,
+  "requested_status": "accepted",
+  "issues": [],
+  "collection_revision": "cb99612dc2dd626cad9cc91908704018bd945ce3",
+  "entries": [
+    {
+      "run_id": "041228B0-CC0A-44EF-8943-C0E9531A166E",
+      "trial": 10,
+      "attempt_id": "B58DCE0D-9D3A-4A09-B7D0-11F71EA2BA87",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_content_first/native.scroll.content_first-041228B0-CC0A-44EF-8943-C0E9531A166E.jsonl.gz",
+      "sha256": "68b7924b9ed11bb7241d2c83b1b1df11ec9bb3da475bffd60a2aec416011a1f3",
+      "raw_sha256": "210eab03f43417b9c4201f94a77fe97c4d72da795406db102385c494f6d89b0d",
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 40114708,
+        "unavailable_sheet_y_frames": 0,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "scroll_start": 0,
+        "scroll_end": 355.6666666666667,
+        "scroll_min": 0,
+        "scroll_max": 355.6666666666667,
+        "delivered_drag_events": 23,
+        "selected_detents": [
+          "medium"
+        ],
+        "sheet_y_observed_range": {
+          "min": 412.1102897086171,
+          "max": 415.0265339966832
+        },
+        "movement_consumer_samples": {
+          "sheet": 20,
+          "none": 147,
+          "both": 27,
+          "scroll": 97
+        },
+        "finger_velocity_samples": 86,
+        "probe_max_frame_gap_ns": 32462958
+      }
+    },
+    {
+      "run_id": "3DD4B268-4572-44DC-97C5-5E7391F4A775",
+      "trial": 4,
+      "attempt_id": "B7796566-F8F6-4A92-AC1D-057BCE5470D8",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_content_first/native.scroll.content_first-3DD4B268-4572-44DC-97C5-5E7391F4A775.jsonl.gz",
+      "sha256": "6533d8313946db3f64c69d44a8b29db481903a38c774206e9adbaf05b0a86299",
+      "raw_sha256": "76afa80503a0ddbc145e020618999fe6ffcfa0afcfffdf8e94dabfc4cb5cb3e3",
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 46030917,
+        "unavailable_sheet_y_frames": 0,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "scroll_start": 0,
+        "scroll_end": 356,
+        "scroll_min": 0,
+        "scroll_max": 356,
+        "delivered_drag_events": 23,
+        "selected_detents": [
+          "medium"
+        ],
+        "sheet_y_observed_range": {
+          "min": 412.11028971106236,
+          "max": 415.0265339966832
+        },
+        "movement_consumer_samples": {
+          "sheet": 21,
+          "none": 144,
+          "both": 27,
+          "scroll": 97
+        },
+        "finger_velocity_samples": 277,
+        "probe_max_frame_gap_ns": 31895458
+      }
+    },
+    {
+      "run_id": "42B260BE-D20A-49EC-A549-0293235854D1",
+      "trial": 3,
+      "attempt_id": "4742B267-C24C-4EBB-941E-0DCB57DE57AB",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_content_first/native.scroll.content_first-42B260BE-D20A-49EC-A549-0293235854D1.jsonl.gz",
+      "sha256": "35f05f6b1496f1149259670fd1b3e832c09e3f8185d71d1716a6f629e4182ad7",
+      "raw_sha256": "af17f852478037b94bbcfc974fc67902e8b8dbdda97ee3973afd5ccf04020766",
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 40121875,
+        "unavailable_sheet_y_frames": 0,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "scroll_start": 0,
+        "scroll_end": 355.6666666666667,
+        "scroll_min": 0,
+        "scroll_max": 355.6666666666667,
+        "delivered_drag_events": 23,
+        "selected_detents": [
+          "medium"
+        ],
+        "sheet_y_observed_range": {
+          "min": 412.1102897111678,
+          "max": 415.0265339966832
+        },
+        "movement_consumer_samples": {
+          "sheet": 20,
+          "none": 145,
+          "both": 27,
+          "scroll": 97
+        },
+        "finger_velocity_samples": 84,
+        "probe_max_frame_gap_ns": 21909125
+      }
+    },
+    {
+      "run_id": "60703822-BBC8-4B56-BD4D-4A45AFCAC1D8",
+      "trial": 2,
+      "attempt_id": "878B4943-2996-4EC0-99FE-88F56B153573",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_content_first/native.scroll.content_first-60703822-BBC8-4B56-BD4D-4A45AFCAC1D8.jsonl.gz",
+      "sha256": "e8da4b891def21189d544c8aa323c979b0e451360ce75098859b10dae6e29a0e",
+      "raw_sha256": "235047bd82807bbe9f8590ffcc38ed8b5f16be03ba7c4e3a060b1ba4733160ff",
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 42313750,
+        "unavailable_sheet_y_frames": 0,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "scroll_start": 0,
+        "scroll_end": 355.6666666666667,
+        "scroll_min": 0,
+        "scroll_max": 355.6666666666667,
+        "delivered_drag_events": 23,
+        "selected_detents": [
+          "medium"
+        ],
+        "sheet_y_observed_range": {
+          "min": 412.1102897111654,
+          "max": 415.0265339966832
+        },
+        "movement_consumer_samples": {
+          "sheet": 21,
+          "none": 144,
+          "both": 27,
+          "scroll": 97
+        },
+        "finger_velocity_samples": 83,
+        "probe_max_frame_gap_ns": 21144667
+      }
+    },
+    {
+      "run_id": "61964A61-706B-4522-BDFD-6DD5E06CB2E4",
+      "trial": 1,
+      "attempt_id": "527260FE-E179-4E3A-8EF6-AC91B7BFDEBA",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_content_first/native.scroll.content_first-61964A61-706B-4522-BDFD-6DD5E06CB2E4.jsonl.gz",
+      "sha256": "5fda95584828d220461e268806ac11b8548445c18c479e10299545b7a0c16b5e",
+      "raw_sha256": "d9989bd1ddbefb9659ba0f4413d27f8d571fee3d0996587e585dc842f366b6ba",
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 49993584,
+        "unavailable_sheet_y_frames": 0,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "scroll_start": 0,
+        "scroll_end": 357,
+        "scroll_min": 0,
+        "scroll_max": 357,
+        "delivered_drag_events": 23,
+        "selected_detents": [
+          "medium"
+        ],
+        "sheet_y_observed_range": {
+          "min": 412.11028971118685,
+          "max": 415.0265339966832
+        },
+        "movement_consumer_samples": {
+          "sheet": 21,
+          "none": 142,
+          "both": 27,
+          "scroll": 98
+        },
+        "finger_velocity_samples": 276,
+        "probe_max_frame_gap_ns": 32947458
+      }
+    },
+    {
+      "run_id": "7A923077-A2B7-46D6-A46C-E991FA0C046A",
+      "trial": 6,
+      "attempt_id": "66093CC0-2CBC-4AB4-9E54-7845BA2CF51F",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_content_first/native.scroll.content_first-7A923077-A2B7-46D6-A46C-E991FA0C046A.jsonl.gz",
+      "sha256": "1f17715cd0ed6bf2ce24c928394c9eaffa4df99607b9d89efb38d130ee5b6301",
+      "raw_sha256": "d08863c61d43061436b6b7e459938bcf99ece8f4c46c430dff645fadb6a095b0",
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 34278166,
+        "unavailable_sheet_y_frames": 0,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "scroll_start": 0,
+        "scroll_end": 355.6666666666667,
+        "scroll_min": 0,
+        "scroll_max": 355.6666666666667,
+        "delivered_drag_events": 23,
+        "selected_detents": [
+          "medium"
+        ],
+        "sheet_y_observed_range": {
+          "min": 412.11028971115957,
+          "max": 415.0265339966832
+        },
+        "movement_consumer_samples": {
+          "sheet": 21,
+          "none": 150,
+          "both": 27,
+          "scroll": 97
+        },
+        "finger_velocity_samples": 90,
+        "probe_max_frame_gap_ns": 23196833
+      }
+    },
+    {
+      "run_id": "7D527A96-875D-456C-9B8A-F797D8F0D343",
+      "trial": 7,
+      "attempt_id": "12F4D852-A253-4AA4-820F-5A9E5CAAF167",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_content_first/native.scroll.content_first-7D527A96-875D-456C-9B8A-F797D8F0D343.jsonl.gz",
+      "sha256": "6ba6417856554a6173821a2c12a327adf8c2ff9102e7df0e5e79a4754a4eae91",
+      "raw_sha256": "c384ce572b361a7bad8783773826f923a95ce1e6aca011810849b6e03b813e32",
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 45697958,
+        "unavailable_sheet_y_frames": 0,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "scroll_start": 0,
+        "scroll_end": 355.6666666666667,
+        "scroll_min": 0,
+        "scroll_max": 355.6666666666667,
+        "delivered_drag_events": 23,
+        "selected_detents": [
+          "medium"
+        ],
+        "sheet_y_observed_range": {
+          "min": 412.110289711223,
+          "max": 415.0265339966832
+        },
+        "movement_consumer_samples": {
+          "sheet": 20,
+          "none": 145,
+          "both": 27,
+          "scroll": 97
+        },
+        "finger_velocity_samples": 84,
+        "probe_max_frame_gap_ns": 33436458
+      }
+    },
+    {
+      "run_id": "E64DC7A6-B670-4072-96C2-5423D7E0B79D",
+      "trial": 5,
+      "attempt_id": "6534C020-B309-4CB9-9B94-ED630B8E9958",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_content_first/native.scroll.content_first-E64DC7A6-B670-4072-96C2-5423D7E0B79D.jsonl.gz",
+      "sha256": "6bdcefd3a111c4e919bd0d323ed06eb8627febee3aad4ac574ed3122f79e80be",
+      "raw_sha256": "5bd5e3cfeea5595ed055be5fcf69e1f2c156d0ecd8c173d78c5f5313769286f8",
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 33278667,
+        "unavailable_sheet_y_frames": 0,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "scroll_start": 0,
+        "scroll_end": 355.6666666666667,
+        "scroll_min": 0,
+        "scroll_max": 355.6666666666667,
+        "delivered_drag_events": 23,
+        "selected_detents": [
+          "medium"
+        ],
+        "sheet_y_observed_range": {
+          "min": 412.11028971114246,
+          "max": 415.0265339966832
+        },
+        "movement_consumer_samples": {
+          "sheet": 20,
+          "none": 145,
+          "both": 27,
+          "scroll": 97
+        },
+        "finger_velocity_samples": 85,
+        "probe_max_frame_gap_ns": 24078834
+      }
+    },
+    {
+      "run_id": "ECC5505E-8764-42EE-B7D1-17F9B8D95678",
+      "trial": 8,
+      "attempt_id": "2EB1B5BC-FAAF-4DFD-9DF1-C5497E2BFA7E",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_content_first/native.scroll.content_first-ECC5505E-8764-42EE-B7D1-17F9B8D95678.jsonl.gz",
+      "sha256": "1fa094faf44a1b31511deeb8950e88fdd484039a67932944ec3153492919d62b",
+      "raw_sha256": "b6c9942dbef46996c281830d64ac9cebddd1388c10bab0dc7e3a2981c93c8e2b",
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 39941333,
+        "unavailable_sheet_y_frames": 0,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "scroll_start": 0,
+        "scroll_end": 347.3333333333333,
+        "scroll_min": 0,
+        "scroll_max": 347.3333333333333,
+        "delivered_drag_events": 23,
+        "selected_detents": [
+          "medium"
+        ],
+        "sheet_y_observed_range": {
+          "min": 412.1102897112406,
+          "max": 415.0265339966832
+        },
+        "movement_consumer_samples": {
+          "sheet": 20,
+          "none": 145,
+          "both": 27,
+          "scroll": 95
+        },
+        "finger_velocity_samples": 84,
+        "probe_max_frame_gap_ns": 33515500
+      }
+    },
+    {
+      "run_id": "FAF5C039-D41C-4DE9-B86E-85A054EFCA5E",
+      "trial": 9,
+      "attempt_id": "5D7C5C83-9CE8-4AF5-8902-357CF79CD393",
+      "role": "training",
+      "native_source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_content_first/native.scroll.content_first-FAF5C039-D41C-4DE9-B86E-85A054EFCA5E.jsonl.gz",
+      "sha256": "13a44112fdee30205fe4ddaac000f225359f708368fa2ad98fdb304e8400d583",
+      "raw_sha256": "906ea716d1087bd09ecddef1c246b8c165583b204fcf3c02b21a60439a4b6e96",
+      "observations": {
+        "scope": "observed_control_and_scroll_outcomes_only",
+        "max_frame_gap_ns": 49789459,
+        "unavailable_sheet_y_frames": 0,
+        "zero_sheet_y_frames": 0,
+        "private_scroll_owner": "unresolved",
+        "full_trajectory_acceptance": false,
+        "scroll_start": 0,
+        "scroll_end": 355.6666666666667,
+        "scroll_min": 0,
+        "scroll_max": 355.6666666666667,
+        "delivered_drag_events": 23,
+        "selected_detents": [
+          "medium"
+        ],
+        "sheet_y_observed_range": {
+          "min": 412.1102897111714,
+          "max": 415.0265339966832
+        },
+        "movement_consumer_samples": {
+          "sheet": 20,
+          "none": 146,
+          "both": 27,
+          "scroll": 97
+        },
+        "finger_velocity_samples": 84,
+        "probe_max_frame_gap_ns": 24093708
+      }
+    }
+  ],
+  "limitations": [
+    "Acceptance is scoped to actual control/scroll outcomes; no full dynamics or private ownership accepted",
+    "Pilot/source-uncommitted attempts cannot become accepted native timing evidence",
+    "All collected failures and unavailable states retained"
+  ]
+}

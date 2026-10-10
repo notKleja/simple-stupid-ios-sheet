@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "status": "FAILED_NOT_ACCEPTED",
+  "reason": "API point/pixel taps returnedsuccess but no native touch delivery/control action observed",
+  "raw_guest_file": {
+    "path": "/private/var/mobile/Containers/Data/Application/6F6C0D11-C5B3-42EF-82CE-9EA63DA4C562/Documents/native.nonmodal.medium-9364B5BE-0A17-413C-9BF1-3167AA16B0F6.jsonl",
+    "type": "file",
+    "link_target_dir": false,
+    "mtime": 1791319852,
+    "perm": "644",
+    "size": 677516257,
+    "modified": "2026-10-06T20:50:52Z",
+    "is_directory": false,
+    "is_symlink": false,
+    "name": "native.nonmodal.medium-9364B5BE-0A17-413C-9BF1-3167AA16B0F6.jsonl"
+  },
+  "export": "bounded complete-line prefix only; full raw remains in guest",
+  "prefix": {
+    "path": "artifacts/native/interactions/vphone_nonmodal_delivery_failure/native-prefix.jsonl.gz",
+    "sha256": "0df50ace3db821fed12fd1b91ba57e01b6e5d12c93ad6cd792abf92d40eb7459"
+  },
+  "run_id": "9364B5BE-0A17-413C-9BF1-3167AA16B0F6",
+  "os": {
+    "build": "23G90",
+    "version": "26.6.2"
+  },
+  "device": {
+    "logical_size": {
+      "height": 932,
+      "width": 430
+    },
+    "model": "iPhone99,11",
+    "physical_size": {
+      "height": 2796,
+      "width": 1290
+    },
+    "refresh_hz": 60,
+    "refresh_hz_source": "UIScreen.maximumFramesPerSecond; measured cadence is per-frame",
+    "runtime_kind": "virtual_device",
+    "scale": 3
+  },
+  "provenance": {
+    "attempt_id": "c8f4d150-45c9-4bef-a672-489e21903a4c",
+    "native_source_revision": "e68fd365b9285bfde2130fc1cdd249771f108bf0",
+    "role": "training"
+  },
+  "prefix_touch_events": 0,
+  "prefix_control_actions": 0,
+  "limitation": "Prefix cannot assert absence over unexported tail; current AX controls unchanged, no terminal completion",
+  "terminal": false
+}

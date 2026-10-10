@@ -1,0 +1,17 @@
+{
+  "task_owned": true,
+  "name": "native-task3b-radius-ios27",
+  "udid": "65F498C4-3EAE-4074-89A9-312ED7E7ACE9",
+  "runtime_id": "com.apple.CoreSimulator.SimRuntime.iOS-27-0",
+  "device_type": "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro",
+  "manifest": {
+    "path": "artifacts/native/geometry_v2/ios27/attempt1/manifest.json",
+    "sha256": "97a0d4081757746f4075873faa9f7cff96c2af9367b685e0a59ad16e58459561"
+  },
+  "inventory": {
+    "path": "artifacts/native/geometry_v2/ios27/attempt1/inventory.json",
+    "sha256": "1e67f7064bfbb057d5e702e016ef248b0471d34bfb35d9bcebc2c8b9310effab"
+  },
+  "deleted": true,
+  "deletion_result": "simctl delete exact task-owned UDID succeeded after manifests/inventory/raw hashes sealed"
+}

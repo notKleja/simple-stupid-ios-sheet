@@ -1,0 +1,426 @@
+{
+  "schema_version": 1,
+  "status": "diagnostic_not_accepted",
+  "path": "artifacts/native/timing/coalescing_diagnostic/native.medium_large.programmatic-0D13CC5E-8260-4A56-837D-3287C341D447.jsonl.gz",
+  "sha256": "cf1494ba787d1bd74648ce4f98c1c7e772abd01ccb2572268370df9dc41946eb",
+  "raw_sha256": "536053f2ce9747a4b4db89dadcd4955d6abb3bf764177f1dc2a94f1f2fe734c2",
+  "session": {
+    "configuration": {
+      "detents": [
+        "fixed320",
+        "medium",
+        "large"
+      ],
+      "edge_attached_in_compact_height": false,
+      "grabber": true,
+      "largest_undimmed": null,
+      "modal_in_presentation": false,
+      "page_sizing": true,
+      "placement": "automatic",
+      "preferred_content_size": {
+        "height": 320,
+        "width": 320
+      },
+      "presentation_style": "page_sheet",
+      "scroll_expansion": true,
+      "surface": "opaque.white",
+      "trial": 1,
+      "width_follows_preferred_content_size": false
+    },
+    "device": {
+      "logical_size": {
+        "height": 874,
+        "width": 402
+      },
+      "model": "iPhone18,1",
+      "physical_size": {
+        "height": 2622,
+        "width": 1206
+      },
+      "refresh_hz": 60,
+      "refresh_hz_source": "UIScreen.maximumFramesPerSecond; measured cadence is per-frame",
+      "runtime_kind": "simulator",
+      "scale": 3
+    },
+    "environment": {
+      "keyboard": {
+        "frame": {
+          "height": 0,
+          "width": 0,
+          "x": 0,
+          "y": 0
+        },
+        "visible": false
+      },
+      "orientation": "portrait",
+      "safe_area": {
+        "bottom": 34,
+        "left": 0,
+        "right": 0,
+        "top": 62
+      },
+      "size_classes": {
+        "horizontal": "compact",
+        "vertical": "regular"
+      },
+      "status_bar": {
+        "hidden": false
+      },
+      "system_settings": {
+        "content_size_category": "UICTContentSizeCategoryL",
+        "reduce_motion": false,
+        "voice_over": false
+      }
+    },
+    "evidence_kind": "runtime",
+    "implementation": "native",
+    "native_contract_version": 2,
+    "os": {
+      "build": "23E254a",
+      "version": "26.4.1"
+    },
+    "provenance": {
+      "attempt_id": "B183228B-0872-4467-B9A3-2EF525CA028C",
+      "native_source_revision": "working_tree_uncommitted",
+      "role": "training"
+    },
+    "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+    "scenario_id": "native.medium_large.programmatic",
+    "schema_version": 1,
+    "seq": 0,
+    "t_ns": 62161346061625,
+    "type": "session"
+  },
+  "audits": [
+    {
+      "data": {
+        "for_event": "present.requested",
+        "sync_ms": 0.0799583358457312,
+        "write_ms": 0.04787500074598938
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 2,
+      "t_ns": 62161351870916,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "detent.resolved",
+        "sync_ms": 0.10395833669463173,
+        "write_ms": 0.10458333417773247
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 4,
+      "t_ns": 62161365520291,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "detent.resolved",
+        "sync_ms": 0.1129166703321971,
+        "write_ms": 0.1087916680262424
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 6,
+      "t_ns": 62161376603958,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "detent.resolved",
+        "sync_ms": 0.15816666564205661,
+        "write_ms": 0.1471666691941209
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 8,
+      "t_ns": 62161395309666,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "detent.resolved",
+        "sync_ms": 0.12466666521504521,
+        "write_ms": 0.12783333659172058
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 10,
+      "t_ns": 62161424126458,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "detent.resolved",
+        "sync_ms": 0.1150833340943791,
+        "write_ms": 0.061666665715165436
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 12,
+      "t_ns": 62161425361875,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "detent.resolved",
+        "sync_ms": 0.13829166709911078,
+        "write_ms": 0.049625006795395166
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 14,
+      "t_ns": 62161426247708,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "present.completed",
+        "sync_ms": 0.31891666731098667,
+        "write_ms": 0.14275000285124406
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 42,
+      "t_ns": 62161935637833,
+      "type": "event"
+    },
+    {
+      "data": {
+        "ca_elapsed_ms": 1572.9368333340972,
+        "dispatch_elapsed_ms": 1572.937541,
+        "requested_ms": 1500
+      },
+      "name": "scheduler.audit",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 102,
+      "t_ns": 62162925877458,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "detent.requested",
+        "sync_ms": 1.2476666670409031,
+        "write_ms": 0.1300416624872014
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 104,
+      "t_ns": 62162927404875,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "detent.resolved",
+        "sync_ms": 0.1647916651563719,
+        "write_ms": 0.06854166713310406
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 106,
+      "t_ns": 62162928088583,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "detent.resolved",
+        "sync_ms": 0.23454166512237862,
+        "write_ms": 0.17229167133336887
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 108,
+      "t_ns": 62162937828583,
+      "type": "event"
+    },
+    {
+      "data": {
+        "ca_elapsed_ms": 3151.5779583351105,
+        "dispatch_elapsed_ms": 3151.578708,
+        "requested_ms": 3000
+      },
+      "name": "scheduler.audit",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 204,
+      "t_ns": 62164504521000,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "detent.requested",
+        "sync_ms": 1.1211249948246405,
+        "write_ms": 0.07241666753543541
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 206,
+      "t_ns": 62164505839791,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "detent.resolved",
+        "sync_ms": 0.11620832810876891,
+        "write_ms": 0.04054167220601812
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 208,
+      "t_ns": 62164506207750,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "detent.resolved",
+        "sync_ms": 0.18383333372185007,
+        "write_ms": 0.18437499966239557
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 210,
+      "t_ns": 62164511552000,
+      "type": "event"
+    },
+    {
+      "data": {
+        "ca_elapsed_ms": 4724.953250006365,
+        "dispatch_elapsed_ms": 4724.955292,
+        "requested_ms": 4500
+      },
+      "name": "scheduler.audit",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 305,
+      "t_ns": 62166077906125,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "dismiss.requested",
+        "sync_ms": 1.3203333292040043,
+        "write_ms": 0.07912499859230593
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 307,
+      "t_ns": 62166079549666,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "detent.resolved",
+        "sync_ms": 0.3310416650492698,
+        "write_ms": 0.2498333342373371
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 310,
+      "t_ns": 62166091880375,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "detent.resolved",
+        "sync_ms": 0.30249999690568075,
+        "write_ms": 0.1907083351397887
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 312,
+      "t_ns": 62166094080333,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "detent.resolved",
+        "sync_ms": 0.20308333478169516,
+        "write_ms": 0.13341666635824367
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 314,
+      "t_ns": 62166096442458,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "detent.resolved",
+        "sync_ms": 0.18987499788636342,
+        "write_ms": 0.08762500510783866
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 316,
+      "t_ns": 62166097552250,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "dismiss.completed",
+        "sync_ms": 0.4076249970239587,
+        "write_ms": 0.2343333326280117
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 348,
+      "t_ns": 62166607436791,
+      "type": "event"
+    },
+    {
+      "data": {
+        "ca_elapsed_ms": 420.1726666724426,
+        "dispatch_elapsed_ms": 420.174459,
+        "requested_ms": 400
+      },
+      "name": "scheduler.audit",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 349,
+      "t_ns": 62167027783833,
+      "type": "event"
+    },
+    {
+      "data": {
+        "for_event": "batch.completed",
+        "sync_ms": 0.33241666824324057,
+        "write_ms": 0.09324999700766057
+      },
+      "name": "recorder.io",
+      "run_id": "0D13CC5E-8260-4A56-837D-3287C341D447",
+      "schema_version": 1,
+      "seq": 351,
+      "t_ns": 62167029087666,
+      "type": "event"
+    }
+  ],
+  "limitations": [
+    "One instrumented run; recorder.io itself changes recording workload",
+    "Retain actual timestamps; no offset correction",
+    "This is diagnosis, not a native motion profile"
+  ]
+}
