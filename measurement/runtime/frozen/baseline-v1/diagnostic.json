@@ -1,0 +1,28 @@
+{
+  "assignments": [
+    {
+      "candidate": {
+        "path": "../../cohorts/flutter-diagnostic-v2.json",
+        "sha256": "d8951acfed904d1595269dd23cf2414d3b92bba4e0c38003d995e82cc6726c5f"
+      },
+      "cell_id": "26/iphone_a/portrait/programmatic",
+      "expected_trials": [
+        1
+      ],
+      "native": {
+        "path": "../../cohorts/native-diagnostic-v2.json",
+        "sha256": "f80f4627982110ba74ae7f20b6880e164dce5a3c0d7064cb1a808f92246452f7"
+      },
+      "provenance": "Actual command markers match; independent gesture/replay verification is not asserted by this diagnostic baseline.",
+      "recipe": {
+        "path": "../../../recipes/programmatic.json",
+        "sha256": "003d7a8c900c435036516ed2ef04d5cab1eae0d7e987439cd933b7741c363cf8"
+      },
+      "runtime_input_verified": false,
+      "split": "diagnostic"
+    }
+  ],
+  "batch_id": "canonical-v2-baseline-001",
+  "schema_version": 1,
+  "split": "diagnostic"
+}

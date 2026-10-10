@@ -1,0 +1,292 @@
+{
+  "schema_version": 1,
+  "scenario_id": "native.nonmodal.medium",
+  "status": "diagnostic",
+  "collection_revision": "e16fbddd6ac574d85a725e77705c65a4823c2d24",
+  "entries": [
+    {
+      "run_id": "2C0F3495-204B-41E6-B6C2-95EEDA80ECBE",
+      "trial": 8,
+      "attempt_id": "E41ABF98-45D0-455B-840F-25B93F198361",
+      "role": "training",
+      "native_source_revision": "working_tree_uncommitted",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal_pilot/native.nonmodal.medium-2C0F3495-204B-41E6-B6C2-95EEDA80ECBE.jsonl.gz",
+      "sha256": "49763782029cfc3c6117a2a1867ed92173f5c358796237d20fb40acfb8ccfd3d",
+      "raw_sha256": "f69b7e4d4b9ab287e6660ca25f82626bfede3f6b6e3bab2ab84ab0077c824fec",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "3DA7B137-4C2D-45B7-8197-7E03534A309E",
+      "trial": 7,
+      "attempt_id": "156E0940-0718-467C-B4F8-88C95CEB059E",
+      "role": "training",
+      "native_source_revision": "working_tree_uncommitted",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal_pilot/native.nonmodal.medium-3DA7B137-4C2D-45B7-8197-7E03534A309E.jsonl.gz",
+      "sha256": "249a3c957a950c1cb49c9ecf168a93fc85fab6259f920161dfbeb1a5bed214d5",
+      "raw_sha256": "fb13862743ba1709402c9e6446e792de3b4399e9b148773b7522589c08b961dc",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "4279D47F-EAAF-490D-9D26-1F5C7E3C43EA",
+      "trial": 6,
+      "attempt_id": "BF9FC1CB-6592-4572-98BA-E02BCFF955F6",
+      "role": "training",
+      "native_source_revision": "working_tree_uncommitted",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal_pilot/native.nonmodal.medium-4279D47F-EAAF-490D-9D26-1F5C7E3C43EA.jsonl.gz",
+      "sha256": "6b7394def9c4aae8c24e560a7d7d4ec383404d27af8d6f3ded9d4dd85b04b273",
+      "raw_sha256": "081aa416bfb14b6c0e11769f4cd17d5a1ca326823fe5b196a5c9833efe907347",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "4AF1EE6D-4198-4150-A88C-87A7586CCA75",
+      "trial": 1,
+      "attempt_id": "5A0A6006-4608-42E2-AD62-2B18CB714FA4",
+      "role": "training",
+      "native_source_revision": "working_tree_uncommitted",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal_pilot/native.nonmodal.medium-4AF1EE6D-4198-4150-A88C-87A7586CCA75.jsonl.gz",
+      "sha256": "9e1a0971dd60e44556a28727f9caf48248c1cd73ee8e93d320724e40d939ad3f",
+      "raw_sha256": "2a0eee1e96d1cb8b891bc1737e735c01ead62ee241a5774f6e4d12f7f85af68b",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "5CB28233-FF45-4AE8-A6D2-89D5BB4F80BB",
+      "trial": 5,
+      "attempt_id": "548F415E-FC4F-42EB-95CE-B199FAA93CD2",
+      "role": "training",
+      "native_source_revision": "working_tree_uncommitted",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal_pilot/native.nonmodal.medium-5CB28233-FF45-4AE8-A6D2-89D5BB4F80BB.jsonl.gz",
+      "sha256": "1b7ba4e6821b90ae6cf6122f9ac1b24093fc7bdb7c377b2aade5e10adab7e616",
+      "raw_sha256": "7748e7218ee50260e508baf4a3592f59aa948e04027a2c77f8145166c1048c10",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "90727D8A-EA72-4635-AEC9-BD580AD82B79",
+      "trial": 4,
+      "attempt_id": "EFD0B7D4-E076-4680-9FD8-B98C2131651F",
+      "role": "training",
+      "native_source_revision": "working_tree_uncommitted",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal_pilot/native.nonmodal.medium-90727D8A-EA72-4635-AEC9-BD580AD82B79.jsonl.gz",
+      "sha256": "347543c6bf244ff8820a59aaaa13dee346a8b24598b721960c5f656edeb87bf8",
+      "raw_sha256": "dc599261393e264841d32d4560d9453aa31f405c019bc567caf26a6bf2823b6c",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "A4BEAAE9-8B91-41B9-BFC8-F5C80A0414D0",
+      "trial": 9,
+      "attempt_id": "1DED17D5-A93E-4331-9CB3-AB10217F3A84",
+      "role": "training",
+      "native_source_revision": "working_tree_uncommitted",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal_pilot/native.nonmodal.medium-A4BEAAE9-8B91-41B9-BFC8-F5C80A0414D0.jsonl.gz",
+      "sha256": "29d4c688613ed2056a7fa26fa29f2cb6c12f43568c7f8602006431da796c931c",
+      "raw_sha256": "e72538e6db59bd735a41e454914fdc01f89b61561f9846110ba1e9ffb4c401f6",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "C8588B40-2EEA-4E50-822D-CB61ADBB68FF",
+      "trial": 3,
+      "attempt_id": "B237B347-12FF-4AEA-84C3-245BDCC15EDF",
+      "role": "training",
+      "native_source_revision": "working_tree_uncommitted",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal_pilot/native.nonmodal.medium-C8588B40-2EEA-4E50-822D-CB61ADBB68FF.jsonl.gz",
+      "sha256": "d8734c49ee6253721472c2ab18ffebf522660a1491b9b0916321a03491039162",
+      "raw_sha256": "5b5d0a5d66fc7a8f3da3f47d74a305aa9109151ebcee3ffa617e11e3e492e195",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "E5E2942E-2904-4549-96A9-F747C0198725",
+      "trial": 10,
+      "attempt_id": "72AB1B28-C0A1-43A4-9BDA-5AA3D7A3DCB4",
+      "role": "training",
+      "native_source_revision": "working_tree_uncommitted",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal_pilot/native.nonmodal.medium-E5E2942E-2904-4549-96A9-F747C0198725.jsonl.gz",
+      "sha256": "efc1fd17e71eab98bfeaefefc0802178b202fef95c7ca84611eb0dc0b7f5eaaa",
+      "raw_sha256": "a94569517305b733a8962ff1d92e4b9008988da1078f16e065a764ac596da48b",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    },
+    {
+      "run_id": "FC5575C7-5920-4135-A99E-F703A0FBA749",
+      "trial": 2,
+      "attempt_id": "3C8D43D3-1F04-433D-88FD-54D5ABE229FA",
+      "role": "training",
+      "native_source_revision": "working_tree_uncommitted",
+      "terminal": true,
+      "path": "artifacts/native/interactions/ios26_nonmodal_pilot/native.nonmodal.medium-FC5575C7-5920-4135-A99E-F703A0FBA749.jsonl.gz",
+      "sha256": "0902178df0e700ba8d920ccf98b0bd4c52dff089ea5bb46a38f9578f179090d1",
+      "raw_sha256": "bebecedc590ef83bdb91ae5b920c5f75098bd5f79757f77b0aa6cbcc78c984a5",
+      "outcomes": [
+        {
+          "phase": "medium_initial",
+          "activated": true,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "large",
+          "activated": false,
+          "delivered_touch_events": 2
+        },
+        {
+          "phase": "medium_return",
+          "activated": true,
+          "delivered_touch_events": 2
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Pilot/source-uncommitted attempts cannot become accepted native timing evidence",
+    "All collected failures and unavailable states retained"
+  ]
+}

@@ -6,12 +6,15 @@ import hashlib
 import gzip
 import json
 import math
+import re
 from pathlib import Path
 import statistics
 import sys
 from functools import lru_cache
 
 APPROVED_AUXILIARY_EVENTS = frozenset({"detent.resolved", "batch.completed"})
+MODEL_RADIUS_METRICS = ("sheet.radius.top_left", "sheet.radius.top_right",
+                        "sheet.radius.bottom_right", "sheet.radius.bottom_left")
 
 
 class TraceError(ValueError):
@@ -32,9 +35,10 @@ def require(condition, message):
         raise TraceError(message)
 
 
-@lru_cache(maxsize=1)
-def trace_schema():
-    return json.loads((Path(__file__).resolve().parents[1] / "measurement/schema/trace.schema.json").read_text())
+@lru_cache(maxsize=2)
+def trace_schema(conditions=False):
+    name = "trace-v2.schema.json" if conditions else "trace.schema.json"
+    return json.loads((Path(__file__).resolve().parents[1] / "measurement/schema" / name).read_text())
 
 
 def schema_equal(value, expected):
@@ -81,6 +85,8 @@ def validate_schema(value, schema, path="$", root=None):
                 raise TraceError(f"{path}.{key}: additional field not allowed")
     if isinstance(value, str) and "minLength" in schema:
         require(len(value) >= schema["minLength"], f"{path}: string too short")
+    if isinstance(value, str) and "pattern" in schema:
+        require(re.search(schema["pattern"], value) is not None, f"{path}: string pattern mismatch")
     if finite(value):
         if "minimum" in schema:
             require(value >= schema["minimum"], f"{path}: below minimum")
@@ -103,7 +109,10 @@ def validate(records, role):
     require(isinstance(records, list) and records, f"{role}: empty trace")
     header = records[0]
     require(isinstance(header, dict), f"{role}: malformed session")
-    validate_schema(header, trace_schema(), role + ".session")
+    # A declaration selects the additive contract even outside a comparison
+    # window/family. Do not silently reinterpret malformed v2 records as v1.
+    schema = trace_schema(conditions="conditions" in header)
+    validate_schema(header, schema, role + ".session")
     require(header.get("type") == "session", f"{role}: session must be first")
     required = ("scenario_id", "implementation", "evidence_kind", "os", "device", "environment", "configuration")
     require(all(key in header for key in required), f"{role}: incomplete session metadata")
@@ -119,7 +128,7 @@ def validate(records, role):
     frames, events = [], []
     for index, record in enumerate(records):
         require(isinstance(record, dict), f"{role}: record {index} is not an object")
-        validate_schema(record, trace_schema(), f"{role}.record[{index}]")
+        validate_schema(record, schema, f"{role}.record[{index}]")
         require(record.get("schema_version") == 1, f"{role}: unsupported schema")
         require(record.get("run_id") == header.get("run_id") and bool(header.get("run_id")), f"{role}: inconsistent run_id")
         seq, timestamp = record.get("seq"), record.get("t_ns")
@@ -236,6 +245,17 @@ def compare(request):
         cfg = request.get("config", {})
         require(isinstance(cfg, dict) and cfg.get("metrics"), "explicit nonempty metric acceptance configuration required")
         baseline = json.loads((Path(__file__).resolve().parents[1] / "measurement/profiles/full.json").read_text())
+        family = cfg.get("check_family")
+        require(family in (None, "model_radius"), "unknown comparison check family")
+        if family == "model_radius":
+            require(isinstance(cfg.get("window"), dict), "model radius requires a declared observed window")
+            limits = baseline["check_families"][family]["metrics"]
+            require(all(name in cfg["metrics"] and all(
+                key in cfg["metrics"][name] and finite(cfg["metrics"][name][key]) and
+                0 <= cfg["metrics"][name][key] <= limit for key, limit in required.items())
+                for name, required in limits.items()), "all four independent model-radius limits required")
+            report["check_family"] = family
+            report["evidence_scope"] = "four_model_configuration_radii_only_not_rendered_contour"
         policy = cfg.get("exact_event_data")
         if policy is not None:
             require(isinstance(policy, dict) and all(isinstance(name, str) and isinstance(fields, list)
@@ -260,7 +280,7 @@ def compare(request):
             if not schema_equal(nh[key], ch[key]):
                 report["issues"].append(f"incompatible {key}; cross-device/build/configuration comparison forbidden")
         report["proof_scope"] = "synthetic_math_only" if "synthetic" in (nh["evidence_kind"], ch["evidence_kind"]) else "runtime_trace_pair_only"
-        report["native_parity_eligible"] = report["proof_scope"] == "runtime_trace_pair_only" and not report["issues"] and not missing
+        report["native_parity_eligible"] = report["proof_scope"] == "runtime_trace_pair_only" and not report["issues"] and not missing and family is None
         report["runs"] = {"native": nh["run_id"], "candidate": ch["run_id"], "scenario_id": nh["scenario_id"]}
         alignment = cfg.get("alignment", {})
         require(not any(e["name"] == "environment.changed" for e in ne + ce), "environment changed: split analysis at event boundary")
@@ -355,6 +375,9 @@ def compare(request):
             nvalues, cvalues = [f["metrics"].get(name) for f in nf], [f["metrics"].get(name) for f in cf]
             if not all(finite(x) for x in nvalues + cvalues):
                 report["issues"].append(f"required metric missing/null: {name}")
+                continue
+            if family == "model_radius" and name in MODEL_RADIUS_METRICS and any(x < 0 for x in nvalues + cvalues):
+                report["issues"].append(f"invalid nonnegative model radius: {name}")
                 continue
             reference = [interpolate(ntime, nvalues, t) for t in union_time]
             aligned = [interpolate(ctime, cvalues, t) for t in union_time]

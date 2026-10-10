@@ -18,5 +18,25 @@
   },
   "states": ["selected_detent", "target_detent", "gesture", "scroll_owner", "underlying_hit_test"],
   "exact_event_data": {"detent.requested": ["target"], "detent.changed": ["selected"], "scroll.handoff": ["owner"], "input.touch": ["phase", "x", "y"]},
+  "check_families": {
+    "model_radius": {"provenance": "Existing scalar-radius acceptance target applied independently to four model/configuration values; not contour acceptance", "metrics": {
+      "sheet.radius.top_left": {"max": 0.5, "final": 0.5}, "sheet.radius.top_right": {"max": 0.5, "final": 0.5},
+      "sheet.radius.bottom_right": {"max": 0.5, "final": 0.5}, "sheet.radius.bottom_left": {"max": 0.5, "final": 0.5}
+    }}
+  },
+  "applicability_policies": {
+    "model_radius.v1": {"phase": "geometry", "observables": {"target_detent": "required", "scroll": "not_applicable", "hit_testing": "not_applicable", "keyboard": "not_applicable", "stack_layers": "not_applicable", "contour": "not_applicable", "performance": "not_applicable", "model_radius": "required"}},
+    "present.v1": {"phase": "present", "observables": {"target_detent": "required", "scroll": "not_applicable", "hit_testing": "not_applicable", "keyboard": "not_applicable", "stack_layers": "not_applicable", "contour": "not_applicable", "performance": "not_applicable"}},
+    "detent.v1": {"phase": "detent", "observables": {"target_detent": "required", "scroll": "not_applicable", "hit_testing": "not_applicable", "keyboard": "not_applicable", "stack_layers": "not_applicable", "contour": "not_applicable", "performance": "not_applicable"}},
+    "drag.v1": {"phase": "gesture", "observables": {"target_detent": "unavailable", "scroll": "not_applicable", "hit_testing": "not_applicable", "keyboard": "not_applicable", "stack_layers": "not_applicable", "contour": "not_applicable", "performance": "not_applicable"}},
+    "interruption.v1": {"phase": "interrupt", "observables": {"target_detent": "required", "scroll": "not_applicable", "hit_testing": "not_applicable", "keyboard": "not_applicable", "stack_layers": "not_applicable", "contour": "not_applicable", "performance": "not_applicable"}},
+    "keyboard.v1": {"phase": "keyboard", "observables": {"target_detent": "required", "scroll": "not_applicable", "hit_testing": "not_applicable", "keyboard": "required", "stack_layers": "not_applicable", "contour": "not_applicable", "performance": "not_applicable"}},
+    "stack.v1": {"phase": "stack", "observables": {"target_detent": "required", "scroll": "not_applicable", "hit_testing": "not_applicable", "keyboard": "not_applicable", "stack_layers": "required", "contour": "not_applicable", "performance": "not_applicable"}},
+    "dismiss.v1": {"phase": "dismiss", "observables": {"target_detent": "not_applicable", "scroll": "not_applicable", "hit_testing": "not_applicable", "keyboard": "not_applicable", "stack_layers": "not_applicable", "contour": "not_applicable", "performance": "not_applicable"}},
+    "scroll.v1": {"phase": "scroll", "observables": {"target_detent": "required", "scroll": "required", "hit_testing": "not_applicable", "keyboard": "not_applicable", "stack_layers": "not_applicable", "contour": "not_applicable", "performance": "not_applicable"}},
+    "hit_testing.v1": {"phase": "hit_testing", "observables": {"target_detent": "required", "scroll": "not_applicable", "hit_testing": "required", "keyboard": "not_applicable", "stack_layers": "not_applicable", "contour": "not_applicable", "performance": "not_applicable"}},
+    "contour.v1": {"phase": "contour", "observables": {"target_detent": "required", "scroll": "not_applicable", "hit_testing": "not_applicable", "keyboard": "not_applicable", "stack_layers": "not_applicable", "contour": "required", "performance": "not_applicable"}},
+    "performance.v1": {"phase": "performance", "observables": {"target_detent": "required", "scroll": "not_applicable", "hit_testing": "not_applicable", "keyboard": "not_applicable", "stack_layers": "not_applicable", "contour": "not_applicable", "performance": "required"}}
+  },
   "notes": ["Profile must be applied per phase and observed state; null metrics fail closed", "Scalar radius only applies when native shape admits one; use separately reviewed contour comparison otherwise", "Observed resting checkpoints required before and after transitions; terminal dismissal frame is not a resting presented sheet", "No velocity target invented: velocity diagnostics are reported until native-repeat-derived limits are approved"]
 }

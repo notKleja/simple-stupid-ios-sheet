@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "split": "training",
+  "attempt": 1,
+  "proof_scope": "pre_correction_native_command_timer_baseline",
+  "motion_accepted": false,
+  "quality": {
+    "verdict": "FAIL",
+    "reason": "medium_initial: resting window sampling gap"
+  },
+  "source_revision": "e16fbddd6ac574d85a725e77705c65a4823c2d24",
+  "source_sha256": {
+    "native_reference/NativeSheetHarness/App.swift": "b5efe0c87bfe081d035d7a804f0b7d4fbd9fc641240eccdb469ed63d160404cc",
+    "native_reference/NativeSheetHarness/NativeScenario.swift": "3b3c37327899a8c4aede01a17896eac7f52be9e30500ace50b70cdd39354d8d8",
+    "native_reference/NativeSheetHarness/SwiftUIReference.swift": "6451434717819dfcf79744de2b068beefef430c3b9b31fe34466ddebe8cfd13c",
+    "native_reference/NativeSheetHarness/Trace.swift": "96e363aa60b68870ba25a3d9c638edf30a644922e1d6976fb5b08d8108db10c5"
+  },
+  "executable_sha256": "64f4a6787f79dd580df11fabde134022a732de9c5d8055abed232d053c895159",
+  "artifacts": [
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference/native.medium_large.programmatic-19D8A651-7E9E-4C89-A879-E871021E8151.jsonl.gz",
+      "sha256": "e2e2780653df1ffffa6969ad12606142d6690958d034057f46edc9059324c76b",
+      "trial": 7,
+      "run_id": "19D8A651-7E9E-4C89-A879-E871021E8151",
+      "attempt": 1,
+      "split": "training"
+    },
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference/native.medium_large.programmatic-25C089A0-61D2-4215-B8E5-B0EC952DFC96.jsonl.gz",
+      "sha256": "b2b2d21765b777fb6da6f1e2f3922159aaed52c8f2486ce97c8d25b405352ac7",
+      "trial": 3,
+      "run_id": "25C089A0-61D2-4215-B8E5-B0EC952DFC96",
+      "attempt": 1,
+      "split": "training"
+    },
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference/native.medium_large.programmatic-2DA62BEF-B788-4017-BF1F-600E3A4AC03E.jsonl.gz",
+      "sha256": "3634645dde48daba561348052246e512dfb7feaf614e0fe6adeaecd881e6c42c",
+      "trial": 6,
+      "run_id": "2DA62BEF-B788-4017-BF1F-600E3A4AC03E",
+      "attempt": 1,
+      "split": "training"
+    },
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference/native.medium_large.programmatic-4AD3A8F6-CB01-4235-9785-522CEBD16B24.jsonl.gz",
+      "sha256": "0d74ef8d79cbb27ccff124620586ca6c1afc5bd532dcc9de2c08ca1a5ffd36f5",
+      "trial": 2,
+      "run_id": "4AD3A8F6-CB01-4235-9785-522CEBD16B24",
+      "attempt": 1,
+      "split": "training"
+    },
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference/native.medium_large.programmatic-65AB66F2-599B-4E37-9180-29169597B10A.jsonl.gz",
+      "sha256": "ef957f6e02d8705c34b6a07ea740d4d3f6da137fdf3cca2394542e608f161e05",
+      "trial": 5,
+      "run_id": "65AB66F2-599B-4E37-9180-29169597B10A",
+      "attempt": 1,
+      "split": "training"
+    },
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference/native.medium_large.programmatic-8812709D-FC58-4124-8DE4-04C8693A1A92.jsonl.gz",
+      "sha256": "d7f00f745eb8abd3798d7aba5c4c6a99c026f326f11a4d49930753f60e55e46e",
+      "trial": 10,
+      "run_id": "8812709D-FC58-4124-8DE4-04C8693A1A92",
+      "attempt": 1,
+      "split": "training"
+    },
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference/native.medium_large.programmatic-C61BA2C1-3FED-429A-B34C-F401EBE1ECB6.jsonl.gz",
+      "sha256": "1628b0812067c2639f1a0cb24ac37fcc67be9b1d74b84853679960b9d156774c",
+      "trial": 9,
+      "run_id": "C61BA2C1-3FED-429A-B34C-F401EBE1ECB6",
+      "attempt": 1,
+      "split": "training"
+    },
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference/native.medium_large.programmatic-D6C29B17-9B8A-4451-A8E9-5841A972AF16.jsonl.gz",
+      "sha256": "dd61c1505843abf3544f51765ff26eff1e1fd1c5d8f11b23899688cf26f3fd8e",
+      "trial": 8,
+      "run_id": "D6C29B17-9B8A-4451-A8E9-5841A972AF16",
+      "attempt": 1,
+      "split": "training"
+    },
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference/native.medium_large.programmatic-DDBE6851-192C-4EF6-B7FC-016734EDA971.jsonl.gz",
+      "sha256": "852984b2bd664282c637791f54825e8245de048d10a2096fc79dc77755ee78f5",
+      "trial": 4,
+      "run_id": "DDBE6851-192C-4EF6-B7FC-016734EDA971",
+      "attempt": 1,
+      "split": "training"
+    },
+    {
+      "path": "artifacts/native/ios27_0_v2_timing_reference/native.medium_large.programmatic-F3DD4FE0-FA66-408A-92E5-81B916C48F0D.jsonl.gz",
+      "sha256": "695660c3ba3b1099a4ca7ae76c2cb756b6a4b419782771c80237664b7fbd2edb",
+      "trial": 1,
+      "run_id": "F3DD4FE0-FA66-408A-92E5-81B916C48F0D",
+      "attempt": 1,
+      "split": "training"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "schema_version": 2,
+  "entries": [
+    {"matrix": "native.medium_large.programmatic", "native": "native.medium_large.programmatic", "flutter": "native.medium_large.programmatic", "revision": 2},
+    {"matrix": "nonmodal.medium", "native": "native.nonmodal.medium", "flutter": null, "revision": 2},
+    {"matrix": "scroll.content_first", "native": "native.scroll.content_first", "flutter": null, "revision": 2},
+    {"matrix": "scroll.long", "native": "native.scroll.medium_large", "flutter": null, "revision": 2},
+    {"matrix": "scroll.downward.large", "native": "native.scroll.handoff.down", "flutter": null, "revision": 2}
+  ]
+}

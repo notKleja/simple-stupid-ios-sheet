@@ -1,0 +1,534 @@
+#!/usr/bin/env python3
+"""Record native and Flutter sheet demos on two synchronized simulators."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import signal
+import subprocess
+import sys
+import time
+from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+from typing import Any
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+
+from measurement.scripts.validate_demo_timeline import validate_timeline
+
+
+DEVICE_TYPE = "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro"
+NATIVE_BUNDLE = "dev.notkleja.NativeSheetHarness"
+FLUTTER_BUNDLE = "dev.sheetreference.iosSheetCandidate"
+
+
+def run(command: list[str], *, env: dict[str, str] | None = None, check: bool = True) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(command, check=check, text=True, capture_output=True, env=env)
+
+
+def run_json(command: list[str]) -> dict[str, Any]:
+    return json.loads(run(command).stdout)
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def find_runtime(inventory: dict[str, Any], version: str) -> dict[str, Any]:
+    for runtime in inventory.get("runtimes", []):
+        if runtime.get("version") == version and runtime.get("isAvailable") is True:
+            return runtime
+    raise RuntimeError(f"No exact available runtime for iOS {version}")
+
+
+def bundled_timeline_paths(native_app: Path, flutter_app: Path) -> dict[str, Path]:
+    return {
+        "native": native_app / "synchronized_bilingual_demo.json",
+        "flutter": flutter_app / "Frameworks/App.framework/flutter_assets/assets/synchronized_bilingual_demo.json",
+    }
+
+
+def bundled_provenance_paths(native_app: Path, flutter_app: Path) -> dict[str, Path]:
+    return {
+        "native": native_app / "synchronized-demo-provenance.json",
+        "flutter": flutter_app / "Frameworks/App.framework/flutter_assets/assets/synchronized-demo-provenance.json",
+    }
+
+
+def verify_timeline_assets(selected: Path, bundled: dict[str, Path]) -> str:
+    expected = sha256_file(selected)
+    for implementation, path in bundled.items():
+        if not path.is_file() or sha256_file(path) != expected:
+            raise RuntimeError(f"{implementation} bundled timeline does not match selected timeline")
+    return expected
+
+
+def verify_matched_build_provenance(
+    native: dict[str, Any], flutter: dict[str, Any], timeline_sha256: str, current_source_revision: str,
+    *, source_tree_clean: bool = True, current_source_tree_fingerprint: str | None = None,
+) -> str:
+    """Require both app bundles to attest to this source revision and recipe."""
+    for implementation, provenance in (("native", native), ("flutter", flutter)):
+        if provenance.get("schema_version") != 1:
+            raise RuntimeError(f"{implementation} build provenance schema_version must equal 1")
+        revision = provenance.get("git_revision")
+        if not isinstance(revision, str) or not revision:
+            raise RuntimeError(f"{implementation} build provenance requires git_revision")
+        if provenance.get("timeline_sha256") != timeline_sha256:
+            raise RuntimeError(f"{implementation} build provenance timeline_sha256 does not match selected timeline")
+    if native["git_revision"] != flutter["git_revision"]:
+        raise RuntimeError("native and Flutter bundles must attest to the same git revision")
+    if native["git_revision"] != current_source_revision:
+        raise RuntimeError("bundle git revision does not match current source revision")
+    if not source_tree_clean:
+        if not isinstance(current_source_tree_fingerprint, str) or not current_source_tree_fingerprint:
+            raise RuntimeError("dirty source tree requires a deterministic source-tree fingerprint")
+        for implementation, provenance in (("native", native), ("flutter", flutter)):
+            if provenance.get("source_tree_fingerprint") != current_source_tree_fingerprint:
+                raise RuntimeError(f"{implementation} source-tree fingerprint does not match current dirty source tree")
+    return native["git_revision"]
+
+
+_GENERATED_OUTPUT_PREFIXES = ("artifacts/", "build/", "graphify-out/", "work/")
+
+
+def source_tree_input_paths(tracked_paths: list[str], untracked_paths: list[str]) -> list[str]:
+    """Return auditable source inputs, excluding known generated outputs only."""
+    relevant_untracked = [
+        path for path in untracked_paths
+        if not path.startswith(_GENERATED_OUTPUT_PREFIXES)
+    ]
+    return sorted(set(tracked_paths) | set(relevant_untracked))
+
+
+def source_tree_is_clean_from_paths(
+    changed_tracked_paths: list[str], source_inputs: list[str], untracked_paths: list[str]
+) -> bool:
+    relevant_untracked = set(source_inputs) & set(untracked_paths)
+    return not changed_tracked_paths and not relevant_untracked
+
+
+def _git_paths(*args: str) -> list[str]:
+    return [path for path in run(["git", *args]).stdout.split("\0") if path]
+
+
+def tracked_source_is_clean() -> bool:
+    tracked_paths = _git_paths("ls-files", "-z")
+    untracked_paths = _git_paths("ls-files", "--others", "--exclude-standard", "-z")
+    changed = _git_paths("diff", "--name-only", "-z") + _git_paths("diff", "--cached", "--name-only", "-z")
+    inputs = source_tree_input_paths(tracked_paths, untracked_paths)
+    return source_tree_is_clean_from_paths(changed, inputs, untracked_paths)
+
+
+def current_source_tree_fingerprint() -> str:
+    digest = hashlib.sha256()
+    tracked_paths = _git_paths("ls-files", "-z")
+    untracked_paths = _git_paths("ls-files", "--others", "--exclude-standard", "-z")
+    for relative in source_tree_input_paths(tracked_paths, untracked_paths):
+        path = ROOT / relative
+        if not path.is_file():
+            raise RuntimeError(f"cannot fingerprint missing tracked source file: {relative}")
+        encoded_path = relative.encode("utf-8")
+        contents = path.read_bytes()
+        digest.update(len(encoded_path).to_bytes(8, "big"))
+        digest.update(encoded_path)
+        digest.update(len(contents).to_bytes(8, "big"))
+        digest.update(contents)
+    return digest.hexdigest()
+
+
+def load_matched_build_provenance(
+    native_app: Path, flutter_app: Path, timeline_sha256: str, current_source_revision: str,
+    *, source_tree_clean: bool, current_source_tree_fingerprint: str | None,
+) -> tuple[dict[str, dict[str, Any]], str]:
+    provenance: dict[str, dict[str, Any]] = {}
+    for implementation, path in bundled_provenance_paths(native_app, flutter_app).items():
+        if not path.is_file():
+            raise RuntimeError(f"{implementation} build provenance is missing: {path}")
+        try:
+            value = json.loads(path.read_text())
+        except json.JSONDecodeError as error:
+            raise RuntimeError(f"{implementation} build provenance is invalid JSON: {path}") from error
+        if not isinstance(value, dict):
+            raise RuntimeError(f"{implementation} build provenance must be an object")
+        provenance[implementation] = value
+    return provenance, verify_matched_build_provenance(
+        provenance["native"], provenance["flutter"], timeline_sha256, current_source_revision,
+        source_tree_clean=source_tree_clean, current_source_tree_fingerprint=current_source_tree_fingerprint,
+    )
+
+
+def validate_simulator_identity(
+    inventory: dict[str, Any], udids: list[str], runtime_id: str
+) -> list[dict[str, Any]]:
+    devices = {device.get("udid"): device for device in inventory.get("devices", {}).get(runtime_id, [])}
+    resolved = []
+    for udid in udids:
+        device = devices.get(udid)
+        if not device:
+            raise RuntimeError(f"Simulator {udid} is not in requested runtime {runtime_id}")
+        if device.get("isAvailable") is not True or device.get("deviceTypeIdentifier") != DEVICE_TYPE:
+            raise RuntimeError(f"Simulator {udid} is not an available iPhone 17 Pro")
+        resolved.append(device)
+    return resolved
+
+
+def validate_ack(value: dict[str, Any], status: str, expected: dict[str, Any]) -> None:
+    if value.get("status") != status or any(value.get(key) != wanted for key, wanted in expected.items()):
+        raise RuntimeError(f"Invalid {status} acknowledgement: {value!r}")
+
+
+def app_documents(udid: str, bundle: str) -> Path:
+    container = Path(run(["xcrun", "simctl", "get_app_container", udid, bundle, "data"]).stdout.strip())
+    return container / "Documents"
+
+
+def clear_acknowledgements(directory: Path) -> None:
+    for name in ("synchronized-demo-armed.json", "synchronized-demo-completed.json"):
+        (directory / name).unlink(missing_ok=True)
+
+
+def wait_for_ack(directory: Path, name: str, status: str, expected: dict[str, Any], deadline: float) -> tuple[Path, dict[str, Any]]:
+    path = directory / name
+    while time.time() < deadline:
+        if path.is_file():
+            try:
+                value = json.loads(path.read_text())
+                validate_ack(value, status, expected)
+                return path, value
+            except (json.JSONDecodeError, OSError):
+                pass
+        time.sleep(0.05)
+    raise RuntimeError(f"Missing valid {status} acknowledgement before deadline: {path}")
+
+
+def marker_gap_seconds(duration_ms: int, marker_window_ms: int = 1000) -> float:
+    if duration_ms <= marker_window_ms:
+        raise ValueError("timeline must be longer than marker window")
+    return (duration_ms - marker_window_ms) / 1000
+
+
+def alignment_transform(
+    native_markers: tuple[float, float],
+    flutter_markers: tuple[float, float],
+    *,
+    marker_gap: float,
+    pre_roll: float = 0,
+) -> dict[str, dict[str, float]]:
+    def transform(markers: tuple[float, float]) -> dict[str, float]:
+        observed_gap = markers[1] - markers[0]
+        if observed_gap <= 0:
+            raise RuntimeError("visible marker interval must be positive")
+        scale = marker_gap / observed_gap
+        start = max(0.0, markers[0] - pre_roll / scale)
+        return {"start": round(start, 6), "scale": round(scale, 9)}
+    return {"native": transform(native_markers), "flutter": transform(flutter_markers)}
+
+
+def compose_filter(native_start: float = 0, flutter_start: float = 0, native_scale: float = 1, flutter_scale: float = 1) -> str:
+    native_base = f"[0:v]trim=start={native_start:.6f},setpts=(PTS-STARTPTS)*{native_scale:.6f}" if native_start or native_scale != 1 else "[0:v]setpts=PTS-STARTPTS"
+    flutter_base = f"[1:v]trim=start={flutter_start:.6f},setpts=(PTS-STARTPTS)*{flutter_scale:.6f}" if flutter_start or flutter_scale != 1 else "[1:v]setpts=PTS-STARTPTS"
+    native_base += ",fps=60"
+    flutter_base += ",fps=60"
+    native = f"{native_base},tpad=stop_mode=clone:stop_duration=2[native]"
+    flutter = f"{flutter_base},tpad=stop_mode=clone:stop_duration=2[flutter]"
+    return f"{native};{flutter};[native][flutter]hstack=inputs=2:shortest=1[out]"
+
+
+def detect_sync_markers(path: Path) -> tuple[float, float]:
+    frames = run_json([
+        "ffprobe", "-v", "error", "-select_streams", "v:0",
+        "-show_entries", "frame=best_effort_timestamp_time", "-of", "json", str(path),
+    ]).get("frames", [])
+    decoded = subprocess.run([
+        "ffmpeg", "-v", "error", "-i", str(path),
+        "-vf", "scale=80:174:flags=neighbor,format=rgb24", "-fps_mode", "passthrough", "-f", "rawvideo", "-",
+    ], check=True, capture_output=True).stdout
+    frame_size = 80 * 174 * 3
+    frame_count = min(len(frames), len(decoded) // frame_size)
+    rising: list[float] = []
+    active = False
+    for index in range(frame_count):
+        frame = decoded[index * frame_size : (index + 1) * frame_size]
+        magenta = sum(
+            1 for offset in range(0, len(frame), 3)
+            if frame[offset] > 180 and frame[offset + 1] < 100 and frame[offset + 2] > 180
+        )
+        visible = magenta >= 6
+        if visible and not active:
+            rising.append(float(frames[index]["best_effort_timestamp_time"]))
+        active = visible
+    if len(rising) < 2:
+        raise RuntimeError(f"Two visible synchronization markers not found in {path}: {rising}")
+    return rising[0], rising[-1]
+
+
+def probe_media(path: Path) -> dict[str, Any]:
+    result = run_json([
+        "ffprobe", "-v", "error", "-select_streams", "v:0",
+        "-show_entries", "stream=codec_name,width,height,avg_frame_rate,nb_frames:format=duration,size",
+        "-of", "json", str(path),
+    ])
+    return {"stream": result.get("streams", [{}])[0], "format": result.get("format", {})}
+
+
+def build_manifest(
+    *,
+    run_id: str,
+    start_epoch_ms: int,
+    recorder_started_ns: dict[str, int],
+    simulators: dict[str, dict[str, Any]],
+    runtime: dict[str, Any],
+    timeline: Path,
+    outputs: dict[str, Path],
+    media: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    return {
+        "schema_version": 1,
+        "run_id": run_id,
+        "start_epoch_ms": start_epoch_ms,
+        "recording_start_monotonic_ns": recorder_started_ns,
+        "recording_start_delta_ns": abs(recorder_started_ns["native"] - recorder_started_ns["flutter"]),
+        "device_type": DEVICE_TYPE,
+        "runtime": {key: runtime.get(key) for key in ("identifier", "version", "buildversion")},
+        "simulators": simulators,
+        "timeline": {"path": str(timeline), "sha256": sha256_file(timeline)},
+        "outputs": {
+            name: {"path": str(path), "sha256": sha256_file(path), "media": media[name]}
+            for name, path in outputs.items()
+        },
+        "evidence_boundary": [
+            "Video demonstrates synchronized visible scenarios; numerical parity remains trace-analyzer work.",
+            "Programmatic scrolling is not finger-driven scroll-handoff proof.",
+            "Property labels do not by themselves prove native hit testing.",
+        ],
+    }
+
+
+def simulator_create_command(name: str, runtime_id: str, clone_source: str | None) -> list[str]:
+    if clone_source:
+        return ["xcrun", "simctl", "clone", clone_source, name]
+    return ["xcrun", "simctl", "create", name, DEVICE_TYPE, runtime_id]
+
+
+def explicit_simulators(native_udid: str | None, flutter_udid: str | None) -> tuple[str, str] | None:
+    if native_udid is None and flutter_udid is None:
+        return None
+    if not native_udid or not flutter_udid:
+        raise ValueError("both --native-udid and --flutter-udid are required together")
+    if native_udid == flutter_udid:
+        raise ValueError("native and Flutter must use two different simulators")
+    return native_udid, flutter_udid
+
+
+def create_simulator(name: str, runtime_id: str, clone_source: str | None = None) -> str:
+    return run(simulator_create_command(name, runtime_id, clone_source)).stdout.strip()
+
+
+def boot_and_install(udid: str, app: Path) -> None:
+    run(["xcrun", "simctl", "boot", udid], check=False)
+    run(["xcrun", "simctl", "bootstatus", udid, "-b"])
+    run(["xcrun", "simctl", "ui", udid, "appearance", "light"])
+    run(["xcrun", "simctl", "ui", udid, "increase_contrast", "disabled"])
+    run(["xcrun", "simctl", "ui", udid, "content_size", "large"])
+    run(["xcrun", "simctl", "install", udid, str(app)])
+
+
+def start_recording(udid: str, path: Path) -> tuple[subprocess.Popen[str], int]:
+    started = time.monotonic_ns()
+    process = subprocess.Popen(
+        ["xcrun", "simctl", "io", udid, "recordVideo", "--codec=h264", "--force", str(path)],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    return process, started
+
+
+def stop_recording(process: subprocess.Popen[str]) -> None:
+    if process.poll() is None:
+        process.send_signal(signal.SIGINT)
+    try:
+        process.communicate(timeout=15)
+    except subprocess.TimeoutExpired:
+        process.kill()
+        process.communicate(timeout=5)
+
+
+def launch_command(udid: str, bundle: str) -> list[str]:
+    return ["xcrun", "simctl", "launch", "--terminate-running-process", udid, bundle]
+
+
+def launch(udid: str, bundle: str, start_epoch_ms: int, build: str) -> dict[str, Any]:
+    env = os.environ.copy()
+    env.update({
+        "SIMCTL_CHILD_SHEET_DEMO": "1",
+        "SIMCTL_CHILD_SHEET_DEMO_START_MS": str(start_epoch_ms),
+        "SIMCTL_CHILD_NATIVE_OS_BUILD": build,
+        "SIMCTL_CHILD_SHEET_OS_BUILD": build,
+    })
+    started = time.monotonic_ns()
+    result = run(launch_command(udid, bundle), env=env)
+    return {"started_monotonic_ns": started, "output": result.stdout.strip()}
+
+
+def compose(native: Path, flutter: Path, output: Path, *, native_start: float = 0, flutter_start: float = 0, native_scale: float = 1, flutter_scale: float = 1) -> None:
+    run([
+        "ffmpeg", "-y", "-i", str(native), "-i", str(flutter),
+        "-filter_complex", compose_filter(native_start, flutter_start, native_scale, flutter_scale), "-map", "[out]", "-an",
+        "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
+        "-movflags", "+faststart", str(output),
+    ])
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--native-app", type=Path, required=True)
+    parser.add_argument("--flutter-app", type=Path, required=True)
+    parser.add_argument("--timeline", type=Path, default=ROOT / "measurement/scenarios/synchronized_bilingual_demo.json")
+    parser.add_argument("--runtime-version", default="26.4.1")
+    parser.add_argument("--clone-source", help="Ready, shutdown simulator UDID to clone twice")
+    parser.add_argument("--native-udid", help="Existing initialized iPhone 17 Pro for native")
+    parser.add_argument("--flutter-udid", help="Existing initialized iPhone 17 Pro for Flutter")
+    parser.add_argument("--output-root", type=Path, default=ROOT / "artifacts/video")
+    args = parser.parse_args()
+
+    if not args.native_app.is_dir() or not args.flutter_app.is_dir():
+        raise RuntimeError("Both built .app bundles are required")
+    timeline_value = json.loads(args.timeline.read_text())
+    timeline_summary = validate_timeline(timeline_value)
+    timeline_asset_hash = verify_timeline_assets(args.timeline, bundled_timeline_paths(args.native_app, args.flutter_app))
+    current_source_revision = run(["git", "rev-parse", "HEAD"]).stdout.strip()
+    source_tree_clean = tracked_source_is_clean()
+    source_tree_fingerprint = None if source_tree_clean else current_source_tree_fingerprint()
+    build_provenance, matched_build_revision = load_matched_build_provenance(
+        args.native_app, args.flutter_app, timeline_asset_hash, current_source_revision,
+        source_tree_clean=source_tree_clean, current_source_tree_fingerprint=source_tree_fingerprint,
+    )
+    runtime = find_runtime(run_json(["xcrun", "simctl", "list", "runtimes", "-j"]), args.runtime_version)
+    run_id = time.strftime("%Y%m%d-%H%M%S")
+    output_dir = args.output_root / run_id
+    output_dir.mkdir(parents=True, exist_ok=False)
+    native_video = output_dir / "native-iphone17pro.mp4"
+    flutter_video = output_dir / "flutter-iphone17pro.mp4"
+    composite_video = output_dir / "native-vs-flutter-iphone17pro-bilingual.mp4"
+
+    supplied = explicit_simulators(args.native_udid, args.flutter_udid)
+    if supplied:
+        native_udid, flutter_udid = supplied
+        native_name, flutter_name = "Existing iPhone 17 Pro — Native", "Existing iPhone 17 Pro — Flutter"
+    else:
+        native_name, flutter_name = f"Sheet Native 17 Pro {run_id}", f"Sheet Flutter 17 Pro {run_id}"
+        native_udid = create_simulator(native_name, runtime["identifier"], args.clone_source)
+        flutter_udid = create_simulator(flutter_name, runtime["identifier"], args.clone_source)
+    device_records = validate_simulator_identity(
+        run_json(["xcrun", "simctl", "list", "devices", "-j"]),
+        [native_udid, flutter_udid],
+        runtime["identifier"],
+    )
+    simulators = {
+        "native": {"udid": native_udid, "name": native_name, "bundle": NATIVE_BUNDLE, "device": device_records[0]},
+        "flutter": {"udid": flutter_udid, "name": flutter_name, "bundle": FLUTTER_BUNDLE, "device": device_records[1]},
+    }
+
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        futures = [executor.submit(boot_and_install, native_udid, args.native_app), executor.submit(boot_and_install, flutter_udid, args.flutter_app)]
+        for future in futures:
+            future.result()
+
+    document_dirs = {
+        "native": app_documents(native_udid, NATIVE_BUNDLE),
+        "flutter": app_documents(flutter_udid, FLUTTER_BUNDLE),
+    }
+    for directory in document_dirs.values():
+        clear_acknowledgements(directory)
+
+    native_recorder, native_started = start_recording(native_udid, native_video)
+    flutter_recorder, flutter_started = start_recording(flutter_udid, flutter_video)
+    start_epoch_ms = int(time.time() * 1000) + 12000
+    launch_results: dict[str, Any] = {}
+    acknowledgements: dict[str, Any] = {}
+    try:
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            launches = {
+                "native": executor.submit(launch, native_udid, NATIVE_BUNDLE, start_epoch_ms, runtime["buildversion"]),
+                "flutter": executor.submit(launch, flutter_udid, FLUTTER_BUNDLE, start_epoch_ms, runtime["buildversion"]),
+            }
+            launch_results = {name: future.result() for name, future in launches.items()}
+        armed_expected = {
+            "start_epoch_ms": start_epoch_ms,
+            "duration_ms": timeline_summary["duration_ms"],
+            "scene_count": timeline_summary["scene_count"],
+        }
+        armed_deadline = start_epoch_ms / 1000 - 1
+        for implementation, directory in document_dirs.items():
+            path, value = wait_for_ack(directory, "synchronized-demo-armed.json", "armed", armed_expected, armed_deadline)
+            copied = output_dir / f"{implementation}-armed.json"
+            copied.write_bytes(path.read_bytes())
+            acknowledgements[f"{implementation}_armed"] = {"path": str(copied), "sha256": sha256_file(copied), "value": value}
+        target_end = start_epoch_ms / 1000 + timeline_summary["duration_ms"] / 1000 + 2
+        time.sleep(max(0, target_end - time.time()))
+        completed_expected = {"start_epoch_ms": start_epoch_ms, "last_scene": timeline_summary["scene_ids"][-1]}
+        for implementation, directory in document_dirs.items():
+            path, value = wait_for_ack(directory, "synchronized-demo-completed.json", "completed", completed_expected, target_end + 5)
+            copied = output_dir / f"{implementation}-completed.json"
+            copied.write_bytes(path.read_bytes())
+            acknowledgements[f"{implementation}_completed"] = {"path": str(copied), "sha256": sha256_file(copied), "value": value}
+    finally:
+        stop_recording(native_recorder)
+        stop_recording(flutter_recorder)
+        run(["xcrun", "simctl", "terminate", native_udid, NATIVE_BUNDLE], check=False)
+        run(["xcrun", "simctl", "terminate", flutter_udid, FLUTTER_BUNDLE], check=False)
+    marker_times = {"native": detect_sync_markers(native_video), "flutter": detect_sync_markers(flutter_video)}
+    transform = alignment_transform(
+        marker_times["native"],
+        marker_times["flutter"],
+        marker_gap=marker_gap_seconds(timeline_summary["duration_ms"]),
+    )
+    compose(native_video, flutter_video, composite_video,
+            native_start=transform["native"]["start"], flutter_start=transform["flutter"]["start"],
+            native_scale=transform["native"]["scale"], flutter_scale=transform["flutter"]["scale"])
+
+    outputs = {"native": native_video, "flutter": flutter_video, "composite": composite_video}
+    media = {name: probe_media(path) for name, path in outputs.items()}
+    manifest = build_manifest(
+        run_id=run_id,
+        start_epoch_ms=start_epoch_ms,
+        recorder_started_ns={"native": native_started, "flutter": flutter_started},
+        simulators=simulators,
+        runtime=runtime,
+        timeline=args.timeline,
+        outputs=outputs,
+        media=media,
+    )
+    manifest["launches"] = launch_results
+    manifest["timeline_summary"] = timeline_summary
+    manifest["verified_bundled_timeline_sha256"] = timeline_asset_hash
+    manifest["verified_build_provenance"] = build_provenance
+    manifest["matched_build_revision"] = matched_build_revision
+    manifest["acknowledgements"] = acknowledgements
+    manifest["visible_alignment"] = {
+        "marker": "60x60 magenta square shown during the first and final timeline seconds",
+        "raw_marker_timestamp_seconds": marker_times,
+        "composite_transform": transform,
+        "shared_preroll_seconds": 0,
+        "start_marker_delta_ms_before_alignment": abs(marker_times["native"][0] - marker_times["flutter"][0]) * 1000,
+        "end_marker_delta_ms_before_alignment": abs(marker_times["native"][1] - marker_times["flutter"][1]) * 1000,
+    }
+    manifest["git_revision"] = current_source_revision
+    manifest_path = output_dir / "manifest.json"
+    manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
+    print(json.dumps({"output_dir": str(output_dir), "composite": str(composite_video), "manifest": str(manifest_path), "simulators": simulators}, indent=2))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

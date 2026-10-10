@@ -30,7 +30,8 @@ def main():
     container = Path(sim("get_app_container", a.udid, BUNDLE, "data")) / "Documents"
     old = set(container.glob("*.jsonl"))
     env = dict(os.environ, SIMCTL_CHILD_NATIVE_AUTORUN="1", SIMCTL_CHILD_NATIVE_TRIALS=str(a.trials),
-               SIMCTL_CHILD_NATIVE_SCENARIO=a.scenario, SIMCTL_CHILD_NATIVE_OS_BUILD=runtime["buildversion"])
+               SIMCTL_CHILD_NATIVE_SCENARIO=a.scenario, SIMCTL_CHILD_NATIVE_OS_BUILD=runtime["buildversion"],
+               SIMCTL_CHILD_NATIVE_SOURCE_REVISION=subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip())
     print(sim("launch", a.udid, BUNDLE, env=env), flush=True)
     deadline = time.monotonic() + max(90, a.trials * 9)
     while time.monotonic() < deadline:

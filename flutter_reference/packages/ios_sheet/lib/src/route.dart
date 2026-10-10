@@ -1,10 +1,16 @@
 import 'dart:math' as math;
+import 'package:flutter/foundation.dart' show precisionErrorTolerance;
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/rendering.dart';
 import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
 
 import 'detents.dart';
+import 'environment.dart';
 import 'profile.dart';
+import 'state.dart';
+import 'motion.dart';
+import 'presentation.dart';
 import 'trace.dart';
 
 const iosSheetSurfaceKey = ValueKey('ios-sheet-opaque-surface');
@@ -44,6 +50,27 @@ class IosSheetController extends ChangeNotifier {
     if (route == null) throw StateError('Sheet controller is detached');
     return route.captureFrame();
   }
+
+  IosSheetState snapshotState() {
+    final route = _route;
+    if (route == null) throw StateError('Sheet controller is detached');
+    return route.snapshotState();
+  }
+
+  void beginUnderlyingControlProbe({
+    required String probeIdentifier,
+    required String controlIdentifier,
+    required Offset position,
+  }) {
+    final route = _route;
+    if (route == null) throw StateError('Sheet controller is detached');
+    route._beginUnderlyingProbe(probeIdentifier, controlIdentifier, position);
+  }
+
+  void recordUnderlyingControlActivation(String identifier) =>
+      _route?._underlyingProbe?.recordControlActivation(identifier);
+  IosSheetUnderlyingHitObservation? completeUnderlyingControlProbe() =>
+      _route?._completeUnderlyingProbe();
 
   void selectDetent(String identifier) {
     final route = _route;
@@ -98,6 +125,8 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     this.onSelectedDetentChanged,
     this.onPresented,
     this.onDismissed,
+    this.trajectoryModel,
+    this.onUnderlyingHitObserved,
     super.settings,
   }) : detents = List.unmodifiable(detents),
        _sheetController = controller {
@@ -130,6 +159,12 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   final ValueChanged<String>? onSelectedDetentChanged;
   final VoidCallback? onPresented;
   final VoidCallback? onDismissed;
+  final IosSheetTrajectoryModel? trajectoryModel;
+  final ValueChanged<IosSheetUnderlyingHitObservation>? onUnderlyingHitObserved;
+  IosSheetUnderlyingControlProbe? _underlyingProbe;
+  IosSheetUnderlyingHitObservation? _underlyingObservation;
+  IosSheetMotionRequest? _motionRequest;
+  IosSheetTrajectory? _trajectory;
 
   String? _selectedIdentifier;
   String? _targetIdentifier;
@@ -138,6 +173,17 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   bool _dismissing = false;
   final _activePointers = <int>{};
   final _surfaceProbe = GlobalKey();
+  _IosSheetRenderedSurface? _renderedSurface;
+
+  double get _transitionFraction {
+    final fixedTransition =
+        profile.fixedSurfaceDuringTransition &&
+        (!_presented || _dismissStartExtent != null);
+    final extent = _layoutExtent;
+    return fixedTransition && extent > 0
+        ? (controller!.value / extent).clamp(0.0, 1.0)
+        : 1;
+  }
 
   IosSheetGeometry get currentGeometry => profile.geometry(
     IosSheetGeometryContext(
@@ -145,6 +191,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
       visibleHeight: _layoutExtent * _referenceHeight,
       progress: _layoutExtent,
       velocity: controller?.velocity ?? 0,
+      transitionFraction: _transitionFraction,
     ),
   );
 
@@ -199,14 +246,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     }
   }
 
-  Rect? get _renderedRect {
-    final box = _surfaceProbe.currentContext?.findRenderObject();
-    if (box is! RenderBox || !box.hasSize) return null;
-    return Rect.fromPoints(
-      box.localToGlobal(Offset.zero),
-      box.localToGlobal(box.size.bottomRight(Offset.zero)),
-    );
-  }
+  Rect? get _renderedRect => _renderedSurface?.bounds;
 
   double get renderedSurfaceHeight => _renderedRect?.height ?? 0;
   double get renderedVisibleHeight {
@@ -214,24 +254,97 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     if (bounds == null) return 0;
     return math.max(
       0,
-      math.min(bounds.bottom, environment.availableSize.height) -
+      math.min(
+            bounds.bottom,
+            _renderedSurface!.environment.availableSize.height,
+          ) -
           math.max(0, bounds.top),
     );
   }
 
-  IosSheetFrame captureFrame() {
-    _synchronizeEngineSelection();
+  /// Pure observation. Semantic synchronization remains in animation handling.
+  IosSheetState snapshotState() {
     final bounds = _renderedRect;
     if (bounds == null) {
       throw StateError('Sheet has not completed layout');
     }
+    final rendered = _renderedSurface!;
+    final corners = rendered.geometry.cornerResolution;
+    return IosSheetState(
+      frame: bounds,
+      velocity: null,
+      phase: _dismissing
+          ? IosSheetPhase.dismissing
+          : !isActive
+          ? IosSheetPhase.dismissed
+          : !_presented
+          ? IosSheetPhase.presenting
+          : isUserDragging
+          ? IosSheetPhase.dragging
+          : controller!.isAnimating
+          ? IosSheetPhase.snapping
+          : IosSheetPhase.presented,
+      selectedDetent: _selectedIdentifier,
+      targetDetent: _engineTargetIdentifier,
+      restingDetent: _restingIdentifier,
+      gesture: _activePointers.isEmpty
+          ? IosSheetGestureState.none
+          : IosSheetGestureState.touch,
+      sheetDragging: isUserDragging,
+      scroll: const IosSheetScrollObservation(),
+      environment: rendered.environment,
+      motionRequest: _motionRequest,
+      motionTargetPoints: _trajectory?.targetPoints,
+      presentation: presentationState,
+      capabilities: {
+        'rendered_frame': IosSheetCapabilityStatus.observed,
+        'profile': profile.isMeasured
+            ? IosSheetCapabilityStatus.accepted
+            : IosSheetCapabilityStatus.fallback,
+        'motion': _trajectory?.capability ?? IosSheetCapabilityStatus.fallback,
+        'corners': corners?.radii == null
+            ? IosSheetCapabilityStatus.unavailable
+            : IosSheetCapabilityStatus.observed,
+        'rendered_contour': IosSheetCapabilityStatus.unavailable,
+        'velocity': IosSheetCapabilityStatus.unavailable,
+        'scroll': IosSheetCapabilityStatus.unavailable,
+      },
+      provenance: {
+        ...profile.evidence,
+        if (_trajectory != null) 'motion': _trajectory!.provenance,
+        'frame':
+            'geometry and window bounds atomically observed at completed Flutter surface paint; not compositor pixels',
+        'velocity':
+            'screen velocity not observed; normalized engine velocity is not substituted',
+        'corners':
+            corners?.provenance ??
+            corners?.reason ??
+            'four-corner resolver not connected; legacy shape remains a fallback',
+        'rendered_contour':
+            'Flutter continuous shape approximation; native rendered contour unresolved',
+        'scroll': 'scroll observation adapter not attached',
+        'keyboard':
+            'MediaQuery obscured inset observed; full keyboard frame unavailable',
+        'traits':
+            'size classes/content category/stack depth unavailable without platform or stack adapters',
+      },
+    );
+  }
+
+  IosSheetFrame captureFrame() {
+    final observed = snapshotState();
+    final bounds = observed.frame;
     final topLeft = bounds.topLeft;
     final bottomRight = bounds.bottomRight;
     final size = bounds.size;
-    final env = environment;
-    final geometry = currentGeometry;
+    final env = observed.environment;
+    // Trace exactly the last painted geometry, not a recomputed live-controller
+    // shape paired with an older laid-out surface rectangle.
+    final geometry = _renderedSurface!.geometry;
+    final corners = geometry.cornerResolution;
+    final radii = corners?.radii;
     final selected = resolvedDetents
-        .where((e) => e.identifier == _selectedIdentifier)
+        .where((e) => e.identifier == observed.selectedDetent)
         .firstOrNull;
     return IosSheetFrame(
       metrics: {
@@ -249,20 +362,26 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
         'sheet.radius': geometry.shape == null
             ? geometry.cornerRadius * geometry.scale
             : null,
+        'sheet.radius.top_left': radii?.topLeft.x,
+        'sheet.radius.top_right': radii?.topRight.x,
+        'sheet.radius.bottom_right': radii?.bottomRight.x,
+        'sheet.radius.bottom_left': radii?.bottomLeft.x,
         'sheet.relative_progress': controller!.value,
         'sheet.trajectory_height_unscaled': unscaledTrajectoryHeight,
         'sheet.surface_height_unscaled': unscaledSurfaceHeight,
-        'barrier.alpha': isModal ? modalBarrierColor.a : 0,
+        'barrier.alpha': observed.presentation!.effectiveBarrierAlpha,
         'sheet.velocity_y': null,
         'finger.velocity_y': null,
         'scroll.offset': null,
       },
       state: {
-        'selected_detent': _selectedIdentifier,
-        'target_detent': _targetIdentifier,
-        'gesture': _activePointers.isEmpty ? 'none' : 'touch',
+        'selected_detent': observed.selectedDetent,
+        'target_detent': observed.targetDetent,
+        'gesture': observed.gesture == IosSheetGestureState.none
+            ? 'none'
+            : 'touch',
         'scroll_owner': null,
-        'underlying_hit_test': null,
+        'underlying_hit_test': _underlyingObservation?.activated,
         'dismissed': !isActive,
         'surface': 'opaque',
         'shape': geometry.shape == null ? 'rounded_superellipse' : 'custom',
@@ -272,19 +391,43 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
         'finger.velocity_y': 'pointer recorder not attached',
         'scroll.offset': 'scroll recorder not attached',
         'scroll_owner': 'gesture ownership instrumentation pending',
-        'underlying_hit_test': 'no real background touch probe in this frame',
-        if (_targetIdentifier == null)
+        if (_underlyingObservation == null)
+          'underlying_hit_test':
+              'no completed actually delivered underlying control probe',
+        if (observed.targetDetent == null)
           'target_detent': _dismissing
               ? 'Dismissal has no configured detent target'
               : 'No committed configured snap target while dragging or retargeting',
         if (geometry.shape != null)
           'sheet.radius': 'custom shape cannot be represented by one scalar',
+        if (radii == null)
+          for (final corner in [
+            'top_left',
+            'top_right',
+            'bottom_right',
+            'bottom_left',
+          ])
+            'sheet.radius.$corner':
+                corners?.reason ??
+                'Native four-corner model unavailable; legacy shape fallback only',
       },
       implementationProvenance: {
-        'resting_detent': _restingIdentifier,
+        'corner_model_status': corners?.status.name ?? 'unavailable',
+        'corner_model_units': 'logical_points_model_configuration',
+        if (corners?.provenance != null) 'corner_model': corners!.provenance,
+        if (radii == null)
+          'corner_fallback':
+              'visible configured upstream radius${geometry.cornerRadius}; not native measured',
+        'rendered_contour_status': 'unavailable',
+        'rendered_contour_reason':
+            'closest supported Flutter continuous four-corner shape; native contour unresolved',
+        'resting_detent': observed.restingDetent,
         'resting_detector': 'engine not animating, no drag, extent epsilon1e-6',
-        'sheet_gesture': isUserDragging ? 'dragging' : 'idle',
+        'sheet_gesture': observed.sheetDragging ? 'dragging' : 'idle',
         'pointer_observation_scope': 'delivered pointers inside sheet content',
+        if (_underlyingObservation != null)
+          'underlying_hit_test_scope':
+              'last completed delivered tap/control activation probe, not a continuous mask',
       },
     );
   }
@@ -306,15 +449,24 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
       ),
       safeArea: media.viewPadding,
       keyboardHeight: keyboard,
+      observedKeyboardHeight: media.viewInsets.bottom,
       displayScale: media.devicePixelRatio,
+      orientation: size.width == size.height
+          ? IosSheetOrientation.unknown
+          : size.height > size.width
+          ? IosSheetOrientation.portrait
+          : IosSheetOrientation.landscape,
+      textScale:
+          media.textScaler == TextScaler.linear(media.textScaler.scale(1))
+          ? media.textScaler.scale(1)
+          : null,
+      reduceMotion: media.disableAnimations,
+      platformBrightness: media.platformBrightness,
+      locale: Localizations.maybeLocaleOf(navigator!.context),
+      textDirection: Directionality.maybeOf(navigator!.context),
+      stack: IosSheetStackContext(isTopmost: isCurrent),
     );
-    return IosSheetEnvironment(
-      availableSize: base.availableSize,
-      maximumDetentHeight: profile.maximumDetentHeight(base),
-      safeArea: base.safeArea,
-      keyboardHeight: base.keyboardHeight,
-      displayScale: base.displayScale,
-    );
+    return base.withMaximumDetentHeight(profile.maximumDetentHeight(base));
   }
 
   double get _referenceHeight => profile.detentToVisibleHeight(
@@ -347,8 +499,97 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     return unscaledTrajectoryHeight > thresholdHeight + 0.000001;
   }
 
+  IosSheetPresentationState get presentationState => IosSheetPresentationState(
+    effectiveBarrierAlpha: isModal ? modalBarrierColor.a : 0,
+    underlyingPointerEligible: !isModal,
+    underlyingSemanticsEligible: !isModal,
+    sheetBounds: _renderedRect,
+    capability: IosSheetCapabilityStatus.fallback,
+    provenance:
+        'existing largest-undimmed threshold and configured alpha; unmeasured fallback, no native curve',
+  );
+  void _beginUnderlyingProbe(
+    String probeIdentifier,
+    String controlIdentifier,
+    Offset position,
+  ) {
+    if (_underlyingProbe != null)
+      throw StateError('Underlying control probe already active');
+    _underlyingProbe = IosSheetUnderlyingControlProbe(
+      probeIdentifier: probeIdentifier,
+      controlIdentifier: controlIdentifier,
+      position: position,
+      viewId: View.of(navigator!.context).viewId,
+    );
+  }
+
+  IosSheetUnderlyingHitObservation? _completeUnderlyingProbe() {
+    final observed = _underlyingProbe?.complete();
+    _underlyingProbe = null;
+    if (observed != null) {
+      _underlyingObservation = observed;
+      onUnderlyingHitObserved?.call(observed);
+    }
+    return observed;
+  }
+
   @override
   Motion get motion => profile.motion;
+
+  @override
+  Simulation createSheetSimulation({
+    required SheetSimulationPhase phase,
+    required double start,
+    required double end,
+    required double velocity,
+    double? dragReleaseVelocity,
+  }) {
+    final height = _referenceHeight;
+    final currentPosition = controller?.value ?? start;
+    final currentVelocity = controller?.velocity ?? velocity;
+    final request = IosSheetMotionRequest(
+      kind: switch (phase) {
+        SheetSimulationPhase.presentation => IosSheetMotionKind.presentation,
+        SheetSimulationPhase.detentSnap => IosSheetMotionKind.detentSnap,
+        SheetSimulationPhase.overdragReturn =>
+          IosSheetMotionKind.overdragReturn,
+        SheetSimulationPhase.dismissal => IosSheetMotionKind.dismissal,
+      },
+      positionPoints: currentPosition * height,
+      velocityPointsPerSecond:
+          (dragReleaseVelocity ?? currentVelocity) * height,
+      targetPoints: end * height,
+      referenceHeightPoints: height,
+      dragReleaseVelocityPointsPerSecond: dragReleaseVelocity == null
+          ? null
+          : dragReleaseVelocity * height,
+      velocitySource: dragReleaseVelocity == null
+          ? IosSheetVelocitySource.controller
+          : IosSheetVelocitySource.dragRelease,
+      environment: environment,
+    );
+    final trajectory =
+        (trajectoryModel ?? FallbackIosSheetTrajectoryModel(motion))
+            .createTrajectory(request);
+    final initialPosition = trajectory.simulation.x(0);
+    final initialVelocity = trajectory.simulation.dx(0);
+    if (trajectory.targetPoints != request.targetPoints ||
+        !initialPosition.isFinite ||
+        !initialVelocity.isFinite ||
+        (initialPosition - request.positionPoints).abs() >
+            precisionErrorTolerance ||
+        (initialVelocity - request.velocityPointsPerSecond).abs() >
+            precisionErrorTolerance) {
+      throw StateError(
+        'Trajectory must preserve the requested target, initial position, '
+        'and initial velocity',
+      );
+    }
+    _motionRequest = request;
+    _trajectory = trajectory;
+    return normalizeIosSheetTrajectory(trajectory, height);
+  }
+
   @override
   bool get resistBoundaryCrossing => profile.dragResistance != null;
   @override
@@ -532,9 +773,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
             profile.fixedSurfaceDuringTransition &&
             (!_presented || _dismissStartExtent != null);
         final layoutExtent = _layoutExtent;
-        final fraction = fixedTransition && layoutExtent > 0
-            ? (controller!.value / layoutExtent).clamp(0.0, 1.0)
-            : 1.0;
+        final fraction = _transitionFraction;
         final transitionOffset =
             (1 - fraction) *
             (layoutExtent * _referenceHeight * geometry.scale +
@@ -560,24 +799,29 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
               child: Transform.scale(
                 alignment: Alignment.bottomCenter,
                 scale: geometry.scale,
-                child: DecoratedBox(
-                  key: iosSheetSurfaceKey,
-                  decoration: ShapeDecoration(
-                    shape: shape,
-                    color: CupertinoDynamicColor.resolve(
-                      backgroundColor,
-                      context,
+                child: _IosSheetSurfaceObserver(
+                  geometry: geometry,
+                  environment: env,
+                  onPainted: (rendered) => _renderedSurface = rendered,
+                  child: DecoratedBox(
+                    key: iosSheetSurfaceKey,
+                    decoration: ShapeDecoration(
+                      shape: shape,
+                      color: CupertinoDynamicColor.resolve(
+                        backgroundColor,
+                        context,
+                      ),
                     ),
-                  ),
-                  child: ClipPath(
-                    key: _surfaceProbe,
-                    clipper: ShapeBorderClipper(shape: shape),
-                    child: SheetDismissalTransition(
-                      animation: fixedTransition
-                          ? AlwaysStoppedAnimation(layoutExtent)
-                          : controller!,
-                      dismissalMode: dismissalMode,
-                      child: maybeSnapshotChild(child!),
+                    child: ClipPath(
+                      key: _surfaceProbe,
+                      clipper: ShapeBorderClipper(shape: shape),
+                      child: SheetDismissalTransition(
+                        animation: fixedTransition
+                            ? AlwaysStoppedAnimation(layoutExtent)
+                            : controller!,
+                        dismissalMode: dismissalMode,
+                        child: maybeSnapshotChild(child!),
+                      ),
                     ),
                   ),
                 ),
@@ -592,12 +836,14 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   @override
   Widget buildModalBarrier() => AnimatedBuilder(
     animation: controller!,
-    builder: (context, _) => IgnorePointer(
-      ignoring: !isModal,
+    builder: (context, _) => IosSheetLiveBarrierRouting(
+      presentation: () => presentationState,
       child: ExcludeSemantics(
-        excluding: !isModal,
+        excluding: presentationState.underlyingSemanticsEligible,
         child: ModalBarrier(
-          color: isModal ? barrierColor : null,
+          color: presentationState.effectiveBarrierAlpha > 0
+              ? barrierColor
+              : null,
           dismissible: barrierDismissible,
           semanticsLabel: barrierLabel,
           onDismiss: () => navigator?.maybePop(),
@@ -619,10 +865,81 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
 
   @override
   void dispose() {
+    _underlyingProbe?.dispose();
+    _underlyingProbe = null;
     controller?.removeListener(_animationChanged);
     controller?.removeStatusListener(_statusChanged);
     _sheetController?._detach(this);
     onDismissed?.call();
     super.dispose();
+  }
+}
+
+/// One completed Flutter paint receipt, not a live build-time geometry sample.
+/// Atomic assignment prevents mixing a new shape with stale layout bounds.
+class _IosSheetRenderedSurface {
+  const _IosSheetRenderedSurface({
+    required this.geometry,
+    required this.bounds,
+    required this.environment,
+  });
+  final IosSheetGeometry geometry;
+  final Rect bounds;
+  final IosSheetEnvironment environment;
+}
+
+class _IosSheetSurfaceObserver extends SingleChildRenderObjectWidget {
+  const _IosSheetSurfaceObserver({
+    required this.geometry,
+    required this.environment,
+    required this.onPainted,
+    required super.child,
+  });
+  final IosSheetGeometry geometry;
+  final IosSheetEnvironment environment;
+  final ValueChanged<_IosSheetRenderedSurface> onPainted;
+  @override
+  RenderObject createRenderObject(BuildContext context) =>
+      _IosSheetSurfaceRenderObserver(geometry, environment, onPainted);
+  @override
+  void updateRenderObject(
+    BuildContext context,
+    covariant _IosSheetSurfaceRenderObserver renderObject,
+  ) => renderObject.update(geometry, environment, onPainted);
+}
+
+class _IosSheetSurfaceRenderObserver extends RenderProxyBox {
+  _IosSheetSurfaceRenderObserver(
+    this._geometry,
+    this._environment,
+    this._onPainted,
+  );
+  IosSheetGeometry _geometry;
+  IosSheetEnvironment _environment;
+  ValueChanged<_IosSheetRenderedSurface> _onPainted;
+  void update(
+    IosSheetGeometry geometry,
+    IosSheetEnvironment environment,
+    ValueChanged<_IosSheetRenderedSurface> onPainted,
+  ) {
+    _geometry = geometry;
+    _environment = environment;
+    _onPainted = onPainted;
+    markNeedsPaint();
+  }
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    super.paint(context, offset);
+    _onPainted(
+      _IosSheetRenderedSurface(
+        geometry: _geometry,
+        environment: _environment,
+        bounds: Rect.fromPoints(
+          localToGlobal(Offset.zero),
+          localToGlobal(size.bottomRight(Offset.zero)),
+        ),
+      ),
+    );
   }
 }

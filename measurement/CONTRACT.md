@@ -74,3 +74,19 @@ the harness must observe those boundaries before that check can pass. A single
 passing phase remains partial. Only detent.resolved/batch.completed may be
 auxiliary; environment changes and mandatory semantic event fields cannot be
 hidden by caller policy.
+
+## Additive v2 four-corner model metrics
+
+`trace-v2.schema.json` permits four independent optional logical-point metrics,
+named clockwise: `sheet.radius.top_left`, `sheet.radius.top_right`,
+`sheet.radius.bottom_right`, `sheet.radius.bottom_left`. Names are identities,
+not interchangeable array positions. Present numeric values must be finite and
+nonnegative. Explicit null requires a nonblank `unavailable` reason under that
+exact metric key. Omission does not imply zero or equality with another corner.
+
+These values describe model/configuration radii, not a rendered clipping contour.
+Keep `sheet.radius` null with reason when no scalar describes the surface; it
+cannot substitute for any missing corner, even when configured radii are equal.
+Raw native geometry-probe values still need a reviewed adapter/provenance before
+canonical pairing; this contract does not rewrite or promote those diagnostics.
+Historical v1 schemas, artifacts and reports remain byte-immutable.

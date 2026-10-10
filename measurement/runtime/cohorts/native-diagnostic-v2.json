@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "cohort_id": "baseline-v2-native-26",
+  "implementation": "native",
+  "split": "diagnostic",
+  "source_revision": "4e3f90c",
+  "artifacts": [
+    {
+      "path": "../../../artifacts/flutter/contract_v2_pair/native_trial1.jsonl.gz",
+      "sha256": "6e235b30c44aedc45c78b70a01c55281e0234d188bd3336f47ea58ef87c0bd5e",
+      "run_id": "4FE99C2A-84FA-41DE-824D-EDA0A62E5B4C",
+      "trial": 1,
+      "attempt": 1,
+      "status": "complete"
+    }
+  ]
+}

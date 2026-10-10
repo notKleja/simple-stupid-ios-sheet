@@ -1,0 +1,851 @@
+{
+  "schema_version": 1,
+  "acceptance_scope": "observed_control_and_scroll_outcomes_only",
+  "full_trajectory_acceptance": false,
+  "cohorts": [
+    {
+      "manifest": "artifacts/native/interactions/ios26_nonmodal/manifest.json",
+      "manifest_sha256": "c3ed4c52a45e65228cbce4e8c6339192d1cc8ac01ea2982cf8b867323068f9d2",
+      "integrity": {
+        "integrity": "PASS",
+        "artifacts": 10,
+        "scenario_id": "native.nonmodal.medium",
+        "scope": "observed_control_and_scroll_outcomes_only"
+      },
+      "source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "role": "training",
+      "max_frame_gap_ns": 55647292,
+      "unavailable_sheet_y_frames": 1,
+      "zero_sheet_y_frames": 0,
+      "activated_trials_by_phase": {
+        "medium_initial": 10,
+        "large": 0,
+        "medium_return": 10
+      }
+    },
+    {
+      "manifest": "artifacts/native/interactions/ios26_content_first/manifest.json",
+      "manifest_sha256": "cbf5bf5c643dab6ea58f45cff485f80b088723eddab2e157590a8b1bb9996b79",
+      "integrity": {
+        "integrity": "PASS",
+        "artifacts": 10,
+        "scenario_id": "native.scroll.content_first",
+        "scope": "observed_control_and_scroll_outcomes_only"
+      },
+      "source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "role": "training",
+      "max_frame_gap_ns": 49993584,
+      "unavailable_sheet_y_frames": 0,
+      "zero_sheet_y_frames": 0,
+      "scroll_start": {
+        "min": 0,
+        "max": 0
+      },
+      "scroll_end": {
+        "min": 347.3333333333333,
+        "max": 357
+      },
+      "scroll_min": {
+        "min": 0,
+        "max": 0
+      },
+      "scroll_max": {
+        "min": 347.3333333333333,
+        "max": 357
+      },
+      "delivered_drag_events": {
+        "min": 23,
+        "max": 23
+      },
+      "finger_velocity_samples": {
+        "min": 83,
+        "max": 277
+      },
+      "probe_max_frame_gap_ns": {
+        "min": 21144667,
+        "max": 33515500
+      },
+      "selected_detents_by_trial": {
+        "10": [
+          "medium"
+        ],
+        "4": [
+          "medium"
+        ],
+        "3": [
+          "medium"
+        ],
+        "2": [
+          "medium"
+        ],
+        "1": [
+          "medium"
+        ],
+        "6": [
+          "medium"
+        ],
+        "7": [
+          "medium"
+        ],
+        "5": [
+          "medium"
+        ],
+        "8": [
+          "medium"
+        ],
+        "9": [
+          "medium"
+        ]
+      },
+      "sheet_y_observed_ranges_by_trial": {
+        "10": {
+          "min": 412.1102897086171,
+          "max": 415.0265339966832
+        },
+        "4": {
+          "min": 412.11028971106236,
+          "max": 415.0265339966832
+        },
+        "3": {
+          "min": 412.1102897111678,
+          "max": 415.0265339966832
+        },
+        "2": {
+          "min": 412.1102897111654,
+          "max": 415.0265339966832
+        },
+        "1": {
+          "min": 412.11028971118685,
+          "max": 415.0265339966832
+        },
+        "6": {
+          "min": 412.11028971115957,
+          "max": 415.0265339966832
+        },
+        "7": {
+          "min": 412.110289711223,
+          "max": 415.0265339966832
+        },
+        "5": {
+          "min": 412.11028971114246,
+          "max": 415.0265339966832
+        },
+        "8": {
+          "min": 412.1102897112406,
+          "max": 415.0265339966832
+        },
+        "9": {
+          "min": 412.1102897111714,
+          "max": 415.0265339966832
+        }
+      }
+    },
+    {
+      "manifest": "artifacts/native/interactions/ios26_expands_first/manifest.json",
+      "manifest_sha256": "140b09a130ba391ba14979a0e05e9a26e62846a78db6cbfe5f18aa7a1a049bf6",
+      "integrity": {
+        "integrity": "PASS",
+        "artifacts": 10,
+        "scenario_id": "native.scroll.medium_large",
+        "scope": "observed_control_and_scroll_outcomes_only"
+      },
+      "source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "role": "training",
+      "max_frame_gap_ns": 107478458,
+      "unavailable_sheet_y_frames": 1,
+      "zero_sheet_y_frames": 0,
+      "scroll_start": {
+        "min": 0,
+        "max": 0
+      },
+      "scroll_end": {
+        "min": 0,
+        "max": 0
+      },
+      "scroll_min": {
+        "min": 0,
+        "max": 0
+      },
+      "scroll_max": {
+        "min": 0,
+        "max": 0
+      },
+      "delivered_drag_events": {
+        "min": 22,
+        "max": 23
+      },
+      "finger_velocity_samples": {
+        "min": 82,
+        "max": 199
+      },
+      "probe_max_frame_gap_ns": {
+        "min": 32365042,
+        "max": 33532292
+      },
+      "selected_detents_by_trial": {
+        "7": [
+          "large",
+          "medium"
+        ],
+        "8": [
+          "large",
+          "medium"
+        ],
+        "2": [
+          "large",
+          "medium"
+        ],
+        "10": [
+          "large",
+          "medium"
+        ],
+        "1": [
+          "large",
+          "medium"
+        ],
+        "5": [
+          "large",
+          "medium"
+        ],
+        "4": [
+          "large",
+          "medium"
+        ],
+        "6": [
+          "large",
+          "medium"
+        ],
+        "3": [
+          "large",
+          "medium"
+        ],
+        "9": [
+          "large",
+          "medium"
+        ]
+      },
+      "sheet_y_observed_ranges_by_trial": {
+        "7": {
+          "min": 62,
+          "max": 415.0265339966832
+        },
+        "8": {
+          "min": 62,
+          "max": 415.0265339966832
+        },
+        "2": {
+          "min": 62,
+          "max": 415.0265339966832
+        },
+        "10": {
+          "min": 62,
+          "max": 415.0265339966832
+        },
+        "1": {
+          "min": 62,
+          "max": 415.0265339966832
+        },
+        "5": {
+          "min": 62,
+          "max": 415.0265339966832
+        },
+        "4": {
+          "min": 62,
+          "max": 415.0265339966832
+        },
+        "6": {
+          "min": 62,
+          "max": 415.0265339966832
+        },
+        "3": {
+          "min": 62,
+          "max": 415.0265339966832
+        },
+        "9": {
+          "min": 62,
+          "max": 415.0265339966832
+        }
+      }
+    },
+    {
+      "manifest": "artifacts/native/interactions/ios26_downward_attempt2/manifest.json",
+      "manifest_sha256": "38a5271d25071fa4ffde9ce2069c67cf1db7d5e6eed4ba61992c69f5656c1e0f",
+      "integrity": {
+        "integrity": "PASS",
+        "artifacts": 10,
+        "scenario_id": "native.scroll.handoff.down",
+        "scope": "observed_control_and_scroll_outcomes_only"
+      },
+      "source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "role": "training",
+      "max_frame_gap_ns": 64949459,
+      "unavailable_sheet_y_frames": 0,
+      "zero_sheet_y_frames": 0,
+      "scroll_start": {
+        "min": 400,
+        "max": 400
+      },
+      "scroll_end": {
+        "min": 0,
+        "max": 0
+      },
+      "scroll_min": {
+        "min": -40.333333333333336,
+        "max": -40.333333333333336
+      },
+      "scroll_max": {
+        "min": 400,
+        "max": 400
+      },
+      "delivered_drag_events": {
+        "min": 51,
+        "max": 63
+      },
+      "finger_velocity_samples": {
+        "min": 96,
+        "max": 212
+      },
+      "probe_max_frame_gap_ns": {
+        "min": 20781750,
+        "max": 49975625
+      },
+      "selected_detents_by_trial": {
+        "2": [
+          "large"
+        ],
+        "6": [
+          "large"
+        ],
+        "5": [
+          "large"
+        ],
+        "9": [
+          "large"
+        ],
+        "10": [
+          "large"
+        ],
+        "8": [
+          "large"
+        ],
+        "3": [
+          "large"
+        ],
+        "1": [
+          "large"
+        ],
+        "4": [
+          "large"
+        ],
+        "7": [
+          "large"
+        ]
+      },
+      "sheet_y_observed_ranges_by_trial": {
+        "2": {
+          "min": 62,
+          "max": 62
+        },
+        "6": {
+          "min": 62,
+          "max": 62
+        },
+        "5": {
+          "min": 62,
+          "max": 62
+        },
+        "9": {
+          "min": 62,
+          "max": 62
+        },
+        "10": {
+          "min": 62,
+          "max": 62
+        },
+        "8": {
+          "min": 62,
+          "max": 62
+        },
+        "3": {
+          "min": 62,
+          "max": 62
+        },
+        "1": {
+          "min": 62,
+          "max": 62
+        },
+        "4": {
+          "min": 62,
+          "max": 62
+        },
+        "7": {
+          "min": 62,
+          "max": 62
+        }
+      }
+    },
+    {
+      "manifest": "artifacts/native/interactions/ios27_nonmodal/manifest.json",
+      "manifest_sha256": "f61f8d909c3e2796b2b05fd1b7d4ceb884f336eaf5fa5b0fb50a6c0279f14183",
+      "integrity": {
+        "integrity": "PASS",
+        "artifacts": 10,
+        "scenario_id": "native.nonmodal.medium",
+        "scope": "observed_control_and_scroll_outcomes_only"
+      },
+      "source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "role": "training",
+      "max_frame_gap_ns": 428547291,
+      "unavailable_sheet_y_frames": 10,
+      "zero_sheet_y_frames": 10,
+      "activated_trials_by_phase": {
+        "medium_initial": 10,
+        "large": 0,
+        "medium_return": 10
+      }
+    },
+    {
+      "manifest": "artifacts/native/interactions/ios27_content_first/manifest.json",
+      "manifest_sha256": "11e70119f5a53a599124a5136c33f9f28a75b5e7ec1c8a6e25293c1f5b7304cb",
+      "integrity": {
+        "integrity": "PASS",
+        "artifacts": 10,
+        "scenario_id": "native.scroll.content_first",
+        "scope": "observed_control_and_scroll_outcomes_only"
+      },
+      "source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "role": "training",
+      "max_frame_gap_ns": 4739113000,
+      "unavailable_sheet_y_frames": 1,
+      "zero_sheet_y_frames": 0,
+      "scroll_start": {
+        "min": 0,
+        "max": 0
+      },
+      "scroll_end": {
+        "min": 257,
+        "max": 365.3333333333333
+      },
+      "scroll_min": {
+        "min": 0,
+        "max": 0
+      },
+      "scroll_max": {
+        "min": 257,
+        "max": 365.3333333333333
+      },
+      "delivered_drag_events": {
+        "min": 7,
+        "max": 23
+      },
+      "finger_velocity_samples": {
+        "min": 73,
+        "max": 113
+      },
+      "probe_max_frame_gap_ns": {
+        "min": 32574542,
+        "max": 4739113000
+      },
+      "selected_detents_by_trial": {
+        "4": [
+          "medium"
+        ],
+        "7": [
+          "medium"
+        ],
+        "3": [
+          "medium"
+        ],
+        "9": [
+          "medium"
+        ],
+        "1": [
+          "medium"
+        ],
+        "5": [
+          "medium"
+        ],
+        "10": [
+          "medium"
+        ],
+        "8": [
+          "medium"
+        ],
+        "6": [
+          "medium"
+        ],
+        "2": [
+          "medium"
+        ]
+      },
+      "sheet_y_observed_ranges_by_trial": {
+        "4": {
+          "min": 412.1050066495632,
+          "max": 415.0265339966832
+        },
+        "7": {
+          "min": 412.1050066496341,
+          "max": 415.0265339966832
+        },
+        "3": {
+          "min": 412.10500664964053,
+          "max": 415.0265339966832
+        },
+        "9": {
+          "min": 412.10500665204495,
+          "max": 415.0265339966832
+        },
+        "1": {
+          "min": 412.10500665204825,
+          "max": 415.0265339966832
+        },
+        "5": {
+          "min": 412.1050066520596,
+          "max": 415.0265339966832
+        },
+        "10": {
+          "min": 413.05078395568876,
+          "max": 415.0265339966832
+        },
+        "8": {
+          "min": 412.1050066495608,
+          "max": 415.0265339966832
+        },
+        "6": {
+          "min": 412.1001062144337,
+          "max": 415.0265339966832
+        },
+        "2": {
+          "min": 412.1038555945377,
+          "max": 415.0265339966832
+        }
+      }
+    },
+    {
+      "manifest": "artifacts/native/interactions/ios27_expands_first/manifest.json",
+      "manifest_sha256": "11332cbdc0e66df3f0b442afd4d404cd1c8c48d11d9cf06002f0ae9b859d78d4",
+      "integrity": {
+        "integrity": "PASS",
+        "artifacts": 10,
+        "scenario_id": "native.scroll.medium_large",
+        "scope": "observed_control_and_scroll_outcomes_only"
+      },
+      "source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "role": "training",
+      "max_frame_gap_ns": 173534959,
+      "unavailable_sheet_y_frames": 2,
+      "zero_sheet_y_frames": 9,
+      "scroll_start": {
+        "min": 0,
+        "max": 0
+      },
+      "scroll_end": {
+        "min": 0,
+        "max": 0
+      },
+      "scroll_min": {
+        "min": 0,
+        "max": 0
+      },
+      "scroll_max": {
+        "min": 0,
+        "max": 0
+      },
+      "delivered_drag_events": {
+        "min": 19,
+        "max": 23
+      },
+      "finger_velocity_samples": {
+        "min": 82,
+        "max": 251
+      },
+      "probe_max_frame_gap_ns": {
+        "min": 32142000,
+        "max": 173534959
+      },
+      "selected_detents_by_trial": {
+        "8": [
+          "large",
+          "medium"
+        ],
+        "9": [
+          "large",
+          "medium"
+        ],
+        "7": [
+          "large",
+          "medium"
+        ],
+        "3": [
+          "large",
+          "medium"
+        ],
+        "2": [
+          "large",
+          "medium"
+        ],
+        "5": [
+          "large",
+          "medium"
+        ],
+        "6": [
+          "large",
+          "medium"
+        ],
+        "10": [
+          "large",
+          "medium"
+        ],
+        "4": [
+          "large",
+          "medium"
+        ],
+        "1": [
+          "large",
+          "medium"
+        ]
+      },
+      "sheet_y_observed_ranges_by_trial": {
+        "8": {
+          "min": 0,
+          "max": 415.0265339966832
+        },
+        "9": {
+          "min": 0,
+          "max": 415.0265339966832
+        },
+        "7": {
+          "min": 62,
+          "max": 415.0265339966832
+        },
+        "3": {
+          "min": 0,
+          "max": 415.0265339966832
+        },
+        "2": {
+          "min": 0,
+          "max": 415.0265339966832
+        },
+        "5": {
+          "min": 0,
+          "max": 415.0265339966832
+        },
+        "6": {
+          "min": 0,
+          "max": 415.0265339966832
+        },
+        "10": {
+          "min": 0,
+          "max": 415.0265339966832
+        },
+        "4": {
+          "min": 0,
+          "max": 415.0265339966832
+        },
+        "1": {
+          "min": 0,
+          "max": 415.0265339966832
+        }
+      }
+    },
+    {
+      "manifest": "artifacts/native/interactions/ios27_downward/manifest.json",
+      "manifest_sha256": "0e6254067dcf5dc6222467a8b9c2fa7ef9ddbd00816a901e25003ed3960449b4",
+      "integrity": {
+        "integrity": "PASS",
+        "artifacts": 10,
+        "scenario_id": "native.scroll.handoff.down",
+        "scope": "observed_control_and_scroll_outcomes_only"
+      },
+      "source_revision": "621d241510a0e2860eb4ab92869ed85a4bd4a95c",
+      "role": "training",
+      "max_frame_gap_ns": 359148667,
+      "unavailable_sheet_y_frames": 0,
+      "zero_sheet_y_frames": 3,
+      "scroll_start": {
+        "min": 400,
+        "max": 400
+      },
+      "scroll_end": {
+        "min": 0,
+        "max": 0
+      },
+      "scroll_min": {
+        "min": -40.333333333333336,
+        "max": -40.333333333333336
+      },
+      "scroll_max": {
+        "min": 400,
+        "max": 400
+      },
+      "delivered_drag_events": {
+        "min": 41,
+        "max": 63
+      },
+      "finger_velocity_samples": {
+        "min": 98,
+        "max": 415
+      },
+      "probe_max_frame_gap_ns": {
+        "min": 21371542,
+        "max": 359148667
+      },
+      "selected_detents_by_trial": {
+        "2": [
+          "large"
+        ],
+        "10": [
+          "large"
+        ],
+        "7": [
+          "large"
+        ],
+        "5": [
+          "large"
+        ],
+        "4": [
+          "large"
+        ],
+        "9": [
+          "large"
+        ],
+        "8": [
+          "large"
+        ],
+        "3": [
+          "large"
+        ],
+        "6": [
+          "large"
+        ],
+        "1": [
+          "large"
+        ]
+      },
+      "sheet_y_observed_ranges_by_trial": {
+        "2": {
+          "min": 62,
+          "max": 62
+        },
+        "10": {
+          "min": 62,
+          "max": 62
+        },
+        "7": {
+          "min": 62,
+          "max": 62
+        },
+        "5": {
+          "min": 62,
+          "max": 62
+        },
+        "4": {
+          "min": 62,
+          "max": 62
+        },
+        "9": {
+          "min": 62,
+          "max": 62
+        },
+        "8": {
+          "min": 62,
+          "max": 62
+        },
+        "3": {
+          "min": 62,
+          "max": 62
+        },
+        "6": {
+          "min": 62,
+          "max": 62
+        },
+        "1": {
+          "min": 62,
+          "max": 62
+        }
+      }
+    }
+  ],
+  "accepted_trials": 80,
+  "limitations": [
+    "Training evidence only; no holdout outcome claims",
+    "Private scroll ownership unresolved; derived movement consumers are not ownership",
+    "Sampler gaps and y0 anomalies retained, not accepted as native motion",
+    "underlying_hit_test stores last completed probe outcome, not a continuous hit-test mask"
+  ],
+  "preserved_nonaccepted_manifests": [
+    {
+      "manifest": "artifacts/native/interactions/diagnostic_cached26_content/manifest.json",
+      "sha256": "1ec6619cd8b156239d8c4cc3cce71bdeade17a9221d06dc918ca81db23d2e23c",
+      "status": "failed",
+      "listed_artifacts": 20,
+      "issues": [
+        "Unresolved runtime source marker: unresolved"
+      ]
+    },
+    {
+      "manifest": "artifacts/native/interactions/diagnostic_cached26_expands/manifest.json",
+      "sha256": "b90ae0c162da17590b37373578f044e33aab725f90cca0a9287e738456178efa",
+      "status": "failed",
+      "listed_artifacts": 20,
+      "issues": []
+    },
+    {
+      "manifest": "artifacts/native/interactions/diagnostic_cached26_nonmodal/manifest.json",
+      "sha256": "a4e4774fe0fd6d44a0393435ea725c036dd3d56b8c7777d4cf03e6cf9e4d742d",
+      "status": "failed",
+      "listed_artifacts": 20,
+      "issues": []
+    },
+    {
+      "manifest": "artifacts/native/interactions/diagnostic_unpinned27_content/manifest.json",
+      "sha256": "cd893782acbddb5b75f09f42bd1bbacfc4b9f39ae449a10e0ad668f9e89ddb4e",
+      "status": "failed",
+      "listed_artifacts": 10,
+      "issues": [
+        "Unresolved runtime source marker: unresolved"
+      ]
+    },
+    {
+      "manifest": "artifacts/native/interactions/diagnostic_unpinned27_expands/manifest.json",
+      "sha256": "dfbec3c0f4eee6acb5510dc2492ff4c80aa28f9cb279e04d0bba6e7df95e099c",
+      "status": "failed",
+      "listed_artifacts": 10,
+      "issues": [
+        "Unresolved runtime source marker: unresolved"
+      ]
+    },
+    {
+      "manifest": "artifacts/native/interactions/diagnostic_unpinned27_nonmodal/manifest.json",
+      "sha256": "86220d4ab77309901cd5c4f917a6d3718b488f754c42002a19a16597729f00bf",
+      "status": "failed",
+      "listed_artifacts": 10,
+      "issues": [
+        "Unresolved runtime source marker: unresolved"
+      ]
+    },
+    {
+      "manifest": "artifacts/native/interactions/ios26_downward/manifest.json",
+      "sha256": "655efff9acff3ccaf48a25202f99d7f09564f2edc8617ec4a1d36ff0619e80e1",
+      "status": "failed",
+      "listed_artifacts": 10,
+      "issues": [
+        "actual delivered drag samples required"
+      ]
+    },
+    {
+      "manifest": "artifacts/native/interactions/ios26_nonmodal_pilot/manifest.json",
+      "sha256": "e23188f310e57a7575c4ffd707c3dff266770b1ac79f7cdd42b4e434640ffa11",
+      "status": "diagnostic",
+      "listed_artifacts": 10,
+      "issues": []
+    },
+    {
+      "manifest": "artifacts/native/interactions/vphone_nonmodal_delivery_failure/manifest.json",
+      "sha256": "168f75b1fc659503e6063826a89c399dca3a3b2251788389272e34b225a9619d",
+      "status": "FAILED_NOT_ACCEPTED",
+      "listed_artifacts": 0,
+      "issues": []
+    }
+  ]
+}

@@ -134,10 +134,10 @@ class RegressionTests(unittest.TestCase):
     def test_project_matrix_enforces_programmatic_phases_and_declared_variants(self):
         selected = json.loads((ROOT / "spec/test_matrix.json").read_text())
         result = self.run_regression([], selected)
-        self.assertEqual(result.get("required_cells"), 248)
+        self.assertEqual(result.get("required_cells"), 636)
         checks = result["coverage"]["26/iphone_a/portrait/programmatic"]["checks"]
         self.assertEqual(set(checks), {"present", "medium_to_large", "large_to_medium", "dismiss", "side_spacing", "presenter"})
-        self.assertGreater(result["required_checks"], 248)
+        self.assertEqual(result["required_checks"], 2520)
 
     def test_missing_declared_variant_cannot_be_ignored_by_required_checks(self):
         selected = complete_matrix()

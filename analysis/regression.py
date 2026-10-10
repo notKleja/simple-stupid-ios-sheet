@@ -128,6 +128,9 @@ def run(request, base=Path(".")):
                 configured = payload["config"].get("window")
                 require(configured is None or normalize_window(configured) == contract["window"], "caller window does not match required check window")
                 payload["config"] = {**payload["config"], "window": contract["window"]}
+                if contract.get("check", contract["id"]) == "model_radius":
+                    require(payload["config"].get("check_family") == "model_radius",
+                            "model-radius check cannot use a legacy scalar comparison")
                 pair["required_window"] = contract["window"]
                 report = compare(payload)
                 pair["report"] = report

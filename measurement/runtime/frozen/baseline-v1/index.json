@@ -1,0 +1,30 @@
+{
+  "batch_id": "canonical-v2-baseline-001",
+  "matrix": {
+    "path": "../../../../spec/test_matrix.json",
+    "sha256": "6d12d9b534451dc13b184a4f1ffd3e24821aabfc9887b90dce872ff64d93a933"
+  },
+  "plan_sha256": "6546a86bc613c96482190b903adc88af07eddd0d5431fa2058fec4f0308a796a",
+  "profile": {
+    "path": "../../../profiles/full.json",
+    "sha256": "ebcd96dc8ff8e90aaeb52267062d2b8baa6a785498acb312a55a3663f275259d"
+  },
+  "schema_version": 1,
+  "splits": [
+    {
+      "path": "diagnostic.json",
+      "sha256": "43b1a966c3f12975c24bb423a021a616e2512b22a07bb7d5b611759f6346a686",
+      "split": "diagnostic"
+    },
+    {
+      "path": "training.json",
+      "sha256": "ee923b47529c4e71e29fcdb5c1e0e2f3b2265ba345490671e7f748df2c2995cb",
+      "split": "training"
+    },
+    {
+      "path": "holdout.json",
+      "sha256": "6a1e3da3ddd6d81286ec9b216954b4a378207ec60a0ce7b8a8ca90ba96ca152d",
+      "split": "holdout"
+    }
+  ]
+}
