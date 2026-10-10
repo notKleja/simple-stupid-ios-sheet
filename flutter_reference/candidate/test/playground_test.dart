@@ -4,6 +4,14 @@ import 'package:ios_sheet_candidate/main.dart';
 import 'package:simple_stupid_ios_sheet/simple_stupid_ios_sheet.dart';
 
 void main() {
+  testWidgets('shows iOS 26 as the only reference target', (tester) async {
+    await tester.pumpWidget(const IosSheetCandidateApp());
+    await tester.pumpAndSettle();
+    expect(find.byType(DropdownButton<int>), findsNothing);
+    expect(find.textContaining('iOS 26'), findsWidgets);
+    expect(find.textContaining('iOS 27'), findsNothing);
+  });
+
   testWidgets('playground presents an opaque semantic medium sheet', (
     tester,
   ) async {
@@ -15,5 +23,9 @@ void main() {
     expect(find.byKey(iosSheetSurfaceKey), findsOneWidget);
     expect(find.text('Calibration center'), findsOneWidget);
     expect(find.byType(BackdropFilter), findsNothing);
+    final route =
+        ModalRoute.of(tester.element(find.text('Calibration center')))!
+            as StupidSimpleIosSheetRoute<void>;
+    expect(route.profile.majorVersion, 26);
   });
 }

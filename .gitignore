@@ -17,3 +17,5 @@ graphify-out/cache/
 graphify-out/[0-9]*/
 graphify-out/.graphify_root
 graphify-out/.graphify_labels.json.sig
+flutter_reference/packages/*/doc/api/
+flutter_reference/packages/*/build/api_docs/

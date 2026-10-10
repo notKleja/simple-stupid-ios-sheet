@@ -9,6 +9,12 @@ Upstream: <https://github.com/whynotmake-it/rivership/tree/main/packages/stupid_
 
 Version selected at project inception: `1.0.0-dev.4`
 
+Local fork identity: `ios_sheet_engine` `1.0.0-dev.4+fork.1` at
+`flutter_reference/packages/ios_sheet_engine`. Its upstream MIT license is
+retained there. The public wrapper at `flutter_reference/packages/ios_sheet`
+uses the separate root MIT license, copied byte-for-byte. See
+[fork provenance](docs/FORK_PROVENANCE.md).
+
 Upstream revision observed at project inception:
 `f1818c117ea7974c804d66b54083227ca1d26879`
 

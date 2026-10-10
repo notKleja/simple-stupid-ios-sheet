@@ -34,9 +34,9 @@ class SheetPlayground extends StatefulWidget {
 class _SheetPlaygroundState extends State<SheetPlayground>
     with TickerProviderStateMixin {
   static const _metadata = MethodChannel('sheet_reference/metadata');
-  int _major = const int.fromEnvironment(
+  static const _major = int.fromEnvironment(
     'SHEET_PROFILE_MAJOR',
-    defaultValue: 27,
+    defaultValue: 26,
   );
   bool _undimmed = false,
       _draggable = true,
@@ -75,9 +75,21 @@ class _SheetPlaygroundState extends State<SheetPlayground>
         media.viewPadding.bottom == 34 &&
         media.devicePixelRatio == 3 &&
         media.viewInsets.bottom == 0;
-    return qualified
-        ? observedPage402x874Profile(_major)
-        : IosSheetProfile.forMajorVersion(_major);
+    return _candidateProfile(qualified: qualified);
+  }
+
+  IosSheetProfile _candidateProfile({required bool qualified}) {
+    if (_major == 26) {
+      return qualified
+          ? observedIos26Page402x874Profile()
+          : IosSheetProfile.ios26;
+    }
+    if (qualified) {
+      // ignore: deprecated_member_use
+      return observedPage402x874Profile(_major);
+    }
+    // ignore: deprecated_member_use
+    return IosSheetProfile.forMajorVersion(_major);
   }
 
   List<IosSheetDetent> _detentList() => switch (_detents) {
@@ -336,16 +348,7 @@ class _SheetPlaygroundState extends State<SheetPlayground>
           'Opaque surface. Native timing, gestures, keyboard and '
           'stacking remain under measurement.',
         ),
-        DropdownButton<int>(
-          value: _major,
-          items: [26, 27]
-              .map(
-                (v) =>
-                    DropdownMenuItem(value: v, child: Text('iOS $v profile')),
-              )
-              .toList(),
-          onChanged: (v) => setState(() => _major = v!),
-        ),
+        const Text('iOS 26 reference profile'),
         DropdownButton<String>(
           value: _detents,
           items: ['reference', 'single', 'custom', 'fraction']

@@ -1,0 +1,1907 @@
+[
+  {
+    "qualifiedName": "simple_stupid_ios_sheet",
+    "kind": 9,
+    "enclosingOwner": null
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.AbsoluteSnapPhysics",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.AbsoluteSnapPhysics.AbsoluteSnapPhysics.new",
+    "kind": 2,
+    "enclosingOwner": "AbsoluteSnapPhysics"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.AbsoluteSnapPhysics.findTargetSnapPoint",
+    "kind": 10,
+    "enclosingOwner": "AbsoluteSnapPhysics"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.FallbackIosSheetTrajectoryModel",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.FallbackIosSheetTrajectoryModel.FallbackIosSheetTrajectoryModel.new",
+    "kind": 2,
+    "enclosingOwner": "FallbackIosSheetTrajectoryModel"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.FallbackIosSheetTrajectoryModel.createTrajectory",
+    "kind": 10,
+    "enclosingOwner": "FallbackIosSheetTrajectoryModel"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.FallbackIosSheetTrajectoryModel.motion",
+    "kind": 16,
+    "enclosingOwner": "FallbackIosSheetTrajectoryModel"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.FlingSnapPhysics",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.FlingSnapPhysics.FlingSnapPhysics.new",
+    "kind": 2,
+    "enclosingOwner": "FlingSnapPhysics"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.FlingSnapPhysics.findTargetSnapPoint",
+    "kind": 10,
+    "enclosingOwner": "FlingSnapPhysics"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.FlingSnapPhysics.minFlingVelocity",
+    "kind": 16,
+    "enclosingOwner": "FlingSnapPhysics"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.FrictionSnapPhysics",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.FrictionSnapPhysics.FrictionSnapPhysics.new",
+    "kind": 2,
+    "enclosingOwner": "FrictionSnapPhysics"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.FrictionSnapPhysics.constantDeceleration",
+    "kind": 16,
+    "enclosingOwner": "FrictionSnapPhysics"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.FrictionSnapPhysics.dragCoefficient",
+    "kind": 16,
+    "enclosingOwner": "FrictionSnapPhysics"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.FrictionSnapPhysics.findTargetSnapPoint",
+    "kind": 10,
+    "enclosingOwner": "FrictionSnapPhysics"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosDetentResolver",
+    "kind": 21,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosDetentVisibleHeightResolver",
+    "kind": 21,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosResistanceResolver",
+    "kind": 21,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCapabilityStatus",
+    "kind": 5,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCapabilityStatus.values",
+    "kind": 1,
+    "enclosingOwner": "IosSheetCapabilityStatus"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetContentInteraction",
+    "kind": 5,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetContentInteraction.values",
+    "kind": 1,
+    "enclosingOwner": "IosSheetContentInteraction"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.IosSheetController.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.beginUnderlyingControlProbe",
+    "kind": 10,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.captureFrame",
+    "kind": 10,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.completeUnderlyingControlProbe",
+    "kind": 10,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.dismiss",
+    "kind": 10,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.isAttached",
+    "kind": 16,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.isModal",
+    "kind": 16,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.isPresented",
+    "kind": 16,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.recordUnderlyingControlActivation",
+    "kind": 10,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.renderedSurfaceHeight",
+    "kind": 16,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.renderedVisibleHeight",
+    "kind": 16,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.requestedDetentIdentifier",
+    "kind": 16,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.restingDetentIdentifier",
+    "kind": 16,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.selectDetent",
+    "kind": 10,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.selectedDetentIdentifier",
+    "kind": 16,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.snapshotState",
+    "kind": 10,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.targetDetentIdentifier",
+    "kind": 16,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.unscaledSurfaceHeight",
+    "kind": 16,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.unscaledTrajectoryHeight",
+    "kind": 16,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.visibleHeight",
+    "kind": 16,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerBridge",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerBridge.IosSheetCornerBridge.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetCornerBridge"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerBridge.resolveBatch",
+    "kind": 10,
+    "enclosingOwner": "IosSheetCornerBridge"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerBridge.resolver",
+    "kind": 16,
+    "enclosingOwner": "IosSheetCornerBridge"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerKey",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerKey.IosSheetCornerKey.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetCornerKey"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerKey.bottom",
+    "kind": 16,
+    "enclosingOwner": "IosSheetCornerKey"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerKey.environment",
+    "kind": 16,
+    "enclosingOwner": "IosSheetCornerKey"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerKey.hashCode",
+    "kind": 16,
+    "enclosingOwner": "IosSheetCornerKey"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerKey.left",
+    "kind": 16,
+    "enclosingOwner": "IosSheetCornerKey"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerKey.operator ==",
+    "kind": 10,
+    "enclosingOwner": "IosSheetCornerKey"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerKey.right",
+    "kind": 16,
+    "enclosingOwner": "IosSheetCornerKey"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerKey.top",
+    "kind": 16,
+    "enclosingOwner": "IosSheetCornerKey"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerRadii",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerRadii.IosSheetCornerRadii.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetCornerRadii"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerRadii.bottomLeft",
+    "kind": 16,
+    "enclosingOwner": "IosSheetCornerRadii"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerRadii.bottomRight",
+    "kind": 16,
+    "enclosingOwner": "IosSheetCornerRadii"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerRadii.clockwise",
+    "kind": 16,
+    "enclosingOwner": "IosSheetCornerRadii"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerRadii.topLeft",
+    "kind": 16,
+    "enclosingOwner": "IosSheetCornerRadii"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerRadii.topRight",
+    "kind": 16,
+    "enclosingOwner": "IosSheetCornerRadii"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerRequest",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerRequest.IosSheetCornerRequest.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetCornerRequest"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerRequest.environment",
+    "kind": 16,
+    "enclosingOwner": "IosSheetCornerRequest"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerRequest.frame",
+    "kind": 16,
+    "enclosingOwner": "IosSheetCornerRequest"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerRequest.key",
+    "kind": 16,
+    "enclosingOwner": "IosSheetCornerRequest"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerResolution",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerResolution.IosSheetCornerResolution.resolved",
+    "kind": 2,
+    "enclosingOwner": "IosSheetCornerResolution"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerResolution.IosSheetCornerResolution.unavailable",
+    "kind": 2,
+    "enclosingOwner": "IosSheetCornerResolution"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerResolution.provenance",
+    "kind": 16,
+    "enclosingOwner": "IosSheetCornerResolution"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerResolution.radii",
+    "kind": 16,
+    "enclosingOwner": "IosSheetCornerResolution"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerResolution.reason",
+    "kind": 16,
+    "enclosingOwner": "IosSheetCornerResolution"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerResolution.status",
+    "kind": 16,
+    "enclosingOwner": "IosSheetCornerResolution"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerResolver",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerResolver.resolveBatch",
+    "kind": 10,
+    "enclosingOwner": "IosSheetCornerResolver"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerStatus",
+    "kind": 5,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetCornerStatus.values",
+    "kind": 1,
+    "enclosingOwner": "IosSheetCornerStatus"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetDetent",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetDetent.IosSheetDetent.custom",
+    "kind": 2,
+    "enclosingOwner": "IosSheetDetent"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetDetent.IosSheetDetent.fraction",
+    "kind": 2,
+    "enclosingOwner": "IosSheetDetent"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetDetent.IosSheetDetent.height",
+    "kind": 2,
+    "enclosingOwner": "IosSheetDetent"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetDetent.identifier",
+    "kind": 16,
+    "enclosingOwner": "IosSheetDetent"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetDetent.large",
+    "kind": 1,
+    "enclosingOwner": "IosSheetDetent"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetDetent.medium",
+    "kind": 1,
+    "enclosingOwner": "IosSheetDetent"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.IosSheetEnvironment.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.appliedKeyboardAvoidance",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.availableSize",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.cacheKey",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.contentHeight",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.contentSizeCategory",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.displayScale",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.hashCode",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.horizontalSizeClass",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.keyboardHeight",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.locale",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.maximumDetentHeight",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.observedKeyboardFrame",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.observedKeyboardHeight",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.operator ==",
+    "kind": 10,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.orientation",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.platformBrightness",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.reduceMotion",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.safeArea",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.stack",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.textDirection",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.textScale",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.verticalSizeClass",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironment.withMaximumDetentHeight",
+    "kind": 10,
+    "enclosingOwner": "IosSheetEnvironment"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironmentKey",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironmentKey.hashCode",
+    "kind": 16,
+    "enclosingOwner": "IosSheetEnvironmentKey"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetEnvironmentKey.operator ==",
+    "kind": 10,
+    "enclosingOwner": "IosSheetEnvironmentKey"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetFrame",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetFrame.IosSheetFrame.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetFrame"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetFrame.implementationProvenance",
+    "kind": 16,
+    "enclosingOwner": "IosSheetFrame"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetFrame.metrics",
+    "kind": 16,
+    "enclosingOwner": "IosSheetFrame"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetFrame.state",
+    "kind": 16,
+    "enclosingOwner": "IosSheetFrame"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetFrame.unavailable",
+    "kind": 16,
+    "enclosingOwner": "IosSheetFrame"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetGeometry",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetGeometry.IosSheetGeometry.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetGeometry"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetGeometry.bottomInset",
+    "kind": 16,
+    "enclosingOwner": "IosSheetGeometry"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetGeometry.cornerRadius",
+    "kind": 16,
+    "enclosingOwner": "IosSheetGeometry"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetGeometry.cornerResolution",
+    "kind": 16,
+    "enclosingOwner": "IosSheetGeometry"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetGeometry.scale",
+    "kind": 16,
+    "enclosingOwner": "IosSheetGeometry"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetGeometry.shape",
+    "kind": 16,
+    "enclosingOwner": "IosSheetGeometry"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetGeometry.sideInset",
+    "kind": 16,
+    "enclosingOwner": "IosSheetGeometry"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetGeometryContext",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetGeometryContext.IosSheetGeometryContext.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetGeometryContext"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetGeometryContext.environment",
+    "kind": 16,
+    "enclosingOwner": "IosSheetGeometryContext"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetGeometryContext.progress",
+    "kind": 16,
+    "enclosingOwner": "IosSheetGeometryContext"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetGeometryContext.transitionFraction",
+    "kind": 16,
+    "enclosingOwner": "IosSheetGeometryContext"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetGeometryContext.velocity",
+    "kind": 16,
+    "enclosingOwner": "IosSheetGeometryContext"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetGeometryContext.visibleHeight",
+    "kind": 16,
+    "enclosingOwner": "IosSheetGeometryContext"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetGeometryResolver",
+    "kind": 21,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetGestureState",
+    "kind": 5,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetGestureState.values",
+    "kind": 1,
+    "enclosingOwner": "IosSheetGestureState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetKeyboardPolicy",
+    "kind": 5,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetKeyboardPolicy.values",
+    "kind": 1,
+    "enclosingOwner": "IosSheetKeyboardPolicy"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetLiveBarrierRouting",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetLiveBarrierRouting.IosSheetLiveBarrierRouting.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetLiveBarrierRouting"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetLiveBarrierRouting.createRenderObject",
+    "kind": 10,
+    "enclosingOwner": "IosSheetLiveBarrierRouting"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetLiveBarrierRouting.presentation",
+    "kind": 16,
+    "enclosingOwner": "IosSheetLiveBarrierRouting"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetLiveBarrierRouting.updateRenderObject",
+    "kind": 10,
+    "enclosingOwner": "IosSheetLiveBarrierRouting"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetMotionKind",
+    "kind": 5,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetMotionKind.values",
+    "kind": 1,
+    "enclosingOwner": "IosSheetMotionKind"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetMotionRequest",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetMotionRequest.IosSheetMotionRequest.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetMotionRequest"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetMotionRequest.dragReleaseVelocityPointsPerSecond",
+    "kind": 16,
+    "enclosingOwner": "IosSheetMotionRequest"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetMotionRequest.environment",
+    "kind": 16,
+    "enclosingOwner": "IosSheetMotionRequest"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetMotionRequest.kind",
+    "kind": 16,
+    "enclosingOwner": "IosSheetMotionRequest"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetMotionRequest.positionPoints",
+    "kind": 16,
+    "enclosingOwner": "IosSheetMotionRequest"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetMotionRequest.referenceHeightPoints",
+    "kind": 16,
+    "enclosingOwner": "IosSheetMotionRequest"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetMotionRequest.targetPoints",
+    "kind": 16,
+    "enclosingOwner": "IosSheetMotionRequest"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetMotionRequest.velocityPointsPerSecond",
+    "kind": 16,
+    "enclosingOwner": "IosSheetMotionRequest"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetMotionRequest.velocitySource",
+    "kind": 16,
+    "enclosingOwner": "IosSheetMotionRequest"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetOrientation",
+    "kind": 5,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetOrientation.values",
+    "kind": 1,
+    "enclosingOwner": "IosSheetOrientation"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPage402x874CornerModel",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPage402x874CornerModel.IosSheetPage402x874CornerModel.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetPage402x874CornerModel"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPage402x874CornerModel.bottomHoldoutMaxError",
+    "kind": 16,
+    "enclosingOwner": "IosSheetPage402x874CornerModel"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPage402x874CornerModel.majorVersion",
+    "kind": 16,
+    "enclosingOwner": "IosSheetPage402x874CornerModel"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPage402x874CornerModel.maximumBottomInset",
+    "kind": 16,
+    "enclosingOwner": "IosSheetPage402x874CornerModel"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPage402x874CornerModel.maximumHeight",
+    "kind": 16,
+    "enclosingOwner": "IosSheetPage402x874CornerModel"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPage402x874CornerModel.maximumSideInset",
+    "kind": 16,
+    "enclosingOwner": "IosSheetPage402x874CornerModel"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPage402x874CornerModel.maximumTop",
+    "kind": 16,
+    "enclosingOwner": "IosSheetPage402x874CornerModel"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPage402x874CornerModel.maximumWidth",
+    "kind": 16,
+    "enclosingOwner": "IosSheetPage402x874CornerModel"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPage402x874CornerModel.minimumBottomInset",
+    "kind": 16,
+    "enclosingOwner": "IosSheetPage402x874CornerModel"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPage402x874CornerModel.minimumHeight",
+    "kind": 16,
+    "enclosingOwner": "IosSheetPage402x874CornerModel"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPage402x874CornerModel.minimumSideInset",
+    "kind": 16,
+    "enclosingOwner": "IosSheetPage402x874CornerModel"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPage402x874CornerModel.minimumTop",
+    "kind": 16,
+    "enclosingOwner": "IosSheetPage402x874CornerModel"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPage402x874CornerModel.minimumWidth",
+    "kind": 16,
+    "enclosingOwner": "IosSheetPage402x874CornerModel"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPage402x874CornerModel.provenance",
+    "kind": 16,
+    "enclosingOwner": "IosSheetPage402x874CornerModel"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPage402x874CornerModel.resolve",
+    "kind": 10,
+    "enclosingOwner": "IosSheetPage402x874CornerModel"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPhase",
+    "kind": 5,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPhase.values",
+    "kind": 1,
+    "enclosingOwner": "IosSheetPhase"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPresentationState",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPresentationState.IosSheetPresentationState.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetPresentationState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPresentationState.allowsUnderlyingPointerAt",
+    "kind": 10,
+    "enclosingOwner": "IosSheetPresentationState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPresentationState.capability",
+    "kind": 16,
+    "enclosingOwner": "IosSheetPresentationState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPresentationState.effectiveBarrierAlpha",
+    "kind": 16,
+    "enclosingOwner": "IosSheetPresentationState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPresentationState.provenance",
+    "kind": 16,
+    "enclosingOwner": "IosSheetPresentationState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPresentationState.sheetBounds",
+    "kind": 16,
+    "enclosingOwner": "IosSheetPresentationState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPresentationState.underlyingPointerEligible",
+    "kind": 16,
+    "enclosingOwner": "IosSheetPresentationState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetPresentationState.underlyingSemanticsEligible",
+    "kind": 16,
+    "enclosingOwner": "IosSheetPresentationState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetProfile",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetProfile.IosSheetProfile.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetProfile"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetProfile.copyWith",
+    "kind": 10,
+    "enclosingOwner": "IosSheetProfile"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetProfile.detentToVisibleHeight",
+    "kind": 16,
+    "enclosingOwner": "IosSheetProfile"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetProfile.dragResistance",
+    "kind": 16,
+    "enclosingOwner": "IosSheetProfile"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetProfile.evidence",
+    "kind": 16,
+    "enclosingOwner": "IosSheetProfile"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetProfile.fixedSurfaceDuringTransition",
+    "kind": 16,
+    "enclosingOwner": "IosSheetProfile"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetProfile.forMajorVersion",
+    "kind": 10,
+    "enclosingOwner": "IosSheetProfile"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetProfile.forReferenceVersion",
+    "kind": 10,
+    "enclosingOwner": "IosSheetProfile"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetProfile.geometry",
+    "kind": 16,
+    "enclosingOwner": "IosSheetProfile"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetProfile.ios26",
+    "kind": 16,
+    "enclosingOwner": "IosSheetProfile"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetProfile.ios27",
+    "kind": 16,
+    "enclosingOwner": "IosSheetProfile"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetProfile.isMeasured",
+    "kind": 16,
+    "enclosingOwner": "IosSheetProfile"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetProfile.majorVersion",
+    "kind": 16,
+    "enclosingOwner": "IosSheetProfile"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetProfile.maximumDetentHeight",
+    "kind": 16,
+    "enclosingOwner": "IosSheetProfile"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetProfile.mediumHeight",
+    "kind": 16,
+    "enclosingOwner": "IosSheetProfile"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetProfile.motion",
+    "kind": 16,
+    "enclosingOwner": "IosSheetProfile"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetProfile.releaseResistance",
+    "kind": 16,
+    "enclosingOwner": "IosSheetProfile"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetProfile.snapPhysics",
+    "kind": 16,
+    "enclosingOwner": "IosSheetProfile"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetResistanceContext",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetResistanceContext.IosSheetResistanceContext.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetResistanceContext"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetResistanceContext.boundaryPoints",
+    "kind": 16,
+    "enclosingOwner": "IosSheetResistanceContext"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetResistanceContext.input",
+    "kind": 16,
+    "enclosingOwner": "IosSheetResistanceContext"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetResistanceContext.positionPoints",
+    "kind": 16,
+    "enclosingOwner": "IosSheetResistanceContext"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetResistanceContext.referenceHeight",
+    "kind": 16,
+    "enclosingOwner": "IosSheetResistanceContext"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetScrollObservation",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetScrollObservation.IosSheetScrollObservation.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetScrollObservation"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetScrollObservation.observedMovementConsumer",
+    "kind": 16,
+    "enclosingOwner": "IosSheetScrollObservation"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetScrollObservation.offset",
+    "kind": 16,
+    "enclosingOwner": "IosSheetScrollObservation"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetScrollObservation.owner",
+    "kind": 16,
+    "enclosingOwner": "IosSheetScrollObservation"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetScrollObservation.velocity",
+    "kind": 16,
+    "enclosingOwner": "IosSheetScrollObservation"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetSizeClass",
+    "kind": 5,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetSizeClass.values",
+    "kind": 1,
+    "enclosingOwner": "IosSheetSizeClass"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetStackContext",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetStackContext.IosSheetStackContext.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetStackContext"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetStackContext.depth",
+    "kind": 16,
+    "enclosingOwner": "IosSheetStackContext"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetStackContext.hashCode",
+    "kind": 16,
+    "enclosingOwner": "IosSheetStackContext"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetStackContext.isTopmost",
+    "kind": 16,
+    "enclosingOwner": "IosSheetStackContext"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetStackContext.operator ==",
+    "kind": 10,
+    "enclosingOwner": "IosSheetStackContext"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetStackContext.parentIdentifier",
+    "kind": 16,
+    "enclosingOwner": "IosSheetStackContext"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetState",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetState.IosSheetState.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetState.capabilities",
+    "kind": 16,
+    "enclosingOwner": "IosSheetState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetState.environment",
+    "kind": 16,
+    "enclosingOwner": "IosSheetState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetState.frame",
+    "kind": 16,
+    "enclosingOwner": "IosSheetState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetState.gesture",
+    "kind": 16,
+    "enclosingOwner": "IosSheetState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetState.motionRequest",
+    "kind": 16,
+    "enclosingOwner": "IosSheetState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetState.motionTargetPoints",
+    "kind": 16,
+    "enclosingOwner": "IosSheetState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetState.phase",
+    "kind": 16,
+    "enclosingOwner": "IosSheetState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetState.position",
+    "kind": 16,
+    "enclosingOwner": "IosSheetState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetState.presentation",
+    "kind": 16,
+    "enclosingOwner": "IosSheetState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetState.provenance",
+    "kind": 16,
+    "enclosingOwner": "IosSheetState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetState.restingDetent",
+    "kind": 16,
+    "enclosingOwner": "IosSheetState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetState.scroll",
+    "kind": 16,
+    "enclosingOwner": "IosSheetState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetState.selectedDetent",
+    "kind": 16,
+    "enclosingOwner": "IosSheetState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetState.sheetDragging",
+    "kind": 16,
+    "enclosingOwner": "IosSheetState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetState.targetDetent",
+    "kind": 16,
+    "enclosingOwner": "IosSheetState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetState.velocity",
+    "kind": 16,
+    "enclosingOwner": "IosSheetState"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetTraceRecorder",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetTraceRecorder.IosSheetTraceRecorder.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetTraceRecorder"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetTraceRecorder.event",
+    "kind": 10,
+    "enclosingOwner": "IosSheetTraceRecorder"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetTraceRecorder.eventWithProvenance",
+    "kind": 10,
+    "enclosingOwner": "IosSheetTraceRecorder"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetTraceRecorder.frame",
+    "kind": 10,
+    "enclosingOwner": "IosSheetTraceRecorder"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetTraceRecorder.runId",
+    "kind": 16,
+    "enclosingOwner": "IosSheetTraceRecorder"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetTraceRecorder.sink",
+    "kind": 16,
+    "enclosingOwner": "IosSheetTraceRecorder"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetTrajectory",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetTrajectory.IosSheetTrajectory.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetTrajectory"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetTrajectory.capability",
+    "kind": 16,
+    "enclosingOwner": "IosSheetTrajectory"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetTrajectory.provenance",
+    "kind": 16,
+    "enclosingOwner": "IosSheetTrajectory"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetTrajectory.simulation",
+    "kind": 16,
+    "enclosingOwner": "IosSheetTrajectory"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetTrajectory.targetPoints",
+    "kind": 16,
+    "enclosingOwner": "IosSheetTrajectory"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetTrajectoryModel",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetTrajectoryModel.createTrajectory",
+    "kind": 10,
+    "enclosingOwner": "IosSheetTrajectoryModel"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetUnderlyingControlProbe",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetUnderlyingControlProbe.IosSheetUnderlyingControlProbe.new",
+    "kind": 2,
+    "enclosingOwner": "IosSheetUnderlyingControlProbe"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetUnderlyingControlProbe.complete",
+    "kind": 10,
+    "enclosingOwner": "IosSheetUnderlyingControlProbe"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetUnderlyingControlProbe.controlIdentifier",
+    "kind": 16,
+    "enclosingOwner": "IosSheetUnderlyingControlProbe"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetUnderlyingControlProbe.dispose",
+    "kind": 10,
+    "enclosingOwner": "IosSheetUnderlyingControlProbe"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetUnderlyingControlProbe.position",
+    "kind": 16,
+    "enclosingOwner": "IosSheetUnderlyingControlProbe"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetUnderlyingControlProbe.probeIdentifier",
+    "kind": 16,
+    "enclosingOwner": "IosSheetUnderlyingControlProbe"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetUnderlyingControlProbe.recordControlActivation",
+    "kind": 10,
+    "enclosingOwner": "IosSheetUnderlyingControlProbe"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetUnderlyingControlProbe.viewId",
+    "kind": 16,
+    "enclosingOwner": "IosSheetUnderlyingControlProbe"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetUnderlyingHitObservation",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetUnderlyingHitObservation.activated",
+    "kind": 16,
+    "enclosingOwner": "IosSheetUnderlyingHitObservation"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetUnderlyingHitObservation.controlIdentifier",
+    "kind": 16,
+    "enclosingOwner": "IosSheetUnderlyingHitObservation"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetUnderlyingHitObservation.deliveredAt",
+    "kind": 16,
+    "enclosingOwner": "IosSheetUnderlyingHitObservation"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetUnderlyingHitObservation.position",
+    "kind": 16,
+    "enclosingOwner": "IosSheetUnderlyingHitObservation"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetUnderlyingHitObservation.probeIdentifier",
+    "kind": 16,
+    "enclosingOwner": "IosSheetUnderlyingHitObservation"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetVelocitySource",
+    "kind": 5,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetVelocitySource.values",
+    "kind": 1,
+    "enclosingOwner": "IosSheetVelocitySource"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.RelativeSnapPhysics",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.RelativeSnapPhysics.RelativeSnapPhysics.new",
+    "kind": 2,
+    "enclosingOwner": "RelativeSnapPhysics"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.RelativeSnapPhysics.findTargetSnapPoint",
+    "kind": 10,
+    "enclosingOwner": "RelativeSnapPhysics"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.ResolvedIosDetent",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.ResolvedIosDetent.ResolvedIosDetent.new",
+    "kind": 2,
+    "enclosingOwner": "ResolvedIosDetent"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.ResolvedIosDetent.height",
+    "kind": 16,
+    "enclosingOwner": "ResolvedIosDetent"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.ResolvedIosDetent.identifier",
+    "kind": 16,
+    "enclosingOwner": "ResolvedIosDetent"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.ResolvedIosDetent.relativeExtent",
+    "kind": 16,
+    "enclosingOwner": "ResolvedIosDetent"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.RouteSnapshotMode",
+    "kind": 5,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.RouteSnapshotMode.values",
+    "kind": 1,
+    "enclosingOwner": "RouteSnapshotMode"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.SheetDragHandoff",
+    "kind": 5,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.SheetDragHandoff.values",
+    "kind": 1,
+    "enclosingOwner": "SheetDragHandoff"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.SnapPhysics",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.SnapPhysics.findClosestPoint",
+    "kind": 10,
+    "enclosingOwner": "SnapPhysics"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.StupidSimpleIosSheetRoute.new",
+    "kind": 2,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.allowSnapshotting",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.animateToRelative",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.animation",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.backgroundColor",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.backgroundSnapshotController",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.backgroundSnapshotMode",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.barrierColor",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.barrierDismissible",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.barrierLabel",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.buildContent",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.buildModalBarrier",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.buildPage",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.buildTransitions",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.callNavigatorUserGestureMethods",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.captureFrame",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.child",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.clearBarrierImmediately",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.contentInteraction",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.createAnimationController",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.createSheetSimulation",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.createSimulation",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.currentGeometry",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.detents",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.didChangeNext",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.didPop",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.didPopNext",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.dismissalMode",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.dismissible",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.dispose",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.dragHandoff",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.draggable",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.effectiveSnappingConfig",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.environment",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.expandsWhenScrolledToEdge",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.initialDetentIdentifier",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.install",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.interactiveDismissDisabled",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.isModal",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.isUserDragging",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.keyboardPolicy",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.largestUndimmedDetentIdentifier",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.maintainState",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.maybeSnapshotChild",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.modalBarrierColor",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.motion",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.onDismissed",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.onPresented",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.onSelectedDetentChanged",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.onUnderlyingHitObserved",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.originateAboveBottomViewInset",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.overrideSnappingConfig",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.overshootResistance",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.popDisposition",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.presentationState",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.profile",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.renderedSurfaceHeight",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.renderedVisibleHeight",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.resistBoundaryCrossing",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.resistedDragDelta",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.resistedReleaseVelocity",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.resolvedDetents",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.secondaryAnimation",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.selectDetent",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.snappingConfig",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.snapshotState",
+    "kind": 10,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.targetRelativePosition",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.trajectoryModel",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.transitionDuration",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.unscaledSurfaceHeight",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.unscaledTrajectoryHeight",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.StupidSimpleIosSheetRoute.visibleHeight",
+    "kind": 16,
+    "enclosingOwner": "StupidSimpleIosSheetRoute"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.UnavailableIosSheetCornerResolver",
+    "kind": 3,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.UnavailableIosSheetCornerResolver.UnavailableIosSheetCornerResolver.new",
+    "kind": 2,
+    "enclosingOwner": "UnavailableIosSheetCornerResolver"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.UnavailableIosSheetCornerResolver.resolveBatch",
+    "kind": 10,
+    "enclosingOwner": "UnavailableIosSheetCornerResolver"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.canonicalIosDetentIdentifier",
+    "kind": 8,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.canonicalIosSheetConfiguration",
+    "kind": 8,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.iosPageReferenceConfiguration",
+    "kind": 8,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.iosSheetComparisonConfigurationKeys",
+    "kind": 19,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.iosSheetReferenceMajorVersion",
+    "kind": 19,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.iosSheetSurfaceKey",
+    "kind": 19,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.normalizeIosSheetTrajectory",
+    "kind": 8,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.observedIos26Page402x874Profile",
+    "kind": 8,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.observedPage402x874Profile",
+    "kind": 8,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.quantizeIosSheetPoint",
+    "kind": 8,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.resolveIosDetents",
+    "kind": 8,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.showIos26Sheet",
+    "kind": 8,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.supportedIosSheetReferenceMajorVersions",
+    "kind": 19,
+    "enclosingOwner": "simple_stupid_ios_sheet"
+  }
+]

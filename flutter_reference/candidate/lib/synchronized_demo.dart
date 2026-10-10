@@ -366,7 +366,7 @@ class _LiveDemoState extends State<_LiveDemo> {
     _sheet = controller;
     if (!mounted) return;
     final route = StupidSimpleIosSheetRoute<void>(
-      profile: observedPage402x874Profile(26),
+      profile: observedIos26Page402x874Profile(),
       controller: controller,
       detents: _detents(scene),
       initialDetentIdentifier: initial,

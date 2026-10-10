@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart' show precisionErrorTolerance;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:stupid_simple_sheet/stupid_simple_sheet.dart';
+import 'package:ios_sheet_engine/ios_sheet_engine.dart';
 
 import 'detents.dart';
 import 'environment.dart';
@@ -122,6 +122,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     this.interactiveDismissDisabled = false,
     this.backgroundColor = CupertinoColors.systemBackground,
     this.modalBarrierColor = const Color.fromRGBO(0, 0, 0, .2),
+    String? barrierLabel,
     this.onSelectedDetentChanged,
     this.onPresented,
     this.onDismissed,
@@ -129,6 +130,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     this.onUnderlyingHitObserved,
     super.settings,
   }) : detents = List.unmodifiable(detents),
+       _barrierLabel = barrierLabel,
        _sheetController = controller {
     if (detents.isEmpty) throw ArgumentError('At least one detent is required');
     final ids = detents.map((e) => e.identifier).toSet();
@@ -156,6 +158,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   final bool interactiveDismissDisabled;
   final Color backgroundColor;
   final Color modalBarrierColor;
+  final String? _barrierLabel;
   final ValueChanged<String>? onSelectedDetentChanged;
   final VoidCallback? onPresented;
   final VoidCallback? onDismissed;
@@ -649,7 +652,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   @override
   bool get barrierDismissible => dismissible && !interactiveDismissDisabled;
   @override
-  String get barrierLabel => 'Dismiss sheet';
+  String get barrierLabel => _barrierLabel ?? 'Dismiss sheet';
   @override
   bool get maintainState => true;
   @override

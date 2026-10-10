@@ -185,6 +185,7 @@ void main() {
   ) async {
     await present(
       tester,
+      // ignore: deprecated_member_use_from_same_package
       profile: IosSheetProfile.ios27.copyWith(
         geometry: (_) => const IosSheetGeometry(
           sideInset: 12,
@@ -464,6 +465,7 @@ void main() {
         IosSheetDetent.large,
       ],
       initial: 'medium',
+      // ignore: deprecated_member_use_from_same_package
       profile: observedPage402x874Profile(26),
     );
     expect(

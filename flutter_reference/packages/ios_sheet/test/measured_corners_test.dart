@@ -50,6 +50,7 @@ void main() {
   ];
   for (final fixture in fixtures) {
     test('${fixture.name} uses four separate model radii from final top', () {
+      // ignore: deprecated_member_use_from_same_package
       final geometry = observedPage402x874Profile(26).geometry(
         IosSheetGeometryContext(
           environment: env,
@@ -173,6 +174,7 @@ void main() {
         expect(result.radii, isNull);
         expect(result.reason, isNotEmpty);
       }
+      // ignore: deprecated_member_use_from_same_package
       final belowFixed = observedPage402x874Profile(26).geometry(
         const IosSheetGeometryContext(
           environment: env,
@@ -210,6 +212,7 @@ void main() {
   test(
     'opening translation contributes to model top without a detent-name rule',
     () {
+      // ignore: deprecated_member_use_from_same_package
       final geometry = observedPage402x874Profile(26).geometry(
         const IosSheetGeometryContext(
           environment: env,
@@ -222,6 +225,7 @@ void main() {
         geometry.cornerResolution!.radii!.bottomLeft.x,
         closeTo(48.253220140445695, 1e-10),
       ); // Literal top874 boundary.
+      // ignore: deprecated_member_use_from_same_package
       final outOfDomain = observedPage402x874Profile(26).geometry(
         const IosSheetGeometryContext(
           environment: env,
@@ -259,6 +263,7 @@ void main() {
     );
     navigator.currentState!.push(
       StupidSimpleIosSheetRoute<void>(
+        // ignore: deprecated_member_use_from_same_package
         profile: observedPage402x874Profile(version),
         controller: controller,
         detents: [

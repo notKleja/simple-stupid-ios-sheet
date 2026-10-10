@@ -9,6 +9,36 @@ void main() {
     safeArea: EdgeInsets.only(top: 40, bottom: 20),
   );
 
+  test('iOS 26 is the only supported reference version', () {
+    expect(iosSheetReferenceMajorVersion, 26);
+    expect(supportedIosSheetReferenceMajorVersions, const {26});
+    expect(
+      IosSheetProfile.forReferenceVersion(26),
+      same(IosSheetProfile.ios26),
+    );
+    for (final version in [-1, 0, 25, 27, 28]) {
+      expect(
+        () => IosSheetProfile.forReferenceVersion(version),
+        throwsUnsupportedError,
+      );
+    }
+  });
+
+  test('legacy iOS 26 and 27 profiles remain compatible', () {
+    // ignore: deprecated_member_use_from_same_package
+    final legacy = IosSheetProfile.ios27;
+    // ignore: deprecated_member_use_from_same_package
+    expect(IosSheetProfile.forMajorVersion(26), same(IosSheetProfile.ios26));
+    // ignore: deprecated_member_use_from_same_package
+    expect(IosSheetProfile.forMajorVersion(27), same(legacy));
+    expect(legacy.majorVersion, 27);
+    expect(legacy.isMeasured, isFalse);
+    expect(legacy.mediumHeight(environment), 380);
+    expect(legacy.evidence, const {
+      'medium': 'fallback: half maximum; iOS 27 unmeasured',
+    });
+  });
+
   test('height and fraction detents resolve against maximum, not screen', () {
     final resolved = resolveIosDetents(
       [
@@ -68,6 +98,7 @@ void main() {
       mediumHeight: (_) => 370,
       evidence: {'medium': 'fixture:26'},
     );
+    // ignore: deprecated_member_use_from_same_package
     final p27 = IosSheetProfile.ios27.copyWith(
       mediumHeight: (_) => 390,
       evidence: {'medium': 'fixture:27'},
@@ -80,11 +111,14 @@ void main() {
     expect(height(p26), 370);
     expect(height(p27), 390);
     expect(IosSheetProfile.ios26.isMeasured, isFalse);
+    // ignore: deprecated_member_use_from_same_package
     expect(IosSheetProfile.ios27.isMeasured, isFalse);
   });
 
   test('unsupported OS does not silently inherit a newer profile', () {
+    // ignore: deprecated_member_use_from_same_package
     expect(() => IosSheetProfile.forMajorVersion(25), throwsUnsupportedError);
+    // ignore: deprecated_member_use_from_same_package
     expect(() => IosSheetProfile.forMajorVersion(28), throwsUnsupportedError);
   });
 }

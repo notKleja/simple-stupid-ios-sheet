@@ -67,7 +67,7 @@ Branch: `feat/ios-sheet-engine`. Working candidate, not full native parity.
 
 ## Changed areas
 
-`flutter_reference/packages/stupid_simple_sheet`, `packages/ios_sheet`,
+`flutter_reference/packages/ios_sheet_engine`, `packages/ios_sheet`,
 `candidate` (playground/native metadata host), `ARCHITECTURE.md`,
 `FALLBACKS.json`, `measurements.json`; `artifacts/flutter` contains 20 corrected
 and 10 excluded compressed traces. Local AST graph rebuilt for repository policy.

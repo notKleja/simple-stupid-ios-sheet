@@ -1,7 +1,15 @@
 # Simple Stupid iOS Sheet
 
-An evidence-driven Flutter implementation of native Apple sheet behavior for
-iOS 26 and iOS 27, built from the `stupid_simple_sheet` transition engine.
+This package uses iOS 26 as its only native-reference scope.
+
+Its default `IosSheetProfile.ios26` is an explicitly unmeasured fallback, not
+a claim of complete observed or accepted native parity.
+
+The public Flutter package is
+[`simple_stupid_ios_sheet`](flutter_reference/packages/ios_sheet/README.md),
+built over the local `ios_sheet_engine` fork of `stupid_simple_sheet`. Start with
+its path installation, `showIos26Sheet` helper, and minimal
+[example](flutter_reference/packages/ios_sheet/example/lib/main.dart).
 
 This project targets native geometry, detent semantics, interaction,
 interruptible motion, scroll handoff, presenter transformation, keyboard
@@ -32,7 +40,9 @@ The implementation is derived from
 [`stupid_simple_sheet`](https://pub.dev/packages/stupid_simple_sheet), version
 `1.0.0-dev.4` at project inception. The upstream package is maintained in
 [`whynotmake-it/rivership`](https://github.com/whynotmake-it/rivership/tree/main/packages/stupid_simple_sheet)
-and is licensed under the MIT License. See `THIRD_PARTY_NOTICES.md`.
+and is licensed under the MIT License. See
+[fork provenance](docs/FORK_PROVENANCE.md) and `THIRD_PARTY_NOTICES.md`. The
+wrapper uses the root MIT license; the engine retains the upstream MIT license.
 
 ## Status
 

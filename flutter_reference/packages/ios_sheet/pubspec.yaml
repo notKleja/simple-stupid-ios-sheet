@@ -1,15 +1,20 @@
 name: simple_stupid_ios_sheet
 description: Opaque iOS sheet semantics with evidence-backed profile seams.
-version: 0.1.0-dev.1
+version: 0.1.0-dev.2
 publish_to: none
 resolution: workspace
+repository: https://github.com/notKleja/simple-stupid-ios-sheet
+issue_tracker: https://github.com/notKleja/simple-stupid-ios-sheet/issues
+documentation: https://github.com/notKleja/simple-stupid-ios-sheet/tree/main/flutter_reference/packages/ios_sheet
+topics: [ios, sheet, cupertino, modal, animation]
 environment:
   sdk: '>=3.12.0 <4.0.0'
   flutter: '>=3.44.0'
 dependencies:
   flutter:
     sdk: flutter
-  stupid_simple_sheet: 1.0.0-dev.4
+  ios_sheet_engine:
+    path: ../ios_sheet_engine
 dev_dependencies:
   flutter_test:
     sdk: flutter

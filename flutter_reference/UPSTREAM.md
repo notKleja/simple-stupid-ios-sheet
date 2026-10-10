@@ -13,7 +13,10 @@ published archive, including MIT license, tests, and examples.
 - Upstream HEAD observed during audit: `f1818c117ea7974c804d66b54083227ca1d26879`
 - Copyright: 2025 Tim Lehmann for whynotmake.it
 
-Local changes and the opaque API layer are tracked in Git. The legacy glass
-route remains in the fork to preserve upstream compatibility; the new API and
-candidate application never instantiate it. Retaining upstream source is not a
+Local changes and the opaque API layer are tracked in Git. The local engine
+fork is `ios_sheet_engine` version `1.0.0-dev.4+fork.1`, located at
+`packages/ios_sheet_engine` with barrel `package:ios_sheet_engine/ios_sheet_engine.dart`.
+The archive identity and provenance above continue to describe upstream.
+The legacy glass route remains in the fork to preserve upstream compatibility;
+the new API and candidate application never instantiate it. Retaining upstream source is not a
 claim that its geometry or physics matches iOS 26 or 27.

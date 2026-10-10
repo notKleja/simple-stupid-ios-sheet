@@ -1,5 +1,5 @@
 name: ios_sheet_candidate
-description: "A new Flutter project."
+description: Opaque iOS 26 sheet research candidate and playground.
 publish_to: 'none'
 resolution: workspace
 version: 0.1.0+1
@@ -8,7 +8,7 @@ environment:
   sdk: ^3.12.2
 
 dependencies:
-  simple_stupid_ios_sheet: 0.1.0-dev.1
+  simple_stupid_ios_sheet: 0.1.0-dev.2
   flutter:
     sdk: flutter
 
