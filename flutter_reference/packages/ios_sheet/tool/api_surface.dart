@@ -73,6 +73,19 @@ List<ApiSymbol> normalizeApiSurface({
   for (final owner in _engineOwners) {
     final html = engineOwnerHtml[owner];
     if (html == null) throw FormatException('Missing engine HTML for $owner');
+    final allRows = _memberRows(html);
+    if (allRows.isEmpty) {
+      throw FormatException('No usable engine HTML member rows for $owner');
+    }
+    for (final entry in engineIndex.whereType<Map<String, Object?>>()) {
+      final entryOwner = entry['enclosedBy'] as Map<String, Object?>?;
+      if (entryOwner?['name'] == owner) {
+        final name = entry['name'] as String;
+        if (!allRows.containsKey(name)) {
+          throw FormatException('Missing engine HTML row for $owner.$name');
+        }
+      }
+    }
     final rows = _memberRows(html, instanceOnly: true);
     declaredByOwner[owner] = rows.entries
         .where((row) => !row.value)

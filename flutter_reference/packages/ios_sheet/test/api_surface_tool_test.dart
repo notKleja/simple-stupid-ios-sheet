@@ -116,6 +116,43 @@ void main() {
     );
   });
 
+  test('rejects empty or malformed engine owner HTML before filtering API', () {
+    for (final owner in [_transition, _controller]) {
+      for (final html in ['', '<html>truncated engine documentation</html>']) {
+        expect(
+          () => normalizeApiSurface(
+            wrapperIndex: _wrapperIndex,
+            engineIndex: _engineIndex,
+            routeHtml: _routeHtml,
+            engineOwnerHtml: {..._engineHtml, owner: html},
+          ),
+          throwsFormatException,
+          reason: 'Unusable ownership evidence for $owner must fail closed',
+        );
+      }
+    }
+  });
+
+  test('rejects an indexed engine member with no corresponding HTML row', () {
+    expect(
+      () => normalizeApiSurface(
+        wrapperIndex: [
+          ..._wrapperIndex,
+          _entry('newEngineAction', 10, owner: _route),
+        ],
+        engineIndex: [
+          ..._engineIndex,
+          _entry('newEngineAction', 10, owner: _controller),
+        ],
+        routeHtml:
+            '$_routeHtml <dt id="newEngineAction" class="callable inherited"></dt>',
+        engineOwnerHtml: _engineHtml,
+      ),
+      throwsFormatException,
+      reason: 'Incomplete engine evidence must not silently drop new API',
+    );
+  });
+
   test(
     'serializes stable fields in sorted order without changing the input',
     () {
