@@ -5,4 +5,5 @@ environment:
 workspace:
   - packages/ios_sheet_engine
   - packages/ios_sheet
+  - packages/ios_sheet/example
   - candidate

@@ -1,3 +1,19 @@
+# Local engine fork: ios_sheet_engine
+
+This checkout contains `ios_sheet_engine` `1.0.0-dev.4+fork.1`, the renamed local
+fork of upstream `stupid_simple_sheet` `1.0.0-dev.4`. It retains upstream source,
+tests, examples, and the upstream MIT license with narrow local physics,
+scroll/motion, and instrumentation seams. See
+[fork provenance](../../../docs/FORK_PROVENANCE.md) and
+[UPSTREAM.md](../../UPSTREAM.md).
+
+For the supported opaque iOS 26 public API, install the sibling
+[`simple_stupid_ios_sheet` wrapper](../ios_sheet/README.md). Its default profile
+is an explicitly unmeasured fallback. The upstream cookbook below is retained
+for legacy engine routes; it does not claim complete native parity and its glass
+examples are not the wrapper's rendering surface. Published
+`stupid_simple_sheet` does not include this fork's local seams.
+
 <p align="center">
   <img src="doc/logo.png" width="128" alt="Stupid Simple Sheet logo" />
 </p>
@@ -13,11 +29,17 @@ The only Flutter sheet that **seamlessly transitions between scrolling content a
 
 Put a `ListView`, `CustomScrollView`, `PageView`, or any scrollable inside the sheet. When the user scrolls to the edge, the gesture hands off to the sheet drag automatically. You don't need to worry about stuff like `DraggableScrollableSheet`. Just smooth, physics-driven motion powered by [motor](https://pub.dev/packages/motor).
 
-## Installation
+## Local fork installation
 
-```sh
-flutter pub add stupid_simple_sheet
+```yaml
+dependencies:
+  ios_sheet_engine:
+    path: /absolute/path/simple-stupid-ios-sheet/flutter_reference/packages/ios_sheet_engine
 ```
+
+Import `package:ios_sheet_engine/ios_sheet_engine.dart`. The original upstream
+package remains available on pub.dev for upstream-only use, with its original
+name; it is not an installation route for the fork-only APIs documented here.
 
 ## Quick start
 

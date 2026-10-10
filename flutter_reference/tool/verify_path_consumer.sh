@@ -45,7 +45,11 @@ import 'package:simple_stupid_ios_sheet/simple_stupid_ios_sheet.dart';
 
 void main() {
   test('external consumer resolves the package surface', () {
-    expect(IosSheetProfile.ios26.majorVersion, 26);
+    expect(iosSheetReferenceMajorVersion, 26);
+    expect(
+      IosSheetProfile.forReferenceVersion(iosSheetReferenceMajorVersion),
+      same(IosSheetProfile.ios26),
+    );
     expect(IosSheetDetent.large.identifier, 'large');
   });
 }

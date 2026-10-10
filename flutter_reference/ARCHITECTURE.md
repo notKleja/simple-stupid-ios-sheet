@@ -1,11 +1,19 @@
 # Flutter engine and opaque API
 
-`stupid_simple_sheet` 1.0.0-dev.4 is vendored unchanged except for narrow,
-backward-compatible physics/scroll seams and standalone legacy-example
-workspace configuration. Its full upstream test suite is retained. The
-new `simple_stupid_ios_sheet` package exports the opaque API, not the legacy
+`ios_sheet_engine` 1.0.0-dev.4+fork.1 is the local renamed fork of
+`stupid_simple_sheet` 1.0.0-dev.4 with narrow, backward-compatible
+physics/scroll/motion seams and standalone legacy-example configuration.
+Its full upstream test suite is retained. The
+`simple_stupid_ios_sheet` 0.1.0-dev.2 package exports the opaque API, not the legacy
 glass route. The candidate never constructs a glass route; its dependency
 closure has no Liquid Glass rendering package.
+
+iOS 26 is the sole supported native-reference scope. The public journey starts
+with [the wrapper README](packages/ios_sheet/README.md), `showIos26Sheet`, and
+the [minimal example](packages/ios_sheet/example/lib/main.dart). The helper
+omits `trajectoryModel` and `onUnderlyingHitObserved`; use direct route
+construction for those two advanced seams. Controllers remain caller-owned.
+See [fork provenance](../docs/FORK_PROVENANCE.md) for the separate licenses.
 
 ## Architecture map
 
@@ -36,9 +44,15 @@ demands it.
 
 ## Profile discipline
 
-`IosSheetProfile.ios26` and `.ios27` are independent, explicitly unmeasured
-fallbacks. An unknown major version fails instead of silently using27.
-`observedPage402x874Profile(26|27)` is a research profile qualified to the
+`IosSheetProfile.ios26` is the supported, explicitly unmeasured fallback.
+`iosSheetReferenceMajorVersion` is 26;
+`supportedIosSheetReferenceMajorVersions` contains only 26.
+`IosSheetProfile.forReferenceVersion` rejects every other major version.
+The deprecated `.ios27`, `forMajorVersion`, and
+`observedPage402x874Profile(26|27)` compatibility paths retain historical
+research behavior and do not make iOS 27 a supported reference.
+`observedIos26Page402x874Profile()` is the strict iOS 26 research entry point,
+qualified to the
 402x874@3x, safe62/34, portrait, keyboard-hidden page scenario with
 fixed320+medium+large. It rejects other geometry. Resting medium435.68 and
 maximum778 are native samples; native visible large812 includes bottom safe

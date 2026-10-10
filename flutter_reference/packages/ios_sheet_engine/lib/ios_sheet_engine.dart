@@ -272,14 +272,20 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
 
   /// Velocity seam for measured release models; preserves upstream defaults.
   @protected
-  double resistedReleaseVelocity(double velocity, double position,
-      double boundary, double maxExtent) {
+  double resistedReleaseVelocity(
+    double velocity,
+    double position,
+    double boundary,
+    double maxExtent,
+  ) {
     final overshoot = (position - boundary).abs();
     return velocity / (maxExtent + overshoot * overshootResistance);
   }
 
   /// Read-only instrumentation state for preset recorders.
   bool get isUserDragging => _isUserDragging;
+
+  /// Current animation target in normalized engine coordinates, if any.
   double? get targetRelativePosition => _animationTargetValue;
 
   /// {@template clearBarrierImmediately}

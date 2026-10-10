@@ -1,0 +1,15 @@
+name: ios26_sheet_example
+description: Minimal public example of the iOS 26 sheet helper.
+publish_to: none
+resolution: workspace
+version: 0.1.0
+environment:
+  sdk: '>=3.12.0 <4.0.0'
+  flutter: '>=3.44.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  simple_stupid_ios_sheet: 0.1.0-dev.2
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
