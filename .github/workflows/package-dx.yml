@@ -1,0 +1,104 @@
+name: Package DX (host evidence)
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  host-checks:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: flutter_reference
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install pinned Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.6'
+          channel: stable
+          cache: true
+
+      - name: Assert pinned Dart 3.12.2
+        run: |
+          dart --version 2>&1 | grep -E '^Dart SDK version: 3\.12\.2([[:space:]]|$)'
+
+      - name: Resolve workspace dependencies without legacy example
+        run: flutter pub get --no-example
+
+      - name: Check formatting of tracked wrapper and candidate Dart
+        run: |
+          # Preserve the engine's upstream formatting and four existing drift
+          # files. All remain covered by the analysis and host tests below.
+          format_paths=()
+          while IFS= read -r -d '' path; do
+            case "$path" in
+              packages/ios_sheet/lib/src/content_adaptation.dart|\
+              packages/ios_sheet/test/content_adaptation_test.dart|\
+              candidate/lib/synchronized_demo.dart|\
+              candidate/test/synchronized_demo_test.dart)
+                continue
+                ;;
+              *.dart)
+                format_paths+=("$path")
+                ;;
+            esac
+          done < <(git ls-files -z -- \
+            packages/ios_sheet/lib packages/ios_sheet/test \
+            packages/ios_sheet/tool packages/ios_sheet/example \
+            candidate/lib candidate/test)
+          test "${#format_paths[@]}" -gt 0
+          dart format --output=none --set-exit-if-changed "${format_paths[@]}"
+
+      - name: Analyze supported workspace code with fatal infos
+        run: >-
+          flutter analyze --fatal-infos --no-pub
+          packages/ios_sheet_engine/lib packages/ios_sheet_engine/test
+          packages/ios_sheet candidate packages/ios_sheet/example
+
+      - name: Test local engine on host
+        run: flutter test --no-pub packages/ios_sheet_engine/test
+
+      - name: Test public wrapper on host
+        run: flutter test --no-pub packages/ios_sheet/test
+
+      - name: Test research candidate on host
+        run: flutter test --no-pub candidate/test
+
+      - name: Test public example on host
+        run: flutter test --no-pub packages/ios_sheet/example/test
+
+      - name: Generate wrapper API docs with zero warnings
+        working-directory: flutter_reference/packages/ios_sheet
+        run: |
+          dart doc --output=build/api_docs . 2>&1 | tee "$RUNNER_TEMP/wrapper-dartdoc.log"
+          grep -Fx 'Found 0 warnings and 0 errors.' "$RUNNER_TEMP/wrapper-dartdoc.log"
+
+      - name: Generate engine API docs with zero warnings
+        working-directory: flutter_reference/packages/ios_sheet_engine
+        run: |
+          dart doc --output=build/api_docs . 2>&1 | tee "$RUNNER_TEMP/engine-dartdoc.log"
+          grep -Fx 'Found 0 warnings and 0 errors.' "$RUNNER_TEMP/engine-dartdoc.log"
+
+      - name: Check public API against preserved baseline
+        working-directory: flutter_reference/packages/ios_sheet
+        run: |
+          dart tool/check_api_surface.dart \
+            build/api_docs/index.json \
+            ../ios_sheet_engine/build/api_docs/index.json \
+            build/api_docs/simple_stupid_ios_sheet/StupidSimpleIosSheetRoute-class.html \
+            tool/api_surface.json
+
+      - name: Compare exact wrapper and root licenses
+        working-directory: .
+        run: cmp LICENSE flutter_reference/packages/ios_sheet/LICENSE
+
+      - name: Verify isolated external path consumer on host
+        run: bash tool/verify_path_consumer.sh "$PWD/packages/ios_sheet"
