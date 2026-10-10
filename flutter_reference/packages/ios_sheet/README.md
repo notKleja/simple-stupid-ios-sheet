@@ -12,7 +12,9 @@ and `showIos26Sheet`. It has no Liquid Glass dependency. Version
 
 ## Install from a checkout
 
-Flutter 3.44.0 or later and Dart 3.12.0 or later are required. Clone the complete
+Use the verified Flutter 3.44.6 release, which bundles Dart 3.12.2, for the
+checkout commands below. The complete workspace requires Dart 3.12.2 or later
+within Dart 3 because the candidate declares `sdk: ^3.12.2`. Clone the complete
 repository so the sibling engine path is retained:
 
 ```sh
@@ -34,6 +36,11 @@ dependencies:
 Run `flutter pub get` in your app. The wrapper resolves its engine through
 `../ios_sheet_engine`; copying the wrapper alone is insufficient. There is no
 hosted-package installation for this fork yet.
+
+The wrapper's own manifest declares Dart `>=3.12.0 <4.0.0` and Flutter
+`>=3.44.0`. Those lower bounds have not been verified; they are separate from
+the complete checkout's Dart 3.12.2 requirement. Package checks and external
+path consumption were verified with Flutter 3.44.6 / Dart 3.12.2.
 
 ## Show a sheet
 

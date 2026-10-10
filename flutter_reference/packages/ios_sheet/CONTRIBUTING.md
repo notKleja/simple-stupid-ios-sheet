@@ -5,8 +5,12 @@ is an explicitly unmeasured fallback. Preserve provenance, qualification checks,
 deprecated compatibility paths, and evidence labels when changing behavior.
 Do not describe host tests or a Simulator launch as accepted native parity.
 
-Clone the full repository, then run these checks from `flutter_reference` with
-Flutter 3.44.0 or later and Dart 3.12.0 or later:
+Clone the full repository, then run these checks from `flutter_reference` using
+the verified Flutter 3.44.6 release and its bundled Dart 3.12.2. Workspace
+resolution requires Dart 3.12.2 or later within Dart 3 because the candidate
+declares `sdk: ^3.12.2`. The wrapper-only manifest's Dart 3.12.0 and Flutter
+3.44.0 lower bounds have not been verified and do not satisfy the checkout's
+workspace requirement by themselves.
 
 ```sh
 flutter pub get
