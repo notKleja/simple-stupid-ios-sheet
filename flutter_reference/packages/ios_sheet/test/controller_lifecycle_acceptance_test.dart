@@ -206,7 +206,7 @@ void main() {
     await h.present(tester);
     var reattached = false;
     final d = h.track(h.sheet.whenDetached(), null, () {
-      expect(h.sheet.isAttached, isFalse);
+      expectSync(h.sheet.isAttached, isFalse);
       h.push();
       reattached = true;
     });
@@ -426,13 +426,18 @@ void main() {
   ) async {
     await h.mount(tester);
     final failure = StateError('expected dismissal callback failure');
-    h.push(onDismissed: () => throw failure);
+    final route = _CapturingDismissedFailureRoute(h.sheet, failure);
+    h.route = route;
+    h.popped = _Probe(
+      h.nav.currentState!.push<Object>(route),
+      onDone: () => h.events.add('popped'),
+    );
     await tester.pumpAndSettle();
     final d = h.track(h.sheet.whenDetached());
     final a = h.track(h.sheet.animateToDetent('large'));
     h.sheet.dismiss();
     await tester.pumpAndSettle();
-    expect(tester.takeException(), same(failure));
+    expect(route.failure, same(failure));
     _success(d);
     expect(a.value, isFalse);
     expect(h.sheet.isAttached, isFalse);
@@ -776,7 +781,16 @@ void main() {
       tester,
       h,
     ) async {
-      await h.present(tester);
+      // Keep the arena contested on pointer-down so ownership begins only after
+      // the vertical move proves this is a sheet drag.
+      await h.present(
+        tester,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {},
+          child: const Center(child: Text('Sheet content')),
+        ),
+      );
       final a = h.track(h.sheet.animateToDetent('large'));
       await h.interior(tester);
       final gesture = await tester.startGesture(
@@ -826,6 +840,8 @@ void main() {
     final gesture = await tester.startGesture(
       tester.getCenter(find.byType(ListView)),
     );
+    // The first event crosses touch slop; the second produces scroll movement.
+    await gesture.moveBy(const Offset(0, -40));
     await gesture.moveBy(const Offset(0, -80));
     await tester.idle();
     expect(scroll.offset, greaterThan(0));
@@ -1135,6 +1151,38 @@ class _InstallOnlyRoute extends StupidSimpleIosSheetRoute<Object> {
 
   @override
   NavigatorState get navigator => owner;
+}
+
+// Navigator disposes routes in a microtask. Capture the callback failure at the
+// public route boundary so the test can assert it without failing the test zone.
+class _CapturingDismissedFailureRoute
+    extends StupidSimpleIosSheetRoute<Object> {
+  _CapturingDismissedFailureRoute(
+    IosSheetController sheet,
+    this.expectedFailure,
+  ) : super(
+        profile: IosSheetProfile.ios26,
+        controller: sheet,
+        detents: [IosSheetDetent.height('short', 300), IosSheetDetent.large],
+        initialDetentIdentifier: 'short',
+        onDismissed: () => throw expectedFailure,
+        child: const ColoredBox(
+          color: Colors.white,
+          child: Center(child: Text('Sheet content')),
+        ),
+      );
+
+  final Object expectedFailure;
+  Object? failure;
+
+  @override
+  void dispose() {
+    try {
+      super.dispose();
+    } catch (error) {
+      failure = error;
+    }
+  }
 }
 
 typedef _Body = Future<void> Function(WidgetTester tester, _Harness harness);
