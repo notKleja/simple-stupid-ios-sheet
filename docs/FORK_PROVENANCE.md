@@ -38,6 +38,12 @@ The preserved [UPSTREAM.md](../flutter_reference/UPSTREAM.md) and
 The engine adds point-based resistance hooks, release-velocity transfer,
 boundary-crossing resistance, continuous scroll handoff, read-only
 instrumentation, and motion request/simulation seams consumed by the wrapper.
+Canceled generic sheet drags release ownership and Navigator gesture bookkeeping,
+then snap live routes with zero release velocity to a configured open detent
+(fully open fallback when none exists). Cancellation never chooses the closed
+target. Popped routes and detector teardown only release ownership and start no
+motion; ordinary release, resistance equations, and snap resolver math retain
+their prior behavior.
 Its standalone legacy example retains its own configuration. The wrapper and
 candidate never instantiate the retained legacy glass route; their dependency
 closure has no Liquid Glass rendering package.
