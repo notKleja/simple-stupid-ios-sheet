@@ -4,7 +4,7 @@
 `stupid_simple_sheet` 1.0.0-dev.4 with narrow, backward-compatible
 physics/scroll/motion seams and standalone legacy-example configuration.
 Its full upstream test suite is retained. The
-`simple_stupid_ios_sheet` 0.1.0-dev.2 package exports the opaque API, not the legacy
+`simple_stupid_ios_sheet` 0.1.0-dev.3 package exports the opaque API, not the legacy
 glass route. The candidate never constructs a glass route; its dependency
 closure has no Liquid Glass rendering package.
 
