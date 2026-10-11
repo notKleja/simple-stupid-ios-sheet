@@ -59,7 +59,10 @@ void main() {
       selectedDetent: 'content',
       contentHeight: 600,
       contentDetent: 'content',
-      detents: [IosSheetDetent.height('content', 600), IosSheetDetent.height('other', 300)],
+      detents: [
+        IosSheetDetent.height('content', 600),
+        IosSheetDetent.height('other', 300),
+      ],
       environment: environment,
       profile: IosSheetProfile.ios26,
       phase: IosSheetPhase.snapping,
@@ -68,16 +71,31 @@ void main() {
 
     expect(result.status, IosSheetContentAdaptationStatus.applied);
     expect(result.snapshot.selectedDetent, 'content');
-    expect(result.snapshot.resolvedDetents.map((detent) => detent.identifier), ['other', 'content']);
+    expect(result.snapshot.resolvedDetents.map((detent) => detent.identifier), [
+      'other',
+      'content',
+    ]);
     expect(result.snapshot.position, const Offset(17, 29));
     expect(result.snapshot.velocity, const Offset(3, -4));
   });
 
   for (final (:phase, :reason) in [
-    (phase: IosSheetPhase.presented, reason: IosSheetContentInvalidationReason.content),
-    (phase: IosSheetPhase.dragging, reason: IosSheetContentInvalidationReason.dynamicType),
-    (phase: IosSheetPhase.snapping, reason: IosSheetContentInvalidationReason.content),
-    (phase: IosSheetPhase.snapping, reason: IosSheetContentInvalidationReason.keyboard),
+    (
+      phase: IosSheetPhase.presented,
+      reason: IosSheetContentInvalidationReason.content,
+    ),
+    (
+      phase: IosSheetPhase.dragging,
+      reason: IosSheetContentInvalidationReason.dynamicType,
+    ),
+    (
+      phase: IosSheetPhase.snapping,
+      reason: IosSheetContentInvalidationReason.content,
+    ),
+    (
+      phase: IosSheetPhase.snapping,
+      reason: IosSheetContentInvalidationReason.keyboard,
+    ),
   ]) {
     test('preserves $phase with $reason invalidation reason', () {
       final adaptation = IosSheetContentAdaptation(
@@ -118,7 +136,10 @@ void main() {
         phase: IosSheetPhase.presented,
         reasons: const {IosSheetContentInvalidationReason.content},
       );
-      expect(result.status, IosSheetContentAdaptationStatus.invalidContentHeight);
+      expect(
+        result.status,
+        IosSheetContentAdaptationStatus.invalidContentHeight,
+      );
       expect(result.snapshot, same(before));
     }
   });
@@ -152,7 +173,10 @@ void main() {
       reasons: const {IosSheetContentInvalidationReason.content},
     );
 
-    expect(missing.status, IosSheetContentAdaptationStatus.missingSemanticSelection);
+    expect(
+      missing.status,
+      IosSheetContentAdaptationStatus.missingSemanticSelection,
+    );
     expect(stale.status, IosSheetContentAdaptationStatus.staleTransaction);
     expect(adaptation.snapshot, same(before));
   });
@@ -196,34 +220,40 @@ void main() {
       reasons: const {IosSheetContentInvalidationReason.content},
     );
 
-    expect(result.status, IosSheetContentAdaptationStatus.contentDetentMismatch);
+    expect(
+      result.status,
+      IosSheetContentAdaptationStatus.contentDetentMismatch,
+    );
     expect(result.snapshot, same(before));
   });
 
-  test('binds content height while a different semantic detent stays selected', () {
-    final adaptation = IosSheetContentAdaptation(
-      snapshot: snapshot(selectedDetent: 'large'),
-    );
+  test(
+    'binds content height while a different semantic detent stays selected',
+    () {
+      final adaptation = IosSheetContentAdaptation(
+        snapshot: snapshot(selectedDetent: 'large'),
+      );
 
-    final result = adaptation.invalidate(
-      transaction: 2,
-      selectedDetent: 'large',
-      contentHeight: 600,
-      contentDetent: 'content',
-      detents: [IosSheetDetent.height('content', 600), IosSheetDetent.large],
-      environment: environment,
-      profile: IosSheetProfile.ios26,
-      phase: IosSheetPhase.snapping,
-      reasons: const {IosSheetContentInvalidationReason.dynamicType},
-    );
+      final result = adaptation.invalidate(
+        transaction: 2,
+        selectedDetent: 'large',
+        contentHeight: 600,
+        contentDetent: 'content',
+        detents: [IosSheetDetent.height('content', 600), IosSheetDetent.large],
+        environment: environment,
+        profile: IosSheetProfile.ios26,
+        phase: IosSheetPhase.snapping,
+        reasons: const {IosSheetContentInvalidationReason.dynamicType},
+      );
 
-    expect(result.status, IosSheetContentAdaptationStatus.applied);
-    expect(result.snapshot.selectedDetent, 'large');
-    expect(
-      result.snapshot.resolvedDetents
-          .singleWhere((detent) => detent.identifier == 'content')
-          .height,
-      600,
-    );
-  });
+      expect(result.status, IosSheetContentAdaptationStatus.applied);
+      expect(result.snapshot.selectedDetent, 'large');
+      expect(
+        result.snapshot.resolvedDetents
+            .singleWhere((detent) => detent.identifier == 'content')
+            .height,
+        600,
+      );
+    },
+  );
 }

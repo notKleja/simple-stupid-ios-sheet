@@ -4,13 +4,11 @@ set -euo pipefail
 script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 cd "$script_dir/.."
 
-# Preserve the engine's upstream formatting and four existing drift files.
+# Preserve the engine's upstream formatting and two existing drift files.
 # Analysis and host tests still cover the engine and all exempt files.
 format_paths=()
 while IFS= read -r -d '' path; do
   case "$path" in
-    packages/ios_sheet/lib/src/content_adaptation.dart|\
-    packages/ios_sheet/test/content_adaptation_test.dart|\
     candidate/lib/synchronized_demo.dart|\
     candidate/test/synchronized_demo_test.dart)
       continue
