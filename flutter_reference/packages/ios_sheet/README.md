@@ -8,7 +8,7 @@ a claim of complete observed or accepted native parity.
 `simple_stupid_ios_sheet` is an opaque Flutter sheet API over the local
 `ios_sheet_engine` fork. It provides semantic detents, a caller-owned controller,
 and `showIos26Sheet`. It has no Liquid Glass dependency. Version
-`0.1.0-dev.2` remains unpublished (`publish_to: none`).
+`0.1.0-dev.3` remains unpublished (`publish_to: none`).
 
 ## Install from a checkout
 
@@ -69,16 +69,83 @@ when the route resolves its environment.
 
 Create an `IosSheetController` in the presenting widget's state, pass it to the
 helper, and dispose it when that owner is disposed. The helper and route do not
-dispose a supplied controller. Attach it to one sheet at a time; reuse only
-after that route has detached following dismissal. `isAttached` and
-`isPresented` describe different stages. Wait for presentation before changing
-detents for fixed-surface profiles.
+dispose a supplied controller. Attach it to one sheet at a time and serialize
+reuse through `whenDetached()`. Navigator's pop-result future can finish while
+the controller is still attached during exit; `whenDetached()` succeeds only
+after actual route disposal clears that attachment.
 
-Use `selectDetent('large')` to request a semantic detent and `dismiss(result)` to
-close explicitly. `selectedDetentIdentifier` is the accepted selection;
-`restingDetentIdentifier` is null while moving or dragging. A covered sheet
-cannot be selected or dismissed through its controller. The
+```dart
+Future<bool> showAndResizeSheet(
+  BuildContext context,
+  IosSheetController controller,
+) async {
+  // Finish the previous attachment before reusing this caller-owned controller.
+  await controller.whenDetached();
+  final popped = showIos26Sheet<void>(
+    context: context,
+    controller: controller,
+    detents: const [IosSheetDetent.medium, IosSheetDetent.large],
+    initialDetentIdentifier: 'medium',
+    builder: (sheetContext) => Center(
+      child: CupertinoButton(
+        onPressed: () => Navigator.of(sheetContext).pop(),
+        child: const Text('Close'),
+      ),
+    ),
+  );
+  try {
+    await controller.whenPresented();
+    final reachedLarge = await controller.animateToDetent('large');
+    await popped;
+    return reachedLarge;
+  } finally {
+    // Pop completion alone is too early for a new attachment.
+    await controller.whenDetached();
+  }
+}
+```
+
+Call this workflow sequentially with a live controller; after it completes
+successfully, that controller is safe to reuse. Lifecycle errors propagate to
+the caller, including removal before first presentation and owner disposal.
+Do not reuse a disposed controller.
+
+`whenPresented()` waits for the captured attachment's first engine rest at a
+configured detent with no animation or sheet drag. That readiness is latched:
+later motion or coverage does not reset it, and an already-presented attachment
+needs no extra frame. It does not guarantee the sheet is current or that final
+geometry has painted. A covered opening may still become ready; muted tickers
+can defer readiness until uncovered.
+
+Each lifecycle wait captures the attachment present when called and never
+rebinds to a later sheet. Detached `whenPresented()` returns a future that fails
+with `StateError` asynchronously; the call does not throw and does not queue for
+the next presentation. Detached `whenDetached()` completes asynchronously.
+Both waits fail asynchronously after controller disposal. Future observers
+always run asynchronously, including already-completed outcomes.
+
+`animateToDetent('large')` accepts selection synchronously and returns `true`
+only if its owned animation completes and rests at that semantic identifier.
+A fully validated already-resting request can succeed without a ticker or extra
+frame. Covering, sheet drag ownership, superseding selection, dismissal,
+logical removal, detachment, or disposal returns `false`; an accepted request
+during an active sheet drag also returns `false`. That result does not undo the
+accepted selection or stop underlying motion, and uncovering never revives the
+old request. Validation/construction failures still throw synchronously.
+
+Use the existing synchronous `selectDetent('large')` when no awaited outcome is
+needed, and `dismiss(result)` to close explicitly. Selection getters/callbacks
+describe accepted selection, not painted geometry; `restingDetentIdentifier`
+is null while moving or dragging. A covered sheet rejects new selection/dismissal
+commands; committed logical removal also rejects new selection. The
 [example](example/lib/main.dart) demonstrates ownership and medium/large controls.
+
+Disposing an attached controller severs observation, fails pending lifecycle
+waits, and resolves an outstanding detent outcome `false`; the sheet remains
+owned by Navigator. Controller disposal does not count as route detachment.
+Do not dispose a `ChangeNotifier` inside its own notification stack; schedule
+owner disposal after that callback stack. See [troubleshooting](doc/troubleshooting.md)
+for timing and cancellation cases.
 
 ## Construct a route directly
 

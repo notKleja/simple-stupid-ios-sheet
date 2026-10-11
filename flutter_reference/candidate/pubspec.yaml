@@ -8,7 +8,7 @@ environment:
   sdk: ^3.12.2
 
 dependencies:
-  simple_stupid_ios_sheet: 0.1.0-dev.2
+  simple_stupid_ios_sheet: 0.1.0-dev.3
   flutter:
     sdk: flutter
 
