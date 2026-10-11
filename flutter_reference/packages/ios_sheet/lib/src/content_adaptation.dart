@@ -111,7 +111,8 @@ class IosSheetContentAdaptation {
     final resolvedContentDetent = resolved.where(
       (detent) => detent.identifier == contentDetent,
     );
-    final expectedContentHeight = contentHeight > environment.maximumDetentHeight
+    final expectedContentHeight =
+        contentHeight > environment.maximumDetentHeight
         ? environment.maximumDetentHeight
         : contentHeight;
     if (resolvedContentDetent.length != 1 ||
