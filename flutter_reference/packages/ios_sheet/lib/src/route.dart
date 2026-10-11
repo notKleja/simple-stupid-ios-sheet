@@ -1,9 +1,14 @@
+import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart' show precisionErrorTolerance;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:ios_sheet_engine/ios_sheet_engine.dart';
+// Intentional private seam in the jointly maintained engine fork.
+// ignore: implementation_imports
+import 'package:ios_sheet_engine/src/controller_lifecycle_bridge.dart'
+    as lifecycle;
 
 import 'detents.dart';
 import 'environment.dart';
@@ -20,8 +25,17 @@ enum IosSheetContentInteraction { resizes, scrolls }
 enum IosSheetKeyboardPolicy { resize, overlay }
 
 /// Controls semantic detents without exposing normalized engine positions.
+///
+/// Supplied controllers remain caller-owned. Disposing an attached controller
+/// fails its lifecycle waits and severs observation; Navigator still owns the
+/// sheet route. Getters then expose detached defaults and later route events
+/// cannot notify this controller. As with ChangeNotifier, disposal from inside
+/// its own notification stack must be scheduled after that stack returns.
 class IosSheetController extends ChangeNotifier {
   StupidSimpleIosSheetRoute<dynamic>? _route;
+  _IosSheetAttachment? _attachment;
+  int _generation = 0;
+  bool _disposed = false;
 
   bool get isAttached => _route != null;
   String? get selectedDetentIdentifier => _route?._selectedIdentifier;
@@ -43,6 +57,39 @@ class IosSheetController extends ChangeNotifier {
   double get renderedVisibleHeight => _route?.renderedVisibleHeight ?? 0;
   double get visibleHeight => renderedVisibleHeight;
   bool get isModal => _route?.isModal ?? false;
+
+  /// Waits for the attached sheet's first settled presentation.
+  ///
+  /// Captures the current attachment, never a future attachment. Success means
+  /// engine rest at a configured detent with no animation or sheet drag, not a
+  /// final paint receipt or top-route visibility. Presentation remains latched
+  /// during later motion or coverage. Already presented completes without
+  /// another frame. Detached/disposed calls return a StateError future rather
+  /// than throwing; removal before presentation or controller disposal also
+  /// fails the captured wait. Future observers always run asynchronously.
+  Future<void> whenPresented() {
+    if (_disposed)
+      return Future<void>.error(StateError('Sheet controller is disposed'));
+    final attachment = _attachment;
+    if (attachment == null)
+      return Future<void>.error(StateError('Sheet controller is detached'));
+    return attachment.whenPresented();
+  }
+
+  /// Waits until the attached sheet releases this controller at route disposal.
+  ///
+  /// Captures the current attachment. Coverage, accepted dismissal, and the
+  /// Navigator pop-result future do not detach. Already detached completes
+  /// without another frame; reuse cannot change an old wait's outcome.
+  /// Disposing an attached controller fails this wait with StateError rather
+  /// than claiming route disposal; disposed calls also return failed futures.
+  /// Observers run asynchronously after synchronous detachment listeners and
+  /// onDismissed have returned or thrown.
+  Future<void> whenDetached() {
+    if (_disposed)
+      return Future<void>.error(StateError('Sheet controller is disposed'));
+    return _attachment?.whenDetached() ?? Future<void>.value();
+  }
 
   /// Capture after layout/paint, typically from a post-frame callback.
   IosSheetFrame captureFrame() {
@@ -78,6 +125,29 @@ class IosSheetController extends ChangeNotifier {
     route.selectDetent(identifier);
   }
 
+  /// Accepts the same semantic selection as selectDetent and awaits its outcome.
+  ///
+  /// Getters and selection callbacks update synchronously. Returns true only
+  /// while this request remains current, its ticker finishes without canceling,
+  /// and the requested semantic identifier rests. A validated already-resting
+  /// request succeeds without a ticker or another frame. Equal-height detents
+  /// remain distinct identifiers.
+  ///
+  /// Returns false on accepted supersession, sheet drag ownership, coverage,
+  /// dismissal, logical removal, detachment, disposal, or ticker cancellation.
+  /// A command accepted during an existing sheet drag also returns false.
+  /// False does not roll back selection or stop the underlying motion.
+  ///
+  /// Validation and trajectory construction failures throw synchronously in
+  /// the same order as selectDetent. A rejected command preserves older motion
+  /// unless user code reentrantly accepted another command. Future observers
+  /// always run asynchronously; completion does not guarantee final paint.
+  Future<bool> animateToDetent(String identifier) {
+    final route = _route;
+    if (route == null) throw StateError('Sheet controller is detached');
+    return route._selectDetent(identifier, awaitable: true)!;
+  }
+
   /// Explicit dismissal is allowed even when interactive dismissal is locked.
   void dismiss([Object? result]) {
     final route = _route;
@@ -87,18 +157,178 @@ class IosSheetController extends ChangeNotifier {
     route.navigator?.pop(result);
   }
 
-  void _attach(StupidSimpleIosSheetRoute<dynamic> route) {
-    if (_route != null) throw StateError('Controller already has a sheet');
-    _route = route;
+  /// @nodoc
+  @override
+  void dispose() {
+    // ChangeNotifier validates its notification-stack precondition first.
+    // A rejected debug disposal must not abandon a still-live attachment.
+    super.dispose();
+    _disposed = true;
+    final route = _route;
+    final attachment = _attachment;
+    _route = null;
+    _attachment = null;
+    if (route != null && attachment != null) {
+      route._abandonController(this, attachment);
+      attachment.abandon();
+    }
   }
 
-  void _changed() => notifyListeners();
+  _IosSheetAttachment _attach(StupidSimpleIosSheetRoute<dynamic> route) {
+    if (_disposed) throw StateError('Sheet controller is disposed');
+    if (_route != null) throw StateError('Controller already has a sheet');
+    final attachment = _IosSheetAttachment(++_generation, route);
+    _route = route;
+    _attachment = attachment;
+    return attachment;
+  }
+
+  bool _owns(
+    _IosSheetAttachment attachment,
+    StupidSimpleIosSheetRoute<dynamic> route,
+  ) =>
+      !_disposed &&
+      identical(_route, route) &&
+      identical(_attachment, attachment) &&
+      attachment.generation == _generation;
+
+  void _changed(StupidSimpleIosSheetRoute<dynamic> route) {
+    if (!_disposed && identical(_route, route)) notifyListeners();
+  }
 
   void _detach(StupidSimpleIosSheetRoute<dynamic> route) {
-    if (identical(_route, route)) {
+    if (!_disposed && identical(_route, route)) {
+      final attachment = _attachment!;
       _route = null;
+      _attachment = null;
+      attachment.detach();
       notifyListeners();
     }
+  }
+}
+
+// Error outcomes are stored without eagerly creating unobserved error futures.
+// Each normal completer is allocated only when that attachment is observed.
+class _IosSheetAttachment {
+  _IosSheetAttachment(this.generation, this.route);
+  final int generation;
+  final StupidSimpleIosSheetRoute<dynamic> route;
+  bool _presented = false;
+  bool _detached = false;
+  StateError? _presentationFailure;
+  StateError? _detachmentFailure;
+  Completer<void>? _presentation;
+  Completer<void>? _detachment;
+
+  Future<void> whenPresented() {
+    final completer = _presentation ??= Completer<void>();
+    if (!completer.isCompleted) {
+      if (_presented) {
+        completer.complete();
+      } else if (_presentationFailure != null) {
+        completer.completeError(_presentationFailure!);
+      }
+    }
+    return completer.future;
+  }
+
+  Future<void> whenDetached() {
+    final completer = _detachment ??= Completer<void>();
+    if (!completer.isCompleted) {
+      if (_detachmentFailure != null) {
+        completer.completeError(_detachmentFailure!);
+      } else if (_detached) {
+        completer.complete();
+      }
+    }
+    return completer.future;
+  }
+
+  void present() {
+    if (_presented || _presentationFailure != null) return;
+    _presented = true;
+    _presentation?.complete();
+  }
+
+  void remove() {
+    if (_presented || _presentationFailure != null) return;
+    _presentationFailure = StateError('Sheet removed before presentation');
+    _presentation?.completeError(_presentationFailure!);
+  }
+
+  void detach() {
+    if (_detached || _detachmentFailure != null) return;
+    _detached = true;
+    remove();
+    _detachment?.complete();
+  }
+
+  void abandon() {
+    if (!_presented && _presentationFailure == null) {
+      _presentationFailure = StateError('Sheet controller is disposed');
+      _presentation?.completeError(_presentationFailure!);
+    }
+    if (!_detached && _detachmentFailure == null) {
+      _detachmentFailure = StateError('Sheet controller is disposed');
+      _detachment?.completeError(_detachmentFailure!);
+    }
+  }
+}
+
+class _IosSheetSelection {
+  _IosSheetSelection(
+    this.identifier,
+    this.attachment,
+    this.revision,
+    this.preRest,
+    this.awaitable,
+  );
+  final String identifier;
+  final _IosSheetAttachment? attachment;
+  int revision;
+  final String? preRest;
+  final bool awaitable;
+  final semanticToken = Object();
+  bool accepted = false;
+  bool starting = true;
+  _IosSheetMotion? operation;
+}
+
+class _IosSheetMotion {
+  final Completer<bool> result = Completer<bool>();
+  void settle(bool success) {
+    if (!result.isCompleted) result.complete(success);
+  }
+}
+
+// Arbitrary custom Simulation methods may reenter while animateWith samples
+// its initial value. Fence that startup before Flutter can start an old ticker.
+class _IosSheetStartupSimulation extends Simulation {
+  _IosSheetStartupSimulation(this.inner, this.validate);
+  final Simulation inner;
+  final VoidCallback validate;
+  @override
+  double x(double time) {
+    validate();
+    final value = inner.x(time);
+    validate();
+    return value;
+  }
+
+  @override
+  double dx(double time) {
+    validate();
+    final value = inner.dx(time);
+    validate();
+    return value;
+  }
+
+  @override
+  bool isDone(double time) {
+    validate();
+    final done = inner.isDone(time);
+    validate();
+    return done;
   }
 }
 
@@ -149,7 +379,10 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   final List<IosSheetDetent> detents;
   final String? initialDetentIdentifier;
   final String? largestUndimmedDetentIdentifier;
-  final IosSheetController? _sheetController;
+  IosSheetController? _sheetController;
+  _IosSheetAttachment? _attachment;
+  VoidCallback? _unregisterLifecycle;
+  Object? _lifecycleToken;
   final IosSheetContentInteraction contentInteraction;
   final IosSheetKeyboardPolicy keyboardPolicy;
   @override
@@ -168,12 +401,21 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   IosSheetUnderlyingHitObservation? _underlyingObservation;
   IosSheetMotionRequest? _motionRequest;
   IosSheetTrajectory? _trajectory;
+  _IosSheetSelection? _selectionAttempt;
+  _IosSheetSelection? _constructingSelection;
+  _IosSheetSelection? _programmaticSelection;
+  Object? _acceptedSelectionToken;
+  _IosSheetMotion? _detentMotion;
+  int _selectionRevision = 0;
 
   String? _selectedIdentifier;
   String? _targetIdentifier;
   bool _presented = false;
   double? _dismissStartExtent;
   bool _dismissing = false;
+  bool _removing = false;
+  bool _disposing = false;
+  Object? _popAttempt;
   final _activePointers = <int>{};
   final _surfaceProbe = GlobalKey();
   _IosSheetRenderedSurface? _renderedSurface;
@@ -547,6 +789,40 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     required double velocity,
     double? dragReleaseVelocity,
   }) {
+    final candidate = _selectionAttempt;
+    // One wrapper attempt owns one engine invocation. Reentrant direct engine
+    // calls cannot borrow a constructing or already-started wrapper attempt.
+    final attempt =
+        phase == SheetSimulationPhase.detentSnap &&
+            candidate != null &&
+            !candidate.accepted &&
+            !identical(candidate, _constructingSelection)
+        ? candidate
+        : null;
+    final previousConstruction = _constructingSelection;
+    _constructingSelection = attempt ?? previousConstruction;
+    try {
+      return _createTrajectorySimulation(
+        phase: phase,
+        start: start,
+        end: end,
+        velocity: velocity,
+        dragReleaseVelocity: dragReleaseVelocity,
+        attempt: attempt,
+      );
+    } finally {
+      _constructingSelection = previousConstruction;
+    }
+  }
+
+  Simulation _createTrajectorySimulation({
+    required SheetSimulationPhase phase,
+    required double start,
+    required double end,
+    required double velocity,
+    required double? dragReleaseVelocity,
+    required _IosSheetSelection? attempt,
+  }) {
     final height = _referenceHeight;
     final currentPosition = controller?.value ?? start;
     final currentVelocity = controller?.velocity ?? velocity;
@@ -576,6 +852,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
             .createTrajectory(request);
     final initialPosition = trajectory.simulation.x(0);
     final initialVelocity = trajectory.simulation.dx(0);
+    if (attempt != null) _requireSelectionOwner(attempt);
     if (trajectory.targetPoints != request.targetPoints ||
         !initialPosition.isFinite ||
         !initialVelocity.isFinite ||
@@ -590,7 +867,26 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     }
     _motionRequest = request;
     _trajectory = trajectory;
-    return normalizeIosSheetTrajectory(trajectory, height);
+    final normalized = normalizeIosSheetTrajectory(trajectory, height);
+    if (phase == SheetSimulationPhase.detentSnap) {
+      // Inherited compliance motion can start without the programmatic bridge.
+      // A validated nested engine construction must fence the outer command
+      // regardless of which engine path subsequently starts its ticker.
+      if (attempt == null && _selectionAttempt != null) _interruptSelection();
+      // The bridge consumes the identity of this completed construction, not
+      // whichever wrapper command happens to remain on the synchronous stack.
+      _programmaticSelection = attempt;
+      if (_lifecycleToken == null) {
+        _programmaticSelection = null;
+        if (attempt != null) {
+          _acceptSelection(attempt);
+        }
+      }
+    }
+    if (attempt == null) return normalized;
+    return _IosSheetStartupSimulation(normalized, () {
+      if (attempt.starting) _requireSelectionOwner(attempt);
+    });
   }
 
   @override
@@ -680,7 +976,9 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     _selectedIdentifier =
         initialDetentIdentifier ?? resolvedDetents.first.identifier;
     _targetIdentifier = _selectedIdentifier;
-    _sheetController?._attach(this);
+    final attachment = _sheetController?._attach(this);
+    _attachment = attachment;
+    if (attachment != null) _registerLifecycle(attachment);
     controller!.addListener(_animationChanged);
     controller!.addStatusListener(_statusChanged);
   }
@@ -688,10 +986,19 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   void _statusChanged(AnimationStatus _) => _animationChanged();
 
   void _animationChanged() {
+    if (_disposing) return;
     _synchronizeEngineSelection();
+    _reducePresentation();
+    _sheetController?._changed(this);
+  }
+
+  void _reducePresentation() {
     if (!controller!.isAnimating &&
         !isUserDragging &&
         isActive &&
+        !_removing &&
+        !_disposing &&
+        _popAttempt == null &&
         !_dismissing) {
       final extent = controller!.value;
       final matches = resolvedDetents.where(
@@ -707,32 +1014,200 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
         _targetIdentifier = selected.identifier;
         if (!_presented) {
           _presented = true;
+          _attachment?.present();
           onPresented?.call();
         }
       }
     }
-    _sheetController?._changed();
   }
 
-  void selectDetent(String identifier) {
+  void _registerLifecycle(_IosSheetAttachment attachment) {
+    final token = Object();
+    _lifecycleToken = token;
+    bool ownsRegistration() =>
+        identical(_lifecycleToken, token) &&
+        identical(_attachment, attachment) &&
+        identical(attachment.route, this) &&
+        (_sheetController?._owns(attachment, this) ?? false) &&
+        !_removing &&
+        !_disposing;
+    void observeRest() {
+      if (ownsRegistration()) {
+        _reducePresentation();
+      }
+    }
+
+    _unregisterLifecycle = lifecycle.registerSheetControllerLifecycle(
+      this,
+      lifecycle.SheetControllerLifecycleCallbacks(
+        onDragStart: () {
+          if (ownsRegistration()) _interruptSelection();
+        },
+        onDragEnd: observeRest,
+        // Detector teardown can precede route disposal while Navigator's
+        // inherited-widget context is inactive. Recheck ownership after that
+        // synchronous teardown stack, before resolving environment geometry.
+        onDragCancel: () => scheduleMicrotask(observeRest),
+        onProgrammaticDetentStart: () {
+          if (!ownsRegistration()) return true;
+          final attempt = _programmaticSelection;
+          _programmaticSelection = null;
+          if (attempt == null) {
+            _interruptSelection();
+            return true;
+          }
+          return _acceptSelection(attempt);
+        },
+      ),
+    );
+  }
+
+  void _clearLifecycle() {
+    _lifecycleToken = null;
+    _programmaticSelection = null;
+    final unregister = _unregisterLifecycle;
+    _unregisterLifecycle = null;
+    unregister?.call();
+  }
+
+  void _abandonController(
+    IosSheetController sheetController,
+    _IosSheetAttachment attachment,
+  ) {
+    if (identical(_sheetController, sheetController) &&
+        identical(_attachment, attachment)) {
+      _interruptSelection();
+      _clearLifecycle();
+      _sheetController = null;
+      _attachment = null;
+    }
+  }
+
+  void selectDetent(String identifier) => _selectDetent(identifier);
+
+  bool _selectionOwns(_IosSheetSelection attempt) =>
+      attempt.revision == _selectionRevision &&
+      identical(attempt.attachment, _attachment) &&
+      (attempt.attachment == null ||
+          (_sheetController?._owns(attempt.attachment!, this) ?? false)) &&
+      isCurrent &&
+      !_dismissing &&
+      !_removing &&
+      !_disposing &&
+      _popAttempt == null;
+
+  void _requireSelectionOwner(_IosSheetSelection attempt) {
+    if (!_selectionOwns(attempt)) {
+      throw StateError('Sheet selection was superseded during construction');
+    }
+  }
+
+  void _interruptSelection() {
+    _selectionRevision++;
+    final operation = _detentMotion;
+    _detentMotion = null;
+    operation?.settle(false);
+  }
+
+  bool _acceptSelection(_IosSheetSelection attempt) {
+    _requireSelectionOwner(attempt);
+    _interruptSelection();
+    attempt.revision = _selectionRevision;
+    attempt.accepted = true;
+    _acceptedSelectionToken = attempt.semanticToken;
+    if (attempt.awaitable) {
+      final operation = _IosSheetMotion();
+      attempt.operation = operation;
+      _detentMotion = operation;
+      if (isUserDragging) {
+        _detentMotion = null;
+        operation.settle(false);
+      } else if (attempt.preRest == attempt.identifier &&
+          _restingIdentifier == attempt.identifier) {
+        _detentMotion = null;
+        operation.settle(true);
+        return false;
+      }
+    }
+    return true;
+  }
+
+  Future<bool>? _selectDetent(String identifier, {bool awaitable = false}) {
     final resolved = resolvedDetents.where((e) => e.identifier == identifier);
     if (resolved.isEmpty) throw ArgumentError('Unknown detent: $identifier');
     _requireOpeningCompleted();
-    if (!isCurrent || _dismissing) throw StateError('Sheet is not current');
+    if (!isCurrent || _dismissing || _removing || _disposing)
+      throw StateError('Sheet is not current');
     final previousSelection = _selectedIdentifier;
     final previousTarget = _targetIdentifier;
+    final previousRequest = _motionRequest;
+    final previousTrajectory = _trajectory;
+    final previousAttempt = _selectionAttempt;
+    final previousSemanticToken = _acceptedSelectionToken;
+    final attempt = _IosSheetSelection(
+      identifier,
+      _attachment,
+      _selectionRevision,
+      _restingIdentifier,
+      awaitable,
+    );
+    _selectionAttempt = attempt;
     _targetIdentifier = identifier;
     _selectedIdentifier = identifier;
     try {
-      animateToRelative(_engineExtent(resolved.single));
+      final ticker = animateToRelative(_engineExtent(resolved.single));
+      attempt.starting = false;
+      final operation = attempt.operation;
+      if (operation != null) {
+        ticker.orCancel
+            .then<void>(
+              (_) {
+                final success =
+                    identical(_detentMotion, operation) &&
+                    _selectionOwns(attempt) &&
+                    _restingIdentifier == identifier;
+                if (identical(_detentMotion, operation)) _detentMotion = null;
+                operation.settle(success);
+              },
+              onError: (Object error, StackTrace stack) {
+                if (identical(_detentMotion, operation)) _detentMotion = null;
+                operation.settle(false);
+              },
+            )
+            .ignore();
+      }
     } catch (_) {
-      _selectedIdentifier = previousSelection;
-      _targetIdentifier = previousTarget;
+      attempt.starting = false;
+      if (!attempt.accepted && _selectionOwns(attempt)) {
+        _selectedIdentifier = previousSelection;
+        _targetIdentifier = previousTarget;
+        _motionRequest = previousRequest;
+        _trajectory = previousTrajectory;
+      } else if (_selectedIdentifier == identifier &&
+          (identical(_acceptedSelectionToken, previousSemanticToken) ||
+              identical(_acceptedSelectionToken, attempt.semanticToken)) &&
+          identical(attempt.attachment, _attachment) &&
+          isCurrent &&
+          !_dismissing &&
+          !_removing &&
+          !_disposing) {
+        // Reentrant engine motion owns its physical observations. Coordinate
+        // equality cannot accept the rejected command's provisional semantic ID.
+        _selectedIdentifier = previousSelection;
+        _targetIdentifier = previousTarget;
+        _acceptedSelectionToken = previousSemanticToken;
+      }
+      attempt.operation?.settle(false);
+      if (identical(_detentMotion, attempt.operation)) _detentMotion = null;
       rethrow;
+    } finally {
+      if (identical(_selectionAttempt, attempt))
+        _selectionAttempt = previousAttempt;
     }
-    if (previousSelection != identifier)
+    if (_selectionOwns(attempt) && previousSelection != identifier)
       onSelectedDetentChanged?.call(identifier);
-    _sheetController?._changed();
+    if (_selectionOwns(attempt)) _sheetController?._changed(this);
+    return attempt.operation?.result.future;
   }
 
   @override
@@ -858,23 +1333,80 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   @override
   bool didPop(T? result) {
     if (_openingLocked) return false;
+    final attempt = Object();
+    final previousDismissing = _dismissing;
+    final previousTarget = _targetIdentifier;
+    final previousExtent = _dismissStartExtent;
+    _popAttempt = attempt;
     _dismissing = true;
     _targetIdentifier = null;
     if (profile.fixedSurfaceDuringTransition) {
       _dismissStartExtent = controller!.value;
     }
-    return super.didPop(result);
+    void rollback() {
+      if (!_removing && identical(_popAttempt, attempt)) {
+        _dismissing = previousDismissing;
+        _targetIdentifier = previousTarget;
+        _dismissStartExtent = previousExtent;
+      }
+    }
+
+    try {
+      final accepted = super.didPop(result);
+      if (!accepted) rollback();
+      return accepted;
+    } catch (_) {
+      rollback();
+      rethrow;
+    } finally {
+      if (identical(_popAttempt, attempt)) _popAttempt = null;
+    }
+  }
+
+  /// @nodoc
+  @override
+  void didComplete(T? result) {
+    _interruptSelection();
+    _removing = true;
+    _dismissing = true;
+    _targetIdentifier = null;
+    _attachment?.remove();
+    super.didComplete(result);
+  }
+
+  @override
+  void didChangeNext(Route<dynamic>? nextRoute) {
+    super.didChangeNext(nextRoute);
+    if (nextRoute != null || !isCurrent) _interruptSelection();
+    _reducePresentation();
+  }
+
+  @override
+  void didPopNext(Route<dynamic> nextRoute) {
+    super.didPopNext(nextRoute);
+    _reducePresentation();
   }
 
   @override
   void dispose() {
-    _underlyingProbe?.dispose();
-    _underlyingProbe = null;
-    controller?.removeListener(_animationChanged);
-    controller?.removeStatusListener(_statusChanged);
-    _sheetController?._detach(this);
-    onDismissed?.call();
-    super.dispose();
+    _disposing = true;
+    _interruptSelection();
+    _clearLifecycle();
+    final sheetController = _sheetController;
+    final attachment = _attachment;
+    _sheetController = null;
+    _attachment = null;
+    try {
+      _underlyingProbe?.dispose();
+      _underlyingProbe = null;
+      controller?.removeListener(_animationChanged);
+      controller?.removeStatusListener(_statusChanged);
+      attachment?.remove();
+      sheetController?._detach(this);
+      onDismissed?.call();
+    } finally {
+      super.dispose();
+    }
   }
 }
 

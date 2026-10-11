@@ -9,7 +9,7 @@ interaction, or complete accepted parity.
 | --- | --- | --- | --- |
 | Upstream archive | `stupid_simple_sheet` `1.0.0-dev.4`, Rivership by Tim Lehmann for whynotmake.it | Immutable source identity for the original transition foundation, tests, and examples | Upstream MIT, Copyright (c) 2025 Tim Lehmann for whynotmake.it |
 | Local engine | `ios_sheet_engine` `1.0.0-dev.4+fork.1`, `flutter_reference/packages/ios_sheet_engine`, barrel `package:ios_sheet_engine/ios_sheet_engine.dart` | Renamed local fork; physics, resistance, handoff, motion, and recorder seams; legacy routes retained | Separate upstream MIT retained in engine `LICENSE` |
-| Public wrapper | `simple_stupid_ios_sheet` `0.1.0-dev.2`, `flutter_reference/packages/ios_sheet` | Opaque semantic detents, controller, strict iOS 26 resolver, helper, research contracts | Root MIT copied byte-for-byte into wrapper, Copyright (c) 2026 notKleja |
+| Public wrapper | `simple_stupid_ios_sheet` `0.1.0-dev.3`, `flutter_reference/packages/ios_sheet` | Opaque semantic detents, controller, strict iOS 26 resolver, helper, research contracts | Root MIT copied byte-for-byte into wrapper, Copyright (c) 2026 notKleja |
 | Candidate and public example | `flutter_reference/candidate` and wrapper `example` | Research playground versus minimal public helper app; neither promotes native evidence | Repository MIT |
 
 ## Archive and corroboration
@@ -38,6 +38,18 @@ The preserved [UPSTREAM.md](../flutter_reference/UPSTREAM.md) and
 The engine adds point-based resistance hooks, release-velocity transfer,
 boundary-crossing resistance, continuous scroll handoff, read-only
 instrumentation, and motion request/simulation seams consumed by the wrapper.
+Canceled generic sheet drags release ownership and Navigator gesture bookkeeping,
+then snap live routes with zero release velocity to a configured open detent
+(fully open fallback when none exists). Cancellation never chooses the closed
+target. Popped routes and detector teardown only release ownership and start no
+motion; ordinary release, resistance equations, and snap resolver math retain
+their prior behavior.
+The nonexported `src/controller_lifecycle_bridge.dart` couples the local engine
+and wrapper through weak per-route identity registrations, token-scoped explicit
+unregistration, drag ownership events, and a validated programmatic-start
+boundary. Route disposal invalidates any remaining registration. This private
+fork dependency adds no route or mixin API member and requires direct registry,
+real-recognizer, teardown, and wrapper API-surface checks when syncing upstream.
 Its standalone legacy example retains its own configuration. The wrapper and
 candidate never instantiate the retained legacy glass route; their dependency
 closure has no Liquid Glass rendering package.

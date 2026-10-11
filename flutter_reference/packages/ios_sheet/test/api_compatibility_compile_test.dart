@@ -125,10 +125,21 @@ void _controllerActions(IosSheetController controller) {
   final IosSheetUnderlyingHitObservation? observation = controller
       .completeUnderlyingControlProbe();
   controller.selectDetent('large');
+  final Future<void> Function() whenPresented = controller.whenPresented;
+  final Future<void> Function() whenDetached = controller.whenDetached;
+  final Future<bool> Function(String) animateToDetent =
+      controller.animateToDetent;
   controller.dismiss();
   controller.dismiss('result');
   // Consume typed values without making a runtime assertion about an open sheet.
-  access.addAll([frame, state, observation]);
+  access.addAll([
+    frame,
+    state,
+    observation,
+    whenPresented,
+    whenDetached,
+    animateToDetent,
+  ]);
 }
 
 void _engineActions(StupidSimpleIosSheetRoute<String> route) {

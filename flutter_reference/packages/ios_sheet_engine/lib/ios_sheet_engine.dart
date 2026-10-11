@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:ios_sheet_engine/src/clamped_animation.dart';
+import 'package:ios_sheet_engine/src/controller_lifecycle_bridge.dart';
 import 'package:ios_sheet_engine/src/dismissal_mode.dart';
 import 'package:ios_sheet_engine/src/route_snapshot_mode.dart';
 import 'package:ios_sheet_engine/src/sheet_constants.dart';
@@ -34,10 +35,13 @@ enum SheetDragHandoff {
 enum SheetSimulationPhase {
   /// Initial route presentation.
   presentation,
+
   /// Programmatic or gesture-selected detent motion.
   detentSnap,
+
   /// Return after existing boundary resistance.
   overdragReturn,
+
   /// Route dismissal, optionally carrying an observed release.
   dismissal,
 }
@@ -150,6 +154,8 @@ class _RelativeGestureDetector extends StatefulWidget {
     required this.onRelativeDragStart,
     required this.onRelativeDragUpdate,
     required this.onRelativeDragEnd,
+    required this.onRelativeDragCancel,
+    required this.onRelativeDragTeardown,
     required this.dismissalMode,
     required this.child,
   });
@@ -163,6 +169,8 @@ class _RelativeGestureDetector extends StatefulWidget {
   // ignore: avoid_positional_boolean_parameters
   final void Function(double velocity, double referenceHeight, bool wouldScroll)
       onRelativeDragEnd;
+  final ValueChanged<double> onRelativeDragCancel;
+  final VoidCallback onRelativeDragTeardown;
   final DismissalMode dismissalMode;
 
   final Widget child;
@@ -174,48 +182,78 @@ class _RelativeGestureDetector extends StatefulWidget {
 
 class _RelativeGestureDetectorState extends State<_RelativeGestureDetector> {
   double? _referenceHeight;
+  final _gesturePointers = <int>{};
+
+  void _cancelDrag() {
+    final height = _referenceHeight;
+    _referenceHeight = null;
+    if (height != null) widget.onRelativeDragCancel(height);
+  }
+
+  @override
+  void dispose() {
+    final wasDragging = _referenceHeight != null;
+    _referenceHeight = null;
+    _gesturePointers.clear();
+    if (wasDragging) widget.onRelativeDragTeardown();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ScrollDragDetector(
-      up: widget.dragFromTrailingEdge
-          ? ScrollDragMode.dragFirst
-          : ScrollDragMode.none,
-      down: switch (widget.dragHandoff) {
-        SheetDragHandoff.gestureStart => ScrollDragMode.boundaryStart,
-        SheetDragHandoff.continuous => ScrollDragMode.scrollFirst,
+    return Listener(
+      onPointerDown: (event) => _gesturePointers.add(event.pointer),
+      onPointerUp: (event) {
+        _gesturePointers.remove(event.pointer);
       },
-      left: ScrollDragMode.none,
-      right: ScrollDragMode.none,
-      onVerticalDragStart: (details, _) {
-        _referenceHeight = SheetDismissalTransition.referenceHeightOf(
-          context,
-          widget.dismissalMode,
-        );
-        widget.onRelativeDragStart();
+      // An accepted Flutter drag reports PointerCancel as a zero-velocity end.
+      // Finalize first, so that synthetic end cannot take the release/pop path.
+      onPointerCancel: (event) {
+        final wasTracked = _gesturePointers.remove(event.pointer);
+        if (wasTracked && _gesturePointers.isEmpty) _cancelDrag();
       },
-      onVerticalDragEnd: (details, willScroll) {
-        if (_referenceHeight case final height?) {
-          widget.onRelativeDragEnd(
-            details.velocity.pixelsPerSecond.dy / height,
-            height,
-            willScroll,
+      child: ScrollDragDetector(
+        up: widget.dragFromTrailingEdge
+            ? ScrollDragMode.dragFirst
+            : ScrollDragMode.none,
+        down: switch (widget.dragHandoff) {
+          SheetDragHandoff.gestureStart => ScrollDragMode.boundaryStart,
+          SheetDragHandoff.continuous => ScrollDragMode.scrollFirst,
+        },
+        left: ScrollDragMode.none,
+        right: ScrollDragMode.none,
+        onVerticalDragStart: (details, _) {
+          _referenceHeight = SheetDismissalTransition.referenceHeightOf(
+            context,
+            widget.dismissalMode,
           );
-        }
-        if (!willScroll) {
-          _referenceHeight = null;
-        }
-      },
-      onVerticalDragUpdate: (details, wouldScroll) {
-        if (_referenceHeight case final height?) {
-          widget.onRelativeDragUpdate(
-            details.primaryDelta! / height,
-            height,
-            wouldScroll,
-          );
-        }
-      },
-      child: widget.child,
+          widget.onRelativeDragStart();
+        },
+        onVerticalDragEnd: (details, willScroll) {
+          if (_referenceHeight case final height?) {
+            if (!willScroll) _referenceHeight = null;
+            widget.onRelativeDragEnd(
+              details.velocity.pixelsPerSecond.dy / height,
+              height,
+              willScroll,
+            );
+          }
+          if (!willScroll) {
+            _referenceHeight = null;
+          }
+        },
+        onVerticalDragCancel: _cancelDrag,
+        onVerticalDragUpdate: (details, wouldScroll) {
+          if (_referenceHeight case final height?) {
+            widget.onRelativeDragUpdate(
+              details.primaryDelta! / height,
+              height,
+              wouldScroll,
+            );
+          }
+        },
+        child: widget.child,
+      ),
     );
   }
 }
@@ -251,7 +289,8 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
     required double end,
     required double velocity,
     double? dragReleaseVelocity,
-  }) => motion.createSimulation(start: start, end: end, velocity: velocity);
+  }) =>
+      motion.createSimulation(start: start, end: end, velocity: velocity);
 
   /// How much resistance the sheet should give when the user tries to drag
   /// it past it's fully opened state.
@@ -373,6 +412,8 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
   SnapshotController? _coveredBySnapshotController;
 
   bool _isUserDragging = false;
+  bool _isDisposed = false;
+  bool _navigatorGestureStarted = false;
 
   @override
   bool get allowSnapshotting =>
@@ -521,6 +562,8 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
             referenceHeight,
             willScroll,
           ),
+          onRelativeDragCancel: _handleDragCancel,
+          onRelativeDragTeardown: _handleDragTeardown,
           child: child!,
         ),
       ),
@@ -598,9 +641,13 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
   void _handleDragStart(
     BuildContext context,
   ) {
+    if (_isDisposed || _poppedNotifier.value || _isUserDragging) return;
     _isUserDragging = true;
+    dispatchSheetDragStart(this);
+    if (_isDisposed || !_isUserDragging) return;
     _updateSnapshotState();
     if (callNavigatorUserGestureMethods) {
+      _navigatorGestureStarted = true;
       navigator?.didStartUserGesture();
     }
   }
@@ -625,8 +672,10 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
     final crossesBoundary = resistBoundaryCrossing &&
         ((currentValue - delta > maxExtent) ||
             (cannotPop && currentValue - delta < minSnap));
-    final applyResistance = !draggable || currentValue > maxExtent ||
-        belowMinAndCannotPop || crossesBoundary;
+    final applyResistance = !draggable ||
+        currentValue > maxExtent ||
+        belowMinAndCannotPop ||
+        crossesBoundary;
 
     if (wouldScroll && (currentValue - delta) > maxExtent) {
       // If the scrollable would scroll, and the sheet will be dragged past its
@@ -651,11 +700,20 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
     double referenceHeight,
     bool willScroll,
   ) {
-    _isUserDragging = false;
-    if (callNavigatorUserGestureMethods) {
-      navigator?.didStopUserGesture();
+    if (!_isUserDragging || _isDisposed) return;
+    _finishDragOwnership();
+    try {
+      _settleDragEnd(velocity, referenceHeight, willScroll);
+    } finally {
+      if (!_isDisposed) dispatchSheetDragEnd(this);
     }
+  }
 
+  void _settleDragEnd(
+    double velocity,
+    double referenceHeight,
+    bool willScroll,
+  ) {
     // If the route has been popped, don't interfere with the closing animation
     if (_poppedNotifier.value) return;
 
@@ -696,7 +754,10 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
       // Scale the velocity by the same resistance factor that was applied
       // during dragging
       final adjustedVelocity = resistedReleaseVelocity(
-        velocity, currentValue, stickingPoint, maxExtent,
+        velocity,
+        currentValue,
+        stickingPoint,
+        maxExtent,
       );
 
       final backSim = createSheetSimulation(
@@ -739,6 +800,58 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
     _updateSnapshotState();
   }
 
+  void _finishDragOwnership() {
+    _isUserDragging = false;
+    if (_navigatorGestureStarted) {
+      _navigatorGestureStarted = false;
+      navigator?.didStopUserGesture();
+    }
+  }
+
+  void _handleDragCancel(double referenceHeight) {
+    if (!_isUserDragging || _isDisposed) return;
+    _finishDragOwnership();
+    try {
+      _settleCanceledDrag();
+    } finally {
+      if (!_isDisposed) dispatchSheetDragCancel(this);
+    }
+  }
+
+  void _handleDragTeardown() {
+    final wasDragging = _isUserDragging;
+    _finishDragOwnership();
+    if (wasDragging && !_isDisposed) dispatchSheetDragCancel(this);
+  }
+
+  void _settleCanceledDrag() {
+    _dragEndVelocity = null;
+    if (_poppedNotifier.value || !isActive) return;
+
+    final config = effectiveSnappingConfig;
+    final hasOpenDetent =
+        config.points.any((point) => point > sheetPositionTolerance);
+    final target = hasOpenDetent
+        ? config.findTargetSnapPoint(
+            position: controller!.value,
+            relativeVelocity: 0,
+            absoluteVelocity: 0,
+            includeClosed: false,
+          )
+        : 1.0;
+    final simulation = createSheetSimulation(
+      phase: SheetSimulationPhase.detentSnap,
+      start: controller!.value,
+      end: target,
+      velocity: 0,
+      dragReleaseVelocity: 0,
+    );
+    _animationTargetValue = target;
+    _stickingPoint = target;
+    controller!.animateWith(simulation);
+    _updateSnapshotState();
+  }
+
   /// Wraps [child] in a [SnapshotWidget] if another sheet route with
   /// snapshotting is stacked on top of this one.
   ///
@@ -778,6 +891,9 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
   @override
   @mustCallSuper
   void dispose() {
+    _isDisposed = true;
+    clearSheetControllerLifecycle(this);
+    _finishDragOwnership();
     _backgroundSnapshotController.dispose();
     _poppedNotifier.dispose();
     super.dispose();
@@ -849,6 +965,9 @@ mixin StupidSimpleSheetController<T> on StupidSimpleSheetTransitionMixin<T> {
       velocity: controller!.velocity,
     );
 
+    if (!dispatchSheetProgrammaticDetentStart(this)) {
+      return TickerFuture.complete();
+    }
     _animationTargetValue = target;
     _stickingPoint = target;
     return controller!.animateWith(simulation);
