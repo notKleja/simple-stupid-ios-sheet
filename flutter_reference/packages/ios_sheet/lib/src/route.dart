@@ -1190,10 +1190,9 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
           isCurrent &&
           !_dismissing &&
           !_removing &&
-          !_disposing &&
-          _engineTargetIdentifier == null) {
-        // A nonsemantic engine retarget owns its physical observations, but
-        // cannot accept the rejected outer command's provisional semantic ID.
+          !_disposing) {
+        // Reentrant engine motion owns its physical observations. Coordinate
+        // equality cannot accept the rejected command's provisional semantic ID.
         _selectedIdentifier = previousSelection;
         _acceptedSelectionToken = previousSemanticToken;
       }

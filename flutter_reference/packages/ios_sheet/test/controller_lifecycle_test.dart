@@ -289,8 +289,8 @@ void main() {
   );
 
   for (final ingress in ['model', 'startup', 'config']) {
-    for (final target in [.5, .375]) {
-      if (ingress == 'config' && target == .375) continue;
+    for (final target in [.5, .375, 1.0]) {
+      if (ingress == 'config' && target != .5) continue;
       testWidgets(
         'M06 nested engine $ingress retarget to $target rejects outer transaction',
         (tester) async {
@@ -338,10 +338,11 @@ void main() {
           expect(nested.done, isTrue);
           expect(nested.error, isNull);
           expect(h.sheet.unscaledTrajectoryHeight, closeTo(target * 800, 1e-6));
-          expect(
-            h.sheet.targetDetentIdentifier,
-            target == .375 ? 'short' : isNull,
-          );
+          expect(h.sheet.targetDetentIdentifier, switch (target) {
+            .375 => 'short',
+            1.0 => 'large',
+            _ => isNull,
+          });
           await h.clean(tester);
         },
       );
