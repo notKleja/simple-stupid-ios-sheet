@@ -44,6 +44,12 @@ then snap live routes with zero release velocity to a configured open detent
 target. Popped routes and detector teardown only release ownership and start no
 motion; ordinary release, resistance equations, and snap resolver math retain
 their prior behavior.
+The nonexported `src/controller_lifecycle_bridge.dart` couples the local engine
+and wrapper through weak per-route identity registrations, token-scoped explicit
+unregistration, drag ownership events, and a validated programmatic-start
+boundary. Route disposal invalidates any remaining registration. This private
+fork dependency adds no route or mixin API member and requires direct registry,
+real-recognizer, teardown, and wrapper API-surface checks when syncing upstream.
 Its standalone legacy example retains its own configuration. The wrapper and
 candidate never instantiate the retained legacy glass route; their dependency
 closure has no Liquid Glass rendering package.

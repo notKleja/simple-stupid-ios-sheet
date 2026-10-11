@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ios_sheet_engine/ios_sheet_engine.dart';
+import 'package:ios_sheet_engine/src/controller_lifecycle_bridge.dart';
+import 'package:scroll_drag_detector/scroll_drag_detector.dart';
 
 class _RecordingRoute extends StupidSimpleSheetRoute<void> {
   _RecordingRoute({super.snappingConfig})
@@ -15,6 +17,7 @@ class _RecordingRoute extends StupidSimpleSheetRoute<void> {
   final simulations =
       <({SheetSimulationPhase phase, double end, double velocity})>[];
   bool? draggingAtDispose;
+  VoidCallback? duringSimulation;
 
   @override
   Simulation createSheetSimulation({
@@ -25,6 +28,7 @@ class _RecordingRoute extends StupidSimpleSheetRoute<void> {
     double? dragReleaseVelocity,
   }) {
     simulations.add((phase: phase, end: end, velocity: velocity));
+    if (phase == SheetSimulationPhase.detentSnap) duringSimulation?.call();
     return super.createSheetSimulation(
       phase: phase,
       start: start,
@@ -77,6 +81,220 @@ double _value(_RecordingRoute route) {
 }
 
 void main() {
+  testWidgets(
+      'bridge teardown emits cancel once before disposal without motion',
+      (tester) async {
+    final route = _RecordingRoute();
+    await _show(tester, route);
+    var cancels = 0;
+    registerSheetControllerLifecycle(
+      route,
+      SheetControllerLifecycleCallbacks(
+        onDragCancel: () {
+          expect(route.isUserDragging, isFalse);
+          cancels++;
+        },
+      ),
+    );
+    final gesture = await _acquire(tester, route);
+    final count = route.simulations.length;
+    await tester.pumpWidget(const SizedBox.shrink());
+    expect(cancels, 1);
+    await gesture.cancel();
+    dispatchSheetDragCancel(route);
+    expect(cancels, 1);
+    expect(route.simulations.length, count);
+  });
+
+  testWidgets('bridge scroll takeover ends ownership without starting motion',
+      (tester) async {
+    final route = _RecordingRoute();
+    final navigator = await _show(tester, route);
+    var ends = 0;
+    registerSheetControllerLifecycle(
+      route,
+      SheetControllerLifecycleCallbacks(
+        onDragEnd: () {
+          expect(route.isUserDragging, isFalse);
+          expect(navigator.currentState!.userGestureInProgress, isFalse);
+          ends++;
+        },
+      ),
+    );
+    final gesture = await _acquire(tester, route);
+    final count = route.simulations.length;
+    tester
+        .widget<ScrollDragDetector>(find.byType(ScrollDragDetector))
+        .onVerticalDragEnd!(DragEndDetails(), true);
+    expect(ends, 1);
+    expect(route.simulations.length, count);
+    await gesture.cancel();
+    expect(ends, 1);
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  testWidgets(
+      'bridge overdrag end observes released ownership after return starts',
+      (tester) async {
+    final route = _RecordingRoute();
+    await _show(tester, route);
+    var ends = 0;
+    registerSheetControllerLifecycle(
+      route,
+      SheetControllerLifecycleCallbacks(
+        onDragEnd: () {
+          expect(route.isUserDragging, isFalse);
+          expect(
+            route.simulations.last.phase,
+            SheetSimulationPhase.overdragReturn,
+          );
+          ends++;
+        },
+      ),
+    );
+    final gesture = await _acquire(tester, route);
+    _position(route, 1.2);
+    await gesture.up();
+    expect(ends, 1);
+    await tester.pumpAndSettle();
+    expect(_value(route), closeTo(1, 1e-6));
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  testWidgets(
+      'bridge observes ownership before Navigator start and after cancel',
+      (tester) async {
+    final route = _RecordingRoute();
+    final navigator = await _show(tester, route);
+    final events = <String>[];
+    registerSheetControllerLifecycle(
+      route,
+      SheetControllerLifecycleCallbacks(
+        onDragStart: () {
+          expect(route.isUserDragging, isTrue);
+          expect(navigator.currentState!.userGestureInProgress, isFalse);
+          events.add('start');
+        },
+        onDragCancel: () {
+          expect(route.isUserDragging, isFalse);
+          expect(navigator.currentState!.userGestureInProgress, isFalse);
+          events.add('cancel');
+        },
+      ),
+    );
+    final gesture = await _acquire(tester, route);
+    await gesture.cancel();
+    expect(events, ['start', 'cancel']);
+    await tester.pumpAndSettle();
+    await tester.pumpWidget(const SizedBox.shrink());
+    dispatchSheetDragStart(route);
+    dispatchSheetDragCancel(route);
+    expect(events, ['start', 'cancel']);
+  });
+
+  testWidgets(
+      'bridge normal release and popped release observe cleared ownership',
+      (tester) async {
+    final route = _RecordingRoute();
+    final navigator = await _show(tester, route);
+    var ends = 0;
+    registerSheetControllerLifecycle(
+      route,
+      SheetControllerLifecycleCallbacks(
+        onDragEnd: () {
+          expect(route.isUserDragging, isFalse);
+          expect(navigator.currentState!.userGestureInProgress, isFalse);
+          ends++;
+        },
+      ),
+    );
+    final first = await _acquire(tester, route);
+    await first.up();
+    await tester.pumpAndSettle();
+    expect(ends, 1);
+    final second = await _acquire(tester, route);
+    navigator.currentState!.pop();
+    await second.up();
+    expect(ends, 2);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets(
+      'validated bridge start follows construction before engine mutation',
+      (tester) async {
+    final route = _RecordingRoute();
+    await _show(tester, route);
+    final events = <String>[];
+    route.duringSimulation = () => events.add('construct');
+    registerSheetControllerLifecycle(
+      route,
+      SheetControllerLifecycleCallbacks(
+        onProgrammaticDetentStart: () {
+          events.add('start');
+          expect(route.targetRelativePosition, 1);
+          // ignore: invalid_use_of_protected_member
+          expect(route.controller!.isAnimating, isFalse);
+          return true;
+        },
+      ),
+    );
+    route.animateToRelative(.5).ignore();
+    expect(events, ['construct', 'start']);
+    expect(route.targetRelativePosition, .5);
+    await tester.pumpAndSettle();
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  testWidgets('validated bridge shortcut starts no ticker and preserves target',
+      (tester) async {
+    final route = _RecordingRoute();
+    await _show(tester, route);
+    registerSheetControllerLifecycle(
+      route,
+      SheetControllerLifecycleCallbacks(onProgrammaticDetentStart: () => false),
+    );
+    var completed = false;
+    route.animateToRelative(.5).orCancel.then((_) => completed = true).ignore();
+    expect(route.targetRelativePosition, 1);
+    // ignore: invalid_use_of_protected_member
+    expect(route.controller!.isAnimating, isFalse);
+    await tester.idle();
+    expect(completed, isTrue);
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  testWidgets('bridge rejection preserves prior ticker and engine target',
+      (tester) async {
+    final route = _RecordingRoute();
+    await _show(tester, route);
+    final prior = route.animateToRelative(.7);
+    var completed = false;
+    prior.orCancel
+        .then<void>(
+          (_) => completed = true,
+          onError: (Object error) {},
+        )
+        .ignore();
+    registerSheetControllerLifecycle(
+      route,
+      SheetControllerLifecycleCallbacks(
+        onProgrammaticDetentStart: () {
+          throw StateError('attempt no longer owns route');
+        },
+      ),
+    );
+    expect(
+      () {
+        route.animateToRelative(.4);
+      },
+      throwsStateError,
+    );
+    expect(route.targetRelativePosition, .7);
+    await tester.pumpAndSettle();
+    expect(completed, isTrue);
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
   testWidgets('cancel clears drag ownership and ends Navigator gesture once',
       (tester) async {
     final route = _RecordingRoute();

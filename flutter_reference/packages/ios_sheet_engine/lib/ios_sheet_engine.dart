@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:ios_sheet_engine/src/clamped_animation.dart';
+import 'package:ios_sheet_engine/src/controller_lifecycle_bridge.dart';
 import 'package:ios_sheet_engine/src/dismissal_mode.dart';
 import 'package:ios_sheet_engine/src/route_snapshot_mode.dart';
 import 'package:ios_sheet_engine/src/sheet_constants.dart';
@@ -562,7 +563,7 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
             willScroll,
           ),
           onRelativeDragCancel: _handleDragCancel,
-          onRelativeDragTeardown: _finishDragOwnership,
+          onRelativeDragTeardown: _handleDragTeardown,
           child: child!,
         ),
       ),
@@ -642,6 +643,8 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
   ) {
     if (_isDisposed || _poppedNotifier.value || _isUserDragging) return;
     _isUserDragging = true;
+    dispatchSheetDragStart(this);
+    if (_isDisposed || !_isUserDragging) return;
     _updateSnapshotState();
     if (callNavigatorUserGestureMethods) {
       _navigatorGestureStarted = true;
@@ -699,7 +702,18 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
   ) {
     if (!_isUserDragging || _isDisposed) return;
     _finishDragOwnership();
+    try {
+      _settleDragEnd(velocity, referenceHeight, willScroll);
+    } finally {
+      if (!_isDisposed) dispatchSheetDragEnd(this);
+    }
+  }
 
+  void _settleDragEnd(
+    double velocity,
+    double referenceHeight,
+    bool willScroll,
+  ) {
     // If the route has been popped, don't interfere with the closing animation
     if (_poppedNotifier.value) return;
 
@@ -797,6 +811,20 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
   void _handleDragCancel(double referenceHeight) {
     if (!_isUserDragging || _isDisposed) return;
     _finishDragOwnership();
+    try {
+      _settleCanceledDrag();
+    } finally {
+      if (!_isDisposed) dispatchSheetDragCancel(this);
+    }
+  }
+
+  void _handleDragTeardown() {
+    final wasDragging = _isUserDragging;
+    _finishDragOwnership();
+    if (wasDragging && !_isDisposed) dispatchSheetDragCancel(this);
+  }
+
+  void _settleCanceledDrag() {
     _dragEndVelocity = null;
     if (_poppedNotifier.value || !isActive) return;
 
@@ -864,6 +892,7 @@ mixin StupidSimpleSheetTransitionMixin<T> on PopupRoute<T> {
   @mustCallSuper
   void dispose() {
     _isDisposed = true;
+    clearSheetControllerLifecycle(this);
     _finishDragOwnership();
     _backgroundSnapshotController.dispose();
     _poppedNotifier.dispose();
@@ -936,6 +965,9 @@ mixin StupidSimpleSheetController<T> on StupidSimpleSheetTransitionMixin<T> {
       velocity: controller!.velocity,
     );
 
+    if (!dispatchSheetProgrammaticDetentStart(this)) {
+      return TickerFuture.complete();
+    }
     _animationTargetValue = target;
     _stickingPoint = target;
     return controller!.animateWith(simulation);
