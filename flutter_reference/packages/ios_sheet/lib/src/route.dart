@@ -1,9 +1,14 @@
+import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart' show precisionErrorTolerance;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:ios_sheet_engine/ios_sheet_engine.dart';
+// Intentional private seam in the jointly maintained engine fork.
+// ignore: implementation_imports
+import 'package:ios_sheet_engine/src/controller_lifecycle_bridge.dart'
+    as lifecycle;
 
 import 'detents.dart';
 import 'environment.dart';
@@ -20,8 +25,17 @@ enum IosSheetContentInteraction { resizes, scrolls }
 enum IosSheetKeyboardPolicy { resize, overlay }
 
 /// Controls semantic detents without exposing normalized engine positions.
+///
+/// Supplied controllers remain caller-owned. Disposing an attached controller
+/// fails its lifecycle waits and severs observation; Navigator still owns the
+/// sheet route. Getters then expose detached defaults and later route events
+/// cannot notify this controller. As with ChangeNotifier, disposal from inside
+/// its own notification stack must be scheduled after that stack returns.
 class IosSheetController extends ChangeNotifier {
   StupidSimpleIosSheetRoute<dynamic>? _route;
+  _IosSheetAttachment? _attachment;
+  int _generation = 0;
+  bool _disposed = false;
 
   bool get isAttached => _route != null;
   String? get selectedDetentIdentifier => _route?._selectedIdentifier;
@@ -43,6 +57,39 @@ class IosSheetController extends ChangeNotifier {
   double get renderedVisibleHeight => _route?.renderedVisibleHeight ?? 0;
   double get visibleHeight => renderedVisibleHeight;
   bool get isModal => _route?.isModal ?? false;
+
+  /// Waits for the attached sheet's first settled presentation.
+  ///
+  /// Captures the current attachment, never a future attachment. Success means
+  /// engine rest at a configured detent with no animation or sheet drag, not a
+  /// final paint receipt or top-route visibility. Presentation remains latched
+  /// during later motion or coverage. Already presented completes without
+  /// another frame. Detached/disposed calls return a StateError future rather
+  /// than throwing; removal before presentation or controller disposal also
+  /// fails the captured wait. Future observers always run asynchronously.
+  Future<void> whenPresented() {
+    if (_disposed)
+      return Future<void>.error(StateError('Sheet controller is disposed'));
+    final attachment = _attachment;
+    if (attachment == null)
+      return Future<void>.error(StateError('Sheet controller is detached'));
+    return attachment.whenPresented();
+  }
+
+  /// Waits until the attached sheet releases this controller at route disposal.
+  ///
+  /// Captures the current attachment. Coverage, accepted dismissal, and the
+  /// Navigator pop-result future do not detach. Already detached completes
+  /// without another frame; reuse cannot change an old wait's outcome.
+  /// Disposing an attached controller fails this wait with StateError rather
+  /// than claiming route disposal; disposed calls also return failed futures.
+  /// Observers run asynchronously after synchronous detachment listeners and
+  /// onDismissed have returned or thrown.
+  Future<void> whenDetached() {
+    if (_disposed)
+      return Future<void>.error(StateError('Sheet controller is disposed'));
+    return _attachment?.whenDetached() ?? Future<void>.value();
+  }
 
   /// Capture after layout/paint, typically from a post-frame callback.
   IosSheetFrame captureFrame() {
@@ -87,17 +134,120 @@ class IosSheetController extends ChangeNotifier {
     route.navigator?.pop(result);
   }
 
-  void _attach(StupidSimpleIosSheetRoute<dynamic> route) {
-    if (_route != null) throw StateError('Controller already has a sheet');
-    _route = route;
+  /// @nodoc
+  @override
+  void dispose() {
+    // ChangeNotifier validates its notification-stack precondition first.
+    // A rejected debug disposal must not abandon a still-live attachment.
+    super.dispose();
+    _disposed = true;
+    final route = _route;
+    final attachment = _attachment;
+    _route = null;
+    _attachment = null;
+    if (route != null && attachment != null) {
+      route._abandonController(this, attachment);
+      attachment.abandon();
+    }
   }
 
-  void _changed() => notifyListeners();
+  _IosSheetAttachment _attach(StupidSimpleIosSheetRoute<dynamic> route) {
+    if (_disposed) throw StateError('Sheet controller is disposed');
+    if (_route != null) throw StateError('Controller already has a sheet');
+    final attachment = _IosSheetAttachment(++_generation, route);
+    _route = route;
+    _attachment = attachment;
+    return attachment;
+  }
+
+  bool _owns(
+    _IosSheetAttachment attachment,
+    StupidSimpleIosSheetRoute<dynamic> route,
+  ) =>
+      !_disposed &&
+      identical(_route, route) &&
+      identical(_attachment, attachment) &&
+      attachment.generation == _generation;
+
+  void _changed(StupidSimpleIosSheetRoute<dynamic> route) {
+    if (!_disposed && identical(_route, route)) notifyListeners();
+  }
 
   void _detach(StupidSimpleIosSheetRoute<dynamic> route) {
-    if (identical(_route, route)) {
+    if (!_disposed && identical(_route, route)) {
+      final attachment = _attachment!;
       _route = null;
+      _attachment = null;
+      attachment.detach();
       notifyListeners();
+    }
+  }
+}
+
+// Error outcomes are stored without eagerly creating unobserved error futures.
+// Each normal completer is allocated only when that attachment is observed.
+class _IosSheetAttachment {
+  _IosSheetAttachment(this.generation, this.route);
+  final int generation;
+  final StupidSimpleIosSheetRoute<dynamic> route;
+  bool _presented = false;
+  bool _detached = false;
+  StateError? _presentationFailure;
+  StateError? _detachmentFailure;
+  Completer<void>? _presentation;
+  Completer<void>? _detachment;
+
+  Future<void> whenPresented() {
+    final completer = _presentation ??= Completer<void>();
+    if (!completer.isCompleted) {
+      if (_presented) {
+        completer.complete();
+      } else if (_presentationFailure != null) {
+        completer.completeError(_presentationFailure!);
+      }
+    }
+    return completer.future;
+  }
+
+  Future<void> whenDetached() {
+    final completer = _detachment ??= Completer<void>();
+    if (!completer.isCompleted) {
+      if (_detachmentFailure != null) {
+        completer.completeError(_detachmentFailure!);
+      } else if (_detached) {
+        completer.complete();
+      }
+    }
+    return completer.future;
+  }
+
+  void present() {
+    if (_presented || _presentationFailure != null) return;
+    _presented = true;
+    _presentation?.complete();
+  }
+
+  void remove() {
+    if (_presented || _presentationFailure != null) return;
+    _presentationFailure = StateError('Sheet removed before presentation');
+    _presentation?.completeError(_presentationFailure!);
+  }
+
+  void detach() {
+    if (_detached || _detachmentFailure != null) return;
+    _detached = true;
+    remove();
+    _detachment?.complete();
+  }
+
+  void abandon() {
+    if (!_presented && _presentationFailure == null) {
+      _presentationFailure = StateError('Sheet controller is disposed');
+      _presentation?.completeError(_presentationFailure!);
+    }
+    if (!_detached && _detachmentFailure == null) {
+      _detachmentFailure = StateError('Sheet controller is disposed');
+      _detachment?.completeError(_detachmentFailure!);
     }
   }
 }
@@ -149,7 +299,10 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   final List<IosSheetDetent> detents;
   final String? initialDetentIdentifier;
   final String? largestUndimmedDetentIdentifier;
-  final IosSheetController? _sheetController;
+  IosSheetController? _sheetController;
+  _IosSheetAttachment? _attachment;
+  VoidCallback? _unregisterLifecycle;
+  Object? _lifecycleToken;
   final IosSheetContentInteraction contentInteraction;
   final IosSheetKeyboardPolicy keyboardPolicy;
   @override
@@ -174,6 +327,9 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   bool _presented = false;
   double? _dismissStartExtent;
   bool _dismissing = false;
+  bool _removing = false;
+  bool _disposing = false;
+  Object? _popAttempt;
   final _activePointers = <int>{};
   final _surfaceProbe = GlobalKey();
   _IosSheetRenderedSurface? _renderedSurface;
@@ -680,7 +836,9 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     _selectedIdentifier =
         initialDetentIdentifier ?? resolvedDetents.first.identifier;
     _targetIdentifier = _selectedIdentifier;
-    _sheetController?._attach(this);
+    final attachment = _sheetController?._attach(this);
+    _attachment = attachment;
+    if (attachment != null) _registerLifecycle(attachment);
     controller!.addListener(_animationChanged);
     controller!.addStatusListener(_statusChanged);
   }
@@ -688,10 +846,19 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   void _statusChanged(AnimationStatus _) => _animationChanged();
 
   void _animationChanged() {
+    if (_disposing) return;
     _synchronizeEngineSelection();
+    _reducePresentation();
+    _sheetController?._changed(this);
+  }
+
+  void _reducePresentation() {
     if (!controller!.isAnimating &&
         !isUserDragging &&
         isActive &&
+        !_removing &&
+        !_disposing &&
+        _popAttempt == null &&
         !_dismissing) {
       final extent = controller!.value;
       final matches = resolvedDetents.where(
@@ -707,18 +874,61 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
         _targetIdentifier = selected.identifier;
         if (!_presented) {
           _presented = true;
+          _attachment?.present();
           onPresented?.call();
         }
       }
     }
-    _sheetController?._changed();
+  }
+
+  void _registerLifecycle(_IosSheetAttachment attachment) {
+    final token = Object();
+    _lifecycleToken = token;
+    void observeRest() {
+      if (identical(_lifecycleToken, token) &&
+          identical(_attachment, attachment) &&
+          identical(attachment.route, this) &&
+          (_sheetController?._owns(attachment, this) ?? false) &&
+          !_removing &&
+          !_disposing) {
+        _reducePresentation();
+      }
+    }
+
+    _unregisterLifecycle = lifecycle.registerSheetControllerLifecycle(
+      this,
+      lifecycle.SheetControllerLifecycleCallbacks(
+        onDragEnd: observeRest,
+        onDragCancel: observeRest,
+      ),
+    );
+  }
+
+  void _clearLifecycle() {
+    _lifecycleToken = null;
+    final unregister = _unregisterLifecycle;
+    _unregisterLifecycle = null;
+    unregister?.call();
+  }
+
+  void _abandonController(
+    IosSheetController sheetController,
+    _IosSheetAttachment attachment,
+  ) {
+    if (identical(_sheetController, sheetController) &&
+        identical(_attachment, attachment)) {
+      _clearLifecycle();
+      _sheetController = null;
+      _attachment = null;
+    }
   }
 
   void selectDetent(String identifier) {
     final resolved = resolvedDetents.where((e) => e.identifier == identifier);
     if (resolved.isEmpty) throw ArgumentError('Unknown detent: $identifier');
     _requireOpeningCompleted();
-    if (!isCurrent || _dismissing) throw StateError('Sheet is not current');
+    if (!isCurrent || _dismissing || _removing || _disposing)
+      throw StateError('Sheet is not current');
     final previousSelection = _selectedIdentifier;
     final previousTarget = _targetIdentifier;
     _targetIdentifier = identifier;
@@ -732,7 +942,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     }
     if (previousSelection != identifier)
       onSelectedDetentChanged?.call(identifier);
-    _sheetController?._changed();
+    _sheetController?._changed(this);
   }
 
   @override
@@ -858,23 +1068,77 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   @override
   bool didPop(T? result) {
     if (_openingLocked) return false;
+    final attempt = Object();
+    final previousDismissing = _dismissing;
+    final previousTarget = _targetIdentifier;
+    final previousExtent = _dismissStartExtent;
+    _popAttempt = attempt;
     _dismissing = true;
     _targetIdentifier = null;
     if (profile.fixedSurfaceDuringTransition) {
       _dismissStartExtent = controller!.value;
     }
-    return super.didPop(result);
+    void rollback() {
+      if (!_removing && identical(_popAttempt, attempt)) {
+        _dismissing = previousDismissing;
+        _targetIdentifier = previousTarget;
+        _dismissStartExtent = previousExtent;
+      }
+    }
+
+    try {
+      final accepted = super.didPop(result);
+      if (!accepted) rollback();
+      return accepted;
+    } catch (_) {
+      rollback();
+      rethrow;
+    } finally {
+      if (identical(_popAttempt, attempt)) _popAttempt = null;
+    }
+  }
+
+  /// @nodoc
+  @override
+  void didComplete(T? result) {
+    _removing = true;
+    _dismissing = true;
+    _targetIdentifier = null;
+    _attachment?.remove();
+    super.didComplete(result);
+  }
+
+  @override
+  void didChangeNext(Route<dynamic>? nextRoute) {
+    super.didChangeNext(nextRoute);
+    _reducePresentation();
+  }
+
+  @override
+  void didPopNext(Route<dynamic> nextRoute) {
+    super.didPopNext(nextRoute);
+    _reducePresentation();
   }
 
   @override
   void dispose() {
-    _underlyingProbe?.dispose();
-    _underlyingProbe = null;
-    controller?.removeListener(_animationChanged);
-    controller?.removeStatusListener(_statusChanged);
-    _sheetController?._detach(this);
-    onDismissed?.call();
-    super.dispose();
+    _disposing = true;
+    _clearLifecycle();
+    final sheetController = _sheetController;
+    final attachment = _attachment;
+    _sheetController = null;
+    _attachment = null;
+    try {
+      _underlyingProbe?.dispose();
+      _underlyingProbe = null;
+      controller?.removeListener(_animationChanged);
+      controller?.removeStatusListener(_statusChanged);
+      attachment?.remove();
+      sheetController?._detach(this);
+      onDismissed?.call();
+    } finally {
+      super.dispose();
+    }
   }
 }
 
