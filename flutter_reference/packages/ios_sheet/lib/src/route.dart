@@ -288,6 +288,7 @@ class _IosSheetSelection {
   int revision;
   final String? preRest;
   final bool awaitable;
+  final semanticToken = Object();
   bool accepted = false;
   bool starting = true;
   _IosSheetMotion? operation;
@@ -401,6 +402,9 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   IosSheetMotionRequest? _motionRequest;
   IosSheetTrajectory? _trajectory;
   _IosSheetSelection? _selectionAttempt;
+  _IosSheetSelection? _constructingSelection;
+  _IosSheetSelection? _programmaticSelection;
+  Object? _acceptedSelectionToken;
   _IosSheetMotion? _detentMotion;
   int _selectionRevision = 0;
 
@@ -785,9 +789,40 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     required double velocity,
     double? dragReleaseVelocity,
   }) {
-    final attempt = phase == SheetSimulationPhase.detentSnap
-        ? _selectionAttempt
+    final candidate = _selectionAttempt;
+    // One wrapper attempt owns one engine invocation. Reentrant direct engine
+    // calls cannot borrow a constructing or already-started wrapper attempt.
+    final attempt =
+        phase == SheetSimulationPhase.detentSnap &&
+            candidate != null &&
+            !candidate.accepted &&
+            !identical(candidate, _constructingSelection)
+        ? candidate
         : null;
+    final previousConstruction = _constructingSelection;
+    _constructingSelection = attempt ?? previousConstruction;
+    try {
+      return _createTrajectorySimulation(
+        phase: phase,
+        start: start,
+        end: end,
+        velocity: velocity,
+        dragReleaseVelocity: dragReleaseVelocity,
+        attempt: attempt,
+      );
+    } finally {
+      _constructingSelection = previousConstruction;
+    }
+  }
+
+  Simulation _createTrajectorySimulation({
+    required SheetSimulationPhase phase,
+    required double start,
+    required double end,
+    required double velocity,
+    required double? dragReleaseVelocity,
+    required _IosSheetSelection? attempt,
+  }) {
     final height = _referenceHeight;
     final currentPosition = controller?.value ?? start;
     final currentVelocity = controller?.velocity ?? velocity;
@@ -833,9 +868,22 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     _motionRequest = request;
     _trajectory = trajectory;
     final normalized = normalizeIosSheetTrajectory(trajectory, height);
+    if (phase == SheetSimulationPhase.detentSnap) {
+      // Inherited compliance motion can start without the programmatic bridge.
+      // A validated nested engine construction must fence the outer command
+      // regardless of which engine path subsequently starts its ticker.
+      if (attempt == null && _selectionAttempt != null) _interruptSelection();
+      // The bridge consumes the identity of this completed construction, not
+      // whichever wrapper command happens to remain on the synchronous stack.
+      _programmaticSelection = attempt;
+      if (_lifecycleToken == null) {
+        _programmaticSelection = null;
+        if (attempt != null) {
+          _acceptSelection(attempt);
+        }
+      }
+    }
     if (attempt == null) return normalized;
-    // Controller-less legacy route commands need no persistent registration.
-    if (_lifecycleToken == null) _acceptSelection(attempt);
     return _IosSheetStartupSimulation(normalized, () {
       if (attempt.starting) _requireSelectionOwner(attempt);
     });
@@ -1002,7 +1050,8 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
         onDragCancel: () => scheduleMicrotask(observeRest),
         onProgrammaticDetentStart: () {
           if (!ownsRegistration()) return true;
-          final attempt = _selectionAttempt;
+          final attempt = _programmaticSelection;
+          _programmaticSelection = null;
           if (attempt == null) {
             _interruptSelection();
             return true;
@@ -1015,6 +1064,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
 
   void _clearLifecycle() {
     _lifecycleToken = null;
+    _programmaticSelection = null;
     final unregister = _unregisterLifecycle;
     _unregisterLifecycle = null;
     unregister?.call();
@@ -1064,6 +1114,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     _interruptSelection();
     attempt.revision = _selectionRevision;
     attempt.accepted = true;
+    _acceptedSelectionToken = attempt.semanticToken;
     if (attempt.awaitable) {
       final operation = _IosSheetMotion();
       attempt.operation = operation;
@@ -1092,6 +1143,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     final previousRequest = _motionRequest;
     final previousTrajectory = _trajectory;
     final previousAttempt = _selectionAttempt;
+    final previousSemanticToken = _acceptedSelectionToken;
     final attempt = _IosSheetSelection(
       identifier,
       _attachment,
@@ -1131,6 +1183,19 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
         _targetIdentifier = previousTarget;
         _motionRequest = previousRequest;
         _trajectory = previousTrajectory;
+      } else if (_selectedIdentifier == identifier &&
+          (identical(_acceptedSelectionToken, previousSemanticToken) ||
+              identical(_acceptedSelectionToken, attempt.semanticToken)) &&
+          identical(attempt.attachment, _attachment) &&
+          isCurrent &&
+          !_dismissing &&
+          !_removing &&
+          !_disposing &&
+          _engineTargetIdentifier == null) {
+        // A nonsemantic engine retarget owns its physical observations, but
+        // cannot accept the rejected outer command's provisional semantic ID.
+        _selectedIdentifier = previousSelection;
+        _acceptedSelectionToken = previousSemanticToken;
       }
       attempt.operation?.settle(false);
       if (identical(_detentMotion, attempt.operation)) _detentMotion = null;

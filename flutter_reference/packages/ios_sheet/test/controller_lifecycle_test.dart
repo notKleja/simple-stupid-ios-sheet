@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:ios_sheet_engine/ios_sheet_engine.dart'
+    show SheetSnappingConfig;
 // Intentional direct coverage of the jointly maintained fork-private bridge.
 // ignore: implementation_imports
 import 'package:ios_sheet_engine/src/controller_lifecycle_bridge.dart'
@@ -225,6 +227,127 @@ class _Harness {
 }
 
 void main() {
+  testWidgets(
+    'M06 nested semantic acceptance survives later nonsemantic engine retarget',
+    (tester) async {
+      final h = _Harness();
+      final model = _LifecycleModel();
+      await h.mount(tester);
+      h.push(model: model);
+      await tester.pumpAndSettle();
+      h.events.clear();
+      late _Probe<bool> semantic;
+      late _Probe<void> physical;
+      model.onCreate = () {
+        model.onCreate = null;
+        semantic = h.track(h.sheet.animateToDetent('large'));
+        physical = h.track(h.route.animateToRelative(.5).orCancel);
+      };
+      Object? failure;
+      try {
+        h.sheet.animateToDetent('large').ignore();
+      } catch (error) {
+        failure = error;
+      }
+      expect(failure, isA<StateError>());
+      expect(h.sheet.selectedDetentIdentifier, 'large');
+      expect(h.events.where((event) => event == 'selected:large'), isEmpty);
+      expect(h.sheet.snapshotState().motionTargetPoints, 400);
+      await tester.pumpAndSettle();
+      expect(semantic.value, isFalse);
+      expect(physical.done, isTrue);
+      expect(physical.error, isNull);
+      expect(h.sheet.unscaledTrajectoryHeight, closeTo(400, 1e-6));
+      await h.clean(tester);
+    },
+  );
+
+  testWidgets(
+    'M06 already compliant nested config preserves outer semantic command',
+    (tester) async {
+      final h = _Harness();
+      final model = _LifecycleModel();
+      await h.mount(tester);
+      h.push(model: model);
+      await tester.pumpAndSettle();
+      model.onCreate = () {
+        model.onCreate = null;
+        h.route
+            .overrideSnappingConfig(
+              const SheetSnappingConfig([.375]),
+              animateToComply: true,
+            )
+            .orCancel
+            .ignore();
+      };
+      final outer = h.track(h.sheet.animateToDetent('large'));
+      await tester.pumpAndSettle();
+      expect(outer.value, isTrue);
+      expect(h.sheet.selectedDetentIdentifier, 'large');
+      await h.clean(tester);
+    },
+  );
+
+  for (final ingress in ['model', 'startup', 'config']) {
+    for (final target in [.5, .375]) {
+      if (ingress == 'config' && target == .375) continue;
+      testWidgets(
+        'M06 nested engine $ingress retarget to $target rejects outer transaction',
+        (tester) async {
+          final h = _Harness();
+          final model = _LifecycleModel();
+          await h.mount(tester);
+          h.push(model: model);
+          await tester.pumpAndSettle();
+          h.events.clear();
+          late _Probe<void> nested;
+          void retarget() {
+            model.onCreate = null;
+            model.onStartup = null;
+            if (ingress == 'config') {
+              nested = h.track(
+                h.route
+                    .overrideSnappingConfig(
+                      SheetSnappingConfig([target]),
+                      animateToComply: true,
+                    )
+                    .orCancel,
+              );
+            } else {
+              nested = h.track(h.route.animateToRelative(target).orCancel);
+            }
+          }
+
+          if (ingress != 'startup') {
+            model.onCreate = retarget;
+          } else {
+            model.onStartup = retarget;
+          }
+          Object? failure;
+          try {
+            h.sheet.animateToDetent('large').ignore();
+          } catch (error) {
+            failure = error;
+          }
+          expect(failure, isA<StateError>());
+          expect(h.route.targetRelativePosition, target);
+          expect(h.sheet.snapshotState().motionTargetPoints, target * 800);
+          expect(h.events, isNot(contains('selected:large')));
+          expect(h.sheet.selectedDetentIdentifier, 'short');
+          await tester.pumpAndSettle();
+          expect(nested.done, isTrue);
+          expect(nested.error, isNull);
+          expect(h.sheet.unscaledTrajectoryHeight, closeTo(target * 800, 1e-6));
+          expect(
+            h.sheet.targetDetentIdentifier,
+            target == .375 ? 'short' : isNull,
+          );
+          await h.clean(tester);
+        },
+      );
+    }
+  }
+
   for (final finish in ['release', 'cancel', 'teardown']) {
     testWidgets(
       'M07 eager pointer ownership and $finish preserves cancellation',
