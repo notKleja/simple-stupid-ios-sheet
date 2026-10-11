@@ -130,6 +130,11 @@
     "enclosingOwner": "IosSheetController"
   },
   {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.animateToDetent",
+    "kind": 10,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
     "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.beginUnderlyingControlProbe",
     "kind": 10,
     "enclosingOwner": "IosSheetController"
@@ -222,6 +227,16 @@
   {
     "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.visibleHeight",
     "kind": 16,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.whenDetached",
+    "kind": 10,
+    "enclosingOwner": "IosSheetController"
+  },
+  {
+    "qualifiedName": "simple_stupid_ios_sheet.IosSheetController.whenPresented",
+    "kind": 10,
     "enclosingOwner": "IosSheetController"
   },
   {
