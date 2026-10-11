@@ -72,6 +72,49 @@ class _RejectedAttachmentRoute extends StupidSimpleIosSheetRoute<Object> {
   }
 }
 
+class _LifecycleModel implements IosSheetTrajectoryModel {
+  bool failure = false;
+  String? invalid;
+  VoidCallback? onCreate;
+  VoidCallback? onStartup;
+  @override
+  IosSheetTrajectory createTrajectory(IosSheetMotionRequest request) {
+    onCreate?.call();
+    if (failure) throw StateError('expected model failure');
+    final trajectory = FallbackIosSheetTrajectoryModel(
+      const CupertinoMotion.smooth(snapToEnd: true),
+    ).createTrajectory(request);
+    if (onStartup == null && invalid == null) return trajectory;
+    return IosSheetTrajectory(
+      simulation: _StartupSimulation(trajectory.simulation, this),
+      targetPoints: trajectory.targetPoints + (invalid == 'target' ? 1 : 0),
+      provenance: trajectory.provenance,
+      capability: trajectory.capability,
+    );
+  }
+}
+
+class _StartupSimulation extends Simulation {
+  _StartupSimulation(this.inner, this.model);
+  final Simulation inner;
+  final _LifecycleModel model;
+  int samples = 0;
+  @override
+  double x(double time) {
+    if (++samples == 2) model.onStartup?.call();
+    return inner.x(time) +
+        (model.invalid == 'position' || (model.invalid == 'rest' && time > 0)
+            ? 1
+            : 0);
+  }
+
+  @override
+  double dx(double time) =>
+      model.invalid == 'velocity' ? double.nan : inner.dx(time);
+  @override
+  bool isDone(double time) => inner.isDone(time);
+}
+
 class _Harness {
   final nav = GlobalKey<NavigatorState>();
   final sheet = IosSheetController();
@@ -105,13 +148,24 @@ class _Harness {
     bool fixedOpening = false,
     VoidCallback? onPresented,
     VoidCallback? onDismissed,
+    ValueChanged<String>? onSelected,
+    IosSheetTrajectoryModel? model,
+    List<IosSheetDetent>? detents,
+    bool tapCompetition = false,
   }) {
     route = StupidSimpleIosSheetRoute<Object>(
       profile: IosSheetProfile.ios26.copyWith(
         fixedSurfaceDuringTransition: fixedOpening,
       ),
       controller: sheet,
-      detents: [IosSheetDetent.height('short', 300), IosSheetDetent.large],
+      detents:
+          detents ??
+          [IosSheetDetent.height('short', 300), IosSheetDetent.large],
+      trajectoryModel: model,
+      onSelectedDetentChanged: (identifier) {
+        events.add('selected:$identifier');
+        onSelected?.call(identifier);
+      },
       initialDetentIdentifier: 'short',
       onPresented: () {
         events.add('onPresented');
@@ -121,9 +175,16 @@ class _Harness {
         events.add('onDismissed');
         onDismissed?.call();
       },
-      child: const ColoredBox(
+      child: ColoredBox(
         color: Colors.white,
-        child: Center(child: Text('Sheet content')),
+        child: Center(
+          child: tapCompetition
+              ? GestureDetector(
+                  onTap: () {},
+                  child: const Text('Sheet content'),
+                )
+              : const Text('Sheet content'),
+        ),
       ),
     );
     // Navigator teardown does not promise completion of its popped future.
@@ -164,6 +225,476 @@ class _Harness {
 }
 
 void main() {
+  testWidgets(
+    'M01 accepted selection is synchronous and succeeds after rest callbacks',
+    (tester) async {
+      final h = _Harness();
+      await h.present(tester);
+      h.sheet.addListener(() {
+        if (h.sheet.restingDetentIdentifier == 'large') h.events.add('rest');
+      });
+      final a = h.track(h.sheet.animateToDetent('large'), 'A');
+      expect(h.sheet.selectedDetentIdentifier, 'large');
+      expect(h.events, contains('selected:large'));
+      expect(a.done, isFalse);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(a.done, isFalse);
+      await tester.pumpAndSettle();
+      expect(a.value, isTrue);
+      expect(h.sheet.restingDetentIdentifier, 'large');
+      expect(h.events.indexOf('rest'), lessThan(h.events.indexOf('A')));
+      await h.clean(tester);
+    },
+  );
+
+  testWidgets(
+    'M02 already resting validates the model and succeeds asynchronously without a ticker',
+    (tester) async {
+      final h = _Harness();
+      final model = _LifecycleModel();
+      await h.mount(tester);
+      h.push(model: model);
+      await tester.pumpAndSettle();
+      final a = h.track(h.sheet.animateToDetent('short'));
+      expect(a.done, isFalse);
+      // ignore: invalid_use_of_protected_member
+      expect(h.route.controller!.isAnimating, isFalse);
+      await tester.idle();
+      expect(a.value, isTrue);
+      model.failure = true;
+      expect(() => h.sheet.animateToDetent('short'), throwsStateError);
+      model.failure = false;
+      h.sheet.selectDetent('short');
+      // ignore: invalid_use_of_protected_member
+      expect(h.route.controller!.isAnimating, isTrue);
+      await h.clean(tester);
+    },
+  );
+
+  for (final replacement in ['animate', 'legacy', 'route', 'same', 'ABA']) {
+    testWidgets('M03 $replacement supersedes each accepted request', (
+      tester,
+    ) async {
+      final h = _Harness();
+      await h.present(tester);
+      final first = h.track(h.sheet.animateToDetent('large'));
+      _Probe<bool>? last;
+      if (replacement == 'legacy') {
+        h.sheet.selectDetent('short');
+      } else if (replacement == 'route') {
+        h.route.selectDetent('short');
+      } else {
+        last = h.track(
+          h.sheet.animateToDetent(replacement == 'same' ? 'large' : 'short'),
+        );
+        if (replacement == 'ABA') {
+          final middle = last;
+          last = h.track(h.sheet.animateToDetent('large'));
+          await tester.idle();
+          expect(middle.value, isFalse);
+        }
+      }
+      await tester.idle();
+      expect(first.value, isFalse);
+      await tester.pumpAndSettle();
+      if (last != null) expect(last.value, isTrue);
+      expect(first.value, isFalse);
+      await h.clean(tester);
+    });
+  }
+
+  testWidgets(
+    'M04 rejected identifiers and M05 construction failures preserve prior motion and observations',
+    (tester) async {
+      final h = _Harness();
+      final model = _LifecycleModel();
+      await h.mount(tester);
+      expect(() => h.sheet.animateToDetent('large'), throwsStateError);
+      h.push(model: model);
+      await tester.pumpAndSettle();
+      final a = h.track(h.sheet.animateToDetent('large'));
+      final request = h.sheet.snapshotState().motionRequest;
+      expect(() => h.sheet.animateToDetent('missing'), throwsArgumentError);
+      model.failure = true;
+      expect(() => h.sheet.animateToDetent('short'), throwsStateError);
+      model.failure = false;
+      expect(h.sheet.selectedDetentIdentifier, 'large');
+      expect(h.sheet.snapshotState().motionRequest, same(request));
+      await tester.idle();
+      expect(a.done, isFalse);
+      await tester.pumpAndSettle();
+      expect(a.value, isTrue);
+      await h.clean(tester);
+      expect(() => h.sheet.animateToDetent('short'), throwsStateError);
+    },
+  );
+
+  for (final nested in ['model', 'selected', 'startup']) {
+    testWidgets(
+      'M06 reentrant $nested selection fences the outer transaction',
+      (tester) async {
+        final h = _Harness();
+        final model = _LifecycleModel();
+        late _Probe<bool> inner;
+        await h.mount(tester);
+        h.push(
+          model: model,
+          onSelected: (id) {
+            if (nested == 'selected' && id == 'large')
+              inner = h.track(h.sheet.animateToDetent('short'));
+          },
+        );
+        await tester.pumpAndSettle();
+        if (nested == 'model') {
+          model.onCreate = () {
+            model.onCreate = null;
+            inner = h.track(h.sheet.animateToDetent('short'));
+          };
+        } else if (nested == 'startup') {
+          model.onStartup = () {
+            model.onStartup = null;
+            inner = h.track(h.sheet.animateToDetent('short'));
+          };
+        }
+        if (nested == 'selected') {
+          final outer = h.track(h.sheet.animateToDetent('large'));
+          await tester.idle();
+          expect(outer.value, isFalse);
+        } else {
+          expect(() => h.sheet.animateToDetent('large'), throwsStateError);
+        }
+        expect(h.sheet.selectedDetentIdentifier, 'short');
+        await tester.pumpAndSettle();
+        expect(inner.value, isTrue);
+        await h.clean(tester);
+      },
+    );
+  }
+
+  testWidgets(
+    'M07 drag start before delta cancels while pointer down alone preserves ownership',
+    (tester) async {
+      final h = _Harness();
+      await h.mount(tester);
+      h.push(tapCompetition: true);
+      await tester.pumpAndSettle();
+      final a = h.track(h.sheet.animateToDetent('large'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.text('Sheet content')),
+      );
+      await tester.idle();
+      expect(a.done, isFalse);
+      await gesture.moveBy(const Offset(0, 30));
+      expect(h.route.isUserDragging, isTrue);
+      await tester.idle();
+      expect(a.value, isFalse);
+      final during = h.track(h.sheet.animateToDetent('short'));
+      expect(h.sheet.selectedDetentIdentifier, 'short');
+      await tester.idle();
+      expect(during.value, isFalse);
+      await gesture.cancel();
+      await tester.pumpAndSettle();
+      expect(h.route.isUserDragging, isFalse);
+      expect(a.value, isFalse);
+      await h.clean(tester);
+    },
+  );
+
+  for (final terminal in [
+    'cover',
+    'dismiss',
+    'remove',
+    'replace',
+    'dispose',
+    'unmount',
+  ]) {
+    testWidgets('M08-M12 $terminal promptly terminates owned selection', (
+      tester,
+    ) async {
+      final h = _Harness();
+      await h.present(tester);
+      final a = h.track(h.sheet.animateToDetent('large'));
+      final d = h.track(h.sheet.whenDetached());
+      if (terminal == 'cover') {
+        h.nav.currentState!
+            .push<void>(
+              MaterialPageRoute<void>(builder: (_) => const Text('Cover')),
+            )
+            .ignore();
+      } else if (terminal == 'dismiss') {
+        h.sheet.dismiss();
+      } else if (terminal == 'remove') {
+        h.nav.currentState!.removeRoute(h.route);
+      } else if (terminal == 'replace') {
+        h.nav.currentState!
+            .pushReplacement<void, Object>(
+              MaterialPageRoute<void>(
+                builder: (_) => const Text('Replacement'),
+              ),
+            )
+            .ignore();
+      } else if (terminal == 'dispose') {
+        h.disposeController();
+      } else {
+        await tester.pumpWidget(const SizedBox.shrink());
+      }
+      await tester.idle();
+      expect(a.value, isFalse);
+      if (terminal == 'cover' || terminal == 'dismiss') expect(d.done, isFalse);
+      await tester.pumpAndSettle();
+      if (terminal == 'cover') {
+        expect(() => h.sheet.animateToDetent('missing'), throwsArgumentError);
+        expect(() => h.sheet.animateToDetent('short'), throwsStateError);
+        h.nav.currentState!.pop();
+        await tester.pumpAndSettle();
+        final fresh = h.track(h.sheet.animateToDetent('short'));
+        await tester.pumpAndSettle();
+        expect(fresh.value, isTrue);
+      }
+      await h.clean(tester);
+    });
+  }
+
+  testWidgets(
+    'M13 equal height aliases retain distinct requested semantic rest',
+    (tester) async {
+      final h = _Harness();
+      await h.mount(tester);
+      h.push(
+        detents: [
+          IosSheetDetent.height('short', 300),
+          IosSheetDetent.height('alias', 300),
+          IosSheetDetent.large,
+        ],
+      );
+      await tester.pumpAndSettle();
+      final a = h.track(h.sheet.animateToDetent('alias'));
+      // ignore: invalid_use_of_protected_member
+      expect(h.route.controller!.isAnimating, isTrue);
+      await tester.pumpAndSettle();
+      expect(a.value, isTrue);
+      expect(h.sheet.restingDetentIdentifier, 'alias');
+      await h.clean(tester);
+    },
+  );
+
+  for (final interruption in ['engine', 'stop', 'value']) {
+    testWidgets(
+      'M14 $interruption interruption cannot become coordinate-only success',
+      (tester) async {
+        final h = _Harness();
+        await h.present(tester);
+        final a = h.track(h.sheet.animateToDetent('large'));
+        // ignore: invalid_use_of_protected_member
+        final engine = h.route.controller!;
+        if (interruption == 'engine') {
+          h.route.animateToRelative(1).orCancel.ignore();
+        } else if (interruption == 'stop') {
+          engine.stop();
+        } else {
+          engine.value = 1;
+        }
+        await tester.idle();
+        expect(a.value, isFalse);
+        await h.clean(tester);
+      },
+    );
+  }
+
+  testWidgets(
+    'M15 final tick listener supersedes old success before its observer',
+    (tester) async {
+      final h = _Harness();
+      await h.present(tester);
+      _Probe<bool>? fresh;
+      h.sheet.addListener(() {
+        if (fresh == null && h.sheet.restingDetentIdentifier == 'large') {
+          fresh = h.track(h.sheet.animateToDetent('short'));
+        }
+      });
+      final old = h.track(h.sheet.animateToDetent('large'));
+      await tester.pumpAndSettle();
+      expect(old.value, isFalse);
+      expect(fresh!.value, isTrue);
+      expect(h.sheet.restingDetentIdentifier, 'short');
+      await h.clean(tester);
+    },
+  );
+
+  testWidgets(
+    'M04 fixed opening and declined pop preserve valid attachment semantics',
+    (tester) async {
+      final h = _Harness();
+      await h.mount(tester);
+      h.push(fixedOpening: true);
+      final p = h.track(h.sheet.whenPresented());
+      await tester.pump();
+      expect(() => h.sheet.animateToDetent('missing'), throwsArgumentError);
+      expect(() => h.sheet.animateToDetent('large'), throwsStateError);
+      await tester.pumpAndSettle();
+      expect(p.error, isNull);
+      h.route.addLocalHistoryEntry(LocalHistoryEntry());
+      final old = h.track(h.sheet.animateToDetent('large'));
+      h.nav.currentState!.pop();
+      await tester.idle();
+      expect(old.done, isFalse);
+      expect(h.sheet.isAttached, isTrue);
+      expect(h.sheet.targetDetentIdentifier, 'large');
+      await tester.pumpAndSettle();
+      expect(old.value, isTrue);
+      final fresh = h.track(h.sheet.animateToDetent('short'));
+      await tester.pumpAndSettle();
+      expect(fresh.value, isTrue);
+      await h.clean(tester);
+    },
+  );
+
+  for (final invalid in ['target', 'position', 'velocity']) {
+    testWidgets('M05 invalid $invalid construction preserves prior ticker', (
+      tester,
+    ) async {
+      final h = _Harness();
+      final model = _LifecycleModel();
+      await h.mount(tester);
+      h.push(model: model);
+      await tester.pumpAndSettle();
+      final old = h.track(h.sheet.animateToDetent('large'));
+      final state = h.sheet.snapshotState();
+      model.invalid = invalid;
+      expect(() => h.sheet.animateToDetent('short'), throwsStateError);
+      model.invalid = null;
+      expect(h.sheet.selectedDetentIdentifier, 'large');
+      expect(h.sheet.snapshotState().motionRequest, same(state.motionRequest));
+      expect(
+        h.sheet.snapshotState().motionTargetPoints,
+        state.motionTargetPoints,
+      );
+      await tester.idle();
+      expect(old.done, isFalse);
+      await tester.pumpAndSettle();
+      expect(old.value, isTrue);
+      await h.clean(tester);
+    });
+  }
+
+  testWidgets(
+    'M06 model dismissal rejects the outer request without stale rollback',
+    (tester) async {
+      final h = _Harness();
+      final model = _LifecycleModel();
+      await h.mount(tester);
+      h.push(model: model);
+      await tester.pumpAndSettle();
+      final old = h.track(h.sheet.animateToDetent('large'));
+      model.onCreate = () {
+        model.onCreate = null;
+        h.sheet.dismiss();
+      };
+      expect(() => h.sheet.animateToDetent('short'), throwsStateError);
+      expect(h.sheet.targetDetentIdentifier, isNull);
+      await tester.idle();
+      expect(old.value, isFalse);
+      await h.clean(tester);
+    },
+  );
+
+  testWidgets(
+    'M06 onPresented dismissal preserves presentation but cancels detent wait',
+    (tester) async {
+      final h = _Harness();
+      await h.mount(tester);
+      h.push(onPresented: () => h.sheet.dismiss());
+      final p = h.track(h.sheet.whenPresented());
+      final a = h.track(h.sheet.animateToDetent('large'));
+      await tester.pumpAndSettle();
+      expect(p.done, isTrue);
+      expect(p.error, isNull);
+      expect(a.value, isFalse);
+      await h.clean(tester);
+    },
+  );
+
+  testWidgets('M07 private drag-start hook cancels before any value delta', (
+    tester,
+  ) async {
+    final h = _Harness();
+    await h.present(tester);
+    final a = h.track(h.sheet.animateToDetent('large'));
+    final height = h.sheet.unscaledTrajectoryHeight;
+    bridge.dispatchSheetDragStart(h.route);
+    expect(h.sheet.unscaledTrajectoryHeight, height);
+    await tester.idle();
+    expect(a.value, isFalse);
+    await h.clean(tester);
+  });
+
+  testWidgets(
+    'M13 old ticker and bridge callbacks cannot affect reused generation',
+    (tester) async {
+      final h = _Harness();
+      await h.present(tester);
+      final oldRoute = h.route;
+      final old = h.track(h.sheet.animateToDetent('large'));
+      final detached = h.track(h.sheet.whenDetached());
+      h.nav.currentState!.removeRoute(oldRoute);
+      await tester.pumpAndSettle();
+      expect(detached.done, isTrue);
+      h.push();
+      await tester.pumpAndSettle();
+      final fresh = h.track(h.sheet.animateToDetent('large'));
+      bridge.dispatchSheetDragStart(oldRoute);
+      bridge.dispatchSheetDragCancel(oldRoute);
+      await tester.idle();
+      expect(old.value, isFalse);
+      expect(fresh.done, isFalse);
+      await tester.pumpAndSettle();
+      expect(fresh.value, isTrue);
+      await h.clean(tester);
+    },
+  );
+
+  testWidgets('M14 successful ticker with wrong semantic rest returns false', (
+    tester,
+  ) async {
+    final h = _Harness();
+    final model = _LifecycleModel();
+    await h.mount(tester);
+    h.push(model: model);
+    await tester.pumpAndSettle();
+    model.invalid = 'rest';
+    final a = h.track(h.sheet.animateToDetent('large'));
+    await tester.pumpAndSettle();
+    expect(a.done, isTrue);
+    expect(a.value, isFalse);
+    await h.clean(tester);
+  });
+
+  testWidgets(
+    'M06 selected callback errors remain synchronous after accepted motion',
+    (tester) async {
+      final h = _Harness();
+      await h.mount(tester);
+      h.push(
+        onSelected: (identifier) {
+          if (identifier == 'large')
+            throw StateError('expected selected failure');
+        },
+      );
+      await tester.pumpAndSettle();
+      expect(() => h.sheet.animateToDetent('large'), throwsStateError);
+      expect(h.sheet.selectedDetentIdentifier, 'large');
+      // ignore: invalid_use_of_protected_member
+      expect(h.route.controller!.isAnimating, isTrue);
+      final fresh = h.track(h.sheet.animateToDetent('short'));
+      await tester.pumpAndSettle();
+      expect(fresh.value, isTrue);
+      await h.clean(tester);
+    },
+  );
+
   testWidgets(
     'detached lifecycle calls return asynchronous error or success without binding to next attachment',
     (tester) async {

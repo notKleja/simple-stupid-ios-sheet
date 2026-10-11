@@ -125,6 +125,29 @@ class IosSheetController extends ChangeNotifier {
     route.selectDetent(identifier);
   }
 
+  /// Accepts the same semantic selection as selectDetent and awaits its outcome.
+  ///
+  /// Getters and selection callbacks update synchronously. Returns true only
+  /// while this request remains current, its ticker finishes without canceling,
+  /// and the requested semantic identifier rests. A validated already-resting
+  /// request succeeds without a ticker or another frame. Equal-height detents
+  /// remain distinct identifiers.
+  ///
+  /// Returns false on accepted supersession, sheet drag ownership, coverage,
+  /// dismissal, logical removal, detachment, disposal, or ticker cancellation.
+  /// A command accepted during an existing sheet drag also returns false.
+  /// False does not roll back selection or stop the underlying motion.
+  ///
+  /// Validation and trajectory construction failures throw synchronously in
+  /// the same order as selectDetent. A rejected command preserves older motion
+  /// unless user code reentrantly accepted another command. Future observers
+  /// always run asynchronously; completion does not guarantee final paint.
+  Future<bool> animateToDetent(String identifier) {
+    final route = _route;
+    if (route == null) throw StateError('Sheet controller is detached');
+    return route._selectDetent(identifier, awaitable: true)!;
+  }
+
   /// Explicit dismissal is allowed even when interactive dismissal is locked.
   void dismiss([Object? result]) {
     final route = _route;
@@ -252,6 +275,62 @@ class _IosSheetAttachment {
   }
 }
 
+class _IosSheetSelection {
+  _IosSheetSelection(
+    this.identifier,
+    this.attachment,
+    this.revision,
+    this.preRest,
+    this.awaitable,
+  );
+  final String identifier;
+  final _IosSheetAttachment? attachment;
+  int revision;
+  final String? preRest;
+  final bool awaitable;
+  bool accepted = false;
+  bool starting = true;
+  _IosSheetMotion? operation;
+}
+
+class _IosSheetMotion {
+  final Completer<bool> result = Completer<bool>();
+  void settle(bool success) {
+    if (!result.isCompleted) result.complete(success);
+  }
+}
+
+// Arbitrary custom Simulation methods may reenter while animateWith samples
+// its initial value. Fence that startup before Flutter can start an old ticker.
+class _IosSheetStartupSimulation extends Simulation {
+  _IosSheetStartupSimulation(this.inner, this.validate);
+  final Simulation inner;
+  final VoidCallback validate;
+  @override
+  double x(double time) {
+    validate();
+    final value = inner.x(time);
+    validate();
+    return value;
+  }
+
+  @override
+  double dx(double time) {
+    validate();
+    final value = inner.dx(time);
+    validate();
+    return value;
+  }
+
+  @override
+  bool isDone(double time) {
+    validate();
+    final done = inner.isDone(time);
+    validate();
+    return done;
+  }
+}
+
 /// Opaque iOS semantics over the flexible upstream transition engine.
 ///
 /// Profile defaults are explicit, unmeasured research fallbacks. This route
@@ -321,6 +400,9 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   IosSheetUnderlyingHitObservation? _underlyingObservation;
   IosSheetMotionRequest? _motionRequest;
   IosSheetTrajectory? _trajectory;
+  _IosSheetSelection? _selectionAttempt;
+  _IosSheetMotion? _detentMotion;
+  int _selectionRevision = 0;
 
   String? _selectedIdentifier;
   String? _targetIdentifier;
@@ -703,6 +785,9 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     required double velocity,
     double? dragReleaseVelocity,
   }) {
+    final attempt = phase == SheetSimulationPhase.detentSnap
+        ? _selectionAttempt
+        : null;
     final height = _referenceHeight;
     final currentPosition = controller?.value ?? start;
     final currentVelocity = controller?.velocity ?? velocity;
@@ -732,6 +817,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
             .createTrajectory(request);
     final initialPosition = trajectory.simulation.x(0);
     final initialVelocity = trajectory.simulation.dx(0);
+    if (attempt != null) _requireSelectionOwner(attempt);
     if (trajectory.targetPoints != request.targetPoints ||
         !initialPosition.isFinite ||
         !initialVelocity.isFinite ||
@@ -746,7 +832,13 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     }
     _motionRequest = request;
     _trajectory = trajectory;
-    return normalizeIosSheetTrajectory(trajectory, height);
+    final normalized = normalizeIosSheetTrajectory(trajectory, height);
+    if (attempt == null) return normalized;
+    // Controller-less legacy route commands need no persistent registration.
+    if (_lifecycleToken == null) _acceptSelection(attempt);
+    return _IosSheetStartupSimulation(normalized, () {
+      if (attempt.starting) _requireSelectionOwner(attempt);
+    });
   }
 
   @override
@@ -884,13 +976,15 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   void _registerLifecycle(_IosSheetAttachment attachment) {
     final token = Object();
     _lifecycleToken = token;
+    bool ownsRegistration() =>
+        identical(_lifecycleToken, token) &&
+        identical(_attachment, attachment) &&
+        identical(attachment.route, this) &&
+        (_sheetController?._owns(attachment, this) ?? false) &&
+        !_removing &&
+        !_disposing;
     void observeRest() {
-      if (identical(_lifecycleToken, token) &&
-          identical(_attachment, attachment) &&
-          identical(attachment.route, this) &&
-          (_sheetController?._owns(attachment, this) ?? false) &&
-          !_removing &&
-          !_disposing) {
+      if (ownsRegistration()) {
         _reducePresentation();
       }
     }
@@ -898,8 +992,20 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
     _unregisterLifecycle = lifecycle.registerSheetControllerLifecycle(
       this,
       lifecycle.SheetControllerLifecycleCallbacks(
+        onDragStart: () {
+          if (ownsRegistration()) _interruptSelection();
+        },
         onDragEnd: observeRest,
         onDragCancel: observeRest,
+        onProgrammaticDetentStart: () {
+          if (!ownsRegistration()) return true;
+          final attempt = _selectionAttempt;
+          if (attempt == null) {
+            _interruptSelection();
+            return true;
+          }
+          return _acceptSelection(attempt);
+        },
       ),
     );
   }
@@ -917,13 +1023,62 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   ) {
     if (identical(_sheetController, sheetController) &&
         identical(_attachment, attachment)) {
+      _interruptSelection();
       _clearLifecycle();
       _sheetController = null;
       _attachment = null;
     }
   }
 
-  void selectDetent(String identifier) {
+  void selectDetent(String identifier) => _selectDetent(identifier);
+
+  bool _selectionOwns(_IosSheetSelection attempt) =>
+      attempt.revision == _selectionRevision &&
+      identical(attempt.attachment, _attachment) &&
+      (attempt.attachment == null ||
+          (_sheetController?._owns(attempt.attachment!, this) ?? false)) &&
+      isCurrent &&
+      !_dismissing &&
+      !_removing &&
+      !_disposing &&
+      _popAttempt == null;
+
+  void _requireSelectionOwner(_IosSheetSelection attempt) {
+    if (!_selectionOwns(attempt)) {
+      throw StateError('Sheet selection was superseded during construction');
+    }
+  }
+
+  void _interruptSelection() {
+    _selectionRevision++;
+    final operation = _detentMotion;
+    _detentMotion = null;
+    operation?.settle(false);
+  }
+
+  bool _acceptSelection(_IosSheetSelection attempt) {
+    _requireSelectionOwner(attempt);
+    _interruptSelection();
+    attempt.revision = _selectionRevision;
+    attempt.accepted = true;
+    if (attempt.awaitable) {
+      final operation = _IosSheetMotion();
+      attempt.operation = operation;
+      _detentMotion = operation;
+      if (isUserDragging) {
+        _detentMotion = null;
+        operation.settle(false);
+      } else if (attempt.preRest == attempt.identifier &&
+          _restingIdentifier == attempt.identifier) {
+        _detentMotion = null;
+        operation.settle(true);
+        return false;
+      }
+    }
+    return true;
+  }
+
+  Future<bool>? _selectDetent(String identifier, {bool awaitable = false}) {
     final resolved = resolvedDetents.where((e) => e.identifier == identifier);
     if (resolved.isEmpty) throw ArgumentError('Unknown detent: $identifier');
     _requireOpeningCompleted();
@@ -931,18 +1086,60 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
       throw StateError('Sheet is not current');
     final previousSelection = _selectedIdentifier;
     final previousTarget = _targetIdentifier;
+    final previousRequest = _motionRequest;
+    final previousTrajectory = _trajectory;
+    final previousAttempt = _selectionAttempt;
+    final attempt = _IosSheetSelection(
+      identifier,
+      _attachment,
+      _selectionRevision,
+      _restingIdentifier,
+      awaitable,
+    );
+    _selectionAttempt = attempt;
     _targetIdentifier = identifier;
     _selectedIdentifier = identifier;
     try {
-      animateToRelative(_engineExtent(resolved.single));
+      final ticker = animateToRelative(_engineExtent(resolved.single));
+      attempt.starting = false;
+      final operation = attempt.operation;
+      if (operation != null) {
+        ticker.orCancel
+            .then<void>(
+              (_) {
+                final success =
+                    identical(_detentMotion, operation) &&
+                    _selectionOwns(attempt) &&
+                    _restingIdentifier == identifier;
+                if (identical(_detentMotion, operation)) _detentMotion = null;
+                operation.settle(success);
+              },
+              onError: (Object error, StackTrace stack) {
+                if (identical(_detentMotion, operation)) _detentMotion = null;
+                operation.settle(false);
+              },
+            )
+            .ignore();
+      }
     } catch (_) {
-      _selectedIdentifier = previousSelection;
-      _targetIdentifier = previousTarget;
+      attempt.starting = false;
+      if (!attempt.accepted && _selectionOwns(attempt)) {
+        _selectedIdentifier = previousSelection;
+        _targetIdentifier = previousTarget;
+        _motionRequest = previousRequest;
+        _trajectory = previousTrajectory;
+      }
+      attempt.operation?.settle(false);
+      if (identical(_detentMotion, attempt.operation)) _detentMotion = null;
       rethrow;
+    } finally {
+      if (identical(_selectionAttempt, attempt))
+        _selectionAttempt = previousAttempt;
     }
-    if (previousSelection != identifier)
+    if (_selectionOwns(attempt) && previousSelection != identifier)
       onSelectedDetentChanged?.call(identifier);
-    _sheetController?._changed(this);
+    if (_selectionOwns(attempt)) _sheetController?._changed(this);
+    return attempt.operation?.result.future;
   }
 
   @override
@@ -1101,6 +1298,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   /// @nodoc
   @override
   void didComplete(T? result) {
+    _interruptSelection();
     _removing = true;
     _dismissing = true;
     _targetIdentifier = null;
@@ -1111,6 +1309,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   @override
   void didChangeNext(Route<dynamic>? nextRoute) {
     super.didChangeNext(nextRoute);
+    if (nextRoute != null || !isCurrent) _interruptSelection();
     _reducePresentation();
   }
 
@@ -1123,6 +1322,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
   @override
   void dispose() {
     _disposing = true;
+    _interruptSelection();
     _clearLifecycle();
     final sheetController = _sheetController;
     final attachment = _attachment;
