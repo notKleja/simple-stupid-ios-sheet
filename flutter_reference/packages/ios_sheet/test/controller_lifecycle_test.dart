@@ -227,6 +227,65 @@ class _Harness {
 }
 
 void main() {
+  for (final ingress in ['model', 'startup']) {
+    for (final semantic in [false, true]) {
+      testWidgets(
+        'M06 alias $ingress retarget preserves ${semantic ? 'new semantic owner' : 'prior semantic target'}',
+        (tester) async {
+          final h = _Harness();
+          final model = _LifecycleModel();
+          await h.mount(tester);
+          h.push(
+            model: model,
+            detents: [
+              IosSheetDetent.height('short', 300),
+              IosSheetDetent.height('alias', 300),
+              IosSheetDetent.large,
+            ],
+          );
+          await tester.pumpAndSettle();
+          h.events.clear();
+          _Probe<bool>? newer;
+          late _Probe<void> physical;
+          void retarget() {
+            model.onCreate = null;
+            model.onStartup = null;
+            if (semantic) newer = h.track(h.sheet.animateToDetent('alias'));
+            physical = h.track(h.route.animateToRelative(.375).orCancel);
+          }
+
+          if (ingress == 'model') {
+            model.onCreate = retarget;
+          } else {
+            model.onStartup = retarget;
+          }
+          Object? failure;
+          try {
+            h.sheet.animateToDetent('alias').ignore();
+          } catch (error) {
+            failure = error;
+          }
+          expect(failure, isA<StateError>());
+          final observedTarget = h.sheet.targetDetentIdentifier;
+          final identifier = semantic ? 'alias' : 'short';
+          expect(h.sheet.selectedDetentIdentifier, identifier);
+          expect(h.route.targetRelativePosition, .375);
+          expect(h.sheet.snapshotState().motionTargetPoints, 300);
+          await tester.pumpAndSettle();
+          expect(observedTarget, identifier);
+          expect(h.sheet.targetDetentIdentifier, identifier);
+          expect(h.sheet.restingDetentIdentifier, identifier);
+          expect(h.sheet.selectedDetentIdentifier, identifier);
+          if (!semantic) expect(h.events, isNot(contains('selected:alias')));
+          expect(physical.done, isTrue);
+          expect(physical.error, isNull);
+          if (newer != null) expect(newer!.value, isTrue);
+          await h.clean(tester);
+        },
+      );
+    }
+  }
+
   testWidgets(
     'M06 nested semantic acceptance survives later nonsemantic engine retarget',
     (tester) async {

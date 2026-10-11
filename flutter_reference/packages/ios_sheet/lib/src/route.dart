@@ -1194,6 +1194,7 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
         // Reentrant engine motion owns its physical observations. Coordinate
         // equality cannot accept the rejected command's provisional semantic ID.
         _selectedIdentifier = previousSelection;
+        _targetIdentifier = previousTarget;
         _acceptedSelectionToken = previousSemanticToken;
       }
       attempt.operation?.settle(false);
