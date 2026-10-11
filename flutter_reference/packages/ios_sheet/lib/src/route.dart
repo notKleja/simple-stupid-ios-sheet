@@ -996,7 +996,10 @@ class StupidSimpleIosSheetRoute<T> extends PopupRoute<T>
           if (ownsRegistration()) _interruptSelection();
         },
         onDragEnd: observeRest,
-        onDragCancel: observeRest,
+        // Detector teardown can precede route disposal while Navigator's
+        // inherited-widget context is inactive. Recheck ownership after that
+        // synchronous teardown stack, before resolving environment geometry.
+        onDragCancel: () => scheduleMicrotask(observeRest),
         onProgrammaticDetentStart: () {
           if (!ownsRegistration()) return true;
           final attempt = _selectionAttempt;

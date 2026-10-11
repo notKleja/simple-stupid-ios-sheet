@@ -225,6 +225,70 @@ class _Harness {
 }
 
 void main() {
+  for (final finish in ['release', 'cancel', 'teardown']) {
+    testWidgets(
+      'M07 eager pointer ownership and $finish preserves cancellation',
+      (tester) async {
+        final h = _Harness();
+        await h.present(tester);
+        final a = h.track(h.sheet.animateToDetent('large'));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
+        expect(a.done, isFalse);
+        final height = h.sheet.unscaledTrajectoryHeight;
+        final gesture = await tester.startGesture(
+          tester.getCenter(find.text('Sheet content')),
+        );
+        await tester.idle();
+        expect(h.route.isUserDragging, isTrue);
+        expect(h.sheet.unscaledTrajectoryHeight, height);
+        expect(a.value, isFalse);
+        await gesture.moveBy(const Offset(0, -60));
+        await tester.idle();
+        expect(h.route.isUserDragging, isTrue);
+        expect(a.value, isFalse);
+        if (finish == 'release') {
+          await gesture.up();
+        } else if (finish == 'cancel') {
+          await gesture.cancel();
+        } else {
+          await tester.pumpWidget(const SizedBox.shrink());
+          await gesture.cancel();
+        }
+        await tester.pumpAndSettle();
+        expect(a.value, isFalse);
+        expect(h.route.isUserDragging, isFalse);
+        await h.clean(tester);
+      },
+    );
+  }
+
+  testWidgets(
+    'M07 opening drag teardown fails presentation without inactive context lookup',
+    (tester) async {
+      final h = _Harness();
+      await h.mount(tester);
+      h.push();
+      final p = h.track(h.sheet.whenPresented());
+      final d = h.track(h.sheet.whenDetached());
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(p.done, isFalse);
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.text('Sheet content')),
+      );
+      await gesture.moveBy(const Offset(0, -30));
+      expect(h.route.isUserDragging, isTrue);
+      await tester.pumpWidget(const SizedBox.shrink());
+      await gesture.cancel();
+      await tester.idle();
+      expect(p.error, isA<StateError>());
+      expect(d.done, isTrue);
+      expect(h.events, isNot(contains('onPresented')));
+      await h.clean(tester);
+    },
+  );
+
   testWidgets(
     'M01 accepted selection is synchronous and succeeds after rest callbacks',
     (tester) async {
