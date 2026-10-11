@@ -81,3 +81,87 @@ jobs:
 
       - name: Verify isolated external path consumer on host
         run: bash tool/verify_path_consumer.sh "$PWD/packages/ios_sheet"
+
+  ios-example-build-only:
+    name: iOS example build only (no native parity)
+    runs-on: macos-15
+    timeout-minutes: 20
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Verify pinned Xcode, SDK, and available destination
+        run: |
+          test "$(uname -m)" = arm64
+          test -d "$DEVELOPER_DIR"
+          xcodebuild -version
+          xcodebuild -version | grep -Fx 'Xcode 26.3'
+          xcrun --sdk iphonesimulator --show-sdk-version | grep -Fx '26.2'
+          xcrun simctl list runtimes --json | tee "$RUNNER_TEMP/ios-runtimes.json"
+          jq -e 'any(.runtimes[];
+            .identifier == "com.apple.CoreSimulator.SimRuntime.iOS-26-2"
+            and .isAvailable and .version == "26.2")' "$RUNNER_TEMP/ios-runtimes.json"
+          xcrun simctl list devices available --json | tee "$RUNNER_TEMP/ios-devices.json"
+          simulator_id="$(jq -er '
+            .devices["com.apple.CoreSimulator.SimRuntime.iOS-26-2"]
+            | map(select(.isAvailable and .name == "iPhone 17"))
+            | first | .udid | select(type == "string" and length > 0)
+          ' "$RUNNER_TEMP/ios-devices.json")"
+          printf 'Build destination: %s\n' "$simulator_id"
+          printf 'IOS_BUILD_SIMULATOR_ID=%s\n' "$simulator_id" >> "$GITHUB_ENV"
+
+      - name: Install pinned Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+        with:
+          flutter-version: '3.44.6'
+          channel: stable
+          architecture: arm64
+          cache: true
+
+      - name: Verify Flutter and Dart versions
+        run: |
+          flutter --version
+          flutter --version --machine | jq -e '.frameworkVersion == "3.44.6"'
+          dart --version 2>&1 | grep -E '^Dart SDK version: 3\.12\.2([[:space:]]|$)'
+
+      - name: Copy workspace and prepare example without tracked churn
+        run: |
+          build_root="$(mktemp -d "$RUNNER_TEMP/ios-example.XXXXXX")"
+          mkdir "$build_root/flutter_reference"
+          rsync -a --exclude=.dart_tool --exclude=build \
+            flutter_reference/ "$build_root/flutter_reference/"
+          printf 'IOS_BUILD_WORKSPACE=%s\n' "$build_root/flutter_reference" >> "$GITHUB_ENV"
+          cd "$build_root/flutter_reference"
+          flutter pub get --no-example
+          cd packages/ios_sheet/example
+          flutter precache --ios
+          flutter create --platforms=ios --no-pub .
+          flutter pub get --no-example
+          flutter build ios --simulator --debug --config-only --no-pub -t lib/main.dart
+
+      - name: Compile arm64 Simulator example only (no launch)
+        run: |
+          cd "$IOS_BUILD_WORKSPACE/packages/ios_sheet/example"
+          xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner \
+            -configuration Debug -sdk iphonesimulator \
+            -destination "platform=iOS Simulator,id=$IOS_BUILD_SIMULATOR_ID" \
+            ARCHS=arm64 ONLY_ACTIVE_ARCH=YES CODE_SIGNING_ALLOWED=NO \
+            IPHONEOS_DEPLOYMENT_TARGET=26.0 \
+            -derivedDataPath "$RUNNER_TEMP/ios-example-derived" \
+            build 2>&1 | tee "$RUNNER_TEMP/ios-example-build.log"
+          app="$RUNNER_TEMP/ios-example-derived/Build/Products/Debug-iphonesimulator/Runner.app"
+          test -s "$app/Runner"
+          xcrun lipo -archs "$app/Runner" | grep -Fx arm64
+          xcrun vtool -show-build "$app/Runner" | grep -E 'platform[[:space:]]+IOSSIMULATOR'
+          shasum -a 256 "$app/Runner"
+          git -C "$GITHUB_WORKSPACE" diff --exit-code
+          git -C "$GITHUB_WORKSPACE" diff --cached --exit-code
+          printf '%s\n' \
+            'Public example built as arm64 Debug for iOS Simulator SDK 26.2 with Xcode 26.3, Flutter 3.44.6, and Dart 3.12.2.' \
+            'Build only: no app installation or launch, lifecycle verification, or native-parity evidence.' \
+            >> "$GITHUB_STEP_SUMMARY"
