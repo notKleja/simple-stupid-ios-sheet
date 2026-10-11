@@ -182,12 +182,11 @@ class _RelativeGestureDetector extends StatefulWidget {
 
 class _RelativeGestureDetectorState extends State<_RelativeGestureDetector> {
   double? _referenceHeight;
-  int? _gesturePointer;
+  final _gesturePointers = <int>{};
 
   void _cancelDrag() {
     final height = _referenceHeight;
     _referenceHeight = null;
-    _gesturePointer = null;
     if (height != null) widget.onRelativeDragCancel(height);
   }
 
@@ -195,7 +194,7 @@ class _RelativeGestureDetectorState extends State<_RelativeGestureDetector> {
   void dispose() {
     final wasDragging = _referenceHeight != null;
     _referenceHeight = null;
-    _gesturePointer = null;
+    _gesturePointers.clear();
     if (wasDragging) widget.onRelativeDragTeardown();
     super.dispose();
   }
@@ -203,14 +202,15 @@ class _RelativeGestureDetectorState extends State<_RelativeGestureDetector> {
   @override
   Widget build(BuildContext context) {
     return Listener(
-      onPointerDown: (event) => _gesturePointer ??= event.pointer,
+      onPointerDown: (event) => _gesturePointers.add(event.pointer),
       onPointerUp: (event) {
-        if (_gesturePointer == event.pointer) _gesturePointer = null;
+        _gesturePointers.remove(event.pointer);
       },
       // An accepted Flutter drag reports PointerCancel as a zero-velocity end.
       // Finalize first, so that synthetic end cannot take the release/pop path.
       onPointerCancel: (event) {
-        if (_gesturePointer == event.pointer) _cancelDrag();
+        final wasTracked = _gesturePointers.remove(event.pointer);
+        if (wasTracked && _gesturePointers.isEmpty) _cancelDrag();
       },
       child: ScrollDragDetector(
         up: widget.dragFromTrailingEdge

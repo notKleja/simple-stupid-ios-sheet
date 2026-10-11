@@ -81,6 +81,63 @@ double _value(_RecordingRoute route) {
 }
 
 void main() {
+  for (final configuration in [
+    (config: const SheetSnappingConfig([.4, 1], initialSnap: 1), target: .4),
+    (config: const SheetSnappingConfig([0]), target: 1.0),
+  ]) {
+    testWidgets(
+        'secondary pointer cancel after primary lift settles at '
+        '${configuration.target} without pop', (tester) async {
+      final route = _RecordingRoute(snappingConfig: configuration.config);
+      final navigator = await _show(tester, route);
+      var stops = 0;
+      var cancels = 0;
+      navigator.currentState!.userGestureInProgressNotifier.addListener(() {
+        if (!navigator.currentState!.userGestureInProgress) stops++;
+      });
+      registerSheetControllerLifecycle(
+        route,
+        SheetControllerLifecycleCallbacks(
+          onDragCancel: () => cancels++,
+        ),
+      );
+      final first = await tester.startGesture(
+        tester.getCenter(find.byKey(const ValueKey('sheet'))),
+        pointer: 401,
+      );
+      await first.moveBy(const Offset(0, 30));
+      expect(route.isUserDragging, isTrue);
+      // Admit the secondary before Navigator installs IgnorePointer.
+      // Both real pointers remain tracked across the next frame.
+      final second = await tester.startGesture(
+        tester.getCenter(find.byKey(const ValueKey('sheet'))),
+        pointer: 402,
+      );
+      final beforeSecondaryMove = _value(route);
+      await second.moveBy(const Offset(0, 30));
+      expect(_value(route), isNot(beforeSecondaryMove));
+      await first.up();
+      await tester.pump();
+      expect(route.isUserDragging, isTrue);
+      expect(navigator.currentState!.userGestureInProgress, isTrue);
+      expect(stops, 0);
+      _position(route, .02);
+      await second.cancel();
+      expect(route.isUserDragging, isFalse);
+      expect(navigator.currentState!.userGestureInProgress, isFalse);
+      expect(stops, 1);
+      await tester.pumpAndSettle();
+      expect(route.isCurrent, isTrue);
+      expect(_value(route), closeTo(configuration.target, 1e-6));
+      expect(cancels, 1);
+      expect(route.simulations.last.velocity, 0);
+      await tester.pumpWidget(const SizedBox.shrink());
+      expect(stops, 1);
+      expect(cancels, 1);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   testWidgets(
       'bridge teardown emits cancel once before disposal without motion',
       (tester) async {
